@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <Version>1.0.0-beta.1</Version>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>latest</LangVersion>
+    <Authors>Simon Cropp, Indu Alagarsamy</Authors>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright $([System.DateTime]::UtcNow.ToString(yyyy)) Simon Cropp, Indu Alagarsamy. All rights reserved</Copyright>
+    <PackageTags>NServiceBus, Native, Raw</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/NServiceBusExtensions/NServiceBus.Native/master/icon.png</PackageIconUrl>
+    <PackageProjectUrl>https://docs.particular.net/nuget/$(PackageId)</PackageProjectUrl>
+    <PackageOutputPath>..\nugets</PackageOutputPath>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);IncludePDBsInPackage</TargetsForTfmSpecificContentInPackage>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Target Name="IncludePDBsInPackage">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(OutputPath)\$(AssemblyName).pdb" PackagePath="lib/$(TargetFramework)" />
+    </ItemGroup>
+  </Target>
+</Project>

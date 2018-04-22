@@ -1,0 +1,13 @@
+﻿[
+  {
+    "Id": "7ec93a58-ee36-4e81-96a3-cd808879ce80",
+    "CorrelationId": "theCorrelationId",
+    "ReplyToAddress": "theReplyToAddress",
+    "Recoverable": true,
+    "Expires": "2018-04-23T07:32:29",
+    "Headers": "{\"headerKey1\":\"headerValue1\",\"headerKey2\":\"headerValue2\"}",
+    "BodyString": "絻",
+    "Body": "e30=",
+    "RowVersion": 1
+  }
+]

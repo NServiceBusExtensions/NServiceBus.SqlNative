@@ -1,0 +1,23 @@
+﻿using SqlServer.Native;
+
+public class DbSetup
+{
+    static bool init;
+    public static void Setup()
+    {
+        if (init)
+        {
+            return;
+        }
+
+        init = true;
+        if (!Connection.IsUsingEnvironmentVariable)
+        {
+            SqlHelper.EnsureDatabaseExists(Connection.ConnectionString);
+        }
+        using (var sqlConnection = Connection.OpenConnection())
+        {
+            MessageQueueCreator.Create(sqlConnection, "error").Wait();
+        }
+    }
+}
