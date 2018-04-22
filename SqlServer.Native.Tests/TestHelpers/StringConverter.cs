@@ -8,12 +8,12 @@ public class StringConverter : JsonConverter
     {
         var input = (string)value;
 
-        if (Guid.TryParse(input, out var _))
+        if (Guid.TryParse(input, out _))
         {
             writer.WriteValue("A Guid");
             return;
         }
-        if (DateTime.TryParse(input, out var _))
+        if (DateTime.TryParse(input, out _))
         {
             writer.WriteValue("A DateTime");
             return;

@@ -27,8 +27,13 @@ static class Extensions
         return await dataReader.GetFieldValueAsync<T>(index, cancellation).ConfigureAwait(false);
     }
 
-    public static Task<SqlDataReader> ExecuteSequentialReader(this SqlCommand command, CancellationToken cancellation = default)
+    public static Task<SqlDataReader> ExecuteSequentialReader(this SqlCommand command, CancellationToken cancellation)
     {
         return command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellation);
+    }
+
+    public static Task<SqlDataReader> ExecuteSingleRowReader(this SqlCommand command, CancellationToken cancellation)
+    {
+        return command.ExecuteReaderAsync(CommandBehavior.SingleRow | CommandBehavior.SequentialAccess, cancellation);
     }
 }

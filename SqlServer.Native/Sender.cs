@@ -63,10 +63,7 @@ namespace SqlServer.Native
                 var bodyParam = parameters.Add("Body", SqlDbType.VarBinary);
                 foreach (var message in messages)
                 {
-                    if (cancellation.IsCancellationRequested)
-                    {
-                        return;
-                    }
+                    cancellation.ThrowIfCancellationRequested();
                     idParam.Value = message.Id;
                     corrParam.SetValueOrDbNull(message.CorrelationId);
                     replyParam.SetValueOrDbNull(message.ReplyToAddress);
