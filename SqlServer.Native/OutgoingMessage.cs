@@ -8,13 +8,13 @@ namespace SqlServer.Native
     /// </summary>
     public class OutgoingMessage
     {
-        public OutgoingMessage( Guid id, string correlationId, string replyToAddress,TimeSpan timeToBeReceived, Dictionary<string, string> headers, byte[] body)
+        public OutgoingMessage( Guid id, string correlationId, string replyToAddress, DateTime expires, Dictionary<string, string> headers, byte[] body)
         {
             Guard.AgainstNull(body, nameof(body));
             Id = id;
             CorrelationId = correlationId;
             ReplyToAddress = replyToAddress;
-            TimeToBeReceived = timeToBeReceived;
+            Expires = expires;
             if (headers != null) Headers = headers;
             Body = body;
         }
@@ -22,7 +22,7 @@ namespace SqlServer.Native
         public Guid Id { get; }
         public string CorrelationId { get; }
         public string ReplyToAddress { get; }
-        public TimeSpan TimeToBeReceived { get; }
+        public DateTime Expires { get; }
         public Dictionary<string, string> Headers { get; }
         public byte[] Body { get; }
     }

@@ -43,14 +43,7 @@ namespace SqlServer.Native
             using (var command = connection.CreateCommand())
             {
                 command.Transaction = transaction;
-                command.CommandText = $@"
-if exists (
-select *
-    from sys.objects
-where
-    object_id = object_id('{table}')
-    and type in ('U'))
-    drop table {table}";
+                command.CommandText = $"drop table if exists {table}";
                 await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
             }
         }

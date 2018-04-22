@@ -9,5 +9,16 @@
     "BodyString": "絻",
     "Body": "e30=",
     "RowVersion": 1
+  },
+  {
+    "Id": "00000000-0000-0000-0000-000000000002",
+    "CorrelationId": "theCorrelationId",
+    "ReplyToAddress": "theReplyToAddress",
+    "Recoverable": true,
+    "Expires": "2000-01-01T01:01:01",
+    "Headers": "{\"headerKey1\":\"headerValue1\",\"headerKey2\":\"headerValue2\"}",
+    "BodyString": "絻",
+    "Body": "e30=",
+    "RowVersion": 2
   }
 ]

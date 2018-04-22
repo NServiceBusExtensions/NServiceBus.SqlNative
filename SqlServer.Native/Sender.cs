@@ -54,11 +54,11 @@ namespace SqlServer.Native
             {
                 command.Transaction = transaction;
                 var parameters = command.Parameters;
-                command.CommandText = string.Format(Sql,table);
+                command.CommandText = string.Format(Sql, table);
                 var idParam = parameters.Add("Id", SqlDbType.UniqueIdentifier);
                 var corrParam = parameters.Add("CorrelationId", SqlDbType.VarChar);
                 var replyParam = parameters.Add("ReplyToAddress", SqlDbType.VarChar);
-                var ttbrParam = parameters.Add("TimeToBeReceived", SqlDbType.Int);
+                var expiresParam = parameters.Add("Expires", SqlDbType.DateTime);
                 var headersParam = parameters.Add("Headers", SqlDbType.NVarChar);
                 var bodyParam = parameters.Add("Body", SqlDbType.VarBinary);
                 foreach (var message in messages)
@@ -66,7 +66,7 @@ namespace SqlServer.Native
                     idParam.Value = message.Id;
                     corrParam.SetValueOrDbNull(message.CorrelationId);
                     replyParam.SetValueOrDbNull(message.ReplyToAddress);
-                    ttbrParam.Value = message.TimeToBeReceived.TotalMilliseconds;
+                    expiresParam.Value = message.Expires;
                     headersParam.Value = HeaderSerializer.Serialize(message.Headers);
                     bodyParam.Value = message.Body;
                     await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
@@ -93,7 +93,8 @@ namespace SqlServer.Native
             Guard.AgainstNull(message, nameof(message));
             return InnerSend(connection, null, message, table, cancellation);
         }
-        public Task Send(SqlConnection connection, SqlTransaction transaction, string table, OutgoingMessage message,  CancellationToken cancellation = default)
+
+        public Task Send(SqlConnection connection, SqlTransaction transaction, string table, OutgoingMessage message, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNull(message, nameof(message));
@@ -112,7 +113,7 @@ namespace SqlServer.Native
                 parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = message.Id;
                 parameters.Add("CorrelationId", SqlDbType.VarChar).SetValueOrDbNull(message.CorrelationId);
                 parameters.Add("ReplyToAddress", SqlDbType.VarChar).SetValueOrDbNull(message.ReplyToAddress);
-                parameters.Add("TimeToBeReceived", SqlDbType.Int).Value = message.TimeToBeReceived.TotalMilliseconds;
+                parameters.Add("Expires", SqlDbType.DateTime).Value = message.Expires;
                 parameters.Add("Headers", SqlDbType.NVarChar).Value = HeaderSerializer.Serialize(message.Headers);
                 parameters.Add("Body", SqlDbType.VarBinary).Value = message.Body;
 
@@ -139,8 +140,7 @@ values (
     @CorrelationId,
     @ReplyToAddress,
     1,
-    case when @TimeToBeReceived is not null
-        then dateadd(ms, @TimeToBeReceived, getutcdate()) end,
+    @Expires,
     @Headers,
     @Body);
 
