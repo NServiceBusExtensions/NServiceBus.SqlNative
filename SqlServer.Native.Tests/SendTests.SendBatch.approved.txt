@@ -5,7 +5,7 @@
     "ReplyToAddress": "theReplyToAddress",
     "Recoverable": true,
     "Expires": "2000-01-01T01:01:01",
-    "Headers": "{\"headerKey1\":\"headerValue1\",\"headerKey2\":\"headerValue2\"}",
+    "Headers": "headers",
     "BodyString": "絻",
     "Body": "e30=",
     "RowVersion": 1
@@ -16,7 +16,7 @@
     "ReplyToAddress": "theReplyToAddress",
     "Recoverable": true,
     "Expires": "2000-01-01T01:01:01",
-    "Headers": "{\"headerKey1\":\"headerValue1\",\"headerKey2\":\"headerValue2\"}",
+    "Headers": "headers",
     "BodyString": "絻",
     "Body": "e30=",
     "RowVersion": 2

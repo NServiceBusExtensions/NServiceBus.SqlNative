@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SqlServer.Native
 {
     /// <summary>
-    /// Represents an outgoing message.
+    /// Represents a message.
     /// </summary>
-    public class OutgoingMessage
+    public class Message
     {
-        public OutgoingMessage( Guid id, string correlationId, string replyToAddress, DateTime expires, Dictionary<string, string> headers, byte[] body)
+        public Message(Guid id, string correlationId, string replyToAddress, DateTime expires, string headers, byte[] body)
         {
             Guard.AgainstNull(body, nameof(body));
             Id = id;
             CorrelationId = correlationId;
             ReplyToAddress = replyToAddress;
             Expires = expires;
-            if (headers != null) Headers = headers;
+            Headers = headers;
             Body = body;
         }
 
@@ -23,7 +22,7 @@ namespace SqlServer.Native
         public string CorrelationId { get; }
         public string ReplyToAddress { get; }
         public DateTime Expires { get; }
-        public Dictionary<string, string> Headers { get; }
+        public string Headers { get; }
         public byte[] Body { get; }
     }
 }

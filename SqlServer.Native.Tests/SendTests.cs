@@ -35,7 +35,7 @@ public class SendTests
 
         sender.Send(
             Connection.ConnectionString, "SendTests",
-            new List<OutgoingMessage>
+            new List<Message>
             {
                 BuildMessage("00000000-0000-0000-0000-000000000001"),
                 BuildMessage("00000000-0000-0000-0000-000000000002")
@@ -43,14 +43,8 @@ public class SendTests
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData("SendTests"));
     }
 
-    static OutgoingMessage BuildMessage(string guid)
+    static Message BuildMessage(string guid)
     {
-        var headers = new Dictionary<string, string>
-        {
-            {"headerKey1", "headerValue1"},
-            {"headerKey2", "headerValue2"}
-        };
-
-        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, headers, Encoding.UTF8.GetBytes("{}"));
+        return new Message(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 }
