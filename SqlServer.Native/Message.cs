@@ -9,7 +9,6 @@ namespace SqlServer.Native
     {
         public Message(Guid id, string correlationId, string replyToAddress, DateTime expires, string headers, byte[] body)
         {
-            Guard.AgainstNull(body, nameof(body));
             Id = id;
             CorrelationId = correlationId;
             ReplyToAddress = replyToAddress;
