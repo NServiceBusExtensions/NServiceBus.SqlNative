@@ -6,7 +6,7 @@ namespace SqlServer.Native
 {
     public partial class Finder
     {
-        public virtual async Task<Message> Find(string connection, long rowVersion, CancellationToken cancellation = default)
+        public virtual async Task<IncomingMessage> Find(string connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
@@ -17,14 +17,14 @@ namespace SqlServer.Native
             }
         }
 
-        public virtual Task<Message> Find(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
+        public virtual Task<IncomingMessage> Find(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             return InnerFind(connection, rowVersion, cancellation);
         }
 
-        async Task<Message> InnerFind(SqlConnection connection, long rowVersion, CancellationToken cancellation)
+        async Task<IncomingMessage> InnerFind(SqlConnection connection, long rowVersion, CancellationToken cancellation)
         {
             using (var command = BuildCommand(connection, 1, rowVersion))
             using (var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))

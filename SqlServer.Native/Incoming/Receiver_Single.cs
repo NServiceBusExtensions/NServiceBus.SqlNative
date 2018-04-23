@@ -6,7 +6,7 @@ namespace SqlServer.Native
 {
     public partial class Receiver
     {
-        public virtual async Task<Message> Receive(string connection, CancellationToken cancellation = default)
+        public virtual async Task<IncomingMessage> Receive(string connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             using (var sqlConnection = new SqlConnection(connection))
@@ -16,19 +16,19 @@ namespace SqlServer.Native
             }
         }
 
-        public virtual Task<Message> Receive(SqlConnection connection, CancellationToken cancellation = default)
+        public virtual Task<IncomingMessage> Receive(SqlConnection connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             return InnerReceive(connection, null, cancellation);
         }
 
-        public virtual Task<Message> Receive(SqlTransaction transaction, CancellationToken cancellation = default)
+        public virtual Task<IncomingMessage> Receive(SqlTransaction transaction, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(transaction, nameof(transaction));
             return InnerReceive(transaction.Connection, transaction, cancellation);
         }
 
-        async Task<Message> InnerReceive(SqlConnection connection, SqlTransaction transaction, CancellationToken cancellation)
+        async Task<IncomingMessage> InnerReceive(SqlConnection connection, SqlTransaction transaction, CancellationToken cancellation)
         {
             using (var command = BuildCommand(connection, transaction, 1))
             using (var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))

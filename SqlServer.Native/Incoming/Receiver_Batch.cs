@@ -7,13 +7,13 @@ namespace SqlServer.Native
 {
     public partial class Receiver
     {
-        public virtual Task<int> Receive(string connection, int size, Action<Message> action, CancellationToken cancellation = default)
+        public virtual Task<int> Receive(string connection, int size, Action<IncomingMessage> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(action, nameof(action));
             return Receive(connection, size, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual async Task<int> Receive(string connection, int size, Func<Message, Task> action, CancellationToken cancellation = default)
+        public virtual async Task<int> Receive(string connection, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(size, nameof(size));
@@ -25,13 +25,13 @@ namespace SqlServer.Native
             }
         }
 
-        public virtual Task<int> Receive(SqlConnection connection, int size, Action<Message> action, CancellationToken cancellation = default)
+        public virtual Task<int> Receive(SqlConnection connection, int size, Action<IncomingMessage> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(action, nameof(action));
             return Receive(connection, size, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual Task<int> Receive(SqlConnection connection, int size, Func<Message, Task> action, CancellationToken cancellation = default)
+        public virtual Task<int> Receive(SqlConnection connection, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(size, nameof(size));
@@ -39,14 +39,14 @@ namespace SqlServer.Native
             return InnerReceive(connection, null, size, action, cancellation);
         }
 
-        public virtual Task<int> Receive(SqlTransaction transaction, int size, Action<Message> action, CancellationToken cancellation = default)
+        public virtual Task<int> Receive(SqlTransaction transaction, int size, Action<IncomingMessage> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNull(action, nameof(action));
             return Receive(transaction, size, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual Task<int> Receive(SqlTransaction transaction, int size, Func<Message, Task> action, CancellationToken cancellation = default)
+        public virtual Task<int> Receive(SqlTransaction transaction, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(transaction, nameof(transaction));
             Guard.AgainstNegativeAndZero(size, nameof(size));
@@ -54,7 +54,7 @@ namespace SqlServer.Native
             return InnerReceive(transaction.Connection, transaction, size, action, cancellation);
         }
 
-        async Task<int> InnerReceive(SqlConnection connection, SqlTransaction transaction, int size, Func<Message, Task> action, CancellationToken cancellation)
+        async Task<int> InnerReceive(SqlConnection connection, SqlTransaction transaction, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation)
         {
             var count = 0;
             using (var command = BuildCommand(connection, transaction, size))

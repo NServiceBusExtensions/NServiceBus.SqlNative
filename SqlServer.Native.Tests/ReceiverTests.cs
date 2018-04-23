@@ -37,14 +37,14 @@ public class ReceiverTests
 
         sender.Send(
             Connection.ConnectionString,
-            new List<Message>
+            new List<OutgoingMessage>
             {
                 BuildMessage("00000000-0000-0000-0000-000000000001"),
                 BuildMessage("00000000-0000-0000-0000-000000000002")
             }).Await();
 
         var receiver = new Receiver("ReceiverTests");
-        var messages = new List<Message>();
+        var messages = new List<IncomingMessage>();
         receiver.Receive(
             connection: Connection.ConnectionString,
             size: 10,
@@ -53,8 +53,8 @@ public class ReceiverTests
         ObjectApprover.VerifyWithJson(messages);
     }
 
-    static Message BuildMessage(string guid)
+    static OutgoingMessage BuildMessage(string guid)
     {
-        return new Message(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 }

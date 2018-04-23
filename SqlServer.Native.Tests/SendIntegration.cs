@@ -39,7 +39,7 @@ public class SendIntegration
             { "NServiceBus.EnclosedMessageTypes", typeof(SendMessage).FullName}
         };
 
-        var message = new Message(Guid.NewGuid(), null, null, DateTime.Now.AddDays(1), HeaderSerializer.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
+        var message = new OutgoingMessage(Guid.NewGuid(), null, null, DateTime.Now.AddDays(1), HeaderSerializer.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
         return sender.Send(Connection.ConnectionString, message);
     }
 

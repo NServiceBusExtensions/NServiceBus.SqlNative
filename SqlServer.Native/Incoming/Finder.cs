@@ -28,6 +28,7 @@ set nocount on;
 
 select top({1})
     Id,
+    RowVersion,
     CorrelationId,
     ReplyToAddress,
     Expires,

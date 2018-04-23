@@ -5,9 +5,9 @@ namespace SqlServer.Native
     /// <summary>
     /// Represents a message.
     /// </summary>
-    public class Message
+    public class OutgoingMessage
     {
-        public Message(Guid id, string correlationId, string replyToAddress, DateTime? expires, string headers, byte[] body)
+        public OutgoingMessage(Guid id, string correlationId, string replyToAddress, DateTime? expires, string headers, byte[] body)
         {
             Id = id;
             CorrelationId = correlationId;

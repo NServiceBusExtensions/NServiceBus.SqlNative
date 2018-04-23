@@ -1,6 +1,7 @@
 ﻿[
   {
     "Id": "00000000-0000-0000-0000-000000000001",
+    "RowVersion": 1,
     "CorrelationId": "theCorrelationId",
     "ReplyToAddress": "theReplyToAddress",
     "Expires": "2000-01-01T01:01:01",
@@ -9,6 +10,7 @@
   },
   {
     "Id": "00000000-0000-0000-0000-000000000002",
+    "RowVersion": 2,
     "CorrelationId": "theCorrelationId",
     "ReplyToAddress": "theReplyToAddress",
     "Expires": "2000-01-01T01:01:01",

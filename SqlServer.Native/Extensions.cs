@@ -14,6 +14,7 @@ static class Extensions
             return Task.CompletedTask;
         };
     }
+
     public static void SetValueOrDbNull(this SqlParameter corrParam, string value)
     {
         if (value == null)
@@ -35,6 +36,7 @@ static class Extensions
             await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
         }
     }
+
     public static async Task<T> ValueOrNull<T>(this SqlDataReader dataReader, int index, CancellationToken cancellation)
     {
         if (await dataReader.IsDBNullAsync(index, cancellation).ConfigureAwait(false))

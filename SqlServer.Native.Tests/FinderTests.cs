@@ -37,7 +37,7 @@ public class FinderTests
 
         sender.Send(
             Connection.ConnectionString,
-            new List<Message>
+            new List<OutgoingMessage>
             {
                 BuildMessage("00000000-0000-0000-0000-000000000001"),
                 BuildMessage("00000000-0000-0000-0000-000000000002"),
@@ -47,7 +47,7 @@ public class FinderTests
             }).Await();
 
         var finder = new Finder("FinderTests");
-        var messages = new List<Message>();
+        var messages = new List<IncomingMessage>();
         finder.Find(
             connection: Connection.ConnectionString,
             size: 3,
@@ -57,8 +57,8 @@ public class FinderTests
         ObjectApprover.VerifyWithJson(messages);
     }
 
-    static Message BuildMessage(string guid)
+    static OutgoingMessage BuildMessage(string guid)
     {
-        return new Message(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 }
