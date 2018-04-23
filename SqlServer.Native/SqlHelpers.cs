@@ -23,6 +23,19 @@ namespace SqlServer.Native
             }
         }
 
+       internal static string WrapInNoCount(string sql)
+        {
+            return $@"
+declare @nocount varchar(3) = 'off';
+if ( (512 & @@options) = 512 ) set @nocount = 'on'
+set nocount on;
+
+{sql}
+
+if (@nocount = 'on') set nocount on;
+if (@nocount = 'off') set nocount off;";
+        }
+
         /// <summary>
         /// Drops a table.
         /// </summary>

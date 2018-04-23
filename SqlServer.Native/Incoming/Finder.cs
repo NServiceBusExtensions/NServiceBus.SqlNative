@@ -21,11 +21,7 @@ namespace SqlServer.Native
             return command;
         }
 
-        public static readonly string FindSql = @"
-declare @nocount varchar(3) = 'off';
-if ( (512 & @@options) = 512 ) set @nocount = 'on';
-set nocount on;
-
+        public static readonly string FindSql = SqlHelpers.WrapInNoCount(@"
 select top({1})
     Id,
     RowVersion,
@@ -37,8 +33,6 @@ select top({1})
 from {0}
 where RowVersion >= @RowVersion
 order by RowVersion
-
-if (@nocount = 'on') set nocount on;
-if (@nocount = 'off') set nocount off;";
+");
     }
 }

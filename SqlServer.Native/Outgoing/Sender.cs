@@ -10,12 +10,8 @@
             this.table = table;
         }
 
-        public static readonly string Sql =
+        public static readonly string Sql = SqlHelpers.WrapInNoCount(
             @"
-declare @nocount varchar(3) = 'off';
-if ( (512 & @@options) = 512 ) set @nocount = 'on'
-set nocount on;
-
 insert into {0} (
     Id,
     CorrelationId,
@@ -32,9 +28,6 @@ values (
     1,
     @Expires,
     @Headers,
-    @Body);
-
-if (@nocount = 'on') set nocount on;
-if (@nocount = 'off') set nocount off;";
+    @Body);");
     }
 }

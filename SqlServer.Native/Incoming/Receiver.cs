@@ -20,11 +20,7 @@ namespace SqlServer.Native
             return command;
         }
 
-        public static readonly string ReceiveSql = @"
-declare @nocount varchar(3) = 'off';
-if ( (512 & @@options) = 512 ) set @nocount = 'on';
-set nocount on;
-
+        public static readonly string ReceiveSql = SqlHelpers.WrapInNoCount(@"
 with message as (
     select top({1}) *
     from {0} with (updlock, readpast, rowlock)
@@ -38,8 +34,6 @@ output
     deleted.Expires,
     deleted.Headers,
     deleted.Body;
-
-if (@nocount = 'on') set nocount on;
-if (@nocount = 'off') set nocount off;";
+");
     }
 }
