@@ -19,12 +19,12 @@ public class ReceiverTests
     {
         SqlHelpers.Drop(Connection.ConnectionString, "SendTests").Await();
         QueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
-        var sender = new Sender();
+        var sender = new Sender("SendTests");
 
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
-        sender.Send(Connection.ConnectionString, "SendTests", message).Await();
-        var receiver = new Receiver();
-        var received = receiver.Receive(Connection.ConnectionString, "SendTests").Result;
+        sender.Send(Connection.ConnectionString, message).Await();
+        var receiver = new Receiver("SendTests");
+        var received = receiver.Receive(Connection.ConnectionString).Result;
         ObjectApprover.VerifyWithJson(received);
     }
 
@@ -33,21 +33,20 @@ public class ReceiverTests
     {
         SqlHelpers.Drop(Connection.ConnectionString, "SendTests").Await();
         QueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
-        var sender = new Sender();
+        var sender = new Sender("SendTests");
 
         sender.Send(
-            Connection.ConnectionString, "SendTests",
+            Connection.ConnectionString,
             new List<Message>
             {
                 BuildMessage("00000000-0000-0000-0000-000000000001"),
                 BuildMessage("00000000-0000-0000-0000-000000000002")
             }).Await();
 
-        var receiver = new Receiver();
+        var receiver = new Receiver("SendTests");
         var messages = new List<Message>();
         receiver.Receive(
             connection: Connection.ConnectionString,
-            table: "SendTests",
             batchSize: 10,
             action: message => { messages.Add(message); })
             .Await();

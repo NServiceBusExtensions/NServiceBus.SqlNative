@@ -23,8 +23,8 @@ public class ReceiverIntegration
         configuration.DisableFeature<TimeoutManager>();
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
-        var receiver = new Receiver();
-        var message = await receiver.Receive(Connection.ConnectionString, "IntegrationReceiver_Receiver");
+        var receiver = new Receiver("IntegrationReceiver_Receiver");
+        var message = await receiver.Receive(Connection.ConnectionString);
         Assert.NotNull(message);
     }
 

@@ -19,7 +19,7 @@ namespace SqlServer.Native
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                await Create(sqlConnection, null, table, cancellation);
+                await Create(sqlConnection, null, table, cancellation).ConfigureAwait(false);
             }
         }
 
@@ -92,7 +92,7 @@ where
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                await Create(sqlConnection, null, table, cancellation);
+                await Create(sqlConnection, null, table, cancellation).ConfigureAwait(false);
             }
         }
 

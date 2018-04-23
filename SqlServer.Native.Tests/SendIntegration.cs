@@ -33,14 +33,14 @@ public class SendIntegration
 
     static Task SendStartMessage()
     {
-        var sender = new Sender();
+        var sender = new Sender("IntegrationSend");
         var headers = new Dictionary<string, string>
         {
             { "NServiceBus.EnclosedMessageTypes", typeof(SendMessage).FullName}
         };
 
         var message = new Message(Guid.NewGuid(), null, null, DateTime.Now.AddDays(1), HeaderSerializer.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
-        return sender.Send(Connection.ConnectionString, "IntegrationSend", message);
+        return sender.Send(Connection.ConnectionString, message);
     }
 
     class SendHandler : IHandleMessages<SendMessage>

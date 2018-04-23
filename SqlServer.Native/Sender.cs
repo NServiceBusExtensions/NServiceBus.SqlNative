@@ -9,18 +9,25 @@ namespace SqlServer.Native
 {
     public class Sender
     {
-        public virtual async Task Send(string connection, string table, IEnumerable<Message> messages, CancellationToken cancellation = default)
+        string table;
+
+        public Sender(string table)
+        {
+            Guard.AgainstNullOrEmpty(table, nameof(table));
+            this.table = table;
+        }
+
+        public virtual async Task Send(string connection, IEnumerable<Message> messages, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNull(messages, nameof(messages));
             using (var sqlConnection = new SqlConnection(connection))
             {
-                await sqlConnection.OpenAsync(cancellation);
+                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
                 var transaction = sqlConnection.BeginTransaction();
                 try
                 {
-                    await InnerSend(sqlConnection, transaction, table, messages, cancellation);
+                    await InnerSend(sqlConnection, transaction, messages, cancellation).ConfigureAwait(false);
                     transaction.Commit();
                 }
                 catch (Exception)
@@ -31,24 +38,22 @@ namespace SqlServer.Native
             }
         }
 
-        public virtual Task Send(SqlConnection connection, string table, IEnumerable<Message> messages, CancellationToken cancellation = default)
+        public virtual Task Send(SqlConnection connection, IEnumerable<Message> messages, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
-            Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNull(messages, nameof(messages));
-            return InnerSend(connection, null, table, messages, cancellation);
+            return InnerSend(connection, null,  messages, cancellation);
         }
 
-        public virtual Task Send(SqlConnection connection, SqlTransaction transaction, string table, IEnumerable<Message> messages, CancellationToken cancellation = default)
+        public virtual Task Send(SqlConnection connection, SqlTransaction transaction,  IEnumerable<Message> messages, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNull(transaction, nameof(transaction));
-            Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNull(messages, nameof(messages));
-            return InnerSend(connection, transaction, table, messages, cancellation);
+            return InnerSend(connection, transaction, messages, cancellation);
         }
 
-        static async Task InnerSend(SqlConnection connection, SqlTransaction transaction, string table, IEnumerable<Message> messages, CancellationToken cancellation)
+        async Task InnerSend(SqlConnection connection, SqlTransaction transaction, IEnumerable<Message> messages, CancellationToken cancellation)
         {
             using (var command = connection.CreateCommand())
             {
@@ -75,36 +80,33 @@ namespace SqlServer.Native
             }
         }
 
-        public virtual async Task Send(string connection, string table, Message message, CancellationToken cancellation = default)
+        public virtual async Task Send(string connection, Message message, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNull(message, nameof(message));
             using (var sqlConnection = new SqlConnection(connection))
             {
-                await sqlConnection.OpenAsync(cancellation);
-                await InnerSend(sqlConnection, null, message, table, cancellation);
+                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
+                await InnerSend(sqlConnection, null, message, cancellation).ConfigureAwait(false);
             }
         }
 
-        public virtual Task Send(SqlConnection connection, string table, Message message, CancellationToken cancellation = default)
+        public virtual Task Send(SqlConnection connection, Message message, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
-            Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNull(message, nameof(message));
-            return InnerSend(connection, null, message, table, cancellation);
+            return InnerSend(connection, null, message, cancellation);
         }
 
-        public virtual Task Send(SqlConnection connection, SqlTransaction transaction, string table, Message message, CancellationToken cancellation = default)
+        public virtual Task Send(SqlConnection connection, SqlTransaction transaction, Message message, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNull(message, nameof(message));
             Guard.AgainstNull(transaction, nameof(transaction));
-            Guard.AgainstNullOrEmpty(table, nameof(table));
-            return InnerSend(connection, transaction, message, table, cancellation);
+            return InnerSend(connection, transaction, message,  cancellation);
         }
 
-        static async Task InnerSend(SqlConnection connection, SqlTransaction transaction, Message message, string table, CancellationToken cancellation)
+        async Task InnerSend(SqlConnection connection, SqlTransaction transaction, Message message, CancellationToken cancellation)
         {
             using (var command = connection.CreateCommand())
             {

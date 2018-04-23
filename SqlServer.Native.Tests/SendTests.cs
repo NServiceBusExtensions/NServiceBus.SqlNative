@@ -19,10 +19,10 @@ public class SendTests
     {
         SqlHelpers.Drop(Connection.ConnectionString, "SendTests").Await();
         QueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
-        var sender = new Sender();
+        var sender = new Sender("SendTests");
 
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
-        sender.Send(Connection.ConnectionString, "SendTests", message).Await();
+        sender.Send(Connection.ConnectionString, message).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData("SendTests"));
     }
 
@@ -31,10 +31,10 @@ public class SendTests
     {
         SqlHelpers.Drop(Connection.ConnectionString, "SendTests").Await();
         QueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
-        var sender = new Sender();
+        var sender = new Sender("SendTests");
 
         sender.Send(
-            Connection.ConnectionString, "SendTests",
+            Connection.ConnectionString,
             new List<Message>
             {
                 BuildMessage("00000000-0000-0000-0000-000000000001"),
