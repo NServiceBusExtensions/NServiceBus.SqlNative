@@ -14,8 +14,8 @@ public class ReceiverIntegration
     [Fact]
     public async Task Run()
     {
-        await MessageQueueCreator.Drop(Connection.ConnectionString, "IntegrationReceiver_Receiver");
-        await MessageQueueCreator.Create(Connection.ConnectionString, "IntegrationReceiver_Receiver");
+        await SqlHelpers.Drop(Connection.ConnectionString, "IntegrationReceiver_Receiver");
+        await QueueCreator.Create(Connection.ConnectionString, "IntegrationReceiver_Receiver");
         var configuration = await EndpointCreator.Create("IntegrationReceiver");
         configuration.SendOnly();
         var transport = configuration.UseTransport<SqlServerTransport>();

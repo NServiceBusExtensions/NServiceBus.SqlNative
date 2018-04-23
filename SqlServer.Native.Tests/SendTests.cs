@@ -17,8 +17,8 @@ public class SendTests
     [Fact]
     public void SendSingle()
     {
-        MessageQueueCreator.Drop(Connection.ConnectionString, "SendTests").Await();
-        MessageQueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
+        SqlHelpers.Drop(Connection.ConnectionString, "SendTests").Await();
+        QueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
         var sender = new Sender();
 
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
@@ -29,8 +29,8 @@ public class SendTests
     [Fact]
     public void SendBatch()
     {
-        MessageQueueCreator.Drop(Connection.ConnectionString, "SendTests").Await();
-        MessageQueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
+        SqlHelpers.Drop(Connection.ConnectionString, "SendTests").Await();
+        QueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
         var sender = new Sender();
 
         sender.Send(

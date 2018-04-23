@@ -34,7 +34,7 @@ namespace SqlServer.Native
 
         static async Task<Message> InnerReceive(SqlConnection connection, SqlTransaction transaction, string table, CancellationToken cancellation)
         {
-            using (var command = BuildCommand(connection, transaction, table))
+            using (var command = BuildCommand(connection, transaction, table, 1))
             using (var dataReader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))
             {
                 if (!dataReader.Read())
@@ -46,9 +46,9 @@ namespace SqlServer.Native
             }
         }
 
-        public virtual Task Receive(string connection, string table, Action<Message> action, CancellationToken cancellation = default)
+        public virtual Task Receive(string connection, string table, int batchSize, Action<Message> action, CancellationToken cancellation = default)
         {
-            return Receive(connection, table,
+            return Receive(connection, table, batchSize,
                 message =>
                 {
                     action(message);
@@ -57,20 +57,22 @@ namespace SqlServer.Native
                 cancellation);
         }
 
-        public virtual async Task Receive(string connection, string table, Func<Message, Task> action, CancellationToken cancellation = default)
+        public virtual async Task Receive(string connection, string table, int batchSize, Func<Message, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(action, nameof(action));
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation);
-                await InnerReceive(sqlConnection, null, table, action, cancellation);
+                await InnerReceive(sqlConnection, null, table, batchSize, action, cancellation);
             }
         }
 
-        public virtual Task Receive(SqlConnection connection, string table, Action<Message> action, CancellationToken cancellation = default)
+        public virtual Task Receive(SqlConnection connection, string table, int batchSize, Action<Message> action, CancellationToken cancellation = default)
         {
             return Receive(connection, table,
+                batchSize,
                 message =>
                 {
                     action(message);
@@ -79,16 +81,17 @@ namespace SqlServer.Native
                 cancellation);
         }
 
-        public virtual Task Receive(SqlConnection connection, string table, Func<Message, Task> action, CancellationToken cancellation = default)
+        public virtual Task Receive(SqlConnection connection, string table, int batchSize, Func<Message, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
+            Guard.AgainstNull(action, nameof(action));
             Guard.AgainstNullOrEmpty(table, nameof(table));
-            return InnerReceive(connection, null, table, action, cancellation);
+            return InnerReceive(connection, null, table, batchSize, action, cancellation);
         }
 
-        public virtual Task Receive(SqlConnection connection, SqlTransaction transaction, string table, Action<Message> action, CancellationToken cancellation = default)
+        public virtual Task Receive(SqlConnection connection, SqlTransaction transaction, string table, int batchSize, Action<Message> action, CancellationToken cancellation = default)
         {
-            return Receive(connection, transaction, table,
+            return Receive(connection, transaction, table, batchSize,
                 message =>
                 {
                     action(message);
@@ -97,17 +100,17 @@ namespace SqlServer.Native
                 cancellation);
         }
 
-        public virtual Task Receive(SqlConnection connection, SqlTransaction transaction, string table, Func<Message, Task> action, CancellationToken cancellation = default)
+        public virtual Task Receive(SqlConnection connection, SqlTransaction transaction, string table, int batchSize, Func<Message, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNull(transaction, nameof(transaction));
             Guard.AgainstNullOrEmpty(table, nameof(table));
-            return InnerReceive(connection, transaction, table, action, cancellation);
+            return InnerReceive(connection, transaction, table, batchSize, action, cancellation);
         }
 
-        static async Task InnerReceive(SqlConnection connection, SqlTransaction transaction, string table, Func<Message, Task> action, CancellationToken cancellation)
+        static async Task InnerReceive(SqlConnection connection, SqlTransaction transaction, string table, int batchSize, Func<Message, Task> action, CancellationToken cancellation)
         {
-            using (var command = BuildCommand(connection, transaction, table))
+            using (var command = BuildCommand(connection, transaction, table, batchSize))
             using (var dataReader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
             {
                 while (dataReader.Read())
@@ -119,11 +122,11 @@ namespace SqlServer.Native
             }
         }
 
-        static SqlCommand BuildCommand(SqlConnection connection, SqlTransaction transaction, string table)
+        static SqlCommand BuildCommand(SqlConnection connection, SqlTransaction transaction, string table, int batchSize)
         {
             var command = connection.CreateCommand();
             command.Transaction = transaction;
-            command.CommandText = string.Format(ReceiveSql, table);
+            command.CommandText = string.Format(ReceiveSql, table, batchSize);
             return command;
         }
 
@@ -145,7 +148,7 @@ if ( (512 & @@options) = 512 ) set @nocount = 'on';
 set nocount on;
 
 with message as (
-    select top(1) *
+    select top({1}) *
     from {0} with (updlock, readpast, rowlock)
     order by RowVersion)
 delete from message

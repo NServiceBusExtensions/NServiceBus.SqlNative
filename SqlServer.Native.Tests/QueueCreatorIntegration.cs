@@ -4,11 +4,11 @@ using NServiceBus;
 using NServiceBus.Features;
 using Xunit;
 
-public class QueueCreationIntegration
+public class QueueCreatorIntegration
 {
     static ManualResetEvent resetEvent;
 
-    static QueueCreationIntegration()
+    static QueueCreatorIntegration()
     {
         DbSetup.Setup();
     }

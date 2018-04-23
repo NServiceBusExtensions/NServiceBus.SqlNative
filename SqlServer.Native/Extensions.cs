@@ -17,6 +17,16 @@ static class Extensions
         corrParam.Value = value;
     }
 
+    public static async Task ExecuteCommand(this SqlConnection connection, SqlTransaction transaction, string sql, CancellationToken cancellation = default)
+    {
+        Guard.AgainstNull(connection, nameof(connection));
+        using (var command = connection.CreateCommand())
+        {
+            command.Transaction = transaction;
+            command.CommandText = sql;
+            await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
+        }
+    }
     public static async Task<T> ValueOrNull<T>(this SqlDataReader dataReader, int index, CancellationToken cancellation)
     {
         if (await dataReader.IsDBNullAsync(index, cancellation).ConfigureAwait(false))

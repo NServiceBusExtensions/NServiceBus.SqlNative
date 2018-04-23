@@ -17,8 +17,8 @@ public class ReceiverTests
     [Fact]
     public void ReceiveSingle()
     {
-        MessageQueueCreator.Drop(Connection.ConnectionString, "SendTests").Await();
-        MessageQueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
+        SqlHelpers.Drop(Connection.ConnectionString, "SendTests").Await();
+        QueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
         var sender = new Sender();
 
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
@@ -31,8 +31,8 @@ public class ReceiverTests
     [Fact]
     public void ReceiveBatch()
     {
-        MessageQueueCreator.Drop(Connection.ConnectionString, "SendTests").Await();
-        MessageQueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
+        SqlHelpers.Drop(Connection.ConnectionString, "SendTests").Await();
+        QueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
         var sender = new Sender();
 
         sender.Send(
@@ -45,10 +45,12 @@ public class ReceiverTests
 
         var receiver = new Receiver();
         var messages = new List<Message>();
-        receiver.Receive(Connection.ConnectionString, "SendTests", message =>
-        {
-            messages.Add(message);
-        }).Await();
+        receiver.Receive(
+            connection: Connection.ConnectionString,
+            table: "SendTests",
+            batchSize: 10,
+            action: message => { messages.Add(message); })
+            .Await();
         ObjectApprover.VerifyWithJson(messages);
     }
 
