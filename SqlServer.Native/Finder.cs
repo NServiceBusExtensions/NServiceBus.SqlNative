@@ -34,7 +34,7 @@ select top({1})
     Expires,
     Headers,
     Body
-from {0} with (updlock, readpast, rowlock)
+from {0}
 where RowVersion >= @RowVersion
 order by RowVersion
 

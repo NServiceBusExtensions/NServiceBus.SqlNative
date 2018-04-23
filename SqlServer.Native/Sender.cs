@@ -80,7 +80,7 @@ namespace SqlServer.Native
             }
         }
 
-        public virtual async Task Send(string connection, Message message, CancellationToken cancellation = default)
+        public virtual async Task<long> Send(string connection, Message message, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             Guard.AgainstNull(message, nameof(message));
@@ -91,14 +91,14 @@ namespace SqlServer.Native
             }
         }
 
-        public virtual Task Send(SqlConnection connection, Message message, CancellationToken cancellation = default)
+        public virtual Task<long> Send(SqlConnection connection, Message message, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNull(message, nameof(message));
             return InnerSend(connection, null, message, cancellation);
         }
 
-        public virtual Task Send(SqlConnection connection, SqlTransaction transaction, Message message, CancellationToken cancellation = default)
+        public virtual Task<long> Send(SqlConnection connection, SqlTransaction transaction, Message message, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNull(message, nameof(message));
@@ -106,7 +106,7 @@ namespace SqlServer.Native
             return InnerSend(connection, transaction, message,  cancellation);
         }
 
-        async Task InnerSend(SqlConnection connection, SqlTransaction transaction, Message message, CancellationToken cancellation)
+        async Task<long> InnerSend(SqlConnection connection, SqlTransaction transaction, Message message, CancellationToken cancellation)
         {
             using (var command = connection.CreateCommand())
             {
@@ -120,7 +120,8 @@ namespace SqlServer.Native
                 parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;
                 parameters.Add("Body", SqlDbType.VarBinary).Value = message.Body;
 
-                await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
+                var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
+                return (long)rowVersion;
             }
         }
 
@@ -138,6 +139,7 @@ insert into {0} (
     Expires,
     Headers,
     Body)
+output inserted.RowVersion
 values (
     @Id,
     @CorrelationId,

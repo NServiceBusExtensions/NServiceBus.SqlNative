@@ -10,6 +10,9 @@
     <NoWarn>CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="MessageLoop.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.4.3" />
   </ItemGroup>
 </Project>
