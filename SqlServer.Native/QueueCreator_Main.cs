@@ -4,52 +4,55 @@ using System.Threading.Tasks;
 
 namespace SqlServer.Native
 {
+    /// <summary>
+    /// Handles creation of transport queues.
+    /// </summary>
     public static partial class QueueCreator
     {
         /// <summary>
-        /// Creates a Delayed queue.
+        /// Creates a queue.
         /// </summary>
-        public static async Task CreateDelayed(string connection, string table, CancellationToken cancellation = default)
+        public static async Task Create(string connection, string table, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             Guard.AgainstNullOrEmpty(table, nameof(table));
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                await InnerCreateDelayed(sqlConnection, null, table, cancellation).ConfigureAwait(false);
+                await InnerCreate(sqlConnection, null, table, cancellation).ConfigureAwait(false);
             }
         }
 
         /// <summary>
-        /// Creates a Delayed queue.
+        /// Creates a queue.
         /// </summary>
-        public static Task CreateDelayed(SqlConnection connection, string table, CancellationToken cancellation = default)
+        public static Task Create(SqlConnection connection, string table, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNullOrEmpty(table, nameof(table));
-            return InnerCreateDelayed(connection, null, table, cancellation);
+            return InnerCreate(connection, null, table, cancellation);
         }
 
         /// <summary>
-        /// Creates a Delayed queue.
+        /// Creates a queue.
         /// </summary>
-        public static Task CreateDelayed(SqlTransaction transaction, string table, CancellationToken cancellation = default)
+        public static Task Create(SqlTransaction transaction, string table, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(transaction, nameof(transaction));
             Guard.AgainstNullOrEmpty(table, nameof(table));
-            return InnerCreateDelayed(transaction.Connection, transaction, table, cancellation);
+            return InnerCreate(transaction.Connection, transaction, table, cancellation);
         }
 
-        static Task InnerCreateDelayed(SqlConnection connection, SqlTransaction transaction, string table, CancellationToken cancellation = default)
+        static Task InnerCreate(SqlConnection connection, SqlTransaction transaction, string table, CancellationToken cancellation = default)
         {
-            var commandText = string.Format(DelayedTableSql, table);
+            var commandText = string.Format(QueueTableSql, table);
             return connection.ExecuteCommand(transaction, commandText, cancellation);
         }
 
         /// <summary>
-        /// The sql statements used to create the Delayed queue.
+        /// The sql statements used to create the queue.
         /// </summary>
-        public static readonly string DelayedTableSql = @"
+        public static readonly string QueueTableSql = @"
 if exists (
     select *
     from sys.objects
@@ -58,17 +61,35 @@ if exists (
 return
 
 create table {0} (
+    Id uniqueidentifier not null,
+    CorrelationId varchar(255),
+    ReplyToAddress varchar(255),
+    Recoverable bit not null,
+    Expires datetime,
     Headers nvarchar(max) not null,
     BodyString as cast(Body as nvarchar(max)),
     Body varbinary(max),
-    Due datetime not null,
     RowVersion bigint identity(1,1) not null
 );
 
-create nonclustered index [Index_Due] on {0}
+create clustered index Index_RowVersion on {0}
 (
-    [Due]
+    RowVersion
 )
+
+create nonclustered index Index_Expires on {0}
+(
+    Expires
+)
+include
+(
+    Id,
+    RowVersion
+)
+where
+    Expires is not null
 ";
+
+
     }
 }
