@@ -5,19 +5,20 @@ NServiceBus.Native
 
 Adds low level APIs for [NServiceBus](https://docs.particular.net/nservicebus/) Transports.
 
+
 ## SQL Server
+
 
 ### Documentation
 
 https://docs.particular.net/nuget/NServiceBus.SqlServer.Native
 
 
-### The NuGet package  [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.Native.svg?style=flat)](https://www.nuget.org/packages/NServiceBus.Attachments.Sql/)
+### The NuGet package  [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.Native.svg?style=flat)](https://www.nuget.org/packages/NServiceBus.SqlServer.Native/)
 
 https://nuget.org/packages/NServiceBus.SqlServer.Native/
 
     PM> Install-Package NServiceBus.SqlServer.Native
-
 
 
 ## Icon
