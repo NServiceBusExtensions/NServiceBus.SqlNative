@@ -42,6 +42,7 @@ namespace SqlServer.Native
             Guard.AgainstNullOrEmpty(table, nameof(table));
             return InnerCreate(transaction.Connection, transaction, table, cancellation);
         }
+
         static Task InnerCreate(SqlConnection connection, SqlTransaction transaction, string table, CancellationToken cancellation = default)
         {
             var commandText = string.Format(QueueTableSql, table);

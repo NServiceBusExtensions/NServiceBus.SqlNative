@@ -31,14 +31,14 @@ namespace SqlServer.Native
         async Task<Message> InnerReceive(SqlConnection connection, SqlTransaction transaction, CancellationToken cancellation)
         {
             using (var command = BuildCommand(connection, transaction, 1))
-            using (var dataReader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))
+            using (var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))
             {
-                if (!await dataReader.ReadAsync(cancellation).ConfigureAwait(false))
+                if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
                 {
                     return null;
                 }
 
-                return await ReadMessage(cancellation, dataReader).ConfigureAwait(false);
+                return await reader.ReadMessage(cancellation).ConfigureAwait(false);
             }
         }
     }

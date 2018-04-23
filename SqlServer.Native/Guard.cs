@@ -29,6 +29,21 @@ static class Guard
         }
     }
 
+    public static void AgainstNegativeAndZero(int value, string argumentName)
+    {
+        if (value<1)
+        {
+            throw new ArgumentNullException(argumentName);
+        }
+    }
+    public static void AgainstNegativeAndZero(long value, string argumentName)
+    {
+        if (value<1)
+        {
+            throw new ArgumentNullException(argumentName);
+        }
+    }
+
     public static Func<T> WrapFuncInCheck<T>(this Func<T> func, string name)
     {
         return () => func.EvaluateAndCheck(name);

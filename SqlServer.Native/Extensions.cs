@@ -8,7 +8,6 @@ static class Extensions
 {
     public static Func<T, Task> ToTaskFunc<T>(this Action<T> action)
     {
-        Guard.AgainstNull(action, nameof(action));
         return x =>
         {
             action(x);
