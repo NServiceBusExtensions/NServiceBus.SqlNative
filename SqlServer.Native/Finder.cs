@@ -13,10 +13,9 @@ namespace SqlServer.Native
             this.table = table;
         }
 
-        SqlCommand BuildCommand(SqlConnection connection, SqlTransaction transaction, int batchSize, long startRowVersion)
+        SqlCommand BuildCommand(SqlConnection connection, int batchSize, long startRowVersion)
         {
             var command = connection.CreateCommand();
-            command.Transaction = transaction;
             command.CommandText = string.Format(FindSql, table, batchSize);
             command.Parameters.Add("RowVersion", SqlDbType.BigInt).Value = startRowVersion;
             return command;

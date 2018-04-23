@@ -87,7 +87,7 @@ namespace SqlServer.Native
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                await InnerSend(sqlConnection, null, message, cancellation).ConfigureAwait(false);
+                return await InnerSend(sqlConnection, null, message, cancellation).ConfigureAwait(false);
             }
         }
 

@@ -21,7 +21,7 @@ namespace SqlServer.Native
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await InnerFind(sqlConnection, null, size, startRowVersion, action, cancellation).ConfigureAwait(false);
+                return await InnerFind(sqlConnection, size, startRowVersion, action, cancellation).ConfigureAwait(false);
             }
         }
 
@@ -36,27 +36,13 @@ namespace SqlServer.Native
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNegativeAndZero(startRowVersion, nameof(startRowVersion));
             Guard.AgainstNull(action, nameof(action));
-            return InnerFind(connection, null, size, startRowVersion, action, cancellation);
+            return InnerFind(connection, size, startRowVersion, action, cancellation);
         }
 
-        public virtual Task<int> Find(SqlTransaction transaction, int size, long startRowVersion, Action<Message> action, CancellationToken cancellation = default)
-        {
-            return Find(transaction, size, startRowVersion, action.ToTaskFunc(), cancellation);
-        }
-
-        public virtual Task<int> Find(SqlTransaction transaction, int size, long startRowVersion, Func<Message, Task> action, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNull(transaction, nameof(transaction));
-            Guard.AgainstNegativeAndZero(size, nameof(size));
-            Guard.AgainstNegativeAndZero(startRowVersion, nameof(startRowVersion));
-            Guard.AgainstNull(action, nameof(action));
-            return InnerFind(transaction.Connection, transaction, size, startRowVersion, action, cancellation);
-        }
-
-        async Task<int> InnerFind(SqlConnection connection, SqlTransaction transaction, int size, long startRowVersion, Func<Message, Task> action, CancellationToken cancellation)
+        async Task<int> InnerFind(SqlConnection connection, int size, long startRowVersion, Func<Message, Task> action, CancellationToken cancellation)
         {
             var count = 0;
-            using (var command = BuildCommand(connection, transaction, size, startRowVersion))
+            using (var command = BuildCommand(connection, size, startRowVersion))
             using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
             {
                 while (reader.Read())

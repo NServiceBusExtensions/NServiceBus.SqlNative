@@ -13,7 +13,7 @@ namespace SqlServer.Native
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await InnerFind(sqlConnection, null, rowVersion, cancellation).ConfigureAwait(false);
+                return await InnerFind(sqlConnection, rowVersion, cancellation).ConfigureAwait(false);
             }
         }
 
@@ -21,19 +21,12 @@ namespace SqlServer.Native
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
-            return InnerFind(connection, null, rowVersion, cancellation);
+            return InnerFind(connection, rowVersion, cancellation);
         }
 
-        public virtual Task<Message> Find(SqlTransaction transaction, long rowVersion, CancellationToken cancellation = default)
+        async Task<Message> InnerFind(SqlConnection connection, long rowVersion, CancellationToken cancellation)
         {
-            Guard.AgainstNull(transaction, nameof(transaction));
-            Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
-            return InnerFind(transaction.Connection, transaction, rowVersion, cancellation);
-        }
-
-        async Task<Message> InnerFind(SqlConnection connection, SqlTransaction transaction, long rowVersion, CancellationToken cancellation)
-        {
-            using (var command = BuildCommand(connection, transaction, 1, rowVersion))
+            using (var command = BuildCommand(connection, 1, rowVersion))
             using (var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))
             {
                 if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
