@@ -11,11 +11,13 @@ public class ReceiverIntegration
         DbSetup.Setup();
     }
 
+    static string table = "IntegrationReceiver_Receiver";
+
     [Fact]
     public async Task Run()
     {
-        await SqlHelpers.Drop(Connection.ConnectionString, "IntegrationReceiver_Receiver");
-        await QueueCreator.Create(Connection.ConnectionString, "IntegrationReceiver_Receiver");
+        await SqlHelpers.Drop(Connection.ConnectionString, table);
+        await QueueCreator.Create(Connection.ConnectionString, table);
         var configuration = await EndpointCreator.Create("IntegrationReceiver");
         configuration.SendOnly();
         var transport = configuration.UseTransport<SqlServerTransport>();
@@ -23,7 +25,7 @@ public class ReceiverIntegration
         configuration.DisableFeature<TimeoutManager>();
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
-        var receiver = new Receiver("IntegrationReceiver_Receiver");
+        var receiver = new Receiver(table);
         var message = await receiver.Receive(Connection.ConnectionString);
         Assert.NotNull(message);
     }
@@ -31,7 +33,7 @@ public class ReceiverIntegration
     static Task SendStartMessage(IEndpointInstance endpoint)
     {
         var sendOptions = new SendOptions();
-        sendOptions.SetDestination("IntegrationReceiver_Receiver");
+        sendOptions.SetDestination(table);
         return endpoint.Send(new SendMessage(), sendOptions);
     }
 

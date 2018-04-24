@@ -9,6 +9,7 @@ public class FinderTests
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
+    string table = "FinderTests";
     static FinderTests()
     {
         DbSetup.Setup();
@@ -17,13 +18,13 @@ public class FinderTests
     [Fact]
     public void FinderSingle()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, "FinderTests").Await();
-        QueueCreator.Create(Connection.ConnectionString, "FinderTests").Await();
-        var sender = new Sender("FinderTests");
+        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
+        QueueCreator.Create(Connection.ConnectionString, table).Await();
+        var sender = new Sender(table);
 
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
         sender.Send(Connection.ConnectionString, message).Await();
-        var finder = new Finder("FinderTests");
+        var finder = new Finder(table);
         var received = finder.Find(Connection.ConnectionString, 1).Result;
         ObjectApprover.VerifyWithJson(received);
     }
@@ -31,9 +32,9 @@ public class FinderTests
     [Fact]
     public void FinderBatch()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, "FinderTests").Await();
-        QueueCreator.Create(Connection.ConnectionString, "FinderTests").Await();
-        var sender = new Sender("FinderTests");
+        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
+        QueueCreator.Create(Connection.ConnectionString, table).Await();
+        var sender = new Sender(table);
 
         sender.Send(
             Connection.ConnectionString,
@@ -46,14 +47,16 @@ public class FinderTests
                 BuildMessage("00000000-0000-0000-0000-000000000005")
             }).Await();
 
-        var finder = new Finder("FinderTests");
+        var finder = new Finder(table);
         var messages = new List<IncomingMessage>();
-        finder.Find(
-            connection: Connection.ConnectionString,
-            size: 3,
-            startRowVersion: 2,
-            action: message => { messages.Add(message); })
-            .Await();
+        var result = finder.Find(
+                connection: Connection.ConnectionString,
+                size: 3,
+                startRowVersion: 2,
+                action: message => { messages.Add(message); })
+            .Result;
+        Assert.Equal(4, result.LastRowVersion);
+        Assert.Equal(3, result.Count);
         ObjectApprover.VerifyWithJson(messages);
     }
 

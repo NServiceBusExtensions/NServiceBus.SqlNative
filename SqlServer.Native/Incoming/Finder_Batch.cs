@@ -7,12 +7,12 @@ namespace SqlServer.Native
 {
     public partial class Finder
     {
-        public virtual Task<int> Find(string connection, int size, long startRowVersion, Action<IncomingMessage> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Find(string connection, int size, long startRowVersion, Action<IncomingMessage> action, CancellationToken cancellation = default)
         {
             return Find(connection, size, startRowVersion, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual async Task<int> Find(string connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
+        public virtual async Task<IncomingResult> Find(string connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNegativeAndZero(startRowVersion, nameof(startRowVersion));
@@ -25,12 +25,12 @@ namespace SqlServer.Native
             }
         }
 
-        public virtual Task<int> Find(SqlConnection connection, int size, long startRowVersion, Action<IncomingMessage> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Find(SqlConnection connection, int size, long startRowVersion, Action<IncomingMessage> action, CancellationToken cancellation = default)
         {
             return Find(connection, size, startRowVersion, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual Task<int> Find(SqlConnection connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Find(SqlConnection connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(size, nameof(size));
@@ -39,9 +39,10 @@ namespace SqlServer.Native
             return InnerFind(connection, size, startRowVersion, action, cancellation);
         }
 
-        async Task<int> InnerFind(SqlConnection connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation)
+        async Task<IncomingResult> InnerFind(SqlConnection connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation)
         {
             var count = 0;
+            long? lastRowVersion =null;
             using (var command = BuildCommand(connection, size, startRowVersion))
             using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
             {
@@ -50,11 +51,16 @@ namespace SqlServer.Native
                     count++;
                     cancellation.ThrowIfCancellationRequested();
                     var message = await reader.ReadMessage(cancellation).ConfigureAwait(false);
+                    lastRowVersion = message.RowVersion;
                     await action(message).ConfigureAwait(false);
                 }
             }
 
-            return count;
+            return new IncomingResult
+            {
+                Count = count,
+                LastRowVersion = lastRowVersion
+            };
         }
     }
 }

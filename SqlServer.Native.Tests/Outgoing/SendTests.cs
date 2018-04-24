@@ -9,6 +9,8 @@ public class SendTests
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
+    string table = "SendTests";
+
     static SendTests()
     {
         DbSetup.Setup();
@@ -17,21 +19,21 @@ public class SendTests
     [Fact]
     public void SendSingle()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, "SendTests").Await();
-        QueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
+        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
+        QueueCreator.Create(Connection.ConnectionString, table).Await();
         var sender = new Sender("SendTests");
 
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
         sender.Send(Connection.ConnectionString, message).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData("SendTests"));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
     [Fact]
     public void SendBatch()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, "SendTests").Await();
-        QueueCreator.Create(Connection.ConnectionString, "SendTests").Await();
-        var sender = new Sender("SendTests");
+        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
+        QueueCreator.Create(Connection.ConnectionString, table).Await();
+        var sender = new Sender(table);
 
         sender.Send(
             Connection.ConnectionString,
@@ -40,7 +42,7 @@ public class SendTests
                 BuildMessage("00000000-0000-0000-0000-000000000001"),
                 BuildMessage("00000000-0000-0000-0000-000000000002")
             }).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData("SendTests"));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
     static OutgoingMessage BuildMessage(string guid)
