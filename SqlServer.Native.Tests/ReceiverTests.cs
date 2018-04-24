@@ -40,16 +40,21 @@ public class ReceiverTests
             new List<OutgoingMessage>
             {
                 BuildMessage("00000000-0000-0000-0000-000000000001"),
-                BuildMessage("00000000-0000-0000-0000-000000000002")
+                BuildMessage("00000000-0000-0000-0000-000000000002"),
+                BuildMessage("00000000-0000-0000-0000-000000000003"),
+                BuildMessage("00000000-0000-0000-0000-000000000004"),
+                BuildMessage("00000000-0000-0000-0000-000000000005")
             }).Await();
 
         var receiver = new Receiver("ReceiverTests");
         var messages = new List<IncomingMessage>();
-        receiver.Receive(
-            connection: Connection.ConnectionString,
-            size: 10,
-            action: message => { messages.Add(message); })
-            .Await();
+        var result = receiver.Receive(
+                connection: Connection.ConnectionString,
+                size: 3,
+                action: message => { messages.Add(message); })
+            .Result;
+        Assert.Equal(3, result.LastRowVersion);
+        Assert.Equal(3, result.Count);
         ObjectApprover.VerifyWithJson(messages);
     }
 

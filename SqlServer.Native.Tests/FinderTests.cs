@@ -48,12 +48,14 @@ public class FinderTests
 
         var finder = new Finder("FinderTests");
         var messages = new List<IncomingMessage>();
-        finder.Find(
-            connection: Connection.ConnectionString,
-            size: 3,
-            startRowVersion: 2,
-            action: message => { messages.Add(message); })
-            .Await();
+        var result = finder.Find(
+                connection: Connection.ConnectionString,
+                size: 3,
+                startRowVersion: 2,
+                action: message => { messages.Add(message); })
+            .Result;
+        Assert.Equal(4, result.LastRowVersion);
+        Assert.Equal(3, result.Count);
         ObjectApprover.VerifyWithJson(messages);
     }
 

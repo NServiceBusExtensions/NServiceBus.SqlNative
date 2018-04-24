@@ -16,5 +16,14 @@
     "Expires": "2000-01-01T01:01:01",
     "Headers": "headers",
     "Body": "e30="
+  },
+  {
+    "Id": "00000000-0000-0000-0000-000000000003",
+    "RowVersion": 3,
+    "CorrelationId": "theCorrelationId",
+    "ReplyToAddress": "theReplyToAddress",
+    "Expires": "2000-01-01T01:01:01",
+    "Headers": "headers",
+    "Body": "e30="
   }
 ]
