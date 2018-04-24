@@ -42,9 +42,9 @@ namespace SqlServer.Native
                 parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = message.Id;
                 parameters.Add("CorrelationId", SqlDbType.VarChar).SetValueOrDbNull(message.CorrelationId);
                 parameters.Add("ReplyToAddress", SqlDbType.VarChar).SetValueOrDbNull(message.ReplyToAddress);
-                parameters.Add("Expires", SqlDbType.DateTime).Value = message.Expires;
+                parameters.Add("Expires", SqlDbType.DateTime).SetValueOrDbNull(message.Expires);
                 parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;
-                parameters.Add("Body", SqlDbType.VarBinary).Value = message.Body;
+                parameters.Add("Body", SqlDbType.VarBinary).SetValueOrDbNull(message.Body);
 
                 var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
                 return (long) rowVersion;

@@ -58,7 +58,7 @@ namespace SqlServer.Native
                         cancellation.ThrowIfCancellationRequested();
                         dueParam.Value = message.Due;
                         headersParam.Value = message.Headers;
-                        bodyParam.Value = message.Body;
+                        bodyParam.SetValueOrDbNull(message.Body);
                         await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
                     }
                 }

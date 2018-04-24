@@ -41,7 +41,7 @@ namespace SqlServer.Native
                 command.CommandText = string.Format(Sql, table);
                 parameters.Add("Due", SqlDbType.DateTime).Value = message.Due;
                 parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;
-                parameters.Add("Body", SqlDbType.VarBinary).Value = message.Body;
+                parameters.Add("Body", SqlDbType.VarBinary).SetValueOrDbNull(message.Body);
 
                 var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
                 return (long) rowVersion;

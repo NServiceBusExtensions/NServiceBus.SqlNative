@@ -26,6 +26,28 @@ static class Extensions
         corrParam.Value = value;
     }
 
+    public static void SetValueOrDbNull(this SqlParameter corrParam, DateTime? value)
+    {
+        if (value == null)
+        {
+            corrParam.Value = DBNull.Value;
+            return;
+        }
+
+        corrParam.Value = value;
+    }
+
+    public static void SetValueOrDbNull(this SqlParameter corrParam, byte[] value)
+    {
+        if (value == null)
+        {
+            corrParam.Value = DBNull.Value;
+            return;
+        }
+
+        corrParam.Value = value;
+    }
+
     public static async Task ExecuteCommand(this SqlConnection connection, SqlTransaction transaction, string sql, CancellationToken cancellation = default)
     {
         Guard.AgainstNull(connection, nameof(connection));

@@ -62,9 +62,9 @@ namespace SqlServer.Native
                         idParam.Value = message.Id;
                         corrParam.SetValueOrDbNull(message.CorrelationId);
                         replyParam.SetValueOrDbNull(message.ReplyToAddress);
-                        expiresParam.Value = message.Expires;
+                        expiresParam.SetValueOrDbNull(message.Expires);
                         headersParam.Value = message.Headers;
-                        bodyParam.Value = message.Body;
+                        bodyParam.SetValueOrDbNull(message.Body);
                         await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
                     }
                 }
