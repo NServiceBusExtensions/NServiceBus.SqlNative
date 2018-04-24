@@ -5,35 +5,36 @@ using ObjectApproval;
 using SqlServer.Native;
 using Xunit;
 
-public class FinderTests
+public class ReceiverTests
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
-    static FinderTests()
+        string table = "ReceiverTests";
+    static ReceiverTests()
     {
         DbSetup.Setup();
     }
 
     [Fact]
-    public void FinderSingle()
+    public void ReceiveSingle()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, "FinderTests").Await();
-        QueueCreator.Create(Connection.ConnectionString, "FinderTests").Await();
-        var sender = new Sender("FinderTests");
+        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
+        QueueCreator.Create(Connection.ConnectionString, table).Await();
+        var sender = new Sender("ReceiverTests");
 
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
         sender.Send(Connection.ConnectionString, message).Await();
-        var finder = new Finder("FinderTests");
-        var received = finder.Find(Connection.ConnectionString, 1).Result;
+        var receiver = new Receiver(table);
+        var received = receiver.Receive(Connection.ConnectionString).Result;
         ObjectApprover.VerifyWithJson(received);
     }
 
     [Fact]
-    public void FinderBatch()
+    public void ReceiveBatch()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, "FinderTests").Await();
-        QueueCreator.Create(Connection.ConnectionString, "FinderTests").Await();
-        var sender = new Sender("FinderTests");
+        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
+        QueueCreator.Create(Connection.ConnectionString, table).Await();
+        var sender = new Sender(table);
 
         sender.Send(
             Connection.ConnectionString,
@@ -46,15 +47,14 @@ public class FinderTests
                 BuildMessage("00000000-0000-0000-0000-000000000005")
             }).Await();
 
-        var finder = new Finder("FinderTests");
+        var receiver = new Receiver(table);
         var messages = new List<IncomingMessage>();
-        var result = finder.Find(
+        var result = receiver.Receive(
                 connection: Connection.ConnectionString,
                 size: 3,
-                startRowVersion: 2,
                 action: message => { messages.Add(message); })
             .Result;
-        Assert.Equal(4, result.LastRowVersion);
+        Assert.Equal(3, result.LastRowVersion);
         Assert.Equal(3, result.Count);
         ObjectApprover.VerifyWithJson(messages);
     }
