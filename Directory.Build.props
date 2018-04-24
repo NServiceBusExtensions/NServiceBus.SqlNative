@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <Version>1.0.0-beta.2</Version>
+    <Version>1.0.0-beta.3</Version>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>latest</LangVersion>
     <Authors>Simon Cropp, Indu Alagarsamy</Authors>
     <NoPackageAnalysis>true</NoPackageAnalysis>
+    <Description>Low level .net wrapper for the SQL Server transport.</Description>
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Copyright>Copyright $([System.DateTime]::UtcNow.ToString(yyyy)) Simon Cropp, Indu Alagarsamy. All rights reserved</Copyright>
