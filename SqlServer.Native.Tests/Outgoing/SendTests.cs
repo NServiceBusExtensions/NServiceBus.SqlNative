@@ -4,17 +4,13 @@ using System.Text;
 using ObjectApproval;
 using SqlServer.Native;
 using Xunit;
+using Xunit.Abstractions;
 
-public class SendTests
+public class SendTests : TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     string table = "SendTests";
-
-    static SendTests()
-    {
-        DbSetup.Setup();
-    }
 
     [Fact]
     public void SendSingle()
@@ -82,5 +78,9 @@ public class SendTests
     static OutgoingMessage BuildNullMessage(string guid)
     {
         return new OutgoingMessage(new Guid(guid), null, null, null, "headers", Encoding.UTF8.GetBytes("{}"));
+    }
+
+    public SendTests(ITestOutputHelper output) : base(output)
+    {
     }
 }

@@ -4,17 +4,13 @@ using System.Text;
 using ObjectApproval;
 using SqlServer.Native;
 using Xunit;
+using Xunit.Abstractions;
 
-public class ReceiverTests
+public class ReceiverTests : TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     string table = "ReceiverTests";
-
-    static ReceiverTests()
-    {
-        DbSetup.Setup();
-    }
 
     [Fact]
     public void ReceiveSingle()
@@ -112,5 +108,9 @@ public class ReceiverTests
     static OutgoingMessage BuildNullMessage(string guid)
     {
         return new OutgoingMessage(new Guid(guid), null, null, null, "headers", null);
+    }
+
+    public ReceiverTests(ITestOutputHelper output) : base(output)
+    {
     }
 }

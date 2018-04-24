@@ -4,16 +4,12 @@ using System.Text;
 using ObjectApproval;
 using SqlServer.Native;
 using Xunit;
+using Xunit.Abstractions;
 
-public class DelayedSenderTests
+public class DelayedSenderTests : TestBase
 {
     string table = "DelayedSenderTests";
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
-
-    static DelayedSenderTests()
-    {
-        DbSetup.Setup();
-    }
 
     [Fact]
     public void SendSingle()
@@ -81,5 +77,9 @@ public class DelayedSenderTests
     static OutgoingDelayedMessage BuildNullMessage()
     {
         return new OutgoingDelayedMessage(dateTime, "headers", null);
+    }
+
+    public DelayedSenderTests(ITestOutputHelper output) : base(output)
+    {
     }
 }

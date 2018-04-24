@@ -4,16 +4,13 @@ using System.Text;
 using ObjectApproval;
 using SqlServer.Native;
 using Xunit;
+using Xunit.Abstractions;
 
-public class FinderTests
+public class FinderTests : TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     string table = "FinderTests";
-    static FinderTests()
-    {
-        DbSetup.Setup();
-    }
 
     [Fact]
     public void FinderSingle()
@@ -63,5 +60,9 @@ public class FinderTests
     static OutgoingMessage BuildMessage(string guid)
     {
         return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+    }
+
+    public FinderTests(ITestOutputHelper output) : base(output)
+    {
     }
 }

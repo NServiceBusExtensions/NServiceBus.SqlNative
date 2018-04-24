@@ -5,17 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using SqlServer.Native;
 using Xunit;
+using Xunit.Abstractions;
 
-public class MessageProcessingLoopTests
+public class MessageProcessingLoopTests : TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     string table = "MessageProcessingLoopTests";
-
-    static MessageProcessingLoopTests()
-    {
-        DbSetup.Setup();
-    }
 
     [Fact]
     public async Task Should_not_throw_when_run_over_end()
@@ -131,5 +127,28 @@ public class MessageProcessingLoopTests
     static OutgoingMessage BuildMessage(string guid)
     {
         return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+    }
+
+    public MessageProcessingLoopTests(ITestOutputHelper output) : base(output)
+    {
+    }
+}
+public class RowVersionTrackerTests : TestBase
+{
+    public RowVersionTrackerTests(ITestOutputHelper output) : base(output)
+    {
+    }
+
+    [Fact]
+    public async Task Run()
+    {
+        await SqlHelpers.Drop(Connection.OpenConnection(), "RowVersion");
+        var tracker = new RowVersionTracker(Connection.OpenAsyncConnection);
+        await tracker.CreateTable();
+        var initial = await tracker.Get();
+        Assert.Equal(1, initial);
+        await tracker.Save(4);
+        var after = await tracker.Get();
+        Assert.Equal(4, after);
     }
 }

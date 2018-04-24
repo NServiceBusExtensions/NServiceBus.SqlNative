@@ -7,15 +7,11 @@ using NServiceBus;
 using NServiceBus.Features;
 using SqlServer.Native;
 using Xunit;
+using Xunit.Abstractions;
 
-public class SendIntegration
+public class SendIntegration : TestBase
 {
     static ManualResetEvent resetEvent;
-
-    static SendIntegration()
-    {
-        DbSetup.Setup();
-    }
 
     [Fact]
     public async Task Run()
@@ -53,6 +49,10 @@ public class SendIntegration
     }
 
     class SendMessage : IMessage
+    {
+    }
+
+    public SendIntegration(ITestOutputHelper output) : base(output)
     {
     }
 }

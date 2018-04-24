@@ -5,17 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using SqlServer.Native;
 using Xunit;
+using Xunit.Abstractions;
 
-public class MessageConsumingLoopTests
+public class MessageConsumingLoopTests : TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     string table = "MessageConsumingLoopTests";
-
-    static MessageConsumingLoopTests()
-    {
-        DbSetup.Setup();
-    }
 
     [Fact]
     public async Task Should_not_throw_when_run_over_end()
@@ -91,5 +87,9 @@ public class MessageConsumingLoopTests
     static OutgoingMessage BuildMessage(string guid)
     {
         return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+    }
+
+    public MessageConsumingLoopTests(ITestOutputHelper output) : base(output)
+    {
     }
 }

@@ -3,14 +3,10 @@ using NServiceBus;
 using NServiceBus.Features;
 using SqlServer.Native;
 using Xunit;
+using Xunit.Abstractions;
 
-public class ReceiverIntegration
+public class ReceiverIntegrationTests : TestBase
 {
-    static ReceiverIntegration()
-    {
-        DbSetup.Setup();
-    }
-
     static string table = "IntegrationReceiver_Receiver";
 
     [Fact]
@@ -38,6 +34,10 @@ public class ReceiverIntegration
     }
 
     class SendMessage : IMessage
+    {
+    }
+
+    public ReceiverIntegrationTests(ITestOutputHelper output) : base(output)
     {
     }
 }
