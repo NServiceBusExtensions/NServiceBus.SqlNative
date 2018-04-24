@@ -18,6 +18,27 @@ public class MessageConsumingLoopTests
     }
 
     [Fact]
+    public async Task Should_not_throw_when_run_over_end()
+    {
+        await SqlHelpers.Drop(Connection.ConnectionString, table);
+        await QueueCreator.Create(Connection.ConnectionString, table);
+        await SendMessages(table);
+
+        Exception exception = null;
+        using (var loop = new MessageConsumingLoop(
+            table: table,
+            connectionBuilder: Connection.OpenAsyncConnection,
+            callback: (message, cancellation) => Task.CompletedTask,
+            errorCallback: innerException => { exception = innerException;}
+            ))
+        {
+            loop.Start();
+            Thread.Sleep(1000);
+        }
+
+        Assert.Null(exception);
+    }
+    [Fact]
     public async Task Should_get_correct_count()
     {
         var resetEvent = new ManualResetEvent(false);

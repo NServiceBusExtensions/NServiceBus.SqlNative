@@ -19,11 +19,26 @@ namespace SqlServer.Native
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                await Drop(sqlConnection, null, table, cancellation);
+                await Drop(sqlConnection, null, table, cancellation).ConfigureAwait(false);
             }
         }
 
-       internal static string WrapInNoCount(string sql)
+        public static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation = default)
+        {
+            var connection = new SqlConnection(connectionString);
+            try
+            {
+                await connection.OpenAsync(cancellation).ConfigureAwait(false);
+                return connection;
+            }
+            catch
+            {
+                connection.Dispose();
+                throw;
+            }
+        }
+
+        internal static string WrapInNoCount(string sql)
         {
             return $@"
 declare @nocount varchar(3) = 'off';

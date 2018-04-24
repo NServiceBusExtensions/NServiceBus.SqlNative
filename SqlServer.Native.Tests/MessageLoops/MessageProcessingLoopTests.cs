@@ -18,6 +18,29 @@ public class MessageProcessingLoopTests
     }
 
     [Fact]
+    public async Task Should_not_throw_when_run_over_end()
+    {
+        await SqlHelpers.Drop(Connection.ConnectionString, table);
+        await QueueCreator.Create(Connection.ConnectionString, table);
+        await SendMessages(table);
+
+        Exception exception = null;
+        using (var loop = new MessageProcessingLoop(
+            table: table,
+            startingRow: 1,
+            connectionBuilder: Connection.OpenAsyncConnection,
+            callback: (message, cancellation) => Task.CompletedTask,
+            errorCallback: innerException => { exception = innerException; },
+            persistRowVersion: (currentRowVersion ,token)=> Task.CompletedTask
+            ))
+        {
+            loop.Start();
+            Thread.Sleep(1000);
+        }
+
+        Assert.Null(exception);
+    }
+    [Fact]
     public async Task Should_get_correct_count()
     {
         var resetEvent = new ManualResetEvent(false);
@@ -44,7 +67,7 @@ public class MessageProcessingLoopTests
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: Callback,
             errorCallback: exception => { },
-            persistRowVersion: currentRowVersion => Task.CompletedTask))
+            persistRowVersion: (currentRowVersion ,token)=> Task.CompletedTask))
         {
             loop.Start();
             resetEvent.WaitOne(TimeSpan.FromSeconds(30));
@@ -63,7 +86,7 @@ public class MessageProcessingLoopTests
 
         long rowVersion = 0;
 
-        Task PersistRowVersion(long currentRowVersion)
+        Task PersistRowVersion(long currentRowVersion, CancellationToken cancellation)
         {
             rowVersion = currentRowVersion;
             if (rowVersion == 6)

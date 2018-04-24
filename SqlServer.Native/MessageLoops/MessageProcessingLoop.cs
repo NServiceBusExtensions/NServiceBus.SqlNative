@@ -10,7 +10,7 @@ namespace SqlServer.Native
         string table;
         long startingRow;
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
-        Func<long, Task> persistRowVersion;
+        Func<long, CancellationToken, Task> persistRowVersion;
         int batchSize;
 
         public MessageProcessingLoop(
@@ -19,7 +19,7 @@ namespace SqlServer.Native
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
             Func<IncomingMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
-            Func<long, Task> persistRowVersion,
+            Func<long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
             TimeSpan? delay = null):base(callback, errorCallback,delay)
         {
@@ -44,8 +44,12 @@ namespace SqlServer.Native
                 {
                     var result = await finder.Find(connection, batchSize, startingRow, message => callback(message, cancellation), cancellation)
                         .ConfigureAwait(false);
+                    if (result.Count == 0)
+                    {
+                        break;
+                    }
                     startingRow = result.LastRowVersion.Value + 1;
-                    await persistRowVersion(startingRow).ConfigureAwait(false);
+                    await persistRowVersion(startingRow, cancellation).ConfigureAwait(false);
                     if (result.Count < batchSize)
                     {
                         break;
