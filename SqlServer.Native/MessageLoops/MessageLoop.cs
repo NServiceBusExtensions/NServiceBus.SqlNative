@@ -19,9 +19,10 @@ namespace SqlServer.Native
         {
             Guard.AgainstNull(callback, nameof(callback));
             Guard.AgainstNull(errorCallback, nameof(errorCallback));
+            Guard.AgainstNegativeAndZero(delay, nameof(delay));
             this.callback = callback;
             this.errorCallback = errorCallback;
-            this.delay = delay.GetValueOrDefault(TimeSpan.FromMinutes(10));
+            this.delay = delay.GetValueOrDefault(TimeSpan.FromMinutes(1));
         }
 
         public void Start()

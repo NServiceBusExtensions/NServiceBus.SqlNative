@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SqlServer.Native
 {
-    public class MessageProcessingLoop: MessageLoop
+    public class MessageProcessingLoop : MessageLoop
     {
         string table;
         long startingRow;
@@ -21,7 +21,8 @@ namespace SqlServer.Native
             Action<Exception> errorCallback,
             Func<long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
-            TimeSpan? delay = null):base(callback, errorCallback,delay)
+            TimeSpan? delay = null)
+            : base(callback, errorCallback, delay)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNegativeAndZero(startingRow, nameof(startingRow));
@@ -39,21 +40,27 @@ namespace SqlServer.Native
         {
             using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
             {
-                var finder = new Finder(table);
-                while (true)
+                await RunBatch(callback, cancellation, connection);
+            }
+        }
+
+        async Task RunBatch(Func<IncomingMessage, CancellationToken, Task> callback, CancellationToken cancellation, SqlConnection connection)
+        {
+            var finder = new Finder(table);
+            while (true)
+            {
+                var result = await finder.Find(connection, batchSize, startingRow, message => callback(message, cancellation), cancellation)
+                    .ConfigureAwait(false);
+                if (result.Count == 0)
                 {
-                    var result = await finder.Find(connection, batchSize, startingRow, message => callback(message, cancellation), cancellation)
-                        .ConfigureAwait(false);
-                    if (result.Count == 0)
-                    {
-                        break;
-                    }
-                    startingRow = result.LastRowVersion.Value + 1;
-                    await persistRowVersion(startingRow, cancellation).ConfigureAwait(false);
-                    if (result.Count < batchSize)
-                    {
-                        break;
-                    }
+                    break;
+                }
+
+                startingRow = result.LastRowVersion.Value + 1;
+                await persistRowVersion(startingRow, cancellation).ConfigureAwait(false);
+                if (result.Count < batchSize)
+                {
+                    break;
                 }
             }
         }

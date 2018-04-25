@@ -29,6 +29,19 @@ static class Guard
         }
     }
 
+    public static void AgainstNegativeAndZero(TimeSpan? value, string argumentName)
+    {
+        if (value == null)
+        {
+            return;
+        }
+
+        if (value < TimeSpan.Zero || value < TimeSpan.Zero)
+        {
+            throw new ArgumentNullException(argumentName);
+        }
+    }
+
     public static void AgainstNegativeAndZero(int value, string argumentName)
     {
         if (value<1)
@@ -36,6 +49,7 @@ static class Guard
             throw new ArgumentNullException(argumentName);
         }
     }
+
     public static void AgainstNegativeAndZero(long value, string argumentName)
     {
         if (value<1)

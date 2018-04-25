@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SqlServer.Native
 {
-    public class MessageConsumingLoop: MessageLoop
+    public class MessageConsumingLoop : MessageLoop
     {
         string table;
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
@@ -13,11 +13,24 @@ namespace SqlServer.Native
 
         public MessageConsumingLoop(
             string table,
+            string connection,
+            Func<IncomingMessage, CancellationToken, Task> callback,
+            Action<Exception> errorCallback,
+            int batchSize = 10,
+            TimeSpan? delay = null) :
+            this(table, token => SqlHelpers.OpenConnection(connection,token), callback, errorCallback, batchSize, delay)
+        {
+            Guard.AgainstNull(connection, nameof(connection));
+        }
+
+        public MessageConsumingLoop(
+            string table,
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
             Func<IncomingMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             int batchSize = 10,
-            TimeSpan? delay = null):base(callback, errorCallback,delay)
+            TimeSpan? delay = null) :
+            base(callback, errorCallback, delay)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
@@ -31,15 +44,20 @@ namespace SqlServer.Native
         {
             using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
             {
-                var finder = new Receiver(table);
-                while (true)
+                await RunBatch(callback, cancellation, connection);
+            }
+        }
+
+        async Task RunBatch(Func<IncomingMessage, CancellationToken, Task> callback, CancellationToken cancellation, SqlConnection connection)
+        {
+            var finder = new Receiver(table);
+            while (true)
+            {
+                var result = await finder.Receive(connection, batchSize, message => callback(message, cancellation), cancellation)
+                    .ConfigureAwait(false);
+                if (result.Count < batchSize)
                 {
-                    var result = await finder.Receive(connection, batchSize, message => callback(message, cancellation), cancellation)
-                        .ConfigureAwait(false);
-                    if (result.Count < batchSize)
-                    {
-                        break;
-                    }
+                    break;
                 }
             }
         }
