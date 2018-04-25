@@ -20,7 +20,6 @@ namespace SqlServer.Native
             TimeSpan? delay = null) :
             this(table, token => SqlHelpers.OpenConnection(connection,token), callback, errorCallback, batchSize, delay)
         {
-            Guard.AgainstNull(connection, nameof(connection));
         }
 
         public MessageConsumingLoop(

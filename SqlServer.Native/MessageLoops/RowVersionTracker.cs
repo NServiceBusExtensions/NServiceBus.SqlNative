@@ -10,8 +10,14 @@ namespace SqlServer.Native
     {
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
 
+        public RowVersionTracker(string connection):
+            this (token => SqlHelpers.OpenConnection(connection,token))
+        {
+        }
+
         public RowVersionTracker(Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
         {
+            Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
             this.connectionBuilder = connectionBuilder;
         }
 

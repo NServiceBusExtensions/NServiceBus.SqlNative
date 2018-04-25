@@ -25,6 +25,8 @@ namespace SqlServer.Native
 
         public static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation = default)
         {
+            Guard.AgainstNullOrEmpty(connectionString, nameof(connectionString));
+
             var connection = new SqlConnection(connectionString);
             try
             {
