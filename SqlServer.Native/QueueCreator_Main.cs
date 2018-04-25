@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SqlServer.Native
+namespace NServiceBus.Transport.SqlServerNative
 {
     /// <summary>
     /// Handles creation of transport queues.

@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using SqlServer.Native;
+using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 

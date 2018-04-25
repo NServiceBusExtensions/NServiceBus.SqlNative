@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace SqlServer.Native
+namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class Receiver
     {

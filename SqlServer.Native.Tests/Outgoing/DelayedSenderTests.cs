@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
-using SqlServer.Native;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -1,4 +1,4 @@
-﻿using SqlServer.Native;
+﻿using NServiceBus.Transport.SqlServerNative;
 
 public class DbSetup
 {

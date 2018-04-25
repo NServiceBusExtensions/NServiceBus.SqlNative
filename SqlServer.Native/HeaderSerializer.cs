@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace SqlServer.Native
+namespace NServiceBus.Transport.SqlServerNative
 {
     public static class HeaderSerializer
     {

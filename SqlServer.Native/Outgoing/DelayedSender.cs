@@ -1,4 +1,4 @@
-﻿namespace SqlServer.Native
+﻿namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class DelayedSender
     {

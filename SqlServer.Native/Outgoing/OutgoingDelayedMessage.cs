@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SqlServer.Native
+namespace NServiceBus.Transport.SqlServerNative
 {
     /// <summary>
     /// Represents a message.

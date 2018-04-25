@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using SqlServer.Native;
+using NServiceBus.Transport.SqlServerNative;
 
 static class MessageReader
 {
