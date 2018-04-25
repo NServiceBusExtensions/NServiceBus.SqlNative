@@ -6,14 +6,14 @@ using ObjectApproval;
 using Xunit;
 using Xunit.Abstractions;
 
-public class FinderTests : TestBase
+public class ReaderTests : TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
-    string table = "FinderTests";
+    string table = "ReaderTests";
 
     [Fact]
-    public void FinderSingle()
+    public void Single()
     {
         SqlHelpers.Drop(Connection.ConnectionString, table).Await();
         QueueCreator.Create(Connection.ConnectionString, table).Await();
@@ -21,13 +21,13 @@ public class FinderTests : TestBase
 
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
         sender.Send(Connection.ConnectionString, message).Await();
-        var finder = new Finder(table);
-        var received = finder.Find(Connection.ConnectionString, 1).Result;
-        ObjectApprover.VerifyWithJson(received);
+        var reader = new Reader(table);
+        var result = reader.Read(Connection.ConnectionString, 1).Result;
+        ObjectApprover.VerifyWithJson(result);
     }
 
     [Fact]
-    public void FinderBatch()
+    public void Batch()
     {
         SqlHelpers.Drop(Connection.ConnectionString, table).Await();
         QueueCreator.Create(Connection.ConnectionString, table).Await();
@@ -44,9 +44,9 @@ public class FinderTests : TestBase
                 BuildMessage("00000000-0000-0000-0000-000000000005")
             }).Await();
 
-        var finder = new Finder(table);
+        var reader = new Reader(table);
         var messages = new List<IncomingMessage>();
-        var result = finder.Find(
+        var result = reader.Read(
                 connection: Connection.ConnectionString,
                 size: 3,
                 startRowVersion: 2,
@@ -62,7 +62,7 @@ public class FinderTests : TestBase
         return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
-    public FinderTests(ITestOutputHelper output) : base(output)
+    public ReaderTests(ITestOutputHelper output) : base(output)
     {
     }
 }

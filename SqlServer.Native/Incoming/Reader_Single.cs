@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class Finder
+    public partial class Reader
     {
-        public virtual async Task<IncomingMessage> Find(string connection, long rowVersion, CancellationToken cancellation = default)
+        public virtual async Task<IncomingMessage> Read(string connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
@@ -17,7 +17,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public virtual Task<IncomingMessage> Find(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
+        public virtual Task<IncomingMessage> Read(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));

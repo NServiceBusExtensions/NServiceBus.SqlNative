@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class Finder
+    public partial class Reader
     {
-        public virtual Task<IncomingResult> Find(string connection, int size, long startRowVersion, Action<IncomingMessage> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Read(string connection, int size, long startRowVersion, Action<IncomingMessage> action, CancellationToken cancellation = default)
         {
-            return Find(connection, size, startRowVersion, action.ToTaskFunc(), cancellation);
+            return Read(connection, size, startRowVersion, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual async Task<IncomingResult> Find(string connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
+        public virtual async Task<IncomingResult> Read(string connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNegativeAndZero(startRowVersion, nameof(startRowVersion));
@@ -25,12 +25,12 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public virtual Task<IncomingResult> Find(SqlConnection connection, int size, long startRowVersion, Action<IncomingMessage> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Read(SqlConnection connection, int size, long startRowVersion, Action<IncomingMessage> action, CancellationToken cancellation = default)
         {
-            return Find(connection, size, startRowVersion, action.ToTaskFunc(), cancellation);
+            return Read(connection, size, startRowVersion, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual Task<IncomingResult> Find(SqlConnection connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Read(SqlConnection connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(size, nameof(size));

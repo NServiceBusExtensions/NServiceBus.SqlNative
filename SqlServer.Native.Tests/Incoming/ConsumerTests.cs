@@ -6,42 +6,42 @@ using ObjectApproval;
 using Xunit;
 using Xunit.Abstractions;
 
-public class ReceiverTests : TestBase
+public class ConsumerTests : TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
-    string table = "ReceiverTests";
+    string table = "ConsumerTests";
 
     [Fact]
-    public void ReceiveSingle()
+    public void Single()
     {
         SqlHelpers.Drop(Connection.ConnectionString, table).Await();
         QueueCreator.Create(Connection.ConnectionString, table).Await();
-        var sender = new Sender("ReceiverTests");
+        var sender = new Sender(table);
 
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
         sender.Send(Connection.ConnectionString, message).Await();
-        var receiver = new Receiver(table);
-        var received = receiver.Receive(Connection.ConnectionString).Result;
-        ObjectApprover.VerifyWithJson(received);
+        var consumer = new Consumer(table);
+        var result = consumer.Consume(Connection.ConnectionString).Result;
+        ObjectApprover.VerifyWithJson(result);
     }
 
     [Fact]
-    public void Can_receive_single_with_nulls()
+    public void Single_with_nulls()
     {
         SqlHelpers.Drop(Connection.ConnectionString, table).Await();
         QueueCreator.Create(Connection.ConnectionString, table).Await();
-        var sender = new Sender("ReceiverTests");
+        var sender = new Sender(table);
 
         var message = BuildNullMessage("00000000-0000-0000-0000-000000000001");
         sender.Send(Connection.ConnectionString, message).Await();
-        var receiver = new Receiver(table);
-        var received = receiver.Receive(Connection.ConnectionString).Result;
-        ObjectApprover.VerifyWithJson(received);
+        var consumer = new Consumer(table);
+        var result = consumer.Consume(Connection.ConnectionString).Result;
+        ObjectApprover.VerifyWithJson(result);
     }
 
     [Fact]
-    public void ReceiveBatch()
+    public void Batch()
     {
         SqlHelpers.Drop(Connection.ConnectionString, table).Await();
         QueueCreator.Create(Connection.ConnectionString, table).Await();
@@ -58,9 +58,9 @@ public class ReceiverTests : TestBase
                 BuildMessage("00000000-0000-0000-0000-000000000005")
             }).Await();
 
-        var receiver = new Receiver(table);
+        var consumer = new Consumer(table);
         var messages = new List<IncomingMessage>();
-        var result = receiver.Receive(
+        var result = consumer.Consume(
                 connection: Connection.ConnectionString,
                 size: 3,
                 action: message => { messages.Add(message); })
@@ -71,7 +71,7 @@ public class ReceiverTests : TestBase
     }
 
     [Fact]
-    public void Can_receive_batch_with_nulls()
+    public void Batch_with_nulls()
     {
         SqlHelpers.Drop(Connection.ConnectionString, table).Await();
         QueueCreator.Create(Connection.ConnectionString, table).Await();
@@ -88,9 +88,9 @@ public class ReceiverTests : TestBase
                 BuildNullMessage("00000000-0000-0000-0000-000000000005")
             }).Await();
 
-        var receiver = new Receiver(table);
+        var consumer = new Consumer(table);
         var messages = new List<IncomingMessage>();
-        var result = receiver.Receive(
+        var result = consumer.Consume(
                 connection: Connection.ConnectionString,
                 size: 3,
                 action: message => { messages.Add(message); })
@@ -110,7 +110,7 @@ public class ReceiverTests : TestBase
         return new OutgoingMessage(new Guid(guid), null, null, null, "headers", null);
     }
 
-    public ReceiverTests(ITestOutputHelper output) : base(output)
+    public ConsumerTests(ITestOutputHelper output) : base(output)
     {
     }
 }

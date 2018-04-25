@@ -2,11 +2,11 @@
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class Receiver
+    public partial class Consumer
     {
         string table;
 
-        public Receiver(string table)
+        public Consumer(string table)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             this.table = table;
@@ -16,11 +16,11 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             var command = connection.CreateCommand();
             command.Transaction = transaction;
-            command.CommandText = string.Format(ReceiveSql, table, batchSize);
+            command.CommandText = string.Format(Sql, table, batchSize);
             return command;
         }
 
-        public static readonly string ReceiveSql = SqlHelpers.WrapInNoCount(@"
+        public static readonly string Sql = SqlHelpers.WrapInNoCount(@"
 with message as (
     select top({1}) *
     from {0} with (updlock, readpast, rowlock)

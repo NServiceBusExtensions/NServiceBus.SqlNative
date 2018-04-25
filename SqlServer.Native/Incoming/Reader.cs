@@ -3,11 +3,11 @@ using System.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class Finder
+    public partial class Reader
     {
         string table;
 
-        public Finder(string table)
+        public Reader(string table)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             this.table = table;
@@ -16,12 +16,12 @@ namespace NServiceBus.Transport.SqlServerNative
         SqlCommand BuildCommand(SqlConnection connection, int batchSize, long startRowVersion)
         {
             var command = connection.CreateCommand();
-            command.CommandText = string.Format(FindSql, table, batchSize);
+            command.CommandText = string.Format(Sql, table, batchSize);
             command.Parameters.Add("RowVersion", SqlDbType.BigInt).Value = startRowVersion;
             return command;
         }
 
-        public static readonly string FindSql = SqlHelpers.WrapInNoCount(@"
+        public static readonly string Sql = SqlHelpers.WrapInNoCount(@"
 select top({1})
     Id,
     RowVersion,

@@ -5,24 +5,24 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class ReceiverIntegrationTests : TestBase
+public class ConsumerIntegrationTests : TestBase
 {
-    static string table = "IntegrationReceiver_Receiver";
+    static string table = "IntegrationConsumer_Consumer";
 
     [Fact]
     public async Task Run()
     {
         await SqlHelpers.Drop(Connection.ConnectionString, table);
         await QueueCreator.Create(Connection.ConnectionString, table);
-        var configuration = await EndpointCreator.Create("IntegrationReceiver");
+        var configuration = await EndpointCreator.Create("IntegrationConsumer");
         configuration.SendOnly();
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
         configuration.DisableFeature<TimeoutManager>();
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
-        var receiver = new Receiver(table);
-        var message = await receiver.Receive(Connection.ConnectionString);
+        var consumer = new Consumer(table);
+        var message = await consumer.Consume(Connection.ConnectionString);
         Assert.NotNull(message);
     }
 
@@ -37,7 +37,7 @@ public class ReceiverIntegrationTests : TestBase
     {
     }
 
-    public ReceiverIntegrationTests(ITestOutputHelper output) : base(output)
+    public ConsumerIntegrationTests(ITestOutputHelper output) : base(output)
     {
     }
 }
