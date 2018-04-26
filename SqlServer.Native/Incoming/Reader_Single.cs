@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +14,8 @@ namespace NServiceBus.Transport.SqlServerNative
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await InnerFind(sqlConnection, rowVersion, cancellation).ConfigureAwait(false);
+                return await InnerFind(sqlConnection, rowVersion, cancellation, MessageReader.ReadBytesMessage)
+                    .ConfigureAwait(false);
             }
         }
 
@@ -21,20 +23,15 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
-            return InnerFind(connection, rowVersion, cancellation);
+            return InnerFind(connection, rowVersion, cancellation, MessageReader.ReadBytesMessage);
         }
 
-        async Task<IncomingMessage> InnerFind(SqlConnection connection, long rowVersion, CancellationToken cancellation)
+        async Task<T> InnerFind<T>(SqlConnection connection, long rowVersion, CancellationToken cancellation, Func<SqlDataReader, T> func)
+            where T : class
         {
             using (var command = BuildCommand(connection, 1, rowVersion))
-            using (var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))
             {
-                if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
-                {
-                    return null;
-                }
-
-                return reader.ReadMessage();
+                return await command.ReadSingle(cancellation, func);
             }
         }
     }

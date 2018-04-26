@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
+using NServiceBus.Transport.SqlServerNative;
 
 static class Extensions
 {
@@ -59,6 +60,43 @@ static class Extensions
         }
     }
 
+
+    public static async Task<T> ReadSingle<T>(this SqlCommand command, CancellationToken cancellation, Func<SqlDataReader, T> func)
+        where T : class
+    {
+        using (var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))
+        {
+            if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
+            {
+                return null;
+            }
+
+            return func(reader);
+        }
+    }
+
+    public static async Task<IncomingResult> ReadMultiple<T>(this SqlCommand command, Func<T, Task> action, CancellationToken cancellation, Func<SqlDataReader, T> func) where T : class, IIncomingMessage
+    {
+        var count = 0;
+        long? lastRowVersion = null;
+        using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
+        {
+            while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
+            {
+                count++;
+                cancellation.ThrowIfCancellationRequested();
+                var message = func(reader);
+                lastRowVersion = message.RowVersion;
+                await action(message).ConfigureAwait(false);
+            }
+        }
+
+        return new IncomingResult
+        {
+            Count = count,
+            LastRowVersion = lastRowVersion
+        };
+    }
     public static T ValueOrNull<T>(this SqlDataReader dataReader, int index)
     {
         if (dataReader.IsDBNull(index))

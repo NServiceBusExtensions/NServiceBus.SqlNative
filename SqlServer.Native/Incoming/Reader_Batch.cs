@@ -21,7 +21,7 @@ namespace NServiceBus.Transport.SqlServerNative
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await InnerFind(sqlConnection, size, startRowVersion, action, cancellation).ConfigureAwait(false);
+                return await InnerFind(sqlConnection, size, startRowVersion, action, cancellation, MessageReader.ReadBytesMessage).ConfigureAwait(false);
             }
         }
 
@@ -36,31 +36,16 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNegativeAndZero(startRowVersion, nameof(startRowVersion));
             Guard.AgainstNull(action, nameof(action));
-            return InnerFind(connection, size, startRowVersion, action, cancellation);
+            return InnerFind(connection, size, startRowVersion, action, cancellation, MessageReader.ReadBytesMessage);
         }
 
-        async Task<IncomingResult> InnerFind(SqlConnection connection, int size, long startRowVersion, Func<IncomingMessage, Task> action, CancellationToken cancellation)
+        async Task<IncomingResult> InnerFind<T>(SqlConnection connection, int size, long startRowVersion, Func<T, Task> action, CancellationToken cancellation, Func<SqlDataReader, T> func)
+            where T : class, IIncomingMessage
         {
-            var count = 0;
-            long? lastRowVersion =null;
             using (var command = BuildCommand(connection, size, startRowVersion))
-            using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
             {
-                while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
-                {
-                    count++;
-                    cancellation.ThrowIfCancellationRequested();
-                    var message = reader.ReadMessage();
-                    lastRowVersion = message.RowVersion;
-                    await action(message).ConfigureAwait(false);
-                }
+                return await command.ReadMultiple(action, cancellation, func);
             }
-
-            return new IncomingResult
-            {
-                Count = count,
-                LastRowVersion = lastRowVersion
-            };
         }
     }
 }

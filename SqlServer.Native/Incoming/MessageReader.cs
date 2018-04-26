@@ -4,7 +4,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 static class MessageReader
 {
-    public static IncomingMessage ReadMessage(this SqlDataReader dataReader)
+    public static IncomingMessage ReadBytesMessage(this SqlDataReader dataReader)
     {
         return new IncomingMessage(
             id: dataReader.GetGuid(0),

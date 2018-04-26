@@ -56,31 +56,17 @@ namespace NServiceBus.Transport.SqlServerNative
 
         Task<IncomingResult> InnerConsume(SqlConnection connection, SqlTransaction transaction, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation)
         {
-            return TransactionWrapper.Run(connection, transaction, sqlTransaction => Inner(sqlTransaction, size, action, cancellation));
+            return TransactionWrapper.Run(connection, transaction, sqlTransaction => Inner(sqlTransaction, size, action, cancellation, MessageReader.ReadBytesMessage));
         }
 
-        async Task<IncomingResult> Inner(SqlTransaction transaction, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation)
+        async Task<IncomingResult> Inner<T>(SqlTransaction transaction, int size, Func<T, Task> action, CancellationToken cancellation, Func<SqlDataReader, T> func)
+            where T : class,IIncomingMessage
         {
-            var count = 0;
-            long? lastRowVersion = null;
             using (var command = BuildCommand(transaction, size))
-            using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
             {
-                while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
-                {
-                    count++;
-                    cancellation.ThrowIfCancellationRequested();
-                    var message = reader.ReadMessage();
-                    lastRowVersion = message.RowVersion;
-                    await action(message).ConfigureAwait(false);
-                }
+                return await command.ReadMultiple(action, cancellation, func);
             }
-
-            return new IncomingResult
-            {
-                Count = count,
-                LastRowVersion = lastRowVersion
-            };
         }
+
     }
 }
