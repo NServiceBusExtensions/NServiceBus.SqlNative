@@ -66,11 +66,11 @@ namespace NServiceBus.Transport.SqlServerNative
             using (var command = BuildCommand(transaction, size))
             using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
             {
-                while (reader.Read())
+                while (await reader.ReadAsync(cancellation))
                 {
                     count++;
                     cancellation.ThrowIfCancellationRequested();
-                    var message = await reader.ReadMessage(cancellation).ConfigureAwait(false);
+                    var message = reader.ReadMessage();
                     lastRowVersion = message.RowVersion;
                     await action(message).ConfigureAwait(false);
                 }

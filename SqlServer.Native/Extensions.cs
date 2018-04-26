@@ -59,14 +59,14 @@ static class Extensions
         }
     }
 
-    public static async Task<T> ValueOrNull<T>(this SqlDataReader dataReader, int index, CancellationToken cancellation)
+    public static T ValueOrNull<T>(this SqlDataReader dataReader, int index)
     {
-        if (await dataReader.IsDBNullAsync(index, cancellation).ConfigureAwait(false))
+        if (dataReader.IsDBNull(index))
         {
             return default;
         }
 
-        return await dataReader.GetFieldValueAsync<T>(index, cancellation).ConfigureAwait(false);
+        return dataReader.GetFieldValue<T>(index);
     }
 
     public static Task<SqlDataReader> ExecuteSequentialReader(this SqlCommand command, CancellationToken cancellation)

@@ -34,7 +34,7 @@ namespace NServiceBus.Transport.SqlServerNative
                     return null;
                 }
 
-                return await reader.ReadMessage(cancellation).ConfigureAwait(false);
+                return reader.ReadMessage();
             }
         }
     }
