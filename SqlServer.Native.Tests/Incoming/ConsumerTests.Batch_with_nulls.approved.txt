@@ -2,16 +2,16 @@
   {
     "Id": "00000000-0000-0000-0000-000000000001",
     "RowVersion": 1,
-    "Headers": "headers"
+    "Headers": "{}"
   },
   {
     "Id": "00000000-0000-0000-0000-000000000002",
     "RowVersion": 2,
-    "Headers": "headers"
+    "Headers": "{}"
   },
   {
     "Id": "00000000-0000-0000-0000-000000000003",
     "RowVersion": 3,
-    "Headers": "headers"
+    "Headers": "{}"
   }
 ]

@@ -7,7 +7,7 @@ namespace NServiceBus.Transport.SqlServerNative
     /// </summary>
     public class OutgoingMessage
     {
-        public OutgoingMessage(Guid id, string correlationId, string replyToAddress, DateTime? expires, string headers, byte[] body)
+        public OutgoingMessage(Guid id, string correlationId = null, string replyToAddress = null, DateTime? expires = null, string headers = null, byte[] body=null)
         {
             Guard.AgainstEmpty(id, nameof(id));
             Guard.AgainstEmpty(headers, nameof(headers));
