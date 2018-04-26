@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public static class HeaderSerializer
+    public static class Headers
     {
         public readonly static Dictionary<string, string> EmptyMetadata = new Dictionary<string, string>();
 
@@ -45,6 +47,20 @@ namespace NServiceBus.Transport.SqlServerNative
                 UseSimpleDictionaryFormat = true
             };
             return new DataContractJsonSerializer(typeof(Dictionary<string, string>), settings);
+        }
+
+        public const string WireDateTimeFormat = "yyyy-MM-dd HH:mm:ss:ffffff Z";
+
+        public static string ToWireFormattedString(DateTime dateTime)
+        {
+            return dateTime.ToUniversalTime()
+                .ToString(WireDateTimeFormat, CultureInfo.InvariantCulture);
+        }
+
+        public static DateTime ToUtcDateTime(string wireFormattedString)
+        {
+            return DateTime.ParseExact(wireFormattedString, WireDateTimeFormat, CultureInfo.InvariantCulture)
+                .ToUniversalTime();
         }
     }
 }

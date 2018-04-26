@@ -8,6 +8,7 @@ using NServiceBus.Features;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
+using Headers = NServiceBus.Transport.SqlServerNative.Headers;
 
 public class SendIntegration : TestBase
 {
@@ -35,7 +36,7 @@ public class SendIntegration : TestBase
             { "NServiceBus.EnclosedMessageTypes", typeof(SendMessage).FullName}
         };
 
-        var message = new OutgoingMessage(Guid.NewGuid(), null, null, DateTime.Now.AddDays(1), HeaderSerializer.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
+        var message = new OutgoingMessage(Guid.NewGuid(), null, null, DateTime.Now.AddDays(1), Headers.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
         return sender.Send(Connection.ConnectionString, message);
     }
 
