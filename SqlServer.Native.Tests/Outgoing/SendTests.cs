@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
@@ -13,13 +14,25 @@ public class SendTests : TestBase
     string table = "SendTests";
 
     [Fact]
-    public void SendSingle()
+    public void Send_bytes()
+    {
+        var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
+        Send(message);
+    }
+
+    [Fact]
+    public void Send_stream()
+    {
+        var message = BuildStreamMessage("00000000-0000-0000-0000-000000000001");
+        Send(message);
+    }
+
+    void Send(OutgoingMessage message)
     {
         SqlHelpers.Drop(Connection.ConnectionString, table).Await();
         QueueCreator.Create(Connection.ConnectionString, table).Await();
         var sender = new Sender("SendTests");
 
-        var message = BuildMessage("00000000-0000-0000-0000-000000000001");
         sender.Send(Connection.ConnectionString, message).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
@@ -47,8 +60,8 @@ public class SendTests : TestBase
             Connection.ConnectionString,
             new List<OutgoingMessage>
             {
-                BuildMessage("00000000-0000-0000-0000-000000000001"),
-                BuildMessage("00000000-0000-0000-0000-000000000002")
+                BuildBytesMessage("00000000-0000-0000-0000-000000000001"),
+                BuildStreamMessage("00000000-0000-0000-0000-000000000002")
             }).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
@@ -70,14 +83,20 @@ public class SendTests : TestBase
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
-    static OutgoingMessage BuildMessage(string guid)
+    static OutgoingMessage BuildBytesMessage(string guid)
     {
         return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
+    static OutgoingMessage BuildStreamMessage(string guid)
+    {
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", stream);
+    }
+
     static OutgoingMessage BuildNullMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid));
+        return new OutgoingMessage(new Guid(guid), bodyBytes: null);
     }
 
     public SendTests(ITestOutputHelper output) : base(output)

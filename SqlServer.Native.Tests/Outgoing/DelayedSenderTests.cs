@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
@@ -12,13 +13,25 @@ public class DelayedSenderTests : TestBase
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     [Fact]
-    public void SendSingle()
+    public void Send_bytes()
+    {
+        var message = BuildBytesMessage();
+        Send(message);
+    }
+
+    [Fact]
+    public void Send_stream()
+    {
+        var message = BuildStreamMessage();
+        Send(message);
+    }
+
+    void Send(OutgoingDelayedMessage message)
     {
         SqlHelpers.Drop(Connection.ConnectionString, table).Await();
         QueueCreator.CreateDelayed(Connection.ConnectionString, table).Await();
         var sender = new DelayedSender(table);
 
-        var message = BuildMessage();
         sender.Send(Connection.ConnectionString, message).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
@@ -46,8 +59,8 @@ public class DelayedSenderTests : TestBase
             Connection.ConnectionString,
             new List<OutgoingDelayedMessage>
             {
-                BuildMessage(),
-                BuildMessage()
+                BuildBytesMessage(),
+                BuildStreamMessage()
             }).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
@@ -69,14 +82,20 @@ public class DelayedSenderTests : TestBase
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
-    static OutgoingDelayedMessage BuildMessage()
+    static OutgoingDelayedMessage BuildBytesMessage()
     {
         return new OutgoingDelayedMessage(dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
+    static OutgoingDelayedMessage BuildStreamMessage()
+    {
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingDelayedMessage(dateTime, "headers", stream);
+    }
+
     static OutgoingDelayedMessage BuildNullMessage()
     {
-        return new OutgoingDelayedMessage(dateTime, null, null);
+        return new OutgoingDelayedMessage(dateTime, null, bodyBytes: null);
     }
 
     public DelayedSenderTests(ITestOutputHelper output) : base(output)

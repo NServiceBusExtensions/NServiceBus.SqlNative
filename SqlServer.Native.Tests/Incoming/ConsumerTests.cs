@@ -107,7 +107,7 @@ public class ConsumerTests : TestBase
 
     static OutgoingMessage BuildNullMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid));
+        return new OutgoingMessage(new Guid(guid), bodyBytes:null);
     }
 
     public ConsumerTests(ITestOutputHelper output) : base(output)

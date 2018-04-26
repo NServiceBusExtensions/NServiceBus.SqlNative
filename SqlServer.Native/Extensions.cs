@@ -37,7 +37,7 @@ static class Extensions
         corrParam.Value = value;
     }
 
-    public static void SetValueOrDbNull(this SqlParameter corrParam, byte[] value)
+    public static void SetValueOrDbNull(this SqlParameter corrParam, object value)
     {
         if (value == null)
         {
