@@ -77,7 +77,7 @@ public class SendTests : TestBase
 
     static OutgoingMessage BuildNullMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), null, null, null, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingMessage(new Guid(guid), null, null, null, null,null);
     }
 
     public SendTests(ITestOutputHelper output) : base(output)

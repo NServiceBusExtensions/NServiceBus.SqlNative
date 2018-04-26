@@ -9,11 +9,22 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         public OutgoingMessage(Guid id, string correlationId, string replyToAddress, DateTime? expires, string headers, byte[] body)
         {
+            Guard.AgainstEmpty(id, nameof(id));
+            Guard.AgainstEmpty(headers, nameof(headers));
+            Guard.AgainstEmpty(correlationId, nameof(correlationId));
+            Guard.AgainstEmpty(replyToAddress, nameof(replyToAddress));
             Id = id;
             CorrelationId = correlationId;
             ReplyToAddress = replyToAddress;
             Expires = expires;
-            Headers = headers;
+            if (headers == null)
+            {
+                Headers = SqlServerNative.Headers.Empty;
+            }
+            else
+            {
+                Headers = headers;
+            }
             Body = body;
         }
 

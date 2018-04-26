@@ -9,8 +9,16 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         public OutgoingDelayedMessage(DateTime due, string headers, byte[] body)
         {
+            Guard.AgainstEmpty(headers, nameof(headers));
             Due = due;
-            Headers = headers;
+            if (headers == null)
+            {
+                Headers = SqlServerNative.Headers.Empty;
+            }
+            else
+            {
+                Headers = headers;
+            }
             Body = body;
         }
 

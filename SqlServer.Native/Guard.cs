@@ -29,6 +29,26 @@ static class Guard
         }
     }
 
+    public static void AgainstEmpty(string value, string argumentName)
+    {
+        if (value == null)
+        {
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new ArgumentNullException(argumentName);
+        }
+    }
+
+    public static void AgainstEmpty(Guid value, string argumentName)
+    {
+        if (value == Guid.Empty)
+        {
+            throw new ArgumentNullException(argumentName);
+        }
+    }
+
     public static void AgainstNegativeAndZero(TimeSpan? value, string argumentName)
     {
         if (value == null)
@@ -41,6 +61,7 @@ static class Guard
             throw new ArgumentNullException(argumentName);
         }
     }
+
 
     public static void AgainstNegativeAndZero(int value, string argumentName)
     {

@@ -76,7 +76,7 @@ public class DelayedSenderTests : TestBase
 
     static OutgoingDelayedMessage BuildNullMessage()
     {
-        return new OutgoingDelayedMessage(dateTime, "headers", null);
+        return new OutgoingDelayedMessage(dateTime, null, null);
     }
 
     public DelayedSenderTests(ITestOutputHelper output) : base(output)

@@ -5,9 +5,9 @@
     "ReplyToAddress": null,
     "Recoverable": true,
     "Expires": null,
-    "Headers": "headers",
-    "BodyString": "絻",
-    "Body": "e30=",
+    "Headers": "{}",
+    "BodyString": null,
+    "Body": null,
     "RowVersion": 1
   },
   {
@@ -16,9 +16,9 @@
     "ReplyToAddress": null,
     "Recoverable": true,
     "Expires": null,
-    "Headers": "headers",
-    "BodyString": "絻",
-    "Body": "e30=",
+    "Headers": "{}",
+    "BodyString": null,
+    "Body": null,
     "RowVersion": 2
   }
 ]
