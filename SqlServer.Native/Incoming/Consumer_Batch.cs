@@ -54,11 +54,16 @@ namespace NServiceBus.Transport.SqlServerNative
             return InnerConsume(transaction.Connection, transaction, size, action, cancellation);
         }
 
-        async Task<IncomingResult> InnerConsume(SqlConnection connection, SqlTransaction transaction, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation)
+        Task<IncomingResult> InnerConsume(SqlConnection connection, SqlTransaction transaction, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation)
+        {
+            return TransactionWrapper.Run(connection, transaction, sqlTransaction => Inner(sqlTransaction, size, action, cancellation));
+        }
+
+        async Task<IncomingResult> Inner(SqlTransaction transaction, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation)
         {
             var count = 0;
             long? lastRowVersion = null;
-            using (var command = BuildCommand(connection, transaction, size))
+            using (var command = BuildCommand(transaction, size))
             using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
             {
                 while (reader.Read())
@@ -76,6 +81,45 @@ namespace NServiceBus.Transport.SqlServerNative
                 Count = count,
                 LastRowVersion = lastRowVersion
             };
+        }
+    }
+}
+static class TransactionWrapper
+{
+    public static async Task<T> Run<T>(SqlConnection connection, SqlTransaction transaction, Func<SqlTransaction, Task<T>> func)
+    {
+        var ownsTransaction = false;
+        if (transaction == null)
+        {
+            ownsTransaction = true;
+            transaction = connection.BeginTransaction();
+        }
+
+        try
+        {
+            var incomingResult = await func(transaction).ConfigureAwait(false);
+            if (ownsTransaction)
+            {
+                transaction.Commit();
+            }
+
+            return incomingResult;
+        }
+        catch (Exception)
+        {
+            if (ownsTransaction)
+            {
+                transaction.Rollback();
+            }
+
+            throw;
+        }
+        finally
+        {
+            if (ownsTransaction)
+            {
+                transaction.Dispose();
+            }
         }
     }
 }

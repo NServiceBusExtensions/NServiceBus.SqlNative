@@ -12,6 +12,11 @@ namespace NServiceBus.Transport.SqlServerNative
             this.table = table;
         }
 
+        SqlCommand BuildCommand(SqlTransaction transaction, int batchSize)
+        {
+            return BuildCommand(transaction.Connection, transaction, batchSize);
+        }
+
         SqlCommand BuildCommand(SqlConnection connection, SqlTransaction transaction, int batchSize)
         {
             var command = connection.CreateCommand();
