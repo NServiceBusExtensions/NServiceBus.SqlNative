@@ -66,7 +66,7 @@ namespace NServiceBus.Transport.SqlServerNative
             using (var command = BuildCommand(transaction, size))
             using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
             {
-                while (await reader.ReadAsync(cancellation))
+                while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
                 {
                     count++;
                     cancellation.ThrowIfCancellationRequested();

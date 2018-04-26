@@ -43,7 +43,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
             {
-                await RunBatch(callback, cancellation, connection);
+                await RunBatch(callback, cancellation, connection).ConfigureAwait(false);
             }
         }
 
