@@ -22,7 +22,7 @@ public class ReaderTests : TestBase
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
         sender.Send(Connection.ConnectionString, message).Await();
         var reader = new Reader(table);
-        var result = reader.Read(Connection.ConnectionString, 1).Result;
+        var result = reader.ReadBytes(Connection.ConnectionString, 1).Result;
         ObjectApprover.VerifyWithJson(result);
     }
 
@@ -45,8 +45,8 @@ public class ReaderTests : TestBase
             }).Await();
 
         var reader = new Reader(table);
-        var messages = new List<IncomingMessage>();
-        var result = reader.Read(
+        var messages = new List<IncomingBytesMessage>();
+        var result = reader.ReadBytes(
                 connection: Connection.ConnectionString,
                 size: 3,
                 startRowVersion: 2,

@@ -17,7 +17,7 @@ namespace NServiceBus.Transport.SqlServerNative
             string table,
             long startingRow,
             string connection,
-            Func<IncomingMessage, CancellationToken, Task> callback,
+            Func<IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             Func<long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
@@ -30,7 +30,7 @@ namespace NServiceBus.Transport.SqlServerNative
             string table,
             long startingRow,
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
-            Func<IncomingMessage, CancellationToken, Task> callback,
+            Func<IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             Func<long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
@@ -49,7 +49,7 @@ namespace NServiceBus.Transport.SqlServerNative
             this.batchSize = batchSize;
         }
 
-        protected override async Task RunBatch(Func<IncomingMessage, CancellationToken, Task> callback, CancellationToken cancellation)
+        protected override async Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation)
         {
             using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
             {
@@ -57,12 +57,12 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        async Task RunBatch(Func<IncomingMessage, CancellationToken, Task> callback, CancellationToken cancellation, SqlConnection connection)
+        async Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation, SqlConnection connection)
         {
             var reader = new Reader(table);
             while (true)
             {
-                var result = await reader.Read(connection, batchSize, startingRow, message => callback(message, cancellation), cancellation)
+                var result = await reader.ReadBytes(connection, batchSize, startingRow, message => callback(message, cancellation), cancellation)
                     .ConfigureAwait(false);
                 if (result.Count == 0)
                 {

@@ -7,13 +7,13 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class Consumer
     {
-        public virtual Task<IncomingResult> Consume(string connection, int size, Action<IncomingMessage> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Consume(string connection, int size, Action<IncomingBytesMessage> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(action, nameof(action));
             return Consume(connection, size, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual async Task<IncomingResult> Consume(string connection, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
+        public virtual async Task<IncomingResult> Consume(string connection, int size, Func<IncomingBytesMessage, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(size, nameof(size));
@@ -25,13 +25,13 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public virtual Task<IncomingResult> Consume(SqlConnection connection, int size, Action<IncomingMessage> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Consume(SqlConnection connection, int size, Action<IncomingBytesMessage> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(action, nameof(action));
             return Consume(connection, size, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual Task<IncomingResult> Consume(SqlConnection connection, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Consume(SqlConnection connection, int size, Func<IncomingBytesMessage, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(size, nameof(size));
@@ -39,14 +39,14 @@ namespace NServiceBus.Transport.SqlServerNative
             return InnerConsume(connection, null, size, action, cancellation);
         }
 
-        public virtual Task<IncomingResult> Consume(SqlTransaction transaction, int size, Action<IncomingMessage> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Consume(SqlTransaction transaction, int size, Action<IncomingBytesMessage> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNull(action, nameof(action));
             return Consume(transaction, size, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual Task<IncomingResult> Consume(SqlTransaction transaction, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Consume(SqlTransaction transaction, int size, Func<IncomingBytesMessage, Task> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(transaction, nameof(transaction));
             Guard.AgainstNegativeAndZero(size, nameof(size));
@@ -54,7 +54,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return InnerConsume(transaction.Connection, transaction, size, action, cancellation);
         }
 
-        Task<IncomingResult> InnerConsume(SqlConnection connection, SqlTransaction transaction, int size, Func<IncomingMessage, Task> action, CancellationToken cancellation)
+        Task<IncomingResult> InnerConsume(SqlConnection connection, SqlTransaction transaction, int size, Func<IncomingBytesMessage, Task> action, CancellationToken cancellation)
         {
             return TransactionWrapper.Run(connection, transaction, sqlTransaction => Inner(sqlTransaction, size, action, cancellation, MessageReader.ReadBytesMessage));
         }

@@ -7,7 +7,7 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class Consumer
     {
-        public virtual async Task<IncomingMessage> Consume(string connection, CancellationToken cancellation = default)
+        public virtual async Task<IncomingBytesMessage> Consume(string connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             using (var sqlConnection = new SqlConnection(connection))
@@ -17,13 +17,13 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public virtual Task<IncomingMessage> Consume(SqlConnection connection, CancellationToken cancellation = default)
+        public virtual Task<IncomingBytesMessage> Consume(SqlConnection connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             return InnerConsume(connection, null, cancellation, MessageReader.ReadBytesMessage);
         }
 
-        public virtual Task<IncomingMessage> Consume(SqlTransaction transaction, CancellationToken cancellation = default)
+        public virtual Task<IncomingBytesMessage> Consume(SqlTransaction transaction, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(transaction, nameof(transaction));
             return InnerConsume(transaction.Connection, transaction, cancellation, MessageReader.ReadBytesMessage);

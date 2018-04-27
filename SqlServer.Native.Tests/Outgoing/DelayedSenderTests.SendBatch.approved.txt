@@ -1,14 +1,14 @@
 ﻿[
   {
     "Headers": "headers",
-    "BodyString": "絻",
+    "BodyString": "{}",
     "Body": "e30=",
     "Due": "2000-01-01T01:01:01",
     "RowVersion": 1
   },
   {
     "Headers": "headers",
-    "BodyString": "絻",
+    "BodyString": "{}",
     "Body": "e30=",
     "Due": "2000-01-01T01:01:01",
     "RowVersion": 2

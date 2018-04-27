@@ -7,7 +7,7 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class Reader
     {
-        public virtual async Task<IncomingMessage> Read(string connection, long rowVersion, CancellationToken cancellation = default)
+        public virtual async Task<IncomingBytesMessage> ReadBytes(string connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
@@ -19,11 +19,30 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public virtual Task<IncomingMessage> Read(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
+        public virtual Task<IncomingBytesMessage> ReadBytes(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             return InnerFind(connection, rowVersion, cancellation, MessageReader.ReadBytesMessage);
+        }
+
+        public virtual async Task<IncomingStreamMessage> ReadStream(string connection, long rowVersion, CancellationToken cancellation = default)
+        {
+            Guard.AgainstNullOrEmpty(connection, nameof(connection));
+            Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
+            using (var sqlConnection = new SqlConnection(connection))
+            {
+                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
+                return await InnerFind(sqlConnection, rowVersion, cancellation, MessageReader.ReadStreamMessage)
+                    .ConfigureAwait(false);
+            }
+        }
+
+        public virtual Task<IncomingStreamMessage> ReadStream(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
+        {
+            Guard.AgainstNull(connection, nameof(connection));
+            Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
+            return InnerFind(connection, rowVersion, cancellation, MessageReader.ReadStreamMessage);
         }
 
         async Task<T> InnerFind<T>(SqlConnection connection, long rowVersion, CancellationToken cancellation, Func<SqlDataReader, T> func)

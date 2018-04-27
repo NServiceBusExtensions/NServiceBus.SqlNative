@@ -6,14 +6,14 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public abstract class MessageLoop : IDisposable
     {
-        Func<IncomingMessage, CancellationToken, Task> callback;
+        Func<IncomingBytesMessage, CancellationToken, Task> callback;
         Action<Exception> errorCallback;
         Task task;
         CancellationTokenSource tokenSource;
         TimeSpan delay;
 
         public MessageLoop(
-            Func<IncomingMessage, CancellationToken, Task> callback,
+            Func<IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             TimeSpan? delay = null)
         {
@@ -52,7 +52,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }, CancellationToken.None);
         }
 
-        protected abstract Task RunBatch(Func<IncomingMessage, CancellationToken, Task> callback, CancellationToken cancellation);
+        protected abstract Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation);
 
         public Task Stop()
         {

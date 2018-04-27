@@ -59,7 +59,7 @@ public class ConsumerTests : TestBase
             }).Await();
 
         var consumer = new Consumer(table);
-        var messages = new List<IncomingMessage>();
+        var messages = new List<IncomingBytesMessage>();
         var result = consumer.Consume(
                 connection: Connection.ConnectionString,
                 size: 3,
@@ -89,7 +89,7 @@ public class ConsumerTests : TestBase
             }).Await();
 
         var consumer = new Consumer(table);
-        var messages = new List<IncomingMessage>();
+        var messages = new List<IncomingBytesMessage>();
         var result = consumer.Consume(
                 connection: Connection.ConnectionString,
                 size: 3,

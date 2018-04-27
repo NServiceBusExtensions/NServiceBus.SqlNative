@@ -5,9 +5,9 @@ namespace NServiceBus.Transport.SqlServerNative
     /// <summary>
     /// Represents a message.
     /// </summary>
-    public class IncomingMessage : IIncomingMessage
+    public class IncomingBytesMessage : IIncomingMessage
     {
-        public IncomingMessage(Guid id, long rowVersion, string correlationId, string replyToAddress, DateTime? expires, string headers, byte[] body)
+        public IncomingBytesMessage(Guid id, long rowVersion, string correlationId, string replyToAddress, DateTime? expires, string headers, byte[] body)
         {
             Id = id;
             RowVersion = rowVersion;
@@ -26,4 +26,5 @@ namespace NServiceBus.Transport.SqlServerNative
         public string Headers { get; }
         public byte[] Body { get; }
     }
+
 }

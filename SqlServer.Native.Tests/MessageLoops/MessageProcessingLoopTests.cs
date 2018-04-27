@@ -46,7 +46,7 @@ public class MessageProcessingLoopTests : TestBase
 
         var count = 0;
 
-        Task Callback(IncomingMessage message, CancellationToken cancellation)
+        Task Callback(IncomingBytesMessage message, CancellationToken cancellation)
         {
             count++;
             if (count == 5)

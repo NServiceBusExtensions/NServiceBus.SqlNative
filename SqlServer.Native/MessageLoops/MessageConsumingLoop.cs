@@ -14,7 +14,7 @@ namespace NServiceBus.Transport.SqlServerNative
         public MessageConsumingLoop(
             string table,
             string connection,
-            Func<IncomingMessage, CancellationToken, Task> callback,
+            Func<IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             int batchSize = 10,
             TimeSpan? delay = null) :
@@ -25,7 +25,7 @@ namespace NServiceBus.Transport.SqlServerNative
         public MessageConsumingLoop(
             string table,
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
-            Func<IncomingMessage, CancellationToken, Task> callback,
+            Func<IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             int batchSize = 10,
             TimeSpan? delay = null) :
@@ -39,7 +39,7 @@ namespace NServiceBus.Transport.SqlServerNative
             this.batchSize = batchSize;
         }
 
-        protected override async Task RunBatch(Func<IncomingMessage, CancellationToken, Task> callback, CancellationToken cancellation)
+        protected override async Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation)
         {
             using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
             {
@@ -47,7 +47,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        async Task RunBatch(Func<IncomingMessage, CancellationToken, Task> callback, CancellationToken cancellation, SqlConnection connection)
+        async Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation, SqlConnection connection)
         {
             var consumer = new Consumer(table);
             while (true)
