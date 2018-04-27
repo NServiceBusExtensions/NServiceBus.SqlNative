@@ -6,7 +6,7 @@
     "Recoverable": true,
     "Expires": "2000-01-01T01:01:01",
     "Headers": "headers",
-    "BodyString": "絻",
+    "BodyString": "{}",
     "Body": "e30=",
     "RowVersion": 1
   },
@@ -17,7 +17,7 @@
     "Recoverable": true,
     "Expires": "2000-01-01T01:01:01",
     "Headers": "headers",
-    "BodyString": "絻",
+    "BodyString": "{}",
     "Body": "e30=",
     "RowVersion": 2
   }

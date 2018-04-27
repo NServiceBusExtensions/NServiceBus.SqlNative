@@ -6,7 +6,7 @@
     "Recoverable": true,
     "Expires": null,
     "Headers": "headers",
-    "BodyString": "絻",
+    "BodyString": "{}",
     "Body": "e30=",
     "RowVersion": 1
   }
