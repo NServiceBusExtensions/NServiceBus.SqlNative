@@ -1,0 +1,21 @@
+﻿[
+  {
+    "Headers": "{}",
+    "Id": "00000000-0000-0000-0000-000000000002",
+    "RowVersion": 2
+  },
+  {
+    "CorrelationId": "theCorrelationId",
+    "Expires": "2000-01-01T01:01:01",
+    "Headers": "headers",
+    "Id": "00000000-0000-0000-0000-000000000003",
+    "ReplyToAddress": "theReplyToAddress",
+    "RowVersion": 3,
+    "bodyString": "{}"
+  },
+  {
+    "Headers": "{}",
+    "Id": "00000000-0000-0000-0000-000000000004",
+    "RowVersion": 4
+  }
+]

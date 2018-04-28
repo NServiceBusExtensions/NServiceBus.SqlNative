@@ -22,7 +22,7 @@ public class ConsumerIntegrationTests : TestBase
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
         var consumer = new Consumer(table);
-        var message = await consumer.Consume(Connection.ConnectionString);
+        var message = await consumer.ConsumeBytes(Connection.ConnectionString);
         Assert.NotNull(message);
     }
 

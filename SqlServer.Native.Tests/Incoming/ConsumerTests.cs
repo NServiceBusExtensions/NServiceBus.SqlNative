@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -8,59 +6,56 @@ using Xunit.Abstractions;
 
 public class ConsumerTests : TestBase
 {
-    static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
-
     string table = "ConsumerTests";
 
     [Fact]
-    public void Single()
+    public void Single_bytes()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.Create(Connection.ConnectionString, table).Await();
-        var sender = new Sender(table);
-
-        var message = BuildMessage("00000000-0000-0000-0000-000000000001");
-        sender.Send(Connection.ConnectionString, message).Await();
+        TestDataBuilder.SendData(table);
         var consumer = new Consumer(table);
-        var result = consumer.Consume(Connection.ConnectionString).Result;
+        var result = consumer.ConsumeBytes(Connection.ConnectionString).Result;
         ObjectApprover.VerifyWithJson(result);
     }
 
     [Fact]
-    public void Single_with_nulls()
+    public void Single_bytes_nulls()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.Create(Connection.ConnectionString, table).Await();
-        var sender = new Sender(table);
-
-        var message = BuildNullMessage("00000000-0000-0000-0000-000000000001");
-        sender.Send(Connection.ConnectionString, message).Await();
+        TestDataBuilder.SendNullData(table);
         var consumer = new Consumer(table);
-        var result = consumer.Consume(Connection.ConnectionString).Result;
+        var result = consumer.ConsumeBytes(Connection.ConnectionString).Result;
         ObjectApprover.VerifyWithJson(result);
     }
 
     [Fact]
-    public void Batch()
+    public void Single_stream()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.Create(Connection.ConnectionString, table).Await();
-        var sender = new Sender(table);
+        TestDataBuilder.SendData(table);
+        var consumer = new Consumer(table);
+        using (var result = consumer.ConsumeStream(Connection.ConnectionString).Result)
+        {
+            ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
+        }
+    }
 
-        sender.Send(
-            Connection.ConnectionString,
-            new List<OutgoingMessage>
-            {
-                BuildMessage("00000000-0000-0000-0000-000000000001"),
-                BuildMessage("00000000-0000-0000-0000-000000000002"),
-                BuildMessage("00000000-0000-0000-0000-000000000003"),
-                BuildMessage("00000000-0000-0000-0000-000000000004"),
-                BuildMessage("00000000-0000-0000-0000-000000000005")
-            }).Await();
+    [Fact]
+    public void Single_stream_nulls()
+    {
+        TestDataBuilder.SendNullData(table);
+        var consumer = new Consumer(table);
+        using (var result = consumer.ConsumeStream(Connection.ConnectionString).Result)
+        {
+            ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
+        }
+    }
+
+    [Fact]
+    public void Batch_bytes()
+    {
+        TestDataBuilder.SendMultipleData(table);
 
         var consumer = new Consumer(table);
         var messages = new List<IncomingBytesMessage>();
-        var result = consumer.Consume(
+        var result = consumer.ConsumeBytes(
                 connection: Connection.ConnectionString,
                 size: 3,
                 action: message => { messages.Add(message); })
@@ -71,46 +66,25 @@ public class ConsumerTests : TestBase
     }
 
     [Fact]
-    public void Batch_with_nulls()
+    public void Batch_stream()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.Create(Connection.ConnectionString, table).Await();
-        var sender = new Sender(table);
-
-        sender.Send(
-            Connection.ConnectionString,
-            new List<OutgoingMessage>
-            {
-                BuildNullMessage("00000000-0000-0000-0000-000000000001"),
-                BuildNullMessage("00000000-0000-0000-0000-000000000002"),
-                BuildNullMessage("00000000-0000-0000-0000-000000000003"),
-                BuildNullMessage("00000000-0000-0000-0000-000000000004"),
-                BuildNullMessage("00000000-0000-0000-0000-000000000005")
-            }).Await();
+        TestDataBuilder.SendMultipleData(table);
 
         var consumer = new Consumer(table);
-        var messages = new List<IncomingBytesMessage>();
-        var result = consumer.Consume(
+        var messages = new List<object>();
+        var result = consumer.ConsumeStream(
                 connection: Connection.ConnectionString,
                 size: 3,
-                action: message => { messages.Add(message); })
+                action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
-        Assert.Equal(3, result.LastRowVersion);
         Assert.Equal(3, result.Count);
+        Assert.Equal(3, result.LastRowVersion);
         ObjectApprover.VerifyWithJson(messages);
-    }
-
-    static OutgoingMessage BuildMessage(string guid)
-    {
-        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
-    }
-
-    static OutgoingMessage BuildNullMessage(string guid)
-    {
-        return new OutgoingMessage(new Guid(guid), bodyBytes:null);
     }
 
     public ConsumerTests(ITestOutputHelper output) : base(output)
     {
+        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
+        QueueCreator.Create(Connection.ConnectionString, table).Await();
     }
 }

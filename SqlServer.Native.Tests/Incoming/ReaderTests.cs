@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -11,38 +10,51 @@ public class ReaderTests : TestBase
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     string table = "ReaderTests";
-
+        
     [Fact]
-    public void Single()
+    public void Single_bytes()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.Create(Connection.ConnectionString, table).Await();
-        var sender = new Sender(table);
-
-        var message = BuildMessage("00000000-0000-0000-0000-000000000001");
-        sender.Send(Connection.ConnectionString, message).Await();
+        TestDataBuilder.SendData(table);
         var reader = new Reader(table);
         var result = reader.ReadBytes(Connection.ConnectionString, 1).Result;
         ObjectApprover.VerifyWithJson(result);
     }
 
     [Fact]
-    public void Batch()
+    public void Single_bytes_nulls()
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.Create(Connection.ConnectionString, table).Await();
-        var sender = new Sender(table);
+        TestDataBuilder.SendNullData(table);
+        var reader = new Reader(table);
+        var result = reader.ReadBytes(Connection.ConnectionString, 1).Result;
+        ObjectApprover.VerifyWithJson(result);
+    }
 
-        sender.Send(
-            Connection.ConnectionString,
-            new List<OutgoingMessage>
-            {
-                BuildMessage("00000000-0000-0000-0000-000000000001"),
-                BuildMessage("00000000-0000-0000-0000-000000000002"),
-                BuildMessage("00000000-0000-0000-0000-000000000003"),
-                BuildMessage("00000000-0000-0000-0000-000000000004"),
-                BuildMessage("00000000-0000-0000-0000-000000000005")
-            }).Await();
+    [Fact]
+    public void Single_stream()
+    {
+        TestDataBuilder.SendData(table);
+        var reader = new Reader(table);
+        using (var result = reader.ReadStream(Connection.ConnectionString, 1).Result)
+        {
+            ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
+        }
+    }
+
+    [Fact]
+    public void Single_stream_nulls()
+    {
+        TestDataBuilder.SendNullData(table);
+        var reader = new Reader(table);
+        using (var result = reader.ReadStream(Connection.ConnectionString, 1).Result)
+        {
+            ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
+        }
+    }
+
+    [Fact]
+    public void Batch_bytes()
+    {
+        TestDataBuilder.SendMultipleData(table);
 
         var reader = new Reader(table);
         var messages = new List<IncomingBytesMessage>();
@@ -57,12 +69,27 @@ public class ReaderTests : TestBase
         ObjectApprover.VerifyWithJson(messages);
     }
 
-    static OutgoingMessage BuildMessage(string guid)
+    [Fact]
+    public void Batch_stream()
     {
-        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        TestDataBuilder.SendMultipleData(table);
+
+        var reader = new Reader(table);
+        var messages = new List<object>();
+        var result = reader.ReadStream(
+                connection: Connection.ConnectionString,
+                size: 3,
+                startRowVersion: 2,
+                action: message => { messages.Add(message.ToVerifyTarget()); })
+            .Result;
+        Assert.Equal(4, result.LastRowVersion);
+        Assert.Equal(3, result.Count);
+        ObjectApprover.VerifyWithJson(messages);
     }
 
     public ReaderTests(ITestOutputHelper output) : base(output)
     {
+        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
+        QueueCreator.Create(Connection.ConnectionString, table).Await();
     }
 }

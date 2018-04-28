@@ -13,73 +13,74 @@ public class DelayedSenderTests : TestBase
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     [Fact]
-    public void Send_bytes()
+    public void Single_bytes()
     {
         var message = BuildBytesMessage();
         Send(message);
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+    }
+    [Fact]
+    public void Single_bytes_nulls()
+    {
+        var message = BuildBytesNullMessage();
+        Send(message);
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
     [Fact]
-    public void Send_stream()
+    public void Single_stream()
     {
         var message = BuildStreamMessage();
         Send(message);
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+    }
+
+    [Fact]
+    public void Single_stream_nulls()
+    {
+        var sender = new DelayedSender(table);
+
+        var message = BuildBytesNullMessage();
+        sender.Send(Connection.ConnectionString, message).Await();
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+    }
+
+    [Fact]
+    public void Batch()
+    {
+        var messages = new List<OutgoingDelayedMessage>
+        {
+            BuildBytesMessage(),
+            BuildStreamMessage()
+        };
+        Send(messages);
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+    }
+
+    [Fact]
+    public void Batch_nulls()
+    {
+        var messages = new List<OutgoingDelayedMessage>
+        {
+            BuildBytesNullMessage(),
+            BuildStreamNullMessage()
+        };
+        Send(messages);
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
     void Send(OutgoingDelayedMessage message)
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.CreateDelayed(Connection.ConnectionString, table).Await();
         var sender = new DelayedSender(table);
 
         sender.Send(Connection.ConnectionString, message).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
-    [Fact]
-    public void Can_send_single_with_nulls()
+    void Send(List<OutgoingDelayedMessage> messages)
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.CreateDelayed(Connection.ConnectionString, table).Await();
         var sender = new DelayedSender(table);
 
-        var message = BuildNullMessage();
-        sender.Send(Connection.ConnectionString, message).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
-    }
-
-    [Fact]
-    public void SendBatch()
-    {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.CreateDelayed(Connection.ConnectionString, table).Await();
-        var sender = new DelayedSender(table);
-
-        sender.Send(
-            Connection.ConnectionString,
-            new List<OutgoingDelayedMessage>
-            {
-                BuildBytesMessage(),
-                BuildStreamMessage()
-            }).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
-    }
-
-    [Fact]
-    public void Can_send_batch_with_nulls()
-    {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.CreateDelayed(Connection.ConnectionString, table).Await();
-        var sender = new DelayedSender(table);
-
-        sender.Send(
-            Connection.ConnectionString,
-            new List<OutgoingDelayedMessage>
-            {
-                BuildNullMessage(),
-                BuildNullMessage()
-            }).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        sender.Send(Connection.ConnectionString, messages).Await();
     }
 
     static OutgoingDelayedMessage BuildBytesMessage()
@@ -93,12 +94,19 @@ public class DelayedSenderTests : TestBase
         return new OutgoingDelayedMessage(dateTime, "headers", stream);
     }
 
-    static OutgoingDelayedMessage BuildNullMessage()
+    static OutgoingDelayedMessage BuildBytesNullMessage()
     {
         return new OutgoingDelayedMessage(dateTime, null, bodyBytes: null);
     }
 
+    static OutgoingDelayedMessage BuildStreamNullMessage()
+    {
+        return new OutgoingDelayedMessage(dateTime, null, bodyStream: null);
+    }
+
     public DelayedSenderTests(ITestOutputHelper output) : base(output)
     {
+        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
+        QueueCreator.CreateDelayed(Connection.ConnectionString, table).Await();
     }
 }

@@ -11,11 +11,7 @@
   {
     "Id": "00000000-0000-0000-0000-000000000002",
     "RowVersion": 2,
-    "CorrelationId": "theCorrelationId",
-    "ReplyToAddress": "theReplyToAddress",
-    "Expires": "2000-01-01T01:01:01",
-    "Headers": "headers",
-    "Body": "e30="
+    "Headers": "{}"
   },
   {
     "Id": "00000000-0000-0000-0000-000000000003",

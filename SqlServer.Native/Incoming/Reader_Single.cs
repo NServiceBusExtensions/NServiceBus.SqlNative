@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,7 +13,7 @@ namespace NServiceBus.Transport.SqlServerNative
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await InnerFind(sqlConnection, rowVersion, cancellation, MessageReader.ReadBytesMessage)
+                return await InnerReadBytes(sqlConnection, rowVersion, cancellation)
                     .ConfigureAwait(false);
             }
         }
@@ -23,34 +22,52 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
-            return InnerFind(connection, rowVersion, cancellation, MessageReader.ReadBytesMessage);
+            return InnerReadBytes(connection, rowVersion, cancellation);
         }
 
         public virtual async Task<IncomingStreamMessage> ReadStream(string connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
-            using (var sqlConnection = new SqlConnection(connection))
+            var sqlConnection = new SqlConnection(connection);
+            await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
+            var command = BuildCommand(sqlConnection, 1, rowVersion);
             {
-                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await InnerFind(sqlConnection, rowVersion, cancellation, MessageReader.ReadStreamMessage)
-                    .ConfigureAwait(false);
+                var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false);
+                if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
+                {
+                    reader.Dispose();
+                    sqlConnection.Dispose();
+                    return null;
+                }
+
+                return reader.ReadStreamMessage(sqlConnection, reader, command);
             }
         }
 
-        public virtual Task<IncomingStreamMessage> ReadStream(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
+        public virtual async Task<IncomingStreamMessage> ReadStream(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
-            return InnerFind(connection, rowVersion, cancellation, MessageReader.ReadStreamMessage);
-        }
-
-        async Task<T> InnerFind<T>(SqlConnection connection, long rowVersion, CancellationToken cancellation, Func<SqlDataReader, T> func)
-            where T : class
-        {
             using (var command = BuildCommand(connection, 1, rowVersion))
             {
-                return await command.ReadSingle(cancellation, func);
+                var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false);
+                if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
+                {
+                    reader.Dispose();
+                    return null;
+                }
+
+                return reader.ReadStreamMessage(reader);
+            }
+        }
+
+        async Task<IncomingBytesMessage> InnerReadBytes(SqlConnection connection, long rowVersion, CancellationToken cancellation)
+        {
+            using (var command = BuildCommand(connection, 1, rowVersion))
+            using (var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))
+            {
+                return await reader.ReadSingle(MessageReader.ReadBytesMessage, cancellation);
             }
         }
     }

@@ -26,5 +26,4 @@ namespace NServiceBus.Transport.SqlServerNative
         public string Headers { get; }
         public byte[] Body { get; }
     }
-
 }

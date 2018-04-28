@@ -29,6 +29,7 @@ select top({1})
     ReplyToAddress,
     Expires,
     Headers,
+    datalength(Body),
     Body
 from {0}
 where RowVersion >= @RowVersion

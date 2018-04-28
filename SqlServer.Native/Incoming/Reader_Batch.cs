@@ -21,7 +21,7 @@ namespace NServiceBus.Transport.SqlServerNative
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await InnerRead(sqlConnection, size, startRowVersion, action, cancellation, MessageReader.ReadBytesMessage)
+                return await InnerReadBytes(sqlConnection, size, startRowVersion, action, cancellation)
                     .ConfigureAwait(false);
             }
         }
@@ -37,7 +37,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNegativeAndZero(startRowVersion, nameof(startRowVersion));
             Guard.AgainstNull(action, nameof(action));
-            return InnerRead(connection, size, startRowVersion, action, cancellation, MessageReader.ReadBytesMessage);
+            return InnerReadBytes(connection, size, startRowVersion, action, cancellation);
         }
 
         public virtual Task<IncomingResult> ReadStream(string connection, int size, long startRowVersion, Action<IncomingStreamMessage> action, CancellationToken cancellation = default)
@@ -54,7 +54,7 @@ namespace NServiceBus.Transport.SqlServerNative
             using (var sqlConnection = new SqlConnection(connection))
             {
                 await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await InnerRead(sqlConnection, size, startRowVersion, action, cancellation, MessageReader.ReadStreamMessage)
+                return await InnerReadStream(sqlConnection, size, startRowVersion, action, cancellation)
                     .ConfigureAwait(false);
             }
         }
@@ -70,15 +70,22 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNegativeAndZero(startRowVersion, nameof(startRowVersion));
             Guard.AgainstNull(action, nameof(action));
-            return InnerRead(connection, size, startRowVersion, action, cancellation, MessageReader.ReadStreamMessage);
+            return InnerReadStream(connection, size, startRowVersion, action, cancellation);
         }
 
-        async Task<IncomingResult> InnerRead<T>(SqlConnection connection, int size, long startRowVersion, Func<T, Task> action, CancellationToken cancellation, Func<SqlDataReader, T> func)
-            where T : class, IIncomingMessage
+        async Task<IncomingResult> InnerReadBytes(SqlConnection connection, int size, long startRowVersion, Func<IncomingBytesMessage, Task> action, CancellationToken cancellation)
         {
             using (var command = BuildCommand(connection, size, startRowVersion))
             {
-                return await command.ReadMultiple(action, cancellation, func);
+                return await command.ReadMultiple(action, cancellation, reader => reader.ReadBytesMessage());
+            }
+        }
+
+        async Task<IncomingResult> InnerReadStream(SqlConnection connection, int size, long startRowVersion, Func<IncomingStreamMessage, Task> action, CancellationToken cancellation)
+        {
+            using (var command = BuildCommand(connection, size, startRowVersion))
+            {
+                return await command.ReadMultiple(action, cancellation, reader => reader.ReadStreamMessage());
             }
         }
     }

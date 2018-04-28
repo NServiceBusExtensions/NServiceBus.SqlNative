@@ -66,11 +66,11 @@ static class Extensions
     {
         using (var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))
         {
-            return await ReadSingle(cancellation, func, reader);
+            return await ReadSingle(reader, func, cancellation);
         }
     }
 
-    private static async Task<T> ReadSingle<T>(CancellationToken cancellation, Func<SqlDataReader, T> func, SqlDataReader reader) where T : class
+    public static async Task<T> ReadSingle<T>(this SqlDataReader reader, Func<SqlDataReader, T> func, CancellationToken cancellation) where T : class
     {
         if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
         {

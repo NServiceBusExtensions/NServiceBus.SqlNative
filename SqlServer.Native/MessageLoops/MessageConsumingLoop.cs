@@ -52,7 +52,7 @@ namespace NServiceBus.Transport.SqlServerNative
             var consumer = new Consumer(table);
             while (true)
             {
-                var result = await consumer.Consume(connection, batchSize, message => callback(message, cancellation), cancellation)
+                var result = await consumer.ConsumeBytes(connection, batchSize, message => callback(message, cancellation), cancellation)
                     .ConfigureAwait(false);
                 if (result.Count < batchSize)
                 {

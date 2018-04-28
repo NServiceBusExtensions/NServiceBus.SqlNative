@@ -38,6 +38,7 @@ output
     deleted.ReplyToAddress,
     deleted.Expires,
     deleted.Headers,
+    datalength(deleted.Body),
     deleted.Body;
 ");
     }

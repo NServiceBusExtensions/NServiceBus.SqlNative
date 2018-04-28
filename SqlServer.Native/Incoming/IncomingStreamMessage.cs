@@ -6,10 +6,14 @@ namespace NServiceBus.Transport.SqlServerNative
     /// <summary>
     /// Represents a message.
     /// </summary>
-    public class IncomingStreamMessage : IIncomingMessage
+    public class IncomingStreamMessage : IIncomingMessage, IDisposable
     {
-        public IncomingStreamMessage(Guid id, long rowVersion, string correlationId, string replyToAddress, DateTime? expires, string headers, Stream body)
+        IDisposable[] cleanups;
+
+        public IncomingStreamMessage(Guid id, long rowVersion, string correlationId, string replyToAddress, DateTime? expires, string headers, Stream body, IDisposable[] cleanups)
         {
+            Guard.AgainstNull(cleanups, nameof(cleanups));
+            this.cleanups = cleanups;
             Id = id;
             RowVersion = rowVersion;
             CorrelationId = correlationId;
@@ -26,6 +30,17 @@ namespace NServiceBus.Transport.SqlServerNative
         public DateTime? Expires { get; }
         public string Headers { get; }
         public Stream Body { get; }
-    }
 
+        public void Dispose()
+        {
+            Body?.Dispose();
+            if (cleanups != null)
+            {
+                foreach (var cleanup in cleanups)
+                {
+                    cleanup.Dispose();
+                }
+            }
+        }
+    }
 }
