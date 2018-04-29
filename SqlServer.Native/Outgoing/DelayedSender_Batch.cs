@@ -35,7 +35,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         Task<long> InnerSend(SqlConnection connection, SqlTransaction transaction, IEnumerable<OutgoingDelayedMessage> messages, CancellationToken cancellation)
         {
-            return TransactionWrapper.Run(connection, transaction, sqlTransaction => NewMethod(sqlTransaction, messages, cancellation));
+            return TransactionWrapper.Run(sqlTransaction => NewMethod(sqlTransaction, messages, cancellation), connection, transaction);
         }
 
         async Task<long> NewMethod(SqlTransaction transaction, IEnumerable<OutgoingDelayedMessage> messages, CancellationToken cancellation)

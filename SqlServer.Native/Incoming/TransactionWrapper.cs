@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 static class TransactionWrapper
 {
-    public static async Task<T> Run<T>(SqlConnection connection, SqlTransaction transaction, Func<SqlTransaction, Task<T>> func)
+    public static async Task<T> Run<T>(Func<SqlTransaction, Task<T>> func, SqlConnection connection, SqlTransaction transaction=null)
     {
         var ownsTransaction = false;
         if (transaction == null)
