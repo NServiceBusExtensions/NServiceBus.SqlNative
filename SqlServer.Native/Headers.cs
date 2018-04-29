@@ -7,10 +7,11 @@ using System.Text;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public static class Headers
+    public static partial class Headers
     {
         public readonly static Dictionary<string, string> EmptyMetadata = new Dictionary<string, string>();
         public readonly static string Empty = "{}";
+
         public static string Serialize(Dictionary<string, string> instance)
         {
             if (instance == null)
