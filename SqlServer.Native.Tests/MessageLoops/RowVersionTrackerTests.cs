@@ -13,12 +13,12 @@ public class RowVersionTrackerTests : TestBase
     public async Task Run()
     {
         await SqlHelpers.Drop(Connection.OpenConnection(), "RowVersionTracker");
-        var tracker = new RowVersionTracker(Connection.OpenAsyncConnection);
-        await tracker.CreateTable();
-        var initial = await tracker.Get();
+        var tracker = new RowVersionTracker();
+        await tracker.CreateTable(Connection.ConnectionString);
+        var initial = await tracker.Get(Connection.ConnectionString);
         Assert.Equal(1, initial);
-        await tracker.Save(4);
-        var after = await tracker.Get();
+        await tracker.Save(Connection.ConnectionString,4);
+        var after = await tracker.Get(Connection.ConnectionString);
         Assert.Equal(4, after);
     }
 }
