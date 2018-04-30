@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -7,10 +6,8 @@ using Xunit.Abstractions;
 
 public class ReaderTests : TestBase
 {
-    static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
-
     string table = "ReaderTests";
-        
+
     [Fact]
     public void Single_bytes()
     {

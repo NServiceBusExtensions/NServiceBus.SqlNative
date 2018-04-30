@@ -60,48 +60,64 @@ static class Extensions
         }
     }
 
-
-    public static async Task<T> ReadSingle<T>(this SqlCommand command, CancellationToken cancellation, Func<SqlDataReader, T> func)
-        where T : class
-    {
-        using (var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))
-        {
-            return await ReadSingle(reader, func, cancellation);
-        }
-    }
-
-    public static async Task<T> ReadSingle<T>(this SqlDataReader reader, Func<SqlDataReader, T> func, CancellationToken cancellation) where T : class
+    public static async Task<IncomingBytesMessage> ReadSingleBytes(this SqlDataReader reader, CancellationToken cancellation)
     {
         if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
         {
             return null;
         }
 
-        return func(reader);
+        return reader.ReadBytesMessage();
     }
 
-    public static async Task<IncomingResult> ReadMultiple<T>(this SqlCommand command, Func<T, Task> action, CancellationToken cancellation, Func<SqlDataReader, T> func) where T : class, IIncomingMessage
+    public static async Task<IncomingResult> ReadMultipleBytes(this SqlCommand command, Func<IncomingBytesMessage, Task> func, CancellationToken cancellation)
     {
-        var count = 0;
-        long? lastRowVersion = null;
         using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
         {
+            var count = 0;
+            long? lastRowVersion = null;
             while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
             {
                 count++;
                 cancellation.ThrowIfCancellationRequested();
-                var message = func(reader);
+                var message = reader.ReadBytesMessage();
                 lastRowVersion = message.RowVersion;
-                await action(message).ConfigureAwait(false);
+                await func(message).ConfigureAwait(false);
             }
-        }
 
-        return new IncomingResult
-        {
-            Count = count,
-            LastRowVersion = lastRowVersion
-        };
+            return new IncomingResult
+            {
+                Count = count,
+                LastRowVersion = lastRowVersion
+            };
+        }
     }
+
+    public static async Task<IncomingResult> ReadMultipleStream(this SqlCommand command, Func<IncomingStreamMessage, Task> func, CancellationToken cancellation)
+    {
+        using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
+        {
+            var count = 0;
+            long? lastRowVersion = null;
+            while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
+            {
+                count++;
+                cancellation.ThrowIfCancellationRequested();
+                using (var message = reader.ReadStreamMessage())
+                {
+                    lastRowVersion = message.RowVersion;
+                    await func(message).ConfigureAwait(false);
+                }
+            }
+
+            return new IncomingResult
+            {
+                Count = count,
+                LastRowVersion = lastRowVersion
+            };
+        }
+    }
+
     public static T ValueOrNull<T>(this SqlDataReader dataReader, int index)
     {
         if (dataReader.IsDBNull(index))

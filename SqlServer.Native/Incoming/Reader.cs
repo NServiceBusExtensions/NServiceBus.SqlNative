@@ -32,6 +32,7 @@ select top({1})
     datalength(Body),
     Body
 from {0}
+with (readpast)
 where RowVersion >= @RowVersion
 order by RowVersion
 ");
