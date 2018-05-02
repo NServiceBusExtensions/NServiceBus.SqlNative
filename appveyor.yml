@@ -9,6 +9,10 @@ before_build:
 - ps: nuget restore
 build:
   verbosity: minimal
+before_test:
+  - ps: >-
+      $instanceName = $env:db_version.ToUpper()
+      net start "MSSQL`$$instanceName"
 test_script:
 - cmd: >-
     %xunit20%\xunit.console SqlServer.Native.Tests\bin\Release\net47\SqlServer.Native.Tests.dll
