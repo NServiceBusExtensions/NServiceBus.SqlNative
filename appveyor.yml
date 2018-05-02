@@ -10,7 +10,6 @@ before_build:
 build:
   verbosity: minimal
 before_test:
-before_test:
   - ps: |
       net start 'MSSQL$SQL2017'
 test_script:
