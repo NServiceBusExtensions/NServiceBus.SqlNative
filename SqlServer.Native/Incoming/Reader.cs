@@ -6,14 +6,27 @@ namespace NServiceBus.Transport.SqlServerNative
     public partial class Reader
     {
         string table;
+        SqlConnection connection;
+        SqlTransaction transaction;
 
-        public Reader(string table)
+        public Reader(string table, SqlConnection connection)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(connection, nameof(connection));
             this.table = table;
+            this.connection = connection;
         }
 
-        SqlCommand BuildCommand(SqlConnection connection, int batchSize, long startRowVersion)
+        public Reader(string table, SqlTransaction transaction)
+        {
+            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(transaction, nameof(transaction));
+            this.table = table;
+            this.transaction = transaction;
+            connection = transaction.Connection;
+        }
+
+        SqlCommand BuildCommand(int batchSize, long startRowVersion)
         {
             var command = connection.CreateCommand();
             command.CommandText = string.Format(Sql, table, batchSize);
@@ -36,5 +49,6 @@ with (readpast)
 where RowVersion >= @RowVersion
 order by RowVersion
 ");
+
     }
 }

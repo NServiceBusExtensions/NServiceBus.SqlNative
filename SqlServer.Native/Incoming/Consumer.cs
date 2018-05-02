@@ -15,6 +15,7 @@ namespace NServiceBus.Transport.SqlServerNative
             this.table = table;
             this.connection = connection;
         }
+
         public Consumer(string table, SqlTransaction transaction)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
