@@ -18,7 +18,7 @@ public class ConsumerIntegrationTests : TestBase
         var configuration = await EndpointCreator.Create("IntegrationConsumer");
         configuration.SendOnly();
         var transport = configuration.UseTransport<SqlServerTransport>();
-        transport.ConnectionString(SqlConnection.ConnectionString);
+        transport.ConnectionString(Connection.ConnectionString);
         configuration.DisableFeature<TimeoutManager>();
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
