@@ -21,8 +21,8 @@ public class ConsumerIntegrationTests : TestBase
         configuration.DisableFeature<TimeoutManager>();
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
-        var consumer = new Consumer(table);
-        var message = await consumer.ConsumeBytes(SqlConnection);
+        var consumer = new Consumer(table, SqlConnection);
+        var message = await consumer.ConsumeBytes();
         Assert.NotNull(message);
     }
 

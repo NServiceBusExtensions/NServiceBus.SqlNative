@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -10,6 +12,17 @@ static class Guard
         if (value == null)
         {
             throw new ArgumentNullException(argumentName);
+        }
+    }
+    public static void AgainstNull(SqlConnection value, string argumentName)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(argumentName);
+        }
+        if (value.State == ConnectionState.Closed)
+        {
+            throw new ArgumentException("Connection must be open.", argumentName);
         }
     }
 

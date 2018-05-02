@@ -12,8 +12,8 @@ public class ConsumerTests : TestBase
     public void Single_bytes()
     {
         TestDataBuilder.SendData(table);
-        var consumer = new Consumer(table);
-        var result = consumer.ConsumeBytes(SqlConnection).Result;
+        var consumer = new Consumer(table, SqlConnection);
+        var result = consumer.ConsumeBytes().Result;
         ObjectApprover.VerifyWithJson(result);
     }
 
@@ -21,8 +21,8 @@ public class ConsumerTests : TestBase
     public void Single_bytes_nulls()
     {
         TestDataBuilder.SendNullData(table);
-        var consumer = new Consumer(table);
-        var result = consumer.ConsumeBytes(SqlConnection).Result;
+        var consumer = new Consumer(table, SqlConnection);
+        var result = consumer.ConsumeBytes().Result;
         ObjectApprover.VerifyWithJson(result);
     }
 
@@ -30,8 +30,8 @@ public class ConsumerTests : TestBase
     public void Single_stream()
     {
         TestDataBuilder.SendData(table);
-        var consumer = new Consumer(table);
-        using (var result = consumer.ConsumeStream(SqlConnection).Result)
+        var consumer = new Consumer(table, SqlConnection);
+        using (var result = consumer.ConsumeStream().Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -41,8 +41,8 @@ public class ConsumerTests : TestBase
     public void Single_stream_nulls()
     {
         TestDataBuilder.SendNullData(table);
-        var consumer = new Consumer(table);
-        using (var result = consumer.ConsumeStream(SqlConnection).Result)
+        var consumer = new Consumer(table, SqlConnection);
+        using (var result = consumer.ConsumeStream().Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -53,10 +53,9 @@ public class ConsumerTests : TestBase
     {
         TestDataBuilder.SendMultipleData(table);
 
-        var consumer = new Consumer(table);
+        var consumer = new Consumer(table, SqlConnection);
         var messages = new List<IncomingBytesMessage>();
         var result = consumer.ConsumeBytes(
-                connection: SqlConnection,
                 size: 3,
                 action: message => { messages.Add(message); })
             .Result;
@@ -70,11 +69,9 @@ public class ConsumerTests : TestBase
     {
         TestDataBuilder.SendMultipleData(table);
 
-        var consumer = new Consumer(table);
+        var consumer = new Consumer(table, SqlConnection);
         var messages = new List<object>();
-        var result = consumer.ConsumeStream(
-                connection: SqlConnection,
-                size: 3,
+        var result = consumer.ConsumeStream(size: 3,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
         Assert.Equal(3, result.Count);

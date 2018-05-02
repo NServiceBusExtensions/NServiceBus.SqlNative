@@ -5,22 +5,29 @@ namespace NServiceBus.Transport.SqlServerNative
     public partial class Consumer
     {
         string table;
+        SqlTransaction transaction;
+        SqlConnection connection;
 
-        public Consumer(string table)
+        public Consumer(string table, SqlConnection connection)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(connection, nameof(connection));
             this.table = table;
+            this.connection = connection;
+        }
+        public Consumer(string table, SqlTransaction transaction)
+        {
+            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(transaction, nameof(transaction));
+            this.table = table;
+            this.transaction = transaction;
+            connection = transaction.Connection;
         }
 
-        SqlCommand BuildCommand(SqlTransaction transaction, int batchSize)
+        SqlCommand BuildCommand(int batchSize)
         {
-            return BuildCommand(transaction.Connection, transaction, batchSize);
-        }
-
-        SqlCommand BuildCommand(SqlConnection connection, SqlTransaction transaction, int batchSize)
-        {
-            var command = connection.CreateCommand();
-            command.Transaction = transaction;
+            var command = this.connection.CreateCommand();
+            command.Transaction = this.transaction;
             command.CommandText = string.Format(Sql, table, batchSize);
             return command;
         }

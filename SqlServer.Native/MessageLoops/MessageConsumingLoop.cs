@@ -49,10 +49,10 @@ namespace NServiceBus.Transport.SqlServerNative
 
         async Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation, SqlConnection connection)
         {
-            var consumer = new Consumer(table);
+            var consumer = new Consumer(table, connection);
             while (true)
             {
-                var result = await consumer.ConsumeBytes(connection, batchSize, message => callback(message, cancellation), cancellation)
+                var result = await consumer.ConsumeBytes(batchSize, message => callback(message, cancellation), cancellation)
                     .ConfigureAwait(false);
                 if (result.Count < batchSize)
                 {
