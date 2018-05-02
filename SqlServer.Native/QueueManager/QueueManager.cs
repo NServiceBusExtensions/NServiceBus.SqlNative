@@ -2,13 +2,13 @@
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class Sender
+    public partial class QueueManager
     {
         string table;
         SqlConnection connection;
         SqlTransaction transaction;
 
-        public Sender(string table, SqlConnection connection)
+        public QueueManager(string table, SqlConnection connection)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNull(connection, nameof(connection));
@@ -16,7 +16,7 @@ namespace NServiceBus.Transport.SqlServerNative
             this.connection = connection;
         }
 
-        public Sender(string table, SqlTransaction transaction)
+        public QueueManager(string table, SqlTransaction transaction)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNull(transaction, nameof(transaction));
@@ -24,25 +24,5 @@ namespace NServiceBus.Transport.SqlServerNative
             this.transaction = transaction;
             connection = transaction.Connection;
         }
-
-        public static readonly string Sql = SqlHelpers.WrapInNoCount(
-            @"
-insert into {0} (
-    Id,
-    CorrelationId,
-    ReplyToAddress,
-    Recoverable,
-    Expires,
-    Headers,
-    Body)
-output inserted.RowVersion
-values (
-    @Id,
-    @CorrelationId,
-    @ReplyToAddress,
-    1,
-    @Expires,
-    @Headers,
-    @Body);");
     }
 }

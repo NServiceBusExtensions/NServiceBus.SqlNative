@@ -59,7 +59,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         async Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation, SqlConnection connection)
         {
-            var reader = new Reader(table, connection);
+            var reader = new QueueManager(table, connection);
             while (true)
             {
                 var result = await reader.ReadBytes(batchSize, startingRow, message => callback(message, cancellation), cancellation)

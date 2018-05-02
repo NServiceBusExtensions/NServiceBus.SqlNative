@@ -11,7 +11,7 @@ static class TestDataBuilder
     {
         using (var connection = Connection.OpenConnection())
         {
-            var sender = new Sender(table, connection);
+            var sender = new QueueManager(table, connection);
 
             var message = BuildMessage("00000000-0000-0000-0000-000000000001");
             sender.Send(message).Await();
@@ -21,7 +21,7 @@ static class TestDataBuilder
     {
         using (var connection = Connection.OpenConnection())
         {
-            var sender = new Sender(table, connection);
+            var sender = new QueueManager(table, connection);
 
             var message = BuildNullMessage("00000000-0000-0000-0000-000000000001");
             sender.Send(message).Await();
@@ -31,7 +31,7 @@ static class TestDataBuilder
     {
         using (var connection = Connection.OpenConnection())
         {
-            var sender = new Sender(table, connection);
+            var sender = new QueueManager(table, connection);
             sender.Send(new List<OutgoingMessage>
                 {
                     BuildMessage("00000000-0000-0000-0000-000000000001"),

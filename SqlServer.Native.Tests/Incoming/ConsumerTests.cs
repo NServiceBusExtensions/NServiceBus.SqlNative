@@ -12,7 +12,7 @@ public class ConsumerTests : TestBase
     public void Single_bytes()
     {
         TestDataBuilder.SendData(table);
-        var consumer = new Consumer(table, SqlConnection);
+        var consumer = new QueueManager(table, SqlConnection);
         var result = consumer.ConsumeBytes().Result;
         ObjectApprover.VerifyWithJson(result);
     }
@@ -21,7 +21,7 @@ public class ConsumerTests : TestBase
     public void Single_bytes_nulls()
     {
         TestDataBuilder.SendNullData(table);
-        var consumer = new Consumer(table, SqlConnection);
+        var consumer = new QueueManager(table, SqlConnection);
         var result = consumer.ConsumeBytes().Result;
         ObjectApprover.VerifyWithJson(result);
     }
@@ -30,7 +30,7 @@ public class ConsumerTests : TestBase
     public void Single_stream()
     {
         TestDataBuilder.SendData(table);
-        var consumer = new Consumer(table, SqlConnection);
+        var consumer = new QueueManager(table, SqlConnection);
         using (var result = consumer.ConsumeStream().Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
@@ -41,7 +41,7 @@ public class ConsumerTests : TestBase
     public void Single_stream_nulls()
     {
         TestDataBuilder.SendNullData(table);
-        var consumer = new Consumer(table, SqlConnection);
+        var consumer = new QueueManager(table, SqlConnection);
         using (var result = consumer.ConsumeStream().Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
@@ -53,7 +53,7 @@ public class ConsumerTests : TestBase
     {
         TestDataBuilder.SendMultipleData(table);
 
-        var consumer = new Consumer(table, SqlConnection);
+        var consumer = new QueueManager(table, SqlConnection);
         var messages = new List<IncomingBytesMessage>();
         var result = consumer.ConsumeBytes(
                 size: 3,
@@ -69,7 +69,7 @@ public class ConsumerTests : TestBase
     {
         TestDataBuilder.SendMultipleData(table);
 
-        var consumer = new Consumer(table, SqlConnection);
+        var consumer = new QueueManager(table, SqlConnection);
         var messages = new List<object>();
         var result = consumer.ConsumeStream(size: 3,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
@@ -82,6 +82,7 @@ public class ConsumerTests : TestBase
     public ConsumerTests(ITestOutputHelper output) : base(output)
     {
         SqlHelpers.Drop(SqlConnection, table).Await();
-        QueueCreator.Create(SqlConnection, table).Await();
+        var manager = new QueueManager(table, SqlConnection);
+        manager.Create().Await();
     }
 }

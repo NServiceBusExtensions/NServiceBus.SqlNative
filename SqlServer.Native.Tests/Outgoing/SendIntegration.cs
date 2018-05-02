@@ -30,7 +30,7 @@ public class SendIntegration : TestBase
 
     Task SendStartMessage()
     {
-        var sender = new Sender("IntegrationSend", SqlConnection);
+        var sender = new QueueManager("IntegrationSend", SqlConnection);
         var headers = new Dictionary<string, string>
         {
             { "NServiceBus.EnclosedMessageTypes", typeof(SendMessage).FullName}

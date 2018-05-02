@@ -17,7 +17,8 @@ public class DbSetup
         }
         using (var sqlConnection = Connection.OpenConnection())
         {
-            QueueCreator.Create(sqlConnection, "error").Wait();
+            var manager = new QueueManager("error", sqlConnection);
+            manager.Create().Await();
         }
     }
 }

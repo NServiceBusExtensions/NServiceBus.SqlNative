@@ -4,20 +4,21 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class Consumer
+    public partial class QueueManager
     {
-        public virtual async Task<IncomingStreamMessage> ConsumeStream(CancellationToken cancellation = default)
+        public virtual async Task<IncomingStreamMessage> ReadStream(long rowVersion, CancellationToken cancellation = default)
         {
+            Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             var shouldCleanup = false;
             SqlDataReader reader = null;
             try
             {
-                using (var command = BuildCommand(1))
+                using (var command = BuildReadCommand(1, rowVersion))
                 {
                     reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false);
                     if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
                     {
-                        reader.Dispose();
+                        shouldCleanup = true;
                         return null;
                     }
 

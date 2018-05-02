@@ -7,7 +7,12 @@ static class EndpointCreator
 {
     public static async Task<EndpointConfiguration> Create(string endpointName)
     {
-        await QueueCreator.Create(Connection.ConnectionString, endpointName);
+        using (var connection = Connection.OpenConnection())
+        {
+            var manager = new QueueManager(endpointName, connection);
+            await manager.Create();
+        }
+
         var configuration = new EndpointConfiguration(endpointName);
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftSerializer>();

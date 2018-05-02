@@ -38,7 +38,7 @@ public class DelayedSenderTests : TestBase
     [Fact]
     public void Single_stream_nulls()
     {
-        var sender = new DelayedSender(table, SqlConnection);
+        var sender = new DelayedQueueManager(table, SqlConnection);
 
         var message = BuildBytesNullMessage();
         sender.Send( message).Await();
@@ -71,14 +71,14 @@ public class DelayedSenderTests : TestBase
 
     void Send(OutgoingDelayedMessage message)
     {
-        var sender = new DelayedSender(table, SqlConnection);
+        var sender = new DelayedQueueManager(table, SqlConnection);
 
         sender.Send(message).Await();
     }
 
     void Send(List<OutgoingDelayedMessage> messages)
     {
-        var sender = new DelayedSender(table, SqlConnection);
+        var sender = new DelayedQueueManager(table, SqlConnection);
 
         sender.Send(messages).Await();
     }
@@ -107,6 +107,7 @@ public class DelayedSenderTests : TestBase
     public DelayedSenderTests(ITestOutputHelper output) : base(output)
     {
         SqlHelpers.Drop(SqlConnection, table).Await();
-        QueueCreator.CreateDelayed(SqlConnection, table).Await();
+        var manager = new DelayedQueueManager(table, SqlConnection);
+        manager.CreateDelayed().Await();
     }
 }

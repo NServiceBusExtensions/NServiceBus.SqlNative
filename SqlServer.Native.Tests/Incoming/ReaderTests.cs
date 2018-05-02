@@ -12,7 +12,7 @@ public class ReaderTests : TestBase
     public void Single_bytes()
     {
         TestDataBuilder.SendData(table);
-        var reader = new Reader(table, SqlConnection);
+        var reader = new QueueManager(table, SqlConnection);
         var result = reader.ReadBytes(1).Result;
         ObjectApprover.VerifyWithJson(result);
     }
@@ -21,7 +21,7 @@ public class ReaderTests : TestBase
     public void Single_bytes_nulls()
     {
         TestDataBuilder.SendNullData(table);
-        var reader = new Reader(table, SqlConnection);
+        var reader = new QueueManager(table, SqlConnection);
         var result = reader.ReadBytes(1).Result;
         ObjectApprover.VerifyWithJson(result);
     }
@@ -30,7 +30,7 @@ public class ReaderTests : TestBase
     public void Single_stream()
     {
         TestDataBuilder.SendData(table);
-        var reader = new Reader(table, SqlConnection);
+        var reader = new QueueManager(table, SqlConnection);
         using (var result = reader.ReadStream(1).Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
@@ -41,7 +41,7 @@ public class ReaderTests : TestBase
     public void Single_stream_nulls()
     {
         TestDataBuilder.SendNullData(table);
-        var reader = new Reader(table, SqlConnection);
+        var reader = new QueueManager(table, SqlConnection);
         using (var result = reader.ReadStream(1).Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
@@ -53,7 +53,7 @@ public class ReaderTests : TestBase
     {
         TestDataBuilder.SendMultipleData(table);
 
-        var reader = new Reader(table, SqlConnection);
+        var reader = new QueueManager(table, SqlConnection);
         var messages = new List<IncomingBytesMessage>();
         var result = reader.ReadBytes(size: 3,
                 startRowVersion: 2,
@@ -69,7 +69,7 @@ public class ReaderTests : TestBase
     {
         TestDataBuilder.SendMultipleData(table);
 
-        var reader = new Reader(table, SqlConnection);
+        var reader = new QueueManager(table, SqlConnection);
         var messages = new List<object>();
         var result = reader.ReadStream(size: 3,
                 startRowVersion: 2,
@@ -83,6 +83,7 @@ public class ReaderTests : TestBase
     public ReaderTests(ITestOutputHelper output) : base(output)
     {
         SqlHelpers.Drop(SqlConnection, table).Await();
-        QueueCreator.Create(SqlConnection, table).Await();
+        var manager = new QueueManager(table, SqlConnection);
+        manager.Create().Await();
     }
 }

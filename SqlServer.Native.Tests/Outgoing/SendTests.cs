@@ -24,7 +24,7 @@ public class SendTests : TestBase
     [Fact]
     public void Single_bytes_nulls()
     {
-        var sender = new Sender("SendTests", SqlConnection);
+        var sender = new QueueManager("SendTests", SqlConnection);
 
         var message = BuildBytesNullMessage("00000000-0000-0000-0000-000000000001");
         sender.Send(message).Await();
@@ -73,13 +73,13 @@ public class SendTests : TestBase
 
     void Send(List<OutgoingMessage> messages)
     {
-        var sender = new Sender(table, SqlConnection);
+        var sender = new QueueManager(table, SqlConnection);
         sender.Send(messages).Await();
     }
 
     void Send(OutgoingMessage message)
     {
-        var sender = new Sender(table, SqlConnection);
+        var sender = new QueueManager(table, SqlConnection);
         sender.Send(message).Await();
     }
 
@@ -107,6 +107,7 @@ public class SendTests : TestBase
     public SendTests(ITestOutputHelper output) : base(output)
     {
         SqlHelpers.Drop(SqlConnection, table).Await();
-        QueueCreator.Create(SqlConnection, table).Await();
+        var manager = new QueueManager(table, SqlConnection);
+        manager.Create().Await();
     }
 }

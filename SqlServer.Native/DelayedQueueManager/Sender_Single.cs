@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class DelayedSender
+    public partial class DelayedQueueManager
     {
         public virtual async Task<long> Send(OutgoingDelayedMessage message, CancellationToken cancellation = default)
         {
@@ -13,7 +13,7 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 command.Transaction = transaction;
                 var parameters = command.Parameters;
-                command.CommandText = string.Format(Sql, table);
+                command.CommandText = string.Format(SendSql, table);
                 parameters.Add("Due", SqlDbType.DateTime).Value = message.Due;
                 parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;
                 parameters.Add("Body", SqlDbType.VarBinary).SetValueOrDbNull(message.Body);

@@ -17,7 +17,8 @@ public class MessageProcessingLoopTests : TestBase
     public async Task Should_not_throw_when_run_over_end()
     {
         await SqlHelpers.Drop(SqlConnection, table);
-        await QueueCreator.Create(SqlConnection, table);
+        var manager = new QueueManager(table, SqlConnection);
+        await manager.Create();
         await SendMessages();
 
         Exception exception = null;
@@ -41,7 +42,8 @@ public class MessageProcessingLoopTests : TestBase
     {
         var resetEvent = new ManualResetEvent(false);
         await SqlHelpers.Drop(SqlConnection, table);
-        await QueueCreator.Create(SqlConnection, table);
+        var manager = new QueueManager(table, SqlConnection);
+        await manager.Create();
         await SendMessages();
 
         var count = 0;
@@ -77,7 +79,8 @@ public class MessageProcessingLoopTests : TestBase
     {
         var resetEvent = new ManualResetEvent(false);
         await SqlHelpers.Drop(SqlConnection, table);
-        await QueueCreator.Create(SqlConnection, table);
+        var manager = new QueueManager(table, SqlConnection);
+        await manager.Create();
         await SendMessages();
 
         long rowVersion = 0;
@@ -110,7 +113,7 @@ public class MessageProcessingLoopTests : TestBase
 
     async Task SendMessages()
     {
-        var sender = new Sender(table, SqlConnection);
+        var sender = new QueueManager(table, SqlConnection);
 
         await sender.Send(new List<OutgoingMessage>
             {

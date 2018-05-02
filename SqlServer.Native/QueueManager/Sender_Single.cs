@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class Sender
+    public partial class QueueManager
     {
         public virtual async Task<long> Send(OutgoingMessage message, CancellationToken cancellation = default)
         {
@@ -13,7 +13,7 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 command.Transaction = transaction;
                 var parameters = command.Parameters;
-                command.CommandText = string.Format(Sql, table);
+                command.CommandText = string.Format(SendSql, table);
                 parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = message.Id;
                 parameters.Add("CorrelationId", SqlDbType.VarChar).SetValueOrDbNull(message.CorrelationId);
                 parameters.Add("ReplyToAddress", SqlDbType.VarChar).SetValueOrDbNull(message.ReplyToAddress);

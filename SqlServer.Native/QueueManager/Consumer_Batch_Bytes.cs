@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class Consumer
+    public partial class QueueManager
     {
         public virtual Task<IncomingResult> ConsumeBytes(int size, Action<IncomingBytesMessage> action, CancellationToken cancellation = default)
         {
@@ -17,7 +17,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNull(func, nameof(func));
-            using (var command = BuildCommand(size))
+            using (var command = BuildConsumeCommand(size))
             {
                 return await command.ReadMultipleBytes(func, cancellation);
             }
