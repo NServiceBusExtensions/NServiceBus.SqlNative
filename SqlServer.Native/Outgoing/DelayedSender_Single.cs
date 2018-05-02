@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,22 +6,9 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class DelayedSender
     {
-        public virtual Task<long> Send(SqlConnection connection, OutgoingDelayedMessage message, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNull(connection, nameof(connection));
-            Guard.AgainstNull(message, nameof(message));
-            return InnerSend(connection, null, message, cancellation);
-        }
-
-        public virtual Task<long> Send(SqlTransaction transaction, OutgoingDelayedMessage message, CancellationToken cancellation = default)
+        public virtual async Task<long> Send(OutgoingDelayedMessage message, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(message, nameof(message));
-            Guard.AgainstNull(transaction, nameof(transaction));
-            return InnerSend(transaction.Connection, transaction, message, cancellation);
-        }
-
-        async Task<long> InnerSend(SqlConnection connection, SqlTransaction transaction, OutgoingDelayedMessage message, CancellationToken cancellation)
-        {
             using (var command = connection.CreateCommand())
             {
                 command.Transaction = transaction;

@@ -38,10 +38,10 @@ public class DelayedSenderTests : TestBase
     [Fact]
     public void Single_stream_nulls()
     {
-        var sender = new DelayedSender(table);
+        var sender = new DelayedSender(table, SqlConnection);
 
         var message = BuildBytesNullMessage();
-        sender.Send(SqlConnection, message).Await();
+        sender.Send( message).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
@@ -71,16 +71,16 @@ public class DelayedSenderTests : TestBase
 
     void Send(OutgoingDelayedMessage message)
     {
-        var sender = new DelayedSender(table);
+        var sender = new DelayedSender(table, SqlConnection);
 
-        sender.Send(SqlConnection, message).Await();
+        sender.Send(message).Await();
     }
 
     void Send(List<OutgoingDelayedMessage> messages)
     {
-        var sender = new DelayedSender(table);
+        var sender = new DelayedSender(table, SqlConnection);
 
-        sender.Send(SqlConnection, messages).Await();
+        sender.Send(messages).Await();
     }
 
     static OutgoingDelayedMessage BuildBytesMessage()
