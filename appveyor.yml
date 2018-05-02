@@ -10,9 +10,8 @@ before_build:
 build:
   verbosity: minimal
 before_test:
-  - ps: >-
-      $instanceName = $env:db_version.ToUpper()
-      net start "MSSQL`$$instanceName"
+- ps: >-
+    net start "MSSQL2017"
 test_script:
 - cmd: >-
     %xunit20%\xunit.console SqlServer.Native.Tests\bin\Release\net47\SqlServer.Native.Tests.dll
