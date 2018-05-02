@@ -13,17 +13,6 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public MessageConsumingLoop(
             string table,
-            string connection,
-            Func<IncomingBytesMessage, CancellationToken, Task> callback,
-            Action<Exception> errorCallback,
-            int batchSize = 10,
-            TimeSpan? delay = null) :
-            this(table, token => SqlHelpers.OpenConnection(connection,token), callback, errorCallback, batchSize, delay)
-        {
-        }
-
-        public MessageConsumingLoop(
-            string table,
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
             Func<IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,

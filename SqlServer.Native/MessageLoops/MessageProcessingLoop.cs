@@ -16,19 +16,6 @@ namespace NServiceBus.Transport.SqlServerNative
         public MessageProcessingLoop(
             string table,
             long startingRow,
-            string connection,
-            Func<IncomingBytesMessage, CancellationToken, Task> callback,
-            Action<Exception> errorCallback,
-            Func<long, CancellationToken, Task> persistRowVersion,
-            int batchSize = 10,
-            TimeSpan? delay = null) :
-            this(table, startingRow, token => SqlHelpers.OpenConnection(connection, token), callback, errorCallback, persistRowVersion, batchSize, delay)
-        {
-        }
-
-        public MessageProcessingLoop(
-            string table,
-            long startingRow,
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
             Func<IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,

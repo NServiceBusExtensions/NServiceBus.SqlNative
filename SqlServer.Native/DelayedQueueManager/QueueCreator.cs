@@ -8,20 +8,20 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// Creates a Delayed queue.
         /// </summary>
-        public Task CreateDelayed(string computedColumnSql, CancellationToken cancellation = default)
+        public Task Create(string computedColumnSql, CancellationToken cancellation = default)
         {
-            return InnerCreateDelayed(true, computedColumnSql, cancellation);
+            return InnerCreate(true, computedColumnSql, cancellation);
         }
 
         /// <summary>
         /// Creates a Delayed queue.
         /// </summary>
-        public async Task CreateDelayed(bool createDecodedBodyComputedColumn = true, CancellationToken cancellation = default)
+        public async Task Create(bool createDecodedBodyComputedColumn = true, CancellationToken cancellation = default)
         {
-            await InnerCreateDelayed(createDecodedBodyComputedColumn, null, cancellation).ConfigureAwait(false);
+            await InnerCreate(createDecodedBodyComputedColumn, null, cancellation).ConfigureAwait(false);
         }
 
-        Task InnerCreateDelayed(bool createDecodedBodyComputedColumn, string computedColumnSql, CancellationToken cancellation)
+        Task InnerCreate(bool createDecodedBodyComputedColumn, string computedColumnSql, CancellationToken cancellation)
         {
             if (createDecodedBodyComputedColumn)
             {
