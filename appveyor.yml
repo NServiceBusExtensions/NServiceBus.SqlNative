@@ -9,9 +9,6 @@ before_build:
 - ps: nuget restore
 build:
   verbosity: minimal
-before_test:
-  - ps: |
-      net start 'MSSQL$SQL2017'
 test_script:
 - cmd: >-
     %xunit20%\xunit.console SqlServer.Native.Tests\bin\Release\net47\SqlServer.Native.Tests.dll
