@@ -13,7 +13,7 @@ public class ReaderTests : TestBase
     {
         TestDataBuilder.SendData(table);
         var reader = new Reader(table);
-        var result = reader.ReadBytes(Connection.ConnectionString, 1).Result;
+        var result = reader.ReadBytes(SqlConnection, 1).Result;
         ObjectApprover.VerifyWithJson(result);
     }
 
@@ -22,7 +22,7 @@ public class ReaderTests : TestBase
     {
         TestDataBuilder.SendNullData(table);
         var reader = new Reader(table);
-        var result = reader.ReadBytes(Connection.ConnectionString, 1).Result;
+        var result = reader.ReadBytes(SqlConnection, 1).Result;
         ObjectApprover.VerifyWithJson(result);
     }
 
@@ -31,7 +31,7 @@ public class ReaderTests : TestBase
     {
         TestDataBuilder.SendData(table);
         var reader = new Reader(table);
-        using (var result = reader.ReadStream(Connection.ConnectionString, 1).Result)
+        using (var result = reader.ReadStream(SqlConnection, 1).Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -42,7 +42,7 @@ public class ReaderTests : TestBase
     {
         TestDataBuilder.SendNullData(table);
         var reader = new Reader(table);
-        using (var result = reader.ReadStream(Connection.ConnectionString, 1).Result)
+        using (var result = reader.ReadStream(SqlConnection, 1).Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -56,7 +56,7 @@ public class ReaderTests : TestBase
         var reader = new Reader(table);
         var messages = new List<IncomingBytesMessage>();
         var result = reader.ReadBytes(
-                connection: Connection.ConnectionString,
+                connection: SqlConnection,
                 size: 3,
                 startRowVersion: 2,
                 action: message => { messages.Add(message); })
@@ -74,7 +74,7 @@ public class ReaderTests : TestBase
         var reader = new Reader(table);
         var messages = new List<object>();
         var result = reader.ReadStream(
-                connection: Connection.ConnectionString,
+                connection: SqlConnection,
                 size: 3,
                 startRowVersion: 2,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
@@ -86,7 +86,7 @@ public class ReaderTests : TestBase
 
     public ReaderTests(ITestOutputHelper output) : base(output)
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.Create(Connection.ConnectionString, table).Await();
+        SqlHelpers.Drop(SqlConnection, table).Await();
+        QueueCreator.Create(SqlConnection, table).Await();
     }
 }

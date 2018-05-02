@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Data.SqlClient;
+using Newtonsoft.Json;
 using ObjectApproval;
 using Xunit.Abstractions;
 
-public class TestBase
+public class TestBase:IDisposable
 {
     static TestBase()
     {
@@ -15,7 +17,15 @@ public class TestBase
     public TestBase(ITestOutputHelper output)
     {
         Output = output;
+        SqlConnection = Connection.OpenConnection();
     }
 
+    public SqlConnection SqlConnection;
+
     protected readonly ITestOutputHelper Output;
+
+    public void Dispose()
+    {
+        SqlConnection?.Dispose();
+    }
 }

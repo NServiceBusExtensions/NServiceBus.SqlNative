@@ -20,7 +20,7 @@ public class SendIntegration : TestBase
         resetEvent = new ManualResetEvent(false);
         var configuration = await EndpointCreator.Create("IntegrationSend");
         var transport = configuration.UseTransport<SqlServerTransport>();
-        transport.ConnectionString(Connection.ConnectionString);
+        transport.ConnectionString(SqlConnection.ConnectionString);
         configuration.DisableFeature<TimeoutManager>();
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage();
@@ -28,7 +28,7 @@ public class SendIntegration : TestBase
         await endpoint.Stop();
     }
 
-    static Task SendStartMessage()
+    Task SendStartMessage()
     {
         var sender = new Sender("IntegrationSend");
         var headers = new Dictionary<string, string>
@@ -37,7 +37,7 @@ public class SendIntegration : TestBase
         };
 
         var message = new OutgoingMessage(Guid.NewGuid(), null, null, DateTime.Now.AddDays(1), Headers.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
-        return sender.Send(Connection.ConnectionString, message);
+        return sender.Send(SqlConnection, message);
     }
 
     class SendHandler : IHandleMessages<SendMessage>

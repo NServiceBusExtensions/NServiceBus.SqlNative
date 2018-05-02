@@ -13,7 +13,7 @@ public class ConsumerTests : TestBase
     {
         TestDataBuilder.SendData(table);
         var consumer = new Consumer(table);
-        var result = consumer.ConsumeBytes(Connection.ConnectionString).Result;
+        var result = consumer.ConsumeBytes(SqlConnection).Result;
         ObjectApprover.VerifyWithJson(result);
     }
 
@@ -22,7 +22,7 @@ public class ConsumerTests : TestBase
     {
         TestDataBuilder.SendNullData(table);
         var consumer = new Consumer(table);
-        var result = consumer.ConsumeBytes(Connection.ConnectionString).Result;
+        var result = consumer.ConsumeBytes(SqlConnection).Result;
         ObjectApprover.VerifyWithJson(result);
     }
 
@@ -31,7 +31,7 @@ public class ConsumerTests : TestBase
     {
         TestDataBuilder.SendData(table);
         var consumer = new Consumer(table);
-        using (var result = consumer.ConsumeStream(Connection.ConnectionString).Result)
+        using (var result = consumer.ConsumeStream(SqlConnection).Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -42,7 +42,7 @@ public class ConsumerTests : TestBase
     {
         TestDataBuilder.SendNullData(table);
         var consumer = new Consumer(table);
-        using (var result = consumer.ConsumeStream(Connection.ConnectionString).Result)
+        using (var result = consumer.ConsumeStream(SqlConnection).Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -56,7 +56,7 @@ public class ConsumerTests : TestBase
         var consumer = new Consumer(table);
         var messages = new List<IncomingBytesMessage>();
         var result = consumer.ConsumeBytes(
-                connection: Connection.ConnectionString,
+                connection: SqlConnection,
                 size: 3,
                 action: message => { messages.Add(message); })
             .Result;
@@ -73,7 +73,7 @@ public class ConsumerTests : TestBase
         var consumer = new Consumer(table);
         var messages = new List<object>();
         var result = consumer.ConsumeStream(
-                connection: Connection.ConnectionString,
+                connection: SqlConnection,
                 size: 3,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
@@ -84,7 +84,7 @@ public class ConsumerTests : TestBase
 
     public ConsumerTests(ITestOutputHelper output) : base(output)
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.Create(Connection.ConnectionString, table).Await();
+        SqlHelpers.Drop(SqlConnection, table).Await();
+        QueueCreator.Create(SqlConnection, table).Await();
     }
 }

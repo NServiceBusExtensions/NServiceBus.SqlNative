@@ -16,8 +16,8 @@ public class MessageProcessingLoopTests : TestBase
     [Fact]
     public async Task Should_not_throw_when_run_over_end()
     {
-        await SqlHelpers.Drop(Connection.ConnectionString, table);
-        await QueueCreator.Create(Connection.ConnectionString, table);
+        await SqlHelpers.Drop(SqlConnection, table);
+        await QueueCreator.Create(SqlConnection, table);
         await SendMessages(table);
 
         Exception exception = null;
@@ -40,8 +40,8 @@ public class MessageProcessingLoopTests : TestBase
     public async Task Should_get_correct_count()
     {
         var resetEvent = new ManualResetEvent(false);
-        await SqlHelpers.Drop(Connection.ConnectionString, table);
-        await QueueCreator.Create(Connection.ConnectionString, table);
+        await SqlHelpers.Drop(SqlConnection, table);
+        await QueueCreator.Create(SqlConnection, table);
         await SendMessages(table);
 
         var count = 0;
@@ -76,8 +76,8 @@ public class MessageProcessingLoopTests : TestBase
     public async Task Should_get_correct_next_row_version()
     {
         var resetEvent = new ManualResetEvent(false);
-        await SqlHelpers.Drop(Connection.ConnectionString, table);
-        await QueueCreator.Create(Connection.ConnectionString, table);
+        await SqlHelpers.Drop(SqlConnection, table);
+        await QueueCreator.Create(SqlConnection, table);
         await SendMessages(table);
 
         long rowVersion = 0;
@@ -108,12 +108,12 @@ public class MessageProcessingLoopTests : TestBase
         Assert.Equal(6, rowVersion);
     }
 
-    static async Task SendMessages(string table)
+    async Task SendMessages(string table)
     {
         var sender = new Sender(table);
 
         await sender.Send(
-            Connection.ConnectionString,
+            SqlConnection,
             new List<OutgoingMessage>
             {
                 BuildMessage("00000000-0000-0000-0000-000000000001"),

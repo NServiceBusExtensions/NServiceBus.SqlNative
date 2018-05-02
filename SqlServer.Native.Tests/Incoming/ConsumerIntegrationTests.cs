@@ -12,17 +12,17 @@ public class ConsumerIntegrationTests : TestBase
     [Fact]
     public async Task Run()
     {
-        await SqlHelpers.Drop(Connection.ConnectionString, table);
-        await QueueCreator.Create(Connection.ConnectionString, table);
+        await SqlHelpers.Drop(SqlConnection, table);
+        await QueueCreator.Create(SqlConnection, table);
         var configuration = await EndpointCreator.Create("IntegrationConsumer");
         configuration.SendOnly();
         var transport = configuration.UseTransport<SqlServerTransport>();
-        transport.ConnectionString(Connection.ConnectionString);
+        transport.ConnectionString(SqlConnection.ConnectionString);
         configuration.DisableFeature<TimeoutManager>();
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
         var consumer = new Consumer(table);
-        var message = await consumer.ConsumeBytes(Connection.ConnectionString);
+        var message = await consumer.ConsumeBytes(SqlConnection);
         Assert.NotNull(message);
     }
 

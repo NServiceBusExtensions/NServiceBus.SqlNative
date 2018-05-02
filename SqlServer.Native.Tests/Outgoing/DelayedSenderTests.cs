@@ -41,7 +41,7 @@ public class DelayedSenderTests : TestBase
         var sender = new DelayedSender(table);
 
         var message = BuildBytesNullMessage();
-        sender.Send(Connection.ConnectionString, message).Await();
+        sender.Send(SqlConnection, message).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
@@ -73,14 +73,14 @@ public class DelayedSenderTests : TestBase
     {
         var sender = new DelayedSender(table);
 
-        sender.Send(Connection.ConnectionString, message).Await();
+        sender.Send(SqlConnection, message).Await();
     }
 
     void Send(List<OutgoingDelayedMessage> messages)
     {
         var sender = new DelayedSender(table);
 
-        sender.Send(Connection.ConnectionString, messages).Await();
+        sender.Send(SqlConnection, messages).Await();
     }
 
     static OutgoingDelayedMessage BuildBytesMessage()
@@ -106,7 +106,7 @@ public class DelayedSenderTests : TestBase
 
     public DelayedSenderTests(ITestOutputHelper output) : base(output)
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.CreateDelayed(Connection.ConnectionString, table).Await();
+        SqlHelpers.Drop(SqlConnection, table).Await();
+        QueueCreator.CreateDelayed(SqlConnection, table).Await();
     }
 }

@@ -27,7 +27,7 @@ public class SendTests : TestBase
         var sender = new Sender("SendTests");
 
         var message = BuildBytesNullMessage("00000000-0000-0000-0000-000000000001");
-        sender.Send(Connection.ConnectionString, message).Await();
+        sender.Send(SqlConnection, message).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
@@ -74,13 +74,13 @@ public class SendTests : TestBase
     void Send(List<OutgoingMessage> messages)
     {
         var sender = new Sender(table);
-        sender.Send(Connection.ConnectionString, messages).Await();
+        sender.Send(SqlConnection, messages).Await();
     }
 
     void Send(OutgoingMessage message)
     {
         var sender = new Sender("SendTests");
-        sender.Send(Connection.ConnectionString, message).Await();
+        sender.Send(SqlConnection, message).Await();
     }
 
     static OutgoingMessage BuildBytesMessage(string guid)
@@ -106,7 +106,7 @@ public class SendTests : TestBase
 
     public SendTests(ITestOutputHelper output) : base(output)
     {
-        SqlHelpers.Drop(Connection.ConnectionString, table).Await();
-        QueueCreator.Create(Connection.ConnectionString, table).Await();
+        SqlHelpers.Drop(SqlConnection, table).Await();
+        QueueCreator.Create(SqlConnection, table).Await();
     }
 }
