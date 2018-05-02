@@ -18,7 +18,7 @@ public class MessageProcessingLoopTests : TestBase
     {
         await SqlHelpers.Drop(SqlConnection, table);
         await QueueCreator.Create(SqlConnection, table);
-        await SendMessages(table);
+        await SendMessages();
 
         Exception exception = null;
         using (var loop = new MessageProcessingLoop(
@@ -42,7 +42,7 @@ public class MessageProcessingLoopTests : TestBase
         var resetEvent = new ManualResetEvent(false);
         await SqlHelpers.Drop(SqlConnection, table);
         await QueueCreator.Create(SqlConnection, table);
-        await SendMessages(table);
+        await SendMessages();
 
         var count = 0;
 
@@ -78,7 +78,7 @@ public class MessageProcessingLoopTests : TestBase
         var resetEvent = new ManualResetEvent(false);
         await SqlHelpers.Drop(SqlConnection, table);
         await QueueCreator.Create(SqlConnection, table);
-        await SendMessages(table);
+        await SendMessages();
 
         long rowVersion = 0;
 
@@ -108,7 +108,7 @@ public class MessageProcessingLoopTests : TestBase
         Assert.Equal(6, rowVersion);
     }
 
-    async Task SendMessages(string table)
+    async Task SendMessages()
     {
         var sender = new Sender(table);
 

@@ -18,7 +18,7 @@ public class MessageConsumingLoopTests : TestBase
     {
         await SqlHelpers.Drop(SqlConnection, table);
         await QueueCreator.Create(SqlConnection, table);
-        await SendMessages(table);
+        await SendMessages();
 
         Exception exception = null;
         using (var loop = new MessageConsumingLoop(
@@ -40,7 +40,7 @@ public class MessageConsumingLoopTests : TestBase
         var resetEvent = new ManualResetEvent(false);
         await SqlHelpers.Drop(SqlConnection, table);
         await QueueCreator.Create(SqlConnection, table);
-        await SendMessages(table);
+        await SendMessages();
 
         var count = 0;
 
@@ -68,7 +68,7 @@ public class MessageConsumingLoopTests : TestBase
         Assert.Equal(5, count);
     }
 
-    async Task SendMessages(string table)
+    async Task SendMessages()
     {
         var sender = new Sender(table);
 
