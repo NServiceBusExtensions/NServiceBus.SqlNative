@@ -17,8 +17,8 @@ public class RowVersionTrackerTests : TestBase
         await tracker.CreateTable(SqlConnection);
         var initial = await tracker.Get(SqlConnection);
         Assert.Equal(1, initial);
-        await tracker.Save(SqlConnection.ConnectionString,4);
-        var after = await tracker.Get(SqlConnection.ConnectionString);
+        await tracker.Save(SqlConnection,4);
+        var after = await tracker.Get(SqlConnection);
         Assert.Equal(4, after);
     }
 }

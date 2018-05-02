@@ -15,16 +15,6 @@ namespace NServiceBus.Transport.SqlServerNative
             this.table = table;
         }
 
-        public async Task CreateTable(string connection, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            using (var sqlConnection = new SqlConnection(connection))
-            {
-                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                await CreateTable(sqlConnection, cancellation).ConfigureAwait(false);
-            }
-        }
-
         public Task CreateTable(SqlConnection connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
@@ -47,14 +37,16 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public async Task Save(string connection, long rowVersion, CancellationToken cancellation = default)
+        public Task Save(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
         {
-            Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            using (var sqlConnection = new SqlConnection(connection))
-            {
-                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                await Save(sqlConnection, null, rowVersion, cancellation).ConfigureAwait(false);
-            }
+            Guard.AgainstNull(connection, nameof(connection));
+            return Save(connection, null, rowVersion, cancellation);
+        }
+
+        public Task Save(SqlTransaction transaction, long rowVersion, CancellationToken cancellation = default)
+        {
+            Guard.AgainstNull(transaction, nameof(transaction));
+            return Save(transaction.Connection, transaction, rowVersion, cancellation);
         }
 
         async Task Save(SqlConnection connection, SqlTransaction transaction, long rowVersion, CancellationToken cancellation)
@@ -74,18 +66,9 @@ if @@rowcount = 0
             }
         }
 
-        public async Task<long> Get(string connection, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            using (var sqlConnection = new SqlConnection(connection))
-            {
-                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await Get(sqlConnection, cancellation);
-            }
-        }
-
         public async Task<long> Get(SqlConnection connection, CancellationToken cancellation = default)
         {
+            Guard.AgainstNull(connection, nameof(connection));
             using (var command = connection.CreateCommand())
             {
                 command.CommandText = $@"
