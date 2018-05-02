@@ -20,7 +20,7 @@ public class SendIntegration : TestBase
         resetEvent = new ManualResetEvent(false);
         var configuration = await EndpointCreator.Create("IntegrationSend");
         var transport = configuration.UseTransport<SqlServerTransport>();
-        transport.ConnectionString(SqlConnection.ConnectionString);
+        transport.ConnectionString(Connection.ConnectionString);
         configuration.DisableFeature<TimeoutManager>();
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage();
