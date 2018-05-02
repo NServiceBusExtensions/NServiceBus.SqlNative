@@ -70,11 +70,9 @@ public class MessageConsumingLoopTests : TestBase
 
     async Task SendMessages()
     {
-        var sender = new Sender(table);
+        var sender = new Sender(table, SqlConnection);
 
-        await sender.Send(
-            SqlConnection,
-            new List<OutgoingMessage>
+        await sender.Send(new List<OutgoingMessage>
             {
                 BuildMessage("00000000-0000-0000-0000-000000000001"),
                 BuildMessage("00000000-0000-0000-0000-000000000002"),

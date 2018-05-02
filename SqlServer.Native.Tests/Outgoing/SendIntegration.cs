@@ -30,14 +30,14 @@ public class SendIntegration : TestBase
 
     Task SendStartMessage()
     {
-        var sender = new Sender("IntegrationSend");
+        var sender = new Sender("IntegrationSend", SqlConnection);
         var headers = new Dictionary<string, string>
         {
             { "NServiceBus.EnclosedMessageTypes", typeof(SendMessage).FullName}
         };
 
         var message = new OutgoingMessage(Guid.NewGuid(), null, null, DateTime.Now.AddDays(1), Headers.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
-        return sender.Send(SqlConnection, message);
+        return sender.Send(message);
     }
 
     class SendHandler : IHandleMessages<SendMessage>

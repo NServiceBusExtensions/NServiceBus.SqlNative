@@ -24,10 +24,10 @@ public class SendTests : TestBase
     [Fact]
     public void Single_bytes_nulls()
     {
-        var sender = new Sender("SendTests");
+        var sender = new Sender("SendTests", SqlConnection);
 
         var message = BuildBytesNullMessage("00000000-0000-0000-0000-000000000001");
-        sender.Send(SqlConnection, message).Await();
+        sender.Send(message).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
 
@@ -73,14 +73,14 @@ public class SendTests : TestBase
 
     void Send(List<OutgoingMessage> messages)
     {
-        var sender = new Sender(table);
-        sender.Send(SqlConnection, messages).Await();
+        var sender = new Sender(table, SqlConnection);
+        sender.Send(messages).Await();
     }
 
     void Send(OutgoingMessage message)
     {
-        var sender = new Sender("SendTests");
-        sender.Send(SqlConnection, message).Await();
+        var sender = new Sender(table, SqlConnection);
+        sender.Send(message).Await();
     }
 
     static OutgoingMessage BuildBytesMessage(string guid)

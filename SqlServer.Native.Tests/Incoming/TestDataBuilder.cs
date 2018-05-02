@@ -11,31 +11,28 @@ static class TestDataBuilder
     {
         using (var connection = Connection.OpenConnection())
         {
-            var sender = new Sender(table);
+            var sender = new Sender(table, connection);
 
             var message = BuildMessage("00000000-0000-0000-0000-000000000001");
-            sender.Send(connection, message).Await();
+            sender.Send(message).Await();
         }
     }
     public static void SendNullData(string table)
     {
         using (var connection = Connection.OpenConnection())
         {
-            var sender = new Sender(table);
+            var sender = new Sender(table, connection);
 
             var message = BuildNullMessage("00000000-0000-0000-0000-000000000001");
-            sender.Send(connection, message).Await();
+            sender.Send(message).Await();
         }
     }
     public static void SendMultipleData(string table)
     {
-        var sender = new Sender(table);
-
         using (var connection = Connection.OpenConnection())
         {
-            sender.Send(
-                connection,
-                new List<OutgoingMessage>
+            var sender = new Sender(table, connection);
+            sender.Send(new List<OutgoingMessage>
                 {
                     BuildMessage("00000000-0000-0000-0000-000000000001"),
                     BuildNullMessage("00000000-0000-0000-0000-000000000002"),

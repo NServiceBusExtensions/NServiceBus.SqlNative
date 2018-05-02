@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,29 +7,11 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class Sender
     {
-        public virtual Task<long> Send(SqlConnection connection, IEnumerable<OutgoingMessage> messages, CancellationToken cancellation = default)
+        public virtual async Task<long> Send(IEnumerable<OutgoingMessage> messages, CancellationToken cancellation = default)
         {
-            Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNull(messages, nameof(messages));
-            return InnerSend(connection, null, messages, cancellation);
-        }
-
-        public virtual Task<long> Send(SqlTransaction transaction, IEnumerable<OutgoingMessage> messages, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNull(transaction, nameof(transaction));
-            Guard.AgainstNull(messages, nameof(messages));
-            return InnerSend(transaction.Connection, transaction, messages, cancellation);
-        }
-
-        Task<long> InnerSend(SqlConnection connection, SqlTransaction transaction, IEnumerable<OutgoingMessage> messages, CancellationToken cancellation)
-        {
-            return TransactionWrapper.Run(sqlTransaction => InnerSend(sqlTransaction, messages, cancellation), connection, transaction);
-        }
-
-        async Task<long> InnerSend(SqlTransaction transaction, IEnumerable<OutgoingMessage> messages, CancellationToken cancellation)
-        {
             long rowVersion = 0;
-            using (var command = transaction.Connection.CreateCommand())
+            using (var command = connection.CreateCommand())
             {
                 command.Transaction = transaction;
                 var parameters = command.Parameters;
