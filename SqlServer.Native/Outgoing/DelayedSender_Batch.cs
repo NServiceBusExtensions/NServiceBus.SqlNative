@@ -8,17 +8,6 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class DelayedSender
     {
-        public virtual async Task<long> Send(string connection, IEnumerable<OutgoingDelayedMessage> messages, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            Guard.AgainstNull(messages, nameof(messages));
-            using (var sqlConnection = new SqlConnection(connection))
-            {
-                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await InnerSend(sqlConnection, null, messages, cancellation).ConfigureAwait(false);
-            }
-        }
-
         public virtual Task<long> Send(SqlConnection connection, IEnumerable<OutgoingDelayedMessage> messages, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));

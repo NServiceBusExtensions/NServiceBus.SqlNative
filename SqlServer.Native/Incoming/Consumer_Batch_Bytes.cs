@@ -7,24 +7,6 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class Consumer
     {
-        public virtual Task<IncomingResult> ConsumeBytes(string connection, int size, Action<IncomingBytesMessage> action, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNull(action, nameof(action));
-            return ConsumeBytes(connection, size, action.ToTaskFunc(), cancellation);
-        }
-
-        public virtual async Task<IncomingResult> ConsumeBytes(string connection, int size, Func<IncomingBytesMessage, Task> func, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            Guard.AgainstNegativeAndZero(size, nameof(size));
-            Guard.AgainstNull(func, nameof(func));
-            using (var sqlConnection = new SqlConnection(connection))
-            {
-                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await TransactionWrapper.Run(sqlTransaction => InnerReadBytes(sqlTransaction, size, func, cancellation), sqlConnection).ConfigureAwait(false);
-            }
-        }
-
         public virtual Task<IncomingResult> ConsumeBytes(SqlConnection connection, int size, Action<IncomingBytesMessage> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(action, nameof(action));

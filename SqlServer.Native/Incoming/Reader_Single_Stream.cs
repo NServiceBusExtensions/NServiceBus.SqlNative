@@ -6,22 +6,6 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class Reader
     {
-        public virtual async Task<IncomingStreamMessage> ReadStream(string connection, long rowVersion, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            var sqlConnection = new SqlConnection(connection);
-            try
-            {
-                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
-                return await InnerReadStream(sqlConnection, rowVersion, true, cancellation);
-            }
-            catch
-            {
-                sqlConnection.Dispose();
-                throw;
-            }
-        }
-
         public virtual Task<IncomingStreamMessage> ReadStream(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));

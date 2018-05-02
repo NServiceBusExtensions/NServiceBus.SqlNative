@@ -7,11 +7,6 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class Reader
     {
-        public virtual Task<IncomingResult> ReadStream(string connection, int size, long startRowVersion, Action<IncomingStreamMessage> action, CancellationToken cancellation = default)
-        {
-            return ReadStream(connection, size, startRowVersion, action.ToTaskFunc(), cancellation);
-        }
-
         public virtual async Task<IncomingResult> ReadStream(string connection, int size, long startRowVersion, Func<IncomingStreamMessage, Task> func, CancellationToken cancellation = default)
         {
             Guard.AgainstNegativeAndZero(size, nameof(size));
