@@ -11,11 +11,9 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNull(messages, nameof(messages));
             long rowVersion = 0;
-            using (var command = connection.CreateCommand())
+            using (var command = connection.CreateCommand(transaction, string.Format(SendSql, table)))
             {
-                command.Transaction = transaction;
                 var parameters = command.Parameters;
-                command.CommandText = string.Format(SendSql, table);
                 var dueParam = parameters.Add("Due", SqlDbType.DateTime);
                 var headersParam = parameters.Add("Headers", SqlDbType.NVarChar);
                 var bodyParam = parameters.Add("Body", SqlDbType.VarBinary);

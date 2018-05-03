@@ -22,6 +22,20 @@ public class SendTests : TestBase
     }
 
     [Fact]
+    public void Single_with_transaction()
+    {
+        var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
+        using (var transaction = SqlConnection.BeginTransaction())
+        {
+            var sender = new QueueManager(table, transaction);
+            sender.Send(message).Await();
+            transaction.Commit();
+        }
+
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+    }
+
+    [Fact]
     public void Single_bytes_nulls()
     {
         var sender = new QueueManager("SendTests", SqlConnection);

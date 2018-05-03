@@ -9,11 +9,9 @@ namespace NServiceBus.Transport.SqlServerNative
         public virtual async Task<long> Send(OutgoingDelayedMessage message, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(message, nameof(message));
-            using (var command = connection.CreateCommand())
+            using (var command = connection.CreateCommand(transaction, string.Format(SendSql, table)))
             {
-                command.Transaction = transaction;
                 var parameters = command.Parameters;
-                command.CommandText = string.Format(SendSql, table);
                 parameters.Add("Due", SqlDbType.DateTime).Value = message.Due;
                 parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;
                 parameters.Add("Body", SqlDbType.VarBinary).SetValueOrDbNull(message.Body);

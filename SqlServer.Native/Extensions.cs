@@ -53,12 +53,18 @@ static class Extensions
     public static async Task ExecuteCommand(this SqlConnection connection, SqlTransaction transaction, string sql, CancellationToken cancellation = default)
     {
         Guard.AgainstNull(connection, nameof(connection));
-        using (var command = connection.CreateCommand())
+        using (var command = connection.CreateCommand(transaction, sql))
         {
-            command.Transaction = transaction;
-            command.CommandText = sql;
             await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
         }
+    }
+
+    public static SqlCommand CreateCommand(this SqlConnection connection, SqlTransaction transaction, string sql)
+    {
+        var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = sql;
+        return command;
     }
 
     public static async Task<IncomingBytesMessage> ReadSingleBytes(this SqlDataReader reader, CancellationToken cancellation)

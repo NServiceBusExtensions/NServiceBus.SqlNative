@@ -11,11 +11,9 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNull(messages, nameof(messages));
             long rowVersion = 0;
-            using (var command = connection.CreateCommand())
+            using (var command = connection.CreateCommand(transaction, string.Format(SendSql, table)))
             {
-                command.Transaction = transaction;
                 var parameters = command.Parameters;
-                command.CommandText = string.Format(SendSql, table);
                 var idParam = parameters.Add("Id", SqlDbType.UniqueIdentifier);
                 var corrParam = parameters.Add("CorrelationId", SqlDbType.VarChar);
                 var replyParam = parameters.Add("ReplyToAddress", SqlDbType.VarChar);

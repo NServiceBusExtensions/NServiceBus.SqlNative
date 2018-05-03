@@ -9,11 +9,9 @@ namespace NServiceBus.Transport.SqlServerNative
         public virtual async Task<long> Send(OutgoingMessage message, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(message, nameof(message));
-            using (var command = connection.CreateCommand())
+            using (var command = connection.CreateCommand(transaction, string.Format(SendSql, table)))
             {
-                command.Transaction = transaction;
                 var parameters = command.Parameters;
-                command.CommandText = string.Format(SendSql, table);
                 parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = message.Id;
                 parameters.Add("CorrelationId", SqlDbType.VarChar).SetValueOrDbNull(message.CorrelationId);
                 parameters.Add("ReplyToAddress", SqlDbType.VarChar).SetValueOrDbNull(message.ReplyToAddress);

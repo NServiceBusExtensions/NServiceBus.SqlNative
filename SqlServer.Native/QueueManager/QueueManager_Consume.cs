@@ -6,10 +6,7 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         SqlCommand BuildConsumeCommand(int batchSize)
         {
-            var command = connection.CreateCommand();
-            command.Transaction = transaction;
-            command.CommandText = string.Format(ConsumeSql, table, batchSize);
-            return command;
+            return connection.CreateCommand(transaction, string.Format(ConsumeSql, table, batchSize));
         }
 
         public static readonly string ConsumeSql = SqlHelpers.WrapInNoCount(@"
