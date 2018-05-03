@@ -29,7 +29,7 @@ public class MessageProcessingLoopTests : TestBase
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: (connection, message, cancellation) => Task.CompletedTask,
             errorCallback: innerException => { exception = innerException; },
-            persistRowVersion: (currentRowVersion, token) => Task.CompletedTask
+            persistRowVersion: (connection, currentRowVersion, token) => Task.CompletedTask
         ))
         {
             loop.Start();
@@ -67,7 +67,7 @@ public class MessageProcessingLoopTests : TestBase
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: Callback,
             errorCallback: exception => { },
-            persistRowVersion: (currentRowVersion, token) => Task.CompletedTask))
+            persistRowVersion: (connection, currentRowVersion, token) => Task.CompletedTask))
         {
             loop.Start();
             resetEvent.WaitOne(TimeSpan.FromSeconds(30));
@@ -87,7 +87,7 @@ public class MessageProcessingLoopTests : TestBase
 
         long rowVersion = 0;
 
-        Task PersistRowVersion(long currentRowVersion, CancellationToken cancellation)
+        Task PersistRowVersion(SqlConnection sqlConnection, long currentRowVersion, CancellationToken arg3)
         {
             rowVersion = currentRowVersion;
             if (rowVersion == 6)

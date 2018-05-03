@@ -64,9 +64,10 @@ namespace NServiceBus.Transport.SqlServerNative
 
                 return;
             }
-
-            using (var transaction = await transactionBuilder(cancellation).ConfigureAwait(false))
+            SqlTransaction transaction = null;
+            try
             {
+                transaction = await transactionBuilder(cancellation).ConfigureAwait(false);
                 var consumer = new QueueManager(table, transaction);
                 try
                 {
@@ -78,6 +79,15 @@ namespace NServiceBus.Transport.SqlServerNative
                 {
                     transaction.Rollback();
                     throw;
+                }
+            }
+            finally
+            {
+                if (transaction != null)
+                {
+                    var connection = transaction.Connection;
+                    transaction.Dispose();
+                    connection.Dispose();
                 }
             }
         }

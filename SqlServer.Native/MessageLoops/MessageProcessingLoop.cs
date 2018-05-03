@@ -13,7 +13,8 @@ namespace NServiceBus.Transport.SqlServerNative
         Func<CancellationToken, Task<SqlTransaction>> transactionBuilder;
         Func<SqlTransaction, IncomingBytesMessage, CancellationToken, Task> transactionCallback;
         Func<SqlConnection, IncomingBytesMessage, CancellationToken, Task> connectionCallback;
-        Func<long, CancellationToken, Task> persistRowVersion;
+        Func<SqlTransaction, long, CancellationToken, Task> transactionPersistRowVersion;
+        Func<SqlConnection, long, CancellationToken, Task> connectionPersistRowVersion;
         int batchSize;
 
         public MessageProcessingLoop(
@@ -22,7 +23,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
             Func<SqlTransaction, IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
-            Func<long, CancellationToken, Task> persistRowVersion,
+            Func<SqlTransaction, long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
             TimeSpan? delay = null)
             : base(errorCallback, delay)
@@ -37,7 +38,7 @@ namespace NServiceBus.Transport.SqlServerNative
             this.startingRow = startingRow;
             this.transactionBuilder = transactionBuilder;
             transactionCallback = callback;
-            this.persistRowVersion = persistRowVersion;
+            transactionPersistRowVersion = persistRowVersion;
             this.batchSize = batchSize;
         }
 
@@ -47,7 +48,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
             Func<SqlConnection, IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
-            Func<long, CancellationToken, Task> persistRowVersion,
+            Func<SqlConnection, long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
             TimeSpan? delay = null)
             : base(errorCallback, delay)
@@ -62,7 +63,7 @@ namespace NServiceBus.Transport.SqlServerNative
             this.table = table;
             this.startingRow = startingRow;
             this.connectionBuilder = connectionBuilder;
-            this.persistRowVersion = persistRowVersion;
+            connectionPersistRowVersion = persistRowVersion;
             this.batchSize = batchSize;
         }
 
@@ -73,19 +74,29 @@ namespace NServiceBus.Transport.SqlServerNative
                 using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
                 {
                     var reader = new QueueManager(table, connection);
-                    await RunBatch(reader, message => connectionCallback(connection, message, cancellation), cancellation)
+                    await RunBatch(
+                            reader,
+                            messageFunc: message => connectionCallback(connection, message, cancellation),
+                            persistFunc: () => connectionPersistRowVersion(connection, startingRow, cancellation),
+                            cancellation)
                         .ConfigureAwait(false);
                 }
 
                 return;
             }
 
-            using (var transaction = await transactionBuilder(cancellation).ConfigureAwait(false))
+            SqlTransaction transaction = null;
+            try
             {
+                transaction = await transactionBuilder(cancellation).ConfigureAwait(false);
                 var reader = new QueueManager(table, transaction);
                 try
                 {
-                    await RunBatch(reader, message => transactionCallback(transaction, message, cancellation), cancellation)
+                    await RunBatch(
+                            reader,
+                            messageFunc: message => transactionCallback(transaction, message, cancellation),
+                            persistFunc: () => transactionPersistRowVersion(transaction, startingRow, cancellation),
+                            cancellation)
                         .ConfigureAwait(false);
                     transaction.Commit();
                 }
@@ -95,13 +106,22 @@ namespace NServiceBus.Transport.SqlServerNative
                     throw;
                 }
             }
+            finally
+            {
+                if (transaction != null)
+                {
+                    var connection = transaction.Connection;
+                    transaction.Dispose();
+                    connection.Dispose();
+                }
+            }
         }
 
-        async Task RunBatch(QueueManager reader, Func<IncomingBytesMessage, Task> func, CancellationToken cancellation)
+        async Task RunBatch(QueueManager reader, Func<IncomingBytesMessage, Task> messageFunc, Func<Task> persistFunc, CancellationToken cancellation)
         {
             while (true)
             {
-                var result = await reader.ReadBytes(batchSize, startingRow, func, cancellation)
+                var result = await reader.ReadBytes(batchSize, startingRow, messageFunc, cancellation)
                     .ConfigureAwait(false);
                 if (result.Count == 0)
                 {
@@ -109,7 +129,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 }
 
                 startingRow = result.LastRowVersion.Value + 1;
-                await persistRowVersion(startingRow, cancellation).ConfigureAwait(false);
+                await persistFunc().ConfigureAwait(false);
                 if (result.Count < batchSize)
                 {
                     break;
