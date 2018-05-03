@@ -9,39 +9,84 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         string table;
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+        Func<CancellationToken, Task<SqlTransaction>> transactionBuilder;
+        Func<SqlTransaction, IncomingBytesMessage, CancellationToken, Task> transactionCallback;
+        Func<SqlConnection, IncomingBytesMessage, CancellationToken, Task> connectionCallback;
         int batchSize;
 
         public MessageConsumingLoop(
             string table,
-            Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
-            Func<IncomingBytesMessage, CancellationToken, Task> callback,
+            Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
+            Func<SqlTransaction, IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             int batchSize = 10,
             TimeSpan? delay = null) :
-            base(callback, errorCallback, delay)
+            base(errorCallback, delay)
+        {
+            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(transactionBuilder, nameof(transactionBuilder));
+            Guard.AgainstNull(callback, nameof(callback));
+            Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
+            this.table = table;
+            transactionCallback = callback;
+            this.transactionBuilder = transactionBuilder;
+            this.batchSize = batchSize;
+        }
+
+        public MessageConsumingLoop(
+            string table,
+            Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
+            Func<SqlConnection, IncomingBytesMessage, CancellationToken, Task> callback,
+            Action<Exception> errorCallback,
+            int batchSize = 10,
+            TimeSpan? delay = null) :
+            base(errorCallback, delay)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
             Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
+            Guard.AgainstNull(callback, nameof(callback));
+            connectionCallback = callback;
             this.table = table;
             this.connectionBuilder = connectionBuilder;
             this.batchSize = batchSize;
         }
 
-        protected override async Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation)
+        protected override async Task RunBatch(CancellationToken cancellation)
         {
-            using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
+            if (connectionBuilder != null)
             {
-                await RunBatch(callback, cancellation, connection).ConfigureAwait(false);
+                using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
+                {
+                    var consumer = new QueueManager(table, connection);
+                    await RunBatch(consumer, message => connectionCallback(connection, message, cancellation), cancellation);
+                }
+
+                return;
+            }
+
+            using (var transaction = await transactionBuilder(cancellation).ConfigureAwait(false))
+            {
+                var consumer = new QueueManager(table, transaction);
+                try
+                {
+                    await RunBatch(consumer, message => transactionCallback(transaction, message, cancellation), cancellation);
+
+                    transaction.Commit();
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
 
-        async Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation, SqlConnection connection)
+        async Task RunBatch(QueueManager consumer, Func<IncomingBytesMessage, Task> action, CancellationToken cancellation)
         {
-            var consumer = new QueueManager(table, connection);
             while (true)
             {
-                var result = await consumer.ConsumeBytes(batchSize, message => callback(message, cancellation), cancellation)
+                var result = await consumer.ConsumeBytes(batchSize, action, cancellation)
                     .ConfigureAwait(false);
                 if (result.Count < batchSize)
                 {

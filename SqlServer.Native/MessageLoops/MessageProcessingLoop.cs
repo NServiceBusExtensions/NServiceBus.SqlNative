@@ -10,25 +10,55 @@ namespace NServiceBus.Transport.SqlServerNative
         string table;
         long startingRow;
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+        Func<CancellationToken, Task<SqlTransaction>> transactionBuilder;
+        Func<SqlTransaction, IncomingBytesMessage, CancellationToken, Task> transactionCallback;
+        Func<SqlConnection, IncomingBytesMessage, CancellationToken, Task> connectionCallback;
         Func<long, CancellationToken, Task> persistRowVersion;
         int batchSize;
 
         public MessageProcessingLoop(
             string table,
             long startingRow,
-            Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
-            Func<IncomingBytesMessage, CancellationToken, Task> callback,
+            Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
+            Func<SqlTransaction, IncomingBytesMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             Func<long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
             TimeSpan? delay = null)
-            : base(callback, errorCallback, delay)
+            : base(errorCallback, delay)
+        {
+            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNegativeAndZero(startingRow, nameof(startingRow));
+            Guard.AgainstNull(transactionBuilder, nameof(transactionBuilder));
+            Guard.AgainstNull(persistRowVersion, nameof(persistRowVersion));
+            Guard.AgainstNull(callback, nameof(callback));
+            Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
+            this.table = table;
+            this.startingRow = startingRow;
+            this.transactionBuilder = transactionBuilder;
+            transactionCallback = callback;
+            this.persistRowVersion = persistRowVersion;
+            this.batchSize = batchSize;
+        }
+
+        public MessageProcessingLoop(
+            string table,
+            long startingRow,
+            Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
+            Func<SqlConnection, IncomingBytesMessage, CancellationToken, Task> callback,
+            Action<Exception> errorCallback,
+            Func<long, CancellationToken, Task> persistRowVersion,
+            int batchSize = 10,
+            TimeSpan? delay = null)
+            : base(errorCallback, delay)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNegativeAndZero(startingRow, nameof(startingRow));
             Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
             Guard.AgainstNull(persistRowVersion, nameof(persistRowVersion));
+            Guard.AgainstNull(callback, nameof(callback));
             Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
+            connectionCallback = callback;
             this.table = table;
             this.startingRow = startingRow;
             this.connectionBuilder = connectionBuilder;
@@ -36,20 +66,42 @@ namespace NServiceBus.Transport.SqlServerNative
             this.batchSize = batchSize;
         }
 
-        protected override async Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation)
+        protected override async Task RunBatch(CancellationToken cancellation)
         {
-            using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
+            if (connectionBuilder != null)
             {
-                await RunBatch(callback, cancellation, connection).ConfigureAwait(false);
+                using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
+                {
+                    var reader = new QueueManager(table, connection);
+                    await RunBatch(reader, message => connectionCallback(connection, message, cancellation), cancellation)
+                        .ConfigureAwait(false);
+                }
+
+                return;
+            }
+
+            using (var transaction = await transactionBuilder(cancellation).ConfigureAwait(false))
+            {
+                var reader = new QueueManager(table, transaction);
+                try
+                {
+                    await RunBatch(reader, message => transactionCallback(transaction, message, cancellation), cancellation)
+                        .ConfigureAwait(false);
+                    transaction.Commit();
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
 
-        async Task RunBatch(Func<IncomingBytesMessage, CancellationToken, Task> callback, CancellationToken cancellation, SqlConnection connection)
+        async Task RunBatch(QueueManager reader, Func<IncomingBytesMessage, Task> func, CancellationToken cancellation)
         {
-            var reader = new QueueManager(table, connection);
             while (true)
             {
-                var result = await reader.ReadBytes(batchSize, startingRow, message => callback(message, cancellation), cancellation)
+                var result = await reader.ReadBytes(batchSize, startingRow, func, cancellation)
                     .ConfigureAwait(false);
                 if (result.Count == 0)
                 {

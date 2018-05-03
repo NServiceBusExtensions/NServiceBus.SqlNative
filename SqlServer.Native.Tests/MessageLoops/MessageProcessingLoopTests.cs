@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,10 +27,10 @@ public class MessageProcessingLoopTests : TestBase
             table: table,
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
-            callback: (message, cancellation) => Task.CompletedTask,
+            callback: (connection, message, cancellation) => Task.CompletedTask,
             errorCallback: innerException => { exception = innerException; },
-            persistRowVersion: (currentRowVersion ,token)=> Task.CompletedTask
-            ))
+            persistRowVersion: (currentRowVersion, token) => Task.CompletedTask
+        ))
         {
             loop.Start();
             Thread.Sleep(1000);
@@ -37,6 +38,7 @@ public class MessageProcessingLoopTests : TestBase
 
         Assert.Null(exception);
     }
+
     [Fact]
     public async Task Should_get_correct_count()
     {
@@ -48,7 +50,7 @@ public class MessageProcessingLoopTests : TestBase
 
         var count = 0;
 
-        Task Callback(IncomingBytesMessage message, CancellationToken cancellation)
+        Task Callback(SqlConnection connection, IncomingBytesMessage incomingBytesMessage, CancellationToken arg3)
         {
             count++;
             if (count == 5)
@@ -65,7 +67,7 @@ public class MessageProcessingLoopTests : TestBase
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: Callback,
             errorCallback: exception => { },
-            persistRowVersion: (currentRowVersion ,token)=> Task.CompletedTask))
+            persistRowVersion: (currentRowVersion, token) => Task.CompletedTask))
         {
             loop.Start();
             resetEvent.WaitOne(TimeSpan.FromSeconds(30));
@@ -100,7 +102,7 @@ public class MessageProcessingLoopTests : TestBase
             table: table,
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
-            callback: (message, cancellation) => Task.CompletedTask,
+            callback: (collection, message, cancellation) => Task.CompletedTask,
             errorCallback: exception => { },
             persistRowVersion: PersistRowVersion))
         {
@@ -116,13 +118,13 @@ public class MessageProcessingLoopTests : TestBase
         var sender = new QueueManager(table, SqlConnection);
 
         await sender.Send(new List<OutgoingMessage>
-            {
-                BuildMessage("00000000-0000-0000-0000-000000000001"),
-                BuildMessage("00000000-0000-0000-0000-000000000002"),
-                BuildMessage("00000000-0000-0000-0000-000000000003"),
-                BuildMessage("00000000-0000-0000-0000-000000000004"),
-                BuildMessage("00000000-0000-0000-0000-000000000005")
-            });
+        {
+            BuildMessage("00000000-0000-0000-0000-000000000001"),
+            BuildMessage("00000000-0000-0000-0000-000000000002"),
+            BuildMessage("00000000-0000-0000-0000-000000000003"),
+            BuildMessage("00000000-0000-0000-0000-000000000004"),
+            BuildMessage("00000000-0000-0000-0000-000000000005")
+        });
     }
 
     static OutgoingMessage BuildMessage(string guid)

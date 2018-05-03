@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ public class MessageConsumingLoopTests : TestBase
         using (var loop = new MessageConsumingLoop(
             table: table,
             connectionBuilder: Connection.OpenAsyncConnection,
-            callback: (message, cancellation) => Task.CompletedTask,
+            callback: (connection, message, cancellation) => Task.CompletedTask,
             errorCallback: innerException => { exception = innerException;}
             ))
         {
@@ -46,7 +47,7 @@ public class MessageConsumingLoopTests : TestBase
 
         var count = 0;
 
-        Task Callback(IncomingBytesMessage message, CancellationToken cancellation)
+        Task Callback(SqlConnection connection, IncomingBytesMessage message, CancellationToken cancellation)
         {
             count++;
             if (count == 5)
