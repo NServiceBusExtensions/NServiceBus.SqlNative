@@ -9,10 +9,12 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public static partial class Headers
     {
-        public readonly static Dictionary<string, string> EmptyMetadata = new Dictionary<string, string>();
-        public readonly static string Empty = "{}";
+        static Dictionary<string, string> emptyHeaders = new Dictionary<string, string>();
+        public readonly static string EmptyHeadersJson = "{}";
 
-        public static string Serialize(Dictionary<string, string> instance)
+        public static IReadOnlyDictionary<string, string> EmptyHeaders => emptyHeaders;
+
+        public static string Serialize(IDictionary<string, string> instance)
         {
             if (instance == null)
             {
@@ -27,11 +29,11 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public static Dictionary<string, string> DeSerialize(string json)
+        public static IDictionary<string, string> DeSerialize(string json)
         {
             if (json == null)
             {
-                return EmptyMetadata;
+                return emptyHeaders;
             }
 
             var serializer = BuildSerializer();

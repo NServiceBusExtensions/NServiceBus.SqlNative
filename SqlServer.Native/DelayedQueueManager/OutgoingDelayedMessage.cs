@@ -14,7 +14,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Due = due;
             if (headers == null)
             {
-                Headers = SqlServerNative.Headers.Empty;
+                Headers = SqlServerNative.Headers.EmptyHeadersJson;
             }
             else
             {

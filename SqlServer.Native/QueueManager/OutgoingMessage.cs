@@ -20,7 +20,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Expires = expires;
             if (headers == null)
             {
-                Headers = SqlServerNative.Headers.Empty;
+                Headers = SqlServerNative.Headers.EmptyHeadersJson;
             }
             else
             {
