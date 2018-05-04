@@ -69,9 +69,10 @@ namespace NServiceBus.Transport.SqlServerNative
 
         protected override async Task RunBatch(CancellationToken cancellation)
         {
+            SqlConnection connection = null;
             if (connectionBuilder != null)
             {
-                using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
+                using (connection = await connectionBuilder(cancellation).ConfigureAwait(false))
                 {
                     var reader = new QueueManager(table, connection);
                     await RunBatch(
@@ -89,6 +90,7 @@ namespace NServiceBus.Transport.SqlServerNative
             try
             {
                 transaction = await transactionBuilder(cancellation).ConfigureAwait(false);
+                connection = transaction.Connection;
                 var reader = new QueueManager(table, transaction);
                 try
                 {
@@ -108,12 +110,8 @@ namespace NServiceBus.Transport.SqlServerNative
             }
             finally
             {
-                if (transaction != null)
-                {
-                    var connection = transaction.Connection;
-                    transaction.Dispose();
-                    connection.Dispose();
-                }
+                transaction?.Dispose();
+                connection?.Dispose();
             }
         }
 
