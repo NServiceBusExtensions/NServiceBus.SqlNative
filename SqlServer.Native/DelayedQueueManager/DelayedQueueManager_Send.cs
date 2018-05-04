@@ -2,7 +2,7 @@
 {
     public partial class DelayedQueueManager
     {
-        public static readonly string SendSql = SqlHelpers.WrapInNoCount(
+        public static readonly string SendSql = ConnectionHelpers.WrapInNoCount(
             @"
 insert into {0} (
     Due,

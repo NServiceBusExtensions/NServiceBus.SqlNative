@@ -5,23 +5,10 @@ using System.Threading.Tasks;
 namespace NServiceBus.Transport.SqlServerNative
 {
     /// <summary>
-    /// SqlHelpers.
+    /// ConnectionHelpers.
     /// </summary>
-    public static class SqlHelpers
+    public static class ConnectionHelpers
     {
-        /// <summary>
-        /// Drops a table.
-        /// </summary>
-        public static async Task Drop(string connection, string table, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            Guard.AgainstNullOrEmpty(table, nameof(table));
-            using (var sqlConnection = await OpenConnection(connection, cancellation).ConfigureAwait(false))
-            {
-                await Drop(sqlConnection, null, table, cancellation).ConfigureAwait(false);
-            }
-        }
-
         public static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connectionString, nameof(connectionString));

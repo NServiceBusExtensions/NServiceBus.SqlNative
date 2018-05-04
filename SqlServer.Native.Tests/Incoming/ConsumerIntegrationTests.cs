@@ -12,7 +12,7 @@ public class ConsumerIntegrationTests : TestBase
     [Fact]
     public async Task Run()
     {
-        await SqlHelpers.Drop(SqlConnection, table);
+        await ConnectionHelpers.Drop(SqlConnection, table);
         var manager = new QueueManager(table, SqlConnection);
         await manager.Create();
         var configuration = await EndpointCreator.Create("IntegrationConsumer");

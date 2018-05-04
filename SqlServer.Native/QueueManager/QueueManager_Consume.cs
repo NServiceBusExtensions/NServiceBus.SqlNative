@@ -9,7 +9,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return connection.CreateCommand(transaction, string.Format(ConsumeSql, table, batchSize));
         }
 
-        public static readonly string ConsumeSql = SqlHelpers.WrapInNoCount(@"
+        public static readonly string ConsumeSql = ConnectionHelpers.WrapInNoCount(@"
 with message as (
     select top({1}) *
     from {0} with (updlock, readpast, rowlock)

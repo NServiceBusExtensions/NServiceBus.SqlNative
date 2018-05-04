@@ -12,7 +12,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return command;
         }
 
-        public static readonly string ReadSql = SqlHelpers.WrapInNoCount(@"
+        public static readonly string ReadSql = ConnectionHelpers.WrapInNoCount(@"
 select top({1})
     Id,
     RowVersion,

@@ -106,7 +106,7 @@ public class DelayedSenderTests : TestBase
 
     public DelayedSenderTests(ITestOutputHelper output) : base(output)
     {
-        SqlHelpers.Drop(SqlConnection, table).Await();
+        ConnectionHelpers.Drop(SqlConnection, table).Await();
         var manager = new DelayedQueueManager(table, SqlConnection);
         manager.Create().Await();
     }

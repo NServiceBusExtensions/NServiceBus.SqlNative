@@ -81,7 +81,7 @@ public class ConsumerTests : TestBase
 
     public ConsumerTests(ITestOutputHelper output) : base(output)
     {
-        SqlHelpers.Drop(SqlConnection, table).Await();
+        ConnectionHelpers.Drop(SqlConnection, table).Await();
         var manager = new QueueManager(table, SqlConnection);
         manager.Create().Await();
     }

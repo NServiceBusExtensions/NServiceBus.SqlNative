@@ -17,7 +17,7 @@ public class MessageProcessingLoopTests : TestBase
     [Fact]
     public async Task Should_not_throw_when_run_over_end()
     {
-        await SqlHelpers.Drop(SqlConnection, table);
+        await ConnectionHelpers.Drop(SqlConnection, table);
         var manager = new QueueManager(table, SqlConnection);
         await manager.Create();
         await SendMessages();
@@ -43,7 +43,7 @@ public class MessageProcessingLoopTests : TestBase
     public async Task Should_get_correct_count()
     {
         var resetEvent = new ManualResetEvent(false);
-        await SqlHelpers.Drop(SqlConnection, table);
+        await ConnectionHelpers.Drop(SqlConnection, table);
         var manager = new QueueManager(table, SqlConnection);
         await manager.Create();
         await SendMessages();
@@ -80,7 +80,7 @@ public class MessageProcessingLoopTests : TestBase
     public async Task Should_get_correct_next_row_version()
     {
         var resetEvent = new ManualResetEvent(false);
-        await SqlHelpers.Drop(SqlConnection, table);
+        await ConnectionHelpers.Drop(SqlConnection, table);
         var manager = new QueueManager(table, SqlConnection);
         await manager.Create();
         await SendMessages();
