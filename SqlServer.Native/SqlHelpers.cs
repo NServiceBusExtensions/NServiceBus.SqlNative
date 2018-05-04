@@ -40,6 +40,14 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
+        public static async Task<SqlTransaction> BeginTransaction(string connectionString, CancellationToken cancellation = default)
+        {
+            Guard.AgainstNullOrEmpty(connectionString, nameof(connectionString));
+
+            var connection = await OpenConnection(connectionString, cancellation).ConfigureAwait(false);
+            return connection.BeginTransaction();
+        }
+
         internal static string WrapInNoCount(string sql)
         {
             return $@"
