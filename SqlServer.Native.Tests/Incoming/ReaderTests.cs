@@ -82,7 +82,7 @@ public class ReaderTests : TestBase
 
     public ReaderTests(ITestOutputHelper output) : base(output)
     {
-        ConnectionHelpers.Drop(SqlConnection, table).Await();
+        SqlConnection.DropTable(null, table).Await();
         var manager = new QueueManager(table, SqlConnection);
         manager.Create().Await();
     }

@@ -17,7 +17,7 @@ public class MessageConsumingLoopTests : TestBase
     [Fact]
     public async Task Should_not_throw_when_run_over_end()
     {
-        await ConnectionHelpers.Drop(SqlConnection, table);
+        await SqlConnection.DropTable(null, table);
         var manager = new QueueManager(table, SqlConnection);
         await manager.Create();
         await SendMessages();
@@ -40,7 +40,7 @@ public class MessageConsumingLoopTests : TestBase
     public async Task Should_get_correct_count()
     {
         var resetEvent = new ManualResetEvent(false);
-        await ConnectionHelpers.Drop(SqlConnection, table);
+        await SqlConnection.DropTable(null, table);
         var manager = new QueueManager(table, SqlConnection);
         await manager.Create();
         await SendMessages();

@@ -21,6 +21,14 @@ namespace NServiceBus.Transport.SqlServerNative
             await InnerCreate(createDecodedBodyComputedColumn, null, cancellation).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Drops a queue.
+        /// </summary>
+        public Task Drop(CancellationToken cancellation = default)
+        {
+            return connection.DropTable(transaction, table, cancellation);
+        }
+
         Task InnerCreate(bool createDecodedBodyComputedColumn, string computedColumnSql, CancellationToken cancellation)
         {
             if (createDecodedBodyComputedColumn)

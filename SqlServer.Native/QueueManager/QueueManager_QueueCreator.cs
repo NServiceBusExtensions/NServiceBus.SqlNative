@@ -18,6 +18,14 @@ namespace NServiceBus.Transport.SqlServerNative
         }
 
         /// <summary>
+        /// Drops a queue.
+        /// </summary>
+        public Task Drop(CancellationToken cancellation = default)
+        {
+            return connection.DropTable(transaction, table, cancellation);
+        }
+
+        /// <summary>
         /// Creates a queue.
         /// </summary>
         public Task Create(bool createDecodedBodyComputedColumn = true, CancellationToken cancellation = default)

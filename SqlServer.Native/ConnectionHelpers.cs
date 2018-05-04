@@ -47,19 +47,8 @@ if (@nocount = 'on') set nocount on;
 if (@nocount = 'off') set nocount off;";
         }
 
-        /// <summary>
-        /// Drops a table.
-        /// </summary>
-        public static Task Drop(SqlConnection connection, string table, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
-            return Drop(connection, null, table, cancellation);
-        }
 
-        /// <summary>
-        /// Drops a table.
-        /// </summary>
-        public static Task Drop(SqlConnection connection, SqlTransaction transaction, string table, CancellationToken cancellation = default)
+        internal static Task DropTable(this SqlConnection connection, SqlTransaction transaction, string table, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             return connection.ExecuteCommand(transaction, $"drop table if exists {table}", cancellation);

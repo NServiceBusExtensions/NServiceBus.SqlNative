@@ -12,7 +12,7 @@ public class RowVersionTrackerTests : TestBase
     [Fact]
     public async Task Run()
     {
-        await ConnectionHelpers.Drop(SqlConnection, "RowVersionTracker");
+        await SqlConnection.DropTable(null, "RowVersionTracker");
         var tracker = new RowVersionTracker();
         await tracker.CreateTable(SqlConnection);
         var initial = await tracker.Get(SqlConnection);
