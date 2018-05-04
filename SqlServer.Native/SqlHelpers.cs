@@ -16,9 +16,8 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
             Guard.AgainstNullOrEmpty(table, nameof(table));
-            using (var sqlConnection = new SqlConnection(connection))
+            using (var sqlConnection = await OpenConnection(connection, cancellation).ConfigureAwait(false))
             {
-                await sqlConnection.OpenAsync(cancellation).ConfigureAwait(false);
                 await Drop(sqlConnection, null, table, cancellation).ConfigureAwait(false);
             }
         }
