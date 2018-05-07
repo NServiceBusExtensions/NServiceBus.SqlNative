@@ -99,13 +99,13 @@ public class SendTests : TestBase
 
     static OutgoingMessage BuildBytesMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     static OutgoingMessage BuildStreamMessage(string guid)
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes("{}"));
-        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", stream);
+        return new OutgoingMessage(new Guid(guid), dateTime, "headers", stream);
     }
 
     static OutgoingMessage BuildStreamNullMessage(string guid)

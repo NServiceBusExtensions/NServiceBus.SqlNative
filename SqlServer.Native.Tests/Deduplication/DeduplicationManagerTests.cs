@@ -21,7 +21,7 @@ public class DeduplicationManagerTests : TestBase
 
         var message2 = BuildBytesMessage("00000000-0000-0000-0000-000000000002");
         Send(message2);
-        var cleaner = new DeduplicationManager(base.SqlConnection);
+        var cleaner = new DeduplicationManager(SqlConnection);
         cleaner.CleanupItemsOlderThan(now).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData("Deduplication").Select(x => x.Values.First()));
     }
@@ -34,7 +34,7 @@ public class DeduplicationManagerTests : TestBase
 
     static OutgoingMessage BuildBytesMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     public DeduplicationManagerTests(ITestOutputHelper output) : base(output)

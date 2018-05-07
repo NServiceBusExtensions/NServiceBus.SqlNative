@@ -16,11 +16,9 @@ static class IncomingStreamMessageHelper
 
         return new
         {
-            result.CorrelationId,
             result.Expires,
             result.Headers,
             result.Id,
-            result.ReplyToAddress,
             result.RowVersion,
             bodyString = readToEnd
         };

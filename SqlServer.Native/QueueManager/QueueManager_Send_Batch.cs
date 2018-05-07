@@ -15,8 +15,6 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 var parameters = command.Parameters;
                 var idParam = parameters.Add("Id", SqlDbType.UniqueIdentifier);
-                var corrParam = parameters.Add("CorrelationId", SqlDbType.VarChar);
-                var replyParam = parameters.Add("ReplyToAddress", SqlDbType.VarChar);
                 var expiresParam = parameters.Add("Expires", SqlDbType.DateTime);
                 var headersParam = parameters.Add("Headers", SqlDbType.NVarChar);
                 var bodyParam = parameters.Add("Body", SqlDbType.VarBinary);
@@ -24,8 +22,6 @@ namespace NServiceBus.Transport.SqlServerNative
                 {
                     cancellation.ThrowIfCancellationRequested();
                     idParam.Value = message.Id;
-                    corrParam.SetValueOrDbNull(message.CorrelationId);
-                    replyParam.SetValueOrDbNull(message.ReplyToAddress);
                     expiresParam.SetValueOrDbNull(message.Expires);
                     headersParam.Value = message.Headers;
                     bodyParam.SetValueOrDbNull(message.Body);

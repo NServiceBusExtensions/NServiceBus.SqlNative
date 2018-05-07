@@ -40,7 +40,7 @@ public class DeduplicationCleanerJobTests : TestBase
 
     static OutgoingMessage BuildBytesMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     public DeduplicationCleanerJobTests(ITestOutputHelper output) : base(output)

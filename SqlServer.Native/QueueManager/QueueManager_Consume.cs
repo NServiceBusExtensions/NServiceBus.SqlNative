@@ -18,8 +18,6 @@ delete from message
 output
     deleted.Id,
     deleted.RowVersion,
-    deleted.CorrelationId,
-    deleted.ReplyToAddress,
     deleted.Expires,
     deleted.Headers,
     datalength(deleted.Body),
