@@ -20,9 +20,13 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// Drops a queue.
         /// </summary>
-        public Task Drop(CancellationToken cancellation = default)
+        public async Task Drop(CancellationToken cancellation = default)
         {
-            return connection.DropTable(transaction, table, cancellation);
+            await connection.DropTable(transaction, table, cancellation);
+            if (deduplicate)
+            {
+                await connection.DropTable(transaction, deduplicationTable, cancellation);
+            }
         }
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return InnerCreate(createDecodedBodyComputedColumn, null, cancellation);
         }
 
-        Task InnerCreate(bool createDecodedBodyComputedColumn, string computedColumnSql, CancellationToken cancellation)
+        async Task InnerCreate(bool createDecodedBodyComputedColumn, string computedColumnSql, CancellationToken cancellation)
         {
             if (createDecodedBodyComputedColumn)
             {
@@ -44,7 +48,12 @@ namespace NServiceBus.Transport.SqlServerNative
                 computedColumnSql = string.Empty;
             }
             var commandText = string.Format(QueueTableSql, table, computedColumnSql);
-            return connection.ExecuteCommand(transaction, commandText, cancellation);
+            await connection.ExecuteCommand(transaction, commandText, cancellation);
+            if (deduplicate)
+            {
+                var dedupCommandText = string.Format(DeduplcationTableSql, deduplicationTable);
+                await connection.ExecuteCommand(transaction, dedupCommandText, cancellation);
+            }
         }
 
         /// <summary>
@@ -85,6 +94,23 @@ include
 )
 where
     Expires is not null
+";
+
+        /// <summary>
+        /// The sql statements used to create the deduplcation table
+        /// </summary>
+        public static readonly string DeduplcationTableSql = @"
+if exists (
+    select *
+    from sys.objects
+    where object_id = object_id('{0}')
+        and type in ('U'))
+return
+
+create table {0} (
+    Id uniqueidentifier primary key,
+    Created datetime2 not null default sysutcdatetime(),
+);
 ";
     }
 }

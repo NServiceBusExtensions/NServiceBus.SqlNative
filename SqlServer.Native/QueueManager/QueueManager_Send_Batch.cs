@@ -11,7 +11,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNull(messages, nameof(messages));
             long rowVersion = 0;
-            using (var command = connection.CreateCommand(transaction, string.Format(SendSql, table)))
+            using (var command = connection.CreateCommand(transaction, string.Format(sendSql, table)))
             {
                 var parameters = command.Parameters;
                 var idParam = parameters.Add("Id", SqlDbType.UniqueIdentifier);
@@ -29,7 +29,8 @@ namespace NServiceBus.Transport.SqlServerNative
                     expiresParam.SetValueOrDbNull(message.Expires);
                     headersParam.Value = message.Headers;
                     bodyParam.SetValueOrDbNull(message.Body);
-                    rowVersion = (long) await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
+                    var result = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
+                    if (result != null) rowVersion = (long) result;
                 }
             }
 

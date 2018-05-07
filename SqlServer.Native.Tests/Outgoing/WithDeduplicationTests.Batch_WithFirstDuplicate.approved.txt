@@ -1,0 +1,24 @@
+﻿[
+  {
+    "Id": "00000000-0000-0000-0000-000000000001",
+    "CorrelationId": "theCorrelationId",
+    "ReplyToAddress": "theReplyToAddress",
+    "Recoverable": true,
+    "Expires": "2000-01-01T01:01:01",
+    "Headers": "headers",
+    "BodyString": "{}",
+    "Body": "e30=",
+    "RowVersion": 1
+  },
+  {
+    "Id": "00000000-0000-0000-0000-000000000002",
+    "CorrelationId": "theCorrelationId",
+    "ReplyToAddress": "theReplyToAddress",
+    "Recoverable": true,
+    "Expires": "2000-01-01T01:01:01",
+    "Headers": "headers",
+    "BodyString": "{}",
+    "Body": "e30=",
+    "RowVersion": 2
+  }
+]

@@ -2,8 +2,21 @@
 {
     public partial class QueueManager
     {
-        public static readonly string SendSql = ConnectionHelpers.WrapInNoCount(
-            @"
+        string sendSql;
+
+        void InitSendSql()
+        {
+            const string dedupsql = @"
+
+if exists (
+    select *
+    from {0}
+    where Id = @Id)
+return
+
+insert into {0} (Id)
+values (@Id);";
+            const string sql = @"
 insert into {0} (
     Id,
     CorrelationId,
@@ -20,6 +33,19 @@ values (
     1,
     @Expires,
     @Headers,
-    @Body);");
+    @Body);";
+
+            string resultSql;
+            if (deduplicate)
+            {
+                resultSql = string.Format(dedupsql, deduplicationTable) + string.Format(sql, table);
+            }
+            else
+            {
+                resultSql = string.Format(sql, table);
+            }
+
+            sendSql = ConnectionHelpers.WrapInNoCount(resultSql);
+        }
     }
 }
