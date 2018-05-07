@@ -6,11 +6,11 @@ using ObjectApproval;
 using Xunit;
 using Xunit.Abstractions;
 
-public class DeduplicationCleanerTests : TestBase
+public class DeduplicationManagerTests : TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
-    string table = "DeduplicationCleanerTests";
+    string table = "DeduplicationManagerTests";
 
     [Fact]
     public void Should_only_clean_up_old_item()
@@ -21,7 +21,7 @@ public class DeduplicationCleanerTests : TestBase
 
         var message2 = BuildBytesMessage("00000000-0000-0000-0000-000000000002");
         Send(message2);
-        var cleaner = new DeduplicationCleaner(base.SqlConnection);
+        var cleaner = new DeduplicationManager(base.SqlConnection);
         cleaner.CleanupItemsOlderThan(now).Await();
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData("Deduplication").Select(x => x.Values.First()));
     }
@@ -37,10 +37,13 @@ public class DeduplicationCleanerTests : TestBase
         return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
-    public DeduplicationCleanerTests(ITestOutputHelper output) : base(output)
+    public DeduplicationManagerTests(ITestOutputHelper output) : base(output)
     {
         var manager = new QueueManager(table, SqlConnection, true);
         manager.Drop().Await();
         manager.Create().Await();
+        var deduplication = new DeduplicationManager(SqlConnection);
+        deduplication.Drop().Await();
+        deduplication.Create().Await();
     }
 }
