@@ -7,11 +7,10 @@ namespace NServiceBus.Transport.SqlServerNative
     /// </summary>
     public class IncomingBytesMessage : IIncomingMessage
     {
-        public IncomingBytesMessage(Guid id, long rowVersion, string correlationId, DateTime? expires, string headers, byte[] body)
+        public IncomingBytesMessage(Guid id, long rowVersion, DateTime? expires, string headers, byte[] body)
         {
             Id = id;
             RowVersion = rowVersion;
-            CorrelationId = correlationId;
             Expires = expires;
             Headers = headers;
             Body = body;
@@ -19,7 +18,6 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public Guid Id { get; }
         public long RowVersion { get; }
-        public string CorrelationId { get; }
         public DateTime? Expires { get; }
         public string Headers { get; }
         public byte[] Body { get; }

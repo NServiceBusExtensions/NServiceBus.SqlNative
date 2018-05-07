@@ -9,10 +9,9 @@ static class MessageReader
         return new IncomingBytesMessage(
             id: dataReader.GetGuid(0),
             rowVersion: dataReader.GetInt64(1),
-            correlationId: dataReader.ValueOrNull<string>(2),
-            expires: dataReader.ValueOrNull<DateTime?>(3),
-            headers: dataReader.ValueOrNull<string>(4),
-            body: dataReader.ValueOrNull<byte[]>(6)
+            expires: dataReader.ValueOrNull<DateTime?>(2),
+            headers: dataReader.ValueOrNull<string>(3),
+            body: dataReader.ValueOrNull<byte[]>(5)
         );
     }
 
@@ -20,10 +19,9 @@ static class MessageReader
     {
         var id = dataReader.GetGuid(0);
         var rowVersion = dataReader.GetInt64(1);
-        var correlationId = dataReader.ValueOrNull<string>(2);
-        var expires = dataReader.ValueOrNull<DateTime?>(3);
-        var headers = dataReader.ValueOrNull<string>(4);
-        var length = dataReader.ValueOrNull<long?>(5);
+        var expires = dataReader.ValueOrNull<DateTime?>(2);
+        var headers = dataReader.ValueOrNull<string>(3);
+        var length = dataReader.ValueOrNull<long?>(4);
         StreamWrapper streamWrapper;
         if (length == null)
         {
@@ -31,13 +29,12 @@ static class MessageReader
         }
         else
         {
-            streamWrapper = new StreamWrapper(length.Value, dataReader.GetStream(6));
+            streamWrapper = new StreamWrapper(length.Value, dataReader.GetStream(5));
         }
 
         return new IncomingStreamMessage(
             id: id,
             rowVersion: rowVersion,
-            correlationId: correlationId,
             expires: expires,
             headers: headers,
             body: streamWrapper,

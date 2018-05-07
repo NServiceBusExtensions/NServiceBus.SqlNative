@@ -1,5 +1,4 @@
 ﻿{
-  "CorrelationId": "theCorrelationId",
   "Expires": "2000-01-01T01:01:01",
   "Headers": "headers",
   "Id": "00000000-0000-0000-0000-000000000001",

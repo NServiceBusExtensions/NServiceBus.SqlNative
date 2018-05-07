@@ -36,7 +36,7 @@ public class SendIntegration : TestBase
             { "NServiceBus.EnclosedMessageTypes", typeof(SendMessage).FullName}
         };
 
-        var message = new OutgoingMessage(Guid.NewGuid(), null, null, DateTime.Now.AddDays(1), Headers.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
+        var message = new OutgoingMessage(Guid.NewGuid(), null, DateTime.Now.AddDays(1), Headers.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
         return sender.Send(message);
     }
 

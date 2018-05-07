@@ -16,7 +16,6 @@ namespace NServiceBus.Transport.SqlServerNative
 select top({1})
     Id,
     RowVersion,
-    CorrelationId,
     Expires,
     Headers,
     datalength(Body),
@@ -26,6 +25,5 @@ with (readpast)
 where RowVersion >= @RowVersion
 order by RowVersion
 ");
-
     }
 }

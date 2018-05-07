@@ -89,7 +89,7 @@ public class WithDeduplicationTests : TestBase
 
     static OutgoingMessage BuildBytesMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), "theCorrelationId", "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingMessage(new Guid(guid), "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     public WithDeduplicationTests(ITestOutputHelper output) : base(output)

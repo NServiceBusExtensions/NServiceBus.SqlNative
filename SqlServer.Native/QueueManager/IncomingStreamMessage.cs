@@ -14,18 +14,16 @@ namespace NServiceBus.Transport.SqlServerNative
         volatile int disposeSignaled;
         Guid id;
         long rowVersion;
-        string correlationId;
         DateTime? expires;
         string headers;
         Stream body;
 
-        public IncomingStreamMessage(Guid id, long rowVersion, string correlationId, DateTime? expires, string headers, Stream body, IDisposable[] cleanups)
+        public IncomingStreamMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream body, IDisposable[] cleanups)
         {
             Guard.AgainstNull(cleanups, nameof(cleanups));
             this.cleanups = cleanups;
             this.id = id;
             this.rowVersion = rowVersion;
-            this.correlationId = correlationId;
             this.expires = expires;
             this.headers = headers;
             this.body = body;
@@ -46,15 +44,6 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 ThrowIfDisposed();
                 return rowVersion;
-            }
-        }
-
-        public string CorrelationId
-        {
-            get
-            {
-                ThrowIfDisposed();
-                return correlationId;
             }
         }
 

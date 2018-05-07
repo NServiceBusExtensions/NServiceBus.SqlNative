@@ -16,7 +16,6 @@ static class IncomingStreamMessageHelper
 
         return new
         {
-            result.CorrelationId,
             result.Expires,
             result.Headers,
             result.Id,
