@@ -34,7 +34,7 @@ public class DeduplicationManagerTests : TestBase
 
     static OutgoingMessage BuildBytesMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     public DeduplicationManagerTests(ITestOutputHelper output) : base(output)

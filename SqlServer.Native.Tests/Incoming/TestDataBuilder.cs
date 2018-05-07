@@ -45,7 +45,7 @@ static class TestDataBuilder
 
     public static OutgoingMessage BuildMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), "theReplyToAddress", dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     public static OutgoingMessage BuildNullMessage(string guid)

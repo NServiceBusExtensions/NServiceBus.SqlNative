@@ -19,7 +19,6 @@ values (@Id);";
             const string sql = @"
 insert into {0} (
     Id,
-    ReplyToAddress,
     Recoverable,
     Expires,
     Headers,
@@ -27,7 +26,6 @@ insert into {0} (
 output inserted.RowVersion
 values (
     @Id,
-    @ReplyToAddress,
     1,
     @Expires,
     @Headers,
