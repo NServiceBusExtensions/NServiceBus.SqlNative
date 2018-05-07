@@ -15,19 +15,17 @@ namespace NServiceBus.Transport.SqlServerNative
         Guid id;
         long rowVersion;
         string correlationId;
-        string replyToAddress;
         DateTime? expires;
         string headers;
         Stream body;
 
-        public IncomingStreamMessage(Guid id, long rowVersion, string correlationId, string replyToAddress, DateTime? expires, string headers, Stream body, IDisposable[] cleanups)
+        public IncomingStreamMessage(Guid id, long rowVersion, string correlationId, DateTime? expires, string headers, Stream body, IDisposable[] cleanups)
         {
             Guard.AgainstNull(cleanups, nameof(cleanups));
             this.cleanups = cleanups;
             this.id = id;
             this.rowVersion = rowVersion;
             this.correlationId = correlationId;
-            this.replyToAddress = replyToAddress;
             this.expires = expires;
             this.headers = headers;
             this.body = body;
@@ -57,15 +55,6 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 ThrowIfDisposed();
                 return correlationId;
-            }
-        }
-
-        public string ReplyToAddress
-        {
-            get
-            {
-                ThrowIfDisposed();
-                return replyToAddress;
             }
         }
 

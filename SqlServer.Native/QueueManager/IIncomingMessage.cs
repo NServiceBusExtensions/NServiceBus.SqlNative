@@ -8,7 +8,6 @@ namespace NServiceBus.Transport.SqlServerNative
         DateTime? Expires { get; }
         string Headers { get; }
         Guid Id { get; }
-        string ReplyToAddress { get; }
         long RowVersion { get; }
     }
 }

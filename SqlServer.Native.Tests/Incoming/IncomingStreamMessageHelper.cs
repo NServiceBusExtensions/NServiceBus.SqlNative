@@ -20,7 +20,6 @@ static class IncomingStreamMessageHelper
             result.Expires,
             result.Headers,
             result.Id,
-            result.ReplyToAddress,
             result.RowVersion,
             bodyString = readToEnd
         };
