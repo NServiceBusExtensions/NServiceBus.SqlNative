@@ -17,8 +17,8 @@ public class MessageConsumingLoopTests : TestBase
     [Fact]
     public async Task Should_not_throw_when_run_over_end()
     {
-        await SqlConnection.DropTable(null, table);
         var manager = new QueueManager(table, SqlConnection);
+        await manager.Drop();
         await manager.Create();
         await SendMessages();
 

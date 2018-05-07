@@ -82,8 +82,8 @@ public class ReaderTests : TestBase
 
     public ReaderTests(ITestOutputHelper output) : base(output)
     {
-        SqlConnection.DropTable(null, table).Await();
         var manager = new QueueManager(table, SqlConnection);
+        manager.Drop().Await();
         manager.Create().Await();
     }
 }
