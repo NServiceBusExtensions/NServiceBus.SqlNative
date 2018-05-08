@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -17,8 +18,8 @@ public class DeduplicationManagerTests : TestBase
     {
         var message1 = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         Send(message1);
+        Thread.Sleep(1000);
         var now = DateTime.UtcNow;
-
         var message2 = BuildBytesMessage("00000000-0000-0000-0000-000000000002");
         Send(message2);
         var cleaner = new DeduplicationManager(SqlConnection);
