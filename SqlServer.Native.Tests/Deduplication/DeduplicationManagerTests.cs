@@ -20,6 +20,7 @@ public class DeduplicationManagerTests : TestBase
         Send(message1);
         Thread.Sleep(1000);
         var now = DateTime.UtcNow;
+        Thread.Sleep(1000);
         var message2 = BuildBytesMessage("00000000-0000-0000-0000-000000000002");
         Send(message2);
         var cleaner = new DeduplicationManager(SqlConnection);
