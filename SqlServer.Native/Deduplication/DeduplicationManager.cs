@@ -69,7 +69,7 @@ return
 
 create table {0} (
     Id uniqueidentifier primary key,
-    Created datetime2 not null default sysutcdatetime(),
+    Created datetime2(0) not null default sysutcdatetime(),
 );
 ";
     }
