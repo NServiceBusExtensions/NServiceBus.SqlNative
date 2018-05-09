@@ -51,11 +51,6 @@
         public const string ReplyToAddress = "NServiceBus.ReplyToAddress";
 
         /// <summary>
-        /// Prefix included on the wire when sending applicative headers.
-        /// </summary>
-        public const string HeaderName = "Header";
-
-        /// <summary>
         /// Header telling the NServiceBus Version.
         /// </summary>
         public const string NServiceBusVersion = "NServiceBus.Version";
