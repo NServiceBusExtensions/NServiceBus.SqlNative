@@ -47,7 +47,6 @@ if (@nocount = 'on') set nocount on;
 if (@nocount = 'off') set nocount off;";
         }
 
-
         internal static Task DropTable(this SqlConnection connection, SqlTransaction transaction, string table, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));

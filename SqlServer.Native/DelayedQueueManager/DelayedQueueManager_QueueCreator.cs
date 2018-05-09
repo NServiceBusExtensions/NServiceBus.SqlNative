@@ -10,6 +10,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public Task Create(string computedColumnSql, CancellationToken cancellation = default)
         {
+            Guard.AgainstNullOrEmpty(computedColumnSql, nameof(computedColumnSql));
             return InnerCreate(true, computedColumnSql, cancellation);
         }
 

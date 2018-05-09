@@ -35,12 +35,14 @@ namespace NServiceBus.Transport.SqlServerNative
         public Task Save(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
+            Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             return Save(connection, null, rowVersion, cancellation);
         }
 
         public Task Save(SqlTransaction transaction, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(transaction, nameof(transaction));
+            Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             return Save(transaction.Connection, transaction, rowVersion, cancellation);
         }
 

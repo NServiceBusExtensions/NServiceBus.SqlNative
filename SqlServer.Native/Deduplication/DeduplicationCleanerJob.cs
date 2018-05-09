@@ -20,8 +20,8 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNull(criticalError, nameof(criticalError));
             Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
             Guard.AgainstNegativeAndZero(expireWindow, nameof(expireWindow));
-            this.expireWindow = expireWindow.GetValueOrDefault(TimeSpan.FromDays(10));
             Guard.AgainstNegativeAndZero(frequencyToRunCleanup, nameof(frequencyToRunCleanup));
+            this.expireWindow = expireWindow.GetValueOrDefault(TimeSpan.FromDays(10));
             this.frequencyToRunCleanup = frequencyToRunCleanup.GetValueOrDefault(TimeSpan.FromHours(1));
             this.table = table;
             this.connectionBuilder = connectionBuilder;
@@ -46,9 +46,6 @@ namespace NServiceBus.Transport.SqlServerNative
             cleaner.Start();
         }
 
-        public virtual Task Stop()
-        {
-            return cleaner.Stop();
-        }
+        public virtual Task Stop() => cleaner.Stop();
     }
 }

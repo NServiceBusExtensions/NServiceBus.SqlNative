@@ -9,6 +9,7 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         public IncomingBytesMessage(Guid id, long rowVersion, DateTime? expires, string headers, byte[] body)
         {
+            Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             Id = id;
             RowVersion = rowVersion;
             Expires = expires;

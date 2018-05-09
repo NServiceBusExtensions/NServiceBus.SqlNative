@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Version>1.0.0-beta.32</Version>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>7.2</LangVersion>
     <Authors>Simon Cropp, Indu Alagarsamy</Authors>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <Description>Low level .net wrapper for the SQL Server transport.</Description>
