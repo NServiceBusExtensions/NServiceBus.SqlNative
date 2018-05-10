@@ -27,7 +27,7 @@ static class DelayedMessageReader
         }
         else
         {
-            streamWrapper = new StreamWrapper(length.Value, dataReader.GetStream(5));
+            streamWrapper = new StreamWrapper(length.Value, dataReader.GetStream(4));
         }
 
         return new IncomingDelayedStreamMessage(

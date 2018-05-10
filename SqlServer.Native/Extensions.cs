@@ -77,6 +77,65 @@ static class Extensions
         return reader.ReadBytesMessage();
     }
 
+
+    public static async Task<IncomingDelayedBytesMessage> ReadSingleDelayedBytes(this SqlDataReader reader, CancellationToken cancellation)
+    {
+        if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
+        {
+            return null;
+        }
+
+        return reader.ReadDelayedBytesMessage();
+    }
+
+    public static async Task<IncomingResult> ReadDelayedMultipleBytes(this SqlCommand command, Func<IncomingDelayedBytesMessage, Task> func, CancellationToken cancellation)
+    {
+        using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
+        {
+            var count = 0;
+            long? lastRowVersion = null;
+            while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
+            {
+                count++;
+                cancellation.ThrowIfCancellationRequested();
+                var message = reader.ReadDelayedBytesMessage();
+                lastRowVersion = message.RowVersion;
+                await func(message).ConfigureAwait(false);
+            }
+
+            return new IncomingResult
+            {
+                Count = count,
+                LastRowVersion = lastRowVersion
+            };
+        }
+    }
+
+    public static async Task<IncomingResult> ReadDelayedMultipleStream(this SqlCommand command, Func<IncomingDelayedStreamMessage, Task> func, CancellationToken cancellation)
+    {
+        using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
+        {
+            var count = 0;
+            long? lastRowVersion = null;
+            while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
+            {
+                count++;
+                cancellation.ThrowIfCancellationRequested();
+                using (var message = reader.ReadDelayedStreamMessage())
+                {
+                    lastRowVersion = message.RowVersion;
+                    await func(message).ConfigureAwait(false);
+                }
+            }
+
+            return new IncomingResult
+            {
+                Count = count,
+                LastRowVersion = lastRowVersion
+            };
+        }
+    }
+
     public static async Task<IncomingResult> ReadMultipleBytes(this SqlCommand command, Func<IncomingBytesMessage, Task> func, CancellationToken cancellation)
     {
         using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
