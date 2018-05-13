@@ -10,7 +10,7 @@ namespace NServiceBus.Transport.SqlServerNative
             using (var command = BuildConsumeCommand(1))
             using (var reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false))
             {
-                return await reader.ReadSingleBytes(cancellation);
+                return await reader.ReadSingleBytes(cancellation).ConfigureAwait(false);
             }
         }
     }

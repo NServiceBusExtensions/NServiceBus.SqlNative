@@ -22,10 +22,10 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public async Task Drop(CancellationToken cancellation = default)
         {
-            await connection.DropTable(transaction, table, cancellation);
+            await connection.DropTable(transaction, table, cancellation).ConfigureAwait(false);
             if (deduplicate)
             {
-                await connection.DropTable(transaction, deduplicationTable, cancellation);
+                await connection.DropTable(transaction, deduplicationTable, cancellation).ConfigureAwait(false);
             }
         }
 
@@ -48,7 +48,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 computedColumnSql = string.Empty;
             }
             var commandText = string.Format(QueueTableSql, table, computedColumnSql);
-            await connection.ExecuteCommand(transaction, commandText, cancellation);
+            await connection.ExecuteCommand(transaction, commandText, cancellation).ConfigureAwait(false);
         }
 
         /// <summary>

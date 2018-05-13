@@ -77,7 +77,6 @@ static class Extensions
         return reader.ReadBytesMessage();
     }
 
-
     public static async Task<IncomingDelayedBytesMessage> ReadSingleDelayedBytes(this SqlDataReader reader, CancellationToken cancellation)
     {
         if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))

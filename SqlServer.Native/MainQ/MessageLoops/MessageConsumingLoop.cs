@@ -60,7 +60,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 using (connection = await connectionBuilder(cancellation).ConfigureAwait(false))
                 {
                     var consumer = new QueueManager(table, connection);
-                    await RunBatch(consumer, message => connectionCallback(connection, message, cancellation), cancellation);
+                    await RunBatch(consumer, message => connectionCallback(connection, message, cancellation), cancellation).ConfigureAwait(false);
                 }
 
                 return;
@@ -73,7 +73,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 var consumer = new QueueManager(table, transaction);
                 try
                 {
-                    await RunBatch(consumer, message => transactionCallback(transaction, message, cancellation), cancellation);
+                    await RunBatch(consumer, message => transactionCallback(transaction, message, cancellation), cancellation).ConfigureAwait(false);
 
                     transaction.Commit();
                 }
