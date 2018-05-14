@@ -27,11 +27,11 @@ public class QueueCreatorIntegration
         await endpoint.Stop();
     }
 
-    static async Task SendStartMessage(IEndpointInstance endpoint)
+    static Task SendStartMessage(IEndpointInstance endpoint)
     {
         var sendOptions = new SendOptions();
         sendOptions.RouteToThisEndpoint();
-        await endpoint.Send(new SendMessage(), sendOptions);
+        return endpoint.Send(new SendMessage(), sendOptions);
     }
 
     class SendHandler : IHandleMessages<SendMessage>
