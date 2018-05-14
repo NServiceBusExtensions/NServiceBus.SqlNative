@@ -6,7 +6,7 @@
 
         void InitSendSql()
         {
-            const string dedupsql = @"
+            const string dedupSql = @"
 
 if exists (
     select *
@@ -34,7 +34,7 @@ values (
             string resultSql;
             if (deduplicate)
             {
-                resultSql = string.Format(dedupsql, deduplicationTable) + string.Format(sql, table);
+                resultSql = string.Format(dedupSql, deduplicationTable) + string.Format(sql, table);
             }
             else
             {
