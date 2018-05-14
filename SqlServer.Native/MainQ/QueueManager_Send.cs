@@ -7,7 +7,6 @@
         void InitSendSql()
         {
             const string dedupSql = @"
-
 if exists (
     select *
     from {0}

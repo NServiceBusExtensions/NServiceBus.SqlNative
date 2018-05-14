@@ -39,6 +39,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
             }
         }
+
         /// <summary>
         /// Drops a queue.
         /// </summary>
