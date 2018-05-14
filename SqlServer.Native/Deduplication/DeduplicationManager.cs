@@ -52,14 +52,14 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public Task Create(CancellationToken cancellation = default)
         {
-            var dedupCommandText = string.Format(DeduplcationTableSql, table);
+            var dedupCommandText = string.Format(DeduplicationTableSql, table);
             return connection.ExecuteCommand(transaction, dedupCommandText, cancellation);
         }
 
         /// <summary>
-        /// The sql statements used to create the deduplcation table
+        /// The sql statements used to create the deduplication table
         /// </summary>
-        public static readonly string DeduplcationTableSql = @"
+        public static readonly string DeduplicationTableSql = @"
 if exists (
     select *
     from sys.objects
