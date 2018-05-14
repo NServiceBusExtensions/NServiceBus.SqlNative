@@ -37,7 +37,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return InnerCreate(createDecodedBodyComputedColumn, null, cancellation);
         }
 
-        async Task InnerCreate(bool createDecodedBodyComputedColumn, string computedColumnSql, CancellationToken cancellation)
+        Task InnerCreate(bool createDecodedBodyComputedColumn, string computedColumnSql, CancellationToken cancellation)
         {
             if (createDecodedBodyComputedColumn)
             {
@@ -48,7 +48,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 computedColumnSql = string.Empty;
             }
             var commandText = string.Format(QueueTableSql, table, computedColumnSql);
-            await connection.ExecuteCommand(transaction, commandText, cancellation).ConfigureAwait(false);
+            return connection.ExecuteCommand(transaction, commandText, cancellation);
         }
 
         /// <summary>
