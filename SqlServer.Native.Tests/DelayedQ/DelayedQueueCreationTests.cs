@@ -11,6 +11,7 @@ public class DelayedQueueCreationTests
         using (var connection = Connection.OpenConnection())
         {
             var manager = new DelayedQueueManager("DelayedQueueCreationTests", connection);
+            manager.Drop().Await();
             manager.Create().Await();
             var sqlScriptBuilder = new SqlScriptBuilder(tables:true, namesToInclude: "DelayedQueueCreationTests");
             Approvals.Verify(sqlScriptBuilder.BuildScript(connection));
