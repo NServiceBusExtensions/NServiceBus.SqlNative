@@ -10,14 +10,14 @@ namespace NServiceBus.Transport.SqlServerNative
         string table;
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
         Func<CancellationToken, Task<SqlTransaction>> transactionBuilder;
-        Func<SqlTransaction, IncomingBytesMessage, CancellationToken, Task> transactionCallback;
-        Func<SqlConnection, IncomingBytesMessage, CancellationToken, Task> connectionCallback;
+        Func<SqlTransaction, IncomingStreamMessage, CancellationToken, Task> transactionCallback;
+        Func<SqlConnection, IncomingStreamMessage, CancellationToken, Task> connectionCallback;
         int batchSize;
 
         public MessageConsumingLoop(
             string table,
             Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
-            Func<SqlTransaction, IncomingBytesMessage, CancellationToken, Task> callback,
+            Func<SqlTransaction, IncomingStreamMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             int batchSize = 10,
             TimeSpan? delay = null) :
@@ -36,7 +36,7 @@ namespace NServiceBus.Transport.SqlServerNative
         public MessageConsumingLoop(
             string table,
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
-            Func<SqlConnection, IncomingBytesMessage, CancellationToken, Task> callback,
+            Func<SqlConnection, IncomingStreamMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             int batchSize = 10,
             TimeSpan? delay = null) :
@@ -90,11 +90,11 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        async Task RunBatch(QueueManager consumer, Func<IncomingBytesMessage, Task> action, CancellationToken cancellation)
+        async Task RunBatch(QueueManager consumer, Func<IncomingStreamMessage, Task> action, CancellationToken cancellation)
         {
             while (true)
             {
-                var result = await consumer.ConsumeBytes(batchSize, action, cancellation)
+                var result = await consumer.ConsumeStream(batchSize, action, cancellation)
                     .ConfigureAwait(false);
                 if (result.Count < batchSize)
                 {

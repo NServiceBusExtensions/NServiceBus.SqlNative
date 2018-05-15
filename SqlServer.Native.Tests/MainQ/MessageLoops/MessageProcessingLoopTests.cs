@@ -50,7 +50,7 @@ public class MessageProcessingLoopTests : TestBase
 
         var count = 0;
 
-        Task Callback(SqlConnection connection, IncomingBytesMessage incomingBytesMessage, CancellationToken arg3)
+        Task Callback(SqlConnection connection, IncomingStreamMessage incomingBytesMessage, CancellationToken arg3)
         {
             count++;
             if (count == 5)

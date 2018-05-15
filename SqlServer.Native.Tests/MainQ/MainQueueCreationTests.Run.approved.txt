@@ -1,10 +1,10 @@
 ﻿CREATE TABLE [dbo].[MainQueueCreationTests](
 	[Id] [uniqueidentifier] NOT NULL,
-	[CorrelationId] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[ReplyToAddress] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[CorrelationId] [varchar](255) COLLATE Latin1_General_CI_AS NULL,
+	[ReplyToAddress] [varchar](255) COLLATE Latin1_General_CI_AS NULL,
 	[Recoverable] [bit] NOT NULL,
 	[Expires] [datetime] NULL,
-	[Headers] [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[Headers] [nvarchar](max) COLLATE Latin1_General_CI_AS NOT NULL,
 	[BodyString]  AS (CONVERT([varchar](max),[Body])),
 	[Body] [varbinary](max) NULL,
 	[RowVersion] [bigint] IDENTITY(1,1) NOT NULL

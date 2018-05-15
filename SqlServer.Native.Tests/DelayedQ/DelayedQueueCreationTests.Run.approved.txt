@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[DelayedQueueCreationTests](
-	[Headers] [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[Headers] [nvarchar](max) COLLATE Latin1_General_CI_AS NOT NULL,
 	[BodyString]  AS (CONVERT([varchar](max),[Body])),
 	[Body] [varbinary](max) NULL,
 	[Due] [datetime] NOT NULL,

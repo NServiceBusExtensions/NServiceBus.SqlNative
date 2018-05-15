@@ -11,8 +11,8 @@ namespace NServiceBus.Transport.SqlServerNative
         long startingRow;
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
         Func<CancellationToken, Task<SqlTransaction>> transactionBuilder;
-        Func<SqlTransaction, IncomingBytesMessage, CancellationToken, Task> transactionCallback;
-        Func<SqlConnection, IncomingBytesMessage, CancellationToken, Task> connectionCallback;
+        Func<SqlTransaction, IncomingStreamMessage, CancellationToken, Task> transactionCallback;
+        Func<SqlConnection, IncomingStreamMessage, CancellationToken, Task> connectionCallback;
         Func<SqlTransaction, long, CancellationToken, Task> transactionPersistRowVersion;
         Func<SqlConnection, long, CancellationToken, Task> connectionPersistRowVersion;
         int batchSize;
@@ -21,7 +21,7 @@ namespace NServiceBus.Transport.SqlServerNative
             string table,
             long startingRow,
             Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
-            Func<SqlTransaction, IncomingBytesMessage, CancellationToken, Task> callback,
+            Func<SqlTransaction, IncomingStreamMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             Func<SqlTransaction, long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
@@ -46,7 +46,7 @@ namespace NServiceBus.Transport.SqlServerNative
             string table,
             long startingRow,
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
-            Func<SqlConnection, IncomingBytesMessage, CancellationToken, Task> callback,
+            Func<SqlConnection, IncomingStreamMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             Func<SqlConnection, long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
@@ -115,11 +115,11 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        async Task RunBatch(QueueManager reader, Func<IncomingBytesMessage, Task> messageFunc, Func<Task> persistFunc, CancellationToken cancellation)
+        async Task RunBatch(QueueManager reader, Func<IncomingStreamMessage, Task> messageFunc, Func<Task> persistFunc, CancellationToken cancellation)
         {
             while (true)
             {
-                var result = await reader.ReadBytes(batchSize, startingRow, messageFunc, cancellation)
+                var result = await reader.ReadStream(batchSize, startingRow, messageFunc, cancellation)
                     .ConfigureAwait(false);
                 if (result.Count == 0)
                 {
