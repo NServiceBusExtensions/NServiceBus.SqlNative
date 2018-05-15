@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class QueueManager
+    public abstract partial class BaseQueueManager<TIncoming,TOutgoing>
+        where TIncoming: IIncomingMessage
     {
-        public virtual async Task<IncomingMessage> Consume(CancellationToken cancellation = default)
+        public virtual async Task<TIncoming> Consume(CancellationToken cancellation = default)
         {
             var shouldCleanup = false;
             SqlDataReader reader = null;
@@ -18,10 +19,10 @@ namespace NServiceBus.Transport.SqlServerNative
                     if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
                     {
                         reader.Dispose();
-                        return null;
+                        return default;
                     }
 
-                    return reader.ReadMessage(reader);
+                    return ReadMessage(reader, reader);
                 }
             }
             catch

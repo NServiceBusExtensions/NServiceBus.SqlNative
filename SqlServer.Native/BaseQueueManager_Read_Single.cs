@@ -4,9 +4,12 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class QueueManager
+    public abstract partial class BaseQueueManager<TIncoming,TOutgoing>
+        where TIncoming: IIncomingMessage
     {
-        public virtual async Task<IncomingMessage> Read(long rowVersion, CancellationToken cancellation = default)
+        protected abstract SqlCommand BuildReadCommand(int batchSize, long startRowVersion);
+
+        public virtual async Task<TIncoming> Read(long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             var shouldCleanup = false;
@@ -19,10 +22,10 @@ namespace NServiceBus.Transport.SqlServerNative
                     if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
                     {
                         shouldCleanup = true;
-                        return null;
+                        return default;
                     }
 
-                    return reader.ReadMessage(reader);
+                    return ReadMessage(reader,reader);
                 }
             }
             catch

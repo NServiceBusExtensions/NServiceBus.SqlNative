@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using NServiceBus.Transport.SqlServerNative;
 
 static class Extensions
 {
@@ -65,56 +64,6 @@ static class Extensions
         command.Transaction = transaction;
         command.CommandText = sql;
         return command;
-    }
-
-    public static async Task<IncomingResult> ReadDelayedMultipleStream(this SqlCommand command, Func<IncomingDelayedMessage, Task> func, CancellationToken cancellation)
-    {
-        using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
-        {
-            var count = 0;
-            long? lastRowVersion = null;
-            while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
-            {
-                count++;
-                cancellation.ThrowIfCancellationRequested();
-                using (var message = reader.ReadDelayedMessage())
-                {
-                    lastRowVersion = message.RowVersion;
-                    await func(message).ConfigureAwait(false);
-                }
-            }
-
-            return new IncomingResult
-            {
-                Count = count,
-                LastRowVersion = lastRowVersion
-            };
-        }
-    }
-
-    public static async Task<IncomingResult> ReadMultipleStream(this SqlCommand command, Func<IncomingMessage, Task> func, CancellationToken cancellation)
-    {
-        using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
-        {
-            var count = 0;
-            long? lastRowVersion = null;
-            while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
-            {
-                count++;
-                cancellation.ThrowIfCancellationRequested();
-                using (var message = reader.ReadMessage())
-                {
-                    lastRowVersion = message.RowVersion;
-                    await func(message).ConfigureAwait(false);
-                }
-            }
-
-            return new IncomingResult
-            {
-                Count = count,
-                LastRowVersion = lastRowVersion
-            };
-        }
     }
 
     public static T ValueOrNull<T>(this SqlDataReader dataReader, int index)

@@ -6,7 +6,7 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class QueueManager
     {
-        SqlCommand BuildReadCommand(int batchSize, long startRowVersion)
+        protected override SqlCommand BuildReadCommand(int batchSize, long startRowVersion)
         {
             var command = connection.CreateCommand(transaction, string.Format(ReadSql, table, batchSize));
             command.Parameters.Add("RowVersion", SqlDbType.BigInt).Value = startRowVersion;
