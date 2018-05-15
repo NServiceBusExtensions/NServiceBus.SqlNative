@@ -4,7 +4,7 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class QueueManager
     {
-        SqlCommand BuildConsumeCommand(int batchSize)
+        protected override SqlCommand BuildConsumeCommand(int batchSize)
         {
             return connection.CreateCommand(transaction, string.Format(ConsumeSql, table, batchSize));
         }

@@ -7,7 +7,7 @@ namespace NServiceBus.Transport.SqlServerNative
     /// <summary>
     /// Represents a message.
     /// </summary>
-    public class IncomingDelayedMessage : IDisposable
+    public class IncomingDelayedMessage : IDisposable, IIncomingMessage
     {
         IDisposable[] cleanups;
         bool disposed;

@@ -2,27 +2,17 @@
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class DelayedQueueManager
+    public partial class DelayedQueueManager: BaseQueueManager<IncomingDelayedMessage, OutgoingDelayedMessage>
     {
-        string table;
-        SqlConnection connection;
-        SqlTransaction transaction;
 
-        public DelayedQueueManager(string table, SqlConnection connection)
+        public DelayedQueueManager(string table, SqlConnection connection):
+            base(table, connection)
         {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
-            Guard.AgainstNull(connection, nameof(connection));
-            this.table = table;
-            this.connection = connection;
         }
 
-        public DelayedQueueManager(string table, SqlTransaction transaction)
+        public DelayedQueueManager(string table, SqlTransaction transaction) :
+            base(table, transaction)
         {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
-            Guard.AgainstNull(transaction, nameof(transaction));
-            this.table = table;
-            this.transaction = transaction;
-            connection = transaction.Connection;
         }
     }
 }
