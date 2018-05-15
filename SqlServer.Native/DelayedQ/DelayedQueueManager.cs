@@ -4,7 +4,6 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class DelayedQueueManager: BaseQueueManager<IncomingDelayedMessage, OutgoingDelayedMessage>
     {
-
         public DelayedQueueManager(string table, SqlConnection connection):
             base(table, connection)
         {

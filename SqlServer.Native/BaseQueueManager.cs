@@ -29,12 +29,12 @@ namespace NServiceBus.Transport.SqlServerNative
             connection = transaction.Connection;
         }
 
-        async Task<IncomingResult> ReadMultipleStream(SqlCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
+        async Task<IncomingResult> ReadMultiple(SqlCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
         {
+            var count = 0;
+            long? lastRowVersion = null;
             using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
             {
-                var count = 0;
-                long? lastRowVersion = null;
                 while (await reader.ReadAsync(cancellation).ConfigureAwait(false))
                 {
                     count++;
@@ -46,13 +46,13 @@ namespace NServiceBus.Transport.SqlServerNative
                     }
                 }
 
-                return new IncomingResult
-                {
-                    Count = count,
-                    LastRowVersion = lastRowVersion
-                };
             }
-        }
 
+            return new IncomingResult
+            {
+                Count = count,
+                LastRowVersion = lastRowVersion
+            };
+        }
     }
 }

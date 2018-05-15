@@ -1,29 +1,19 @@
 ﻿using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class QueueManager
     {
-        public virtual async Task<long> Send(OutgoingMessage message, CancellationToken cancellation = default)
+        protected override SqlCommand CreateSendCommand(OutgoingMessage message)
         {
-            Guard.AgainstNull(message, nameof(message));
-            using (var command = connection.CreateCommand(transaction, string.Format(sendSql, table)))
-            {
-                var parameters = command.Parameters;
-                parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = message.Id;
-                parameters.Add("Expires", SqlDbType.DateTime).SetValueOrDbNull(message.Expires);
-                parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;
-                parameters.Add("Body", SqlDbType.VarBinary).SetBinaryOrDbNull(message.Body);
-
-                var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
-                if (rowVersion == null)
-                {
-                    return 0;
-                }
-                return (long) rowVersion;
-            }
+            var command = connection.CreateCommand(transaction, string.Format(sendSql, table));
+            var parameters = command.Parameters;
+            parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = message.Id;
+            parameters.Add("Expires", SqlDbType.DateTime).SetValueOrDbNull(message.Expires);
+            parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;
+            parameters.Add("Body", SqlDbType.VarBinary).SetBinaryOrDbNull(message.Body);
+            return command;
         }
     }
 }

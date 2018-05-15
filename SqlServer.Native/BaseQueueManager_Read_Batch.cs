@@ -19,7 +19,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNull(func, nameof(func));
             using (var command = BuildReadCommand(size, startRowVersion))
             {
-                return await ReadMultipleStream(command, func, cancellation).ConfigureAwait(false);
+                return await ReadMultiple(command, func, cancellation).ConfigureAwait(false);
             }
         }
     }
