@@ -14,7 +14,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 var parameters = command.Parameters;
                 parameters.Add("Due", SqlDbType.DateTime).Value = message.Due;
                 parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;
-                parameters.Add("Body", SqlDbType.VarBinary).SetValueOrDbNull(message.Body);
+                parameters.Add("Body", SqlDbType.VarBinary).SetBinaryOrDbNull(message.Body);
 
                 var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
                 return (long) rowVersion;

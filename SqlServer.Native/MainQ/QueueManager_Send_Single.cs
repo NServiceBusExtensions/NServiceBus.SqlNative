@@ -15,7 +15,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = message.Id;
                 parameters.Add("Expires", SqlDbType.DateTime).SetValueOrDbNull(message.Expires);
                 parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;
-                parameters.Add("Body", SqlDbType.VarBinary).SetValueOrDbNull(message.Body);
+                parameters.Add("Body", SqlDbType.VarBinary).SetBinaryOrDbNull(message.Body);
 
                 var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
                 if (rowVersion == null)

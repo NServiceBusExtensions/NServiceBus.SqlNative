@@ -24,7 +24,7 @@ namespace NServiceBus.Transport.SqlServerNative
                     idParam.Value = message.Id;
                     expiresParam.SetValueOrDbNull(message.Expires);
                     headersParam.Value = message.Headers;
-                    bodyParam.SetValueOrDbNull(message.Body);
+                    bodyParam.SetBinaryOrDbNull(message.Body);
                     var result = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
                     if (result != null) rowVersion = (long) result;
                 }

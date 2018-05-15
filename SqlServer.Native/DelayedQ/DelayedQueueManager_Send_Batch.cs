@@ -22,7 +22,7 @@ namespace NServiceBus.Transport.SqlServerNative
                     cancellation.ThrowIfCancellationRequested();
                     dueParam.Value = message.Due;
                     headersParam.Value = message.Headers;
-                    bodyParam.SetValueOrDbNull(message.Body);
+                    bodyParam.SetBinaryOrDbNull(message.Body);
                     rowVersion = (long) await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
                 }
             }
