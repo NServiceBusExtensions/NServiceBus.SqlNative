@@ -25,31 +25,17 @@ namespace NServiceBus.Transport.SqlServerNative
         public OutgoingDelayedMessage(DateTime due, string headers, byte[] bodyBytes)
             : this(due, headers)
         {
-            BodyBytes = bodyBytes;
+            Body = bodyBytes;
         }
 
         public OutgoingDelayedMessage(DateTime due, string headers, Stream bodyStream)
             : this(due, headers)
         {
-            BodyStream = bodyStream;
+            Body = bodyStream;
         }
 
         public DateTime Due { get; }
         public string Headers { get; }
-        public byte[] BodyBytes { get; }
-        public Stream BodyStream { get; }
-
-        public object Body
-        {
-            get
-            {
-                if (BodyBytes == null)
-                {
-                    return BodyStream;
-                }
-
-                return BodyBytes;
-            }
-        }
+        public object Body { get; }
     }
 }

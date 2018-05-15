@@ -27,31 +27,18 @@ namespace NServiceBus.Transport.SqlServerNative
         public OutgoingMessage(Guid id, DateTime? expires = null, string headers = null, byte[] bodyBytes = null)
             : this(id, expires, headers)
         {
-            BodyBytes = bodyBytes;
+            Body = bodyBytes;
         }
 
         public OutgoingMessage(Guid id, DateTime? expires = null, string headers = null, Stream bodyStream = null)
             : this(id, expires, headers)
         {
-            BodyStream = bodyStream;
+            Body = bodyStream;
         }
 
         public Guid Id { get; }
         public DateTime? Expires { get; }
         public string Headers { get; }
-        public byte[] BodyBytes { get; }
-        public Stream BodyStream { get; }
-
-        public object Body
-        {
-            get
-            {
-                if (BodyBytes == null)
-                {
-                    return BodyStream;
-                }
-                return BodyBytes;
-            }
-        }
+        public object Body { get; }
     }
 }
