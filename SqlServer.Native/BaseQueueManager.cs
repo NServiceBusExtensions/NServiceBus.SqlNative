@@ -45,7 +45,6 @@ namespace NServiceBus.Transport.SqlServerNative
                         await func(message).ConfigureAwait(false);
                     }
                 }
-
             }
 
             return new IncomingResult

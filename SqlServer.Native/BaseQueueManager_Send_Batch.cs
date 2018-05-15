@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,11 +14,7 @@ namespace NServiceBus.Transport.SqlServerNative
             foreach (var message in messages)
             {
                 cancellation.ThrowIfCancellationRequested();
-                using (var command = CreateSendCommand(message))
-                {
-                    var result = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
-                    if (result != null) rowVersion = (long) result;
-                }
+                rowVersion= await InnerSend(message, cancellation).ConfigureAwait(false);
             }
 
             return rowVersion;

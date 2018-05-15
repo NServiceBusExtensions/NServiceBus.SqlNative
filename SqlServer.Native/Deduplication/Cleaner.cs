@@ -35,10 +35,7 @@ class Cleaner
             delayStrategy: Task.Delay);
     }
 
-    public virtual Task Stop()
-    {
-        return timer.Stop();
-    }
+    public virtual Task Stop() => timer.Stop();
 
     AsyncTimer timer;
     Action<string, Exception> criticalError;

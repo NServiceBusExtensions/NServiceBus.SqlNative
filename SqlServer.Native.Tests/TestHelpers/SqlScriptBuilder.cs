@@ -34,7 +34,6 @@ public class SqlScriptBuilder
 
         var database = theServer.Databases[builder.InitialCatalog];
         var buildScript = string.Join("\n\n", GetScripts(database));
-        buildScript = buildScript.Replace($" COLLATE {database.Collation}", "");
         return buildScript;
     }
 
@@ -56,6 +55,7 @@ public class SqlScriptBuilder
         var options = new ScriptingOptions
         {
             ChangeTracking = true,
+            NoCollation = true,
         };
         return string.Join("\n\n", scriptable.Script(options)
             .Cast<string>()

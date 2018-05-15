@@ -7,9 +7,14 @@ namespace NServiceBus.Transport.SqlServerNative
     public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
         where TIncoming : IIncomingMessage
     {
-        public virtual async Task<long> Send(TOutgoing message, CancellationToken cancellation = default)
+        public virtual Task<long> Send(TOutgoing message, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(message, nameof(message));
+            return InnerSend(message, cancellation);
+        }
+
+        async Task<long> InnerSend(TOutgoing message, CancellationToken cancellation)
+        {
             using (var command = CreateSendCommand(message))
             {
                 var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
@@ -18,7 +23,7 @@ namespace NServiceBus.Transport.SqlServerNative
                     return 0;
                 }
 
-                return (long)rowVersion;
+                return (long) rowVersion;
             }
         }
 
