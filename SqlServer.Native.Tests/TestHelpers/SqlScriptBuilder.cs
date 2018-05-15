@@ -31,8 +31,11 @@ public class SqlScriptBuilder
     {
         var builder = new SqlConnectionStringBuilder(sqlConnection.ConnectionString);
         var theServer = new Server(new ServerConnection(sqlConnection));
+
         var database = theServer.Databases[builder.InitialCatalog];
-        return string.Join("\n\n", GetScripts(database));
+        var buildScript = string.Join("\n\n", GetScripts(database));
+        buildScript = buildScript.Replace($" COLLATE {database.Collation}", "");
+        return buildScript;
     }
 
     IEnumerable<string> GetScripts(Database database)
