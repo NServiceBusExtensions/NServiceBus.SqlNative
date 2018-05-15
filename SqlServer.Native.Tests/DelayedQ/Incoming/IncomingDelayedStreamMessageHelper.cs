@@ -3,7 +3,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 static class IncomingDelayedStreamMessageHelper
 {
-    public static object ToVerifyTarget(this IncomingDelayedStreamMessage result)
+    public static object ToVerifyTarget(this IncomingDelayedMessage result)
     {
         string readToEnd = null;
         if (result.Body != null)

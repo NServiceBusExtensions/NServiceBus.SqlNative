@@ -7,25 +7,36 @@ namespace NServiceBus.Transport.SqlServerNative
     /// <summary>
     /// Represents a message.
     /// </summary>
-    public class IncomingDelayedStreamMessage : IIncomingDelayedMessage, IDisposable
+    public class IncomingMessage : IDisposable
     {
         IDisposable[] cleanups;
         bool disposed;
         volatile int disposeSignaled;
+        Guid id;
         long rowVersion;
-        DateTime due;
+        DateTime? expires;
         string headers;
         Stream body;
 
-        public IncomingDelayedStreamMessage(long rowVersion, DateTime due, string headers, Stream body, IDisposable[] cleanups)
+        public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream body, IDisposable[] cleanups)
         {
             Guard.AgainstNull(cleanups, nameof(cleanups));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             this.cleanups = cleanups;
+            this.id = id;
             this.rowVersion = rowVersion;
-            this.due = due;
+            this.expires = expires;
             this.headers = headers;
             this.body = body;
+        }
+
+        public Guid Id
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return id;
+            }
         }
 
         public long RowVersion
@@ -37,12 +48,12 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public DateTime Due
+        public DateTime? Expires
         {
             get
             {
                 ThrowIfDisposed();
-                return due;
+                return expires;
             }
         }
 
@@ -68,7 +79,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             if (disposed)
             {
-                throw new ObjectDisposedException(nameof(IncomingStreamMessage));
+                throw new ObjectDisposedException(nameof(IncomingMessage));
             }
         }
 

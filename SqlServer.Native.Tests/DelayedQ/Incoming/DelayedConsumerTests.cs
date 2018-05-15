@@ -13,7 +13,7 @@ public class DelayedConsumerTests : TestBase
     {
         DelayedTestDataBuilder.SendData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        using (var result = consumer.ConsumeStream().Result)
+        using (var result = consumer.Consume().Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -24,7 +24,7 @@ public class DelayedConsumerTests : TestBase
     {
         DelayedTestDataBuilder.SendNullData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        using (var result = consumer.ConsumeStream().Result)
+        using (var result = consumer.Consume().Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -37,7 +37,7 @@ public class DelayedConsumerTests : TestBase
 
         var consumer = new DelayedQueueManager(table, SqlConnection);
         var messages = new List<object>();
-        var result = consumer.ConsumeStream(size: 3,
+        var result = consumer.Consume(size: 3,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
         Assert.Equal(3, result.Count);

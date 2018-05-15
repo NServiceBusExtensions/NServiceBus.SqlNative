@@ -6,13 +6,13 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class DelayedQueueManager
     {
-        public virtual Task<IncomingResult> ConsumeStream(int size, Action<IncomingDelayedStreamMessage> action, CancellationToken cancellation = default)
+        public virtual Task<IncomingResult> Consume(int size, Action<IncomingDelayedMessage> action, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(action, nameof(action));
-            return ConsumeStream(size, action.ToTaskFunc(), cancellation);
+            return Consume(size, action.ToTaskFunc(), cancellation);
         }
 
-        public virtual async Task<IncomingResult> ConsumeStream(int size, Func<IncomingDelayedStreamMessage, Task> func, CancellationToken cancellation = default)
+        public virtual async Task<IncomingResult> Consume(int size, Func<IncomingDelayedMessage, Task> func, CancellationToken cancellation = default)
         {
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNull(func, nameof(func));

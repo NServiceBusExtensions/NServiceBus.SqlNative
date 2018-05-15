@@ -4,7 +4,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 static class DelayedMessageReader
 {
-    public static IncomingDelayedStreamMessage ReadDelayedStreamMessage(this SqlDataReader dataReader, params IDisposable[] cleanups)
+    public static IncomingDelayedMessage ReadDelayedMessage(this SqlDataReader dataReader, params IDisposable[] cleanups)
     {
         var rowVersion = dataReader.GetInt64(0);
         var due = dataReader.ValueOrNull<DateTime>(1);
@@ -20,7 +20,7 @@ static class DelayedMessageReader
             streamWrapper = new StreamWrapper(length.Value, dataReader.GetStream(4));
         }
 
-        return new IncomingDelayedStreamMessage(
+        return new IncomingDelayedMessage(
             rowVersion: rowVersion,
             due: due,
             headers: headers,

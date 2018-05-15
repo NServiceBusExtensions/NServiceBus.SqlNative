@@ -13,7 +13,7 @@ public class DelayedReaderTests : TestBase
     {
         DelayedTestDataBuilder.SendData(table);
         var reader = new DelayedQueueManager(table, SqlConnection);
-        using (var result = reader.ReadStream(1).Result)
+        using (var result = reader.Read(1).Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -24,7 +24,7 @@ public class DelayedReaderTests : TestBase
     {
         DelayedTestDataBuilder.SendNullData(table);
         var reader = new DelayedQueueManager(table, SqlConnection);
-        using (var result = reader.ReadStream(1).Result)
+        using (var result = reader.Read(1).Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -37,7 +37,7 @@ public class DelayedReaderTests : TestBase
 
         var reader = new DelayedQueueManager(table, SqlConnection);
         var messages = new List<object>();
-        var result = reader.ReadStream(size: 3,
+        var result = reader.Read(size: 3,
                 startRowVersion: 2,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;

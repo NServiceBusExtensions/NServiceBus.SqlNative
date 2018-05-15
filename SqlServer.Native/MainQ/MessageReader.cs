@@ -4,7 +4,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 static class MessageReader
 {
-    public static IncomingStreamMessage ReadStreamMessage(this SqlDataReader dataReader, params IDisposable[] cleanups)
+    public static IncomingMessage ReadMessage(this SqlDataReader dataReader, params IDisposable[] cleanups)
     {
         var id = dataReader.GetGuid(0);
         var rowVersion = dataReader.GetInt64(1);
@@ -21,7 +21,7 @@ static class MessageReader
             streamWrapper = new StreamWrapper(length.Value, dataReader.GetStream(5));
         }
 
-        return new IncomingStreamMessage(
+        return new IncomingMessage(
             id: id,
             rowVersion: rowVersion,
             expires: expires,

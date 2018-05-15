@@ -6,7 +6,7 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class QueueManager
     {
-        public virtual async Task<IncomingStreamMessage> ConsumeStream(CancellationToken cancellation = default)
+        public virtual async Task<IncomingMessage> Consume(CancellationToken cancellation = default)
         {
             var shouldCleanup = false;
             SqlDataReader reader = null;
@@ -21,7 +21,7 @@ namespace NServiceBus.Transport.SqlServerNative
                         return null;
                     }
 
-                    return reader.ReadStreamMessage(reader);
+                    return reader.ReadMessage(reader);
                 }
             }
             catch

@@ -6,7 +6,7 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class DelayedQueueManager
     {
-        public virtual async Task<IncomingDelayedStreamMessage> ReadStream(long rowVersion, CancellationToken cancellation = default)
+        public virtual async Task<IncomingDelayedMessage> Read(long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             var shouldCleanup = false;
@@ -22,7 +22,7 @@ namespace NServiceBus.Transport.SqlServerNative
                         return null;
                     }
 
-                    return reader.ReadDelayedStreamMessage(reader);
+                    return reader.ReadDelayedMessage(reader);
                 }
             }
             catch

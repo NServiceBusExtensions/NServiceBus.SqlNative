@@ -14,7 +14,7 @@ public class ReaderTests : TestBase
     {
         TestDataBuilder.SendData(table);
         var reader = new QueueManager(table, SqlConnection);
-        using (var result = reader.ReadStream(1).Result)
+        using (var result = reader.Read(1).Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -25,7 +25,7 @@ public class ReaderTests : TestBase
     {
         TestDataBuilder.SendNullData(table);
         var reader = new QueueManager(table, SqlConnection);
-        using (var result = reader.ReadStream(1).Result)
+        using (var result = reader.Read(1).Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
@@ -38,7 +38,7 @@ public class ReaderTests : TestBase
 
         var reader = new QueueManager(table, SqlConnection);
         var messages = new List<object>();
-        var result = reader.ReadStream(size: 3,
+        var result = reader.Read(size: 3,
                 startRowVersion: 2,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;

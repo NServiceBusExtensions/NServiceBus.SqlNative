@@ -67,7 +67,7 @@ static class Extensions
         return command;
     }
 
-    public static async Task<IncomingResult> ReadDelayedMultipleStream(this SqlCommand command, Func<IncomingDelayedStreamMessage, Task> func, CancellationToken cancellation)
+    public static async Task<IncomingResult> ReadDelayedMultipleStream(this SqlCommand command, Func<IncomingDelayedMessage, Task> func, CancellationToken cancellation)
     {
         using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
         {
@@ -77,7 +77,7 @@ static class Extensions
             {
                 count++;
                 cancellation.ThrowIfCancellationRequested();
-                using (var message = reader.ReadDelayedStreamMessage())
+                using (var message = reader.ReadDelayedMessage())
                 {
                     lastRowVersion = message.RowVersion;
                     await func(message).ConfigureAwait(false);
@@ -92,7 +92,7 @@ static class Extensions
         }
     }
 
-    public static async Task<IncomingResult> ReadMultipleStream(this SqlCommand command, Func<IncomingStreamMessage, Task> func, CancellationToken cancellation)
+    public static async Task<IncomingResult> ReadMultipleStream(this SqlCommand command, Func<IncomingMessage, Task> func, CancellationToken cancellation)
     {
         using (var reader = await command.ExecuteSequentialReader(cancellation).ConfigureAwait(false))
         {
@@ -102,7 +102,7 @@ static class Extensions
             {
                 count++;
                 cancellation.ThrowIfCancellationRequested();
-                using (var message = reader.ReadStreamMessage())
+                using (var message = reader.ReadMessage())
                 {
                     lastRowVersion = message.RowVersion;
                     await func(message).ConfigureAwait(false);

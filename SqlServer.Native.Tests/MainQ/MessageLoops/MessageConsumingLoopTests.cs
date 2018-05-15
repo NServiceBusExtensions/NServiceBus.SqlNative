@@ -47,7 +47,7 @@ public class MessageConsumingLoopTests : TestBase
 
         var count = 0;
 
-        Task Callback(SqlConnection connection, IncomingStreamMessage message, CancellationToken cancellation)
+        Task Callback(SqlConnection connection, IncomingMessage message, CancellationToken cancellation)
         {
             count++;
             if (count == 5)

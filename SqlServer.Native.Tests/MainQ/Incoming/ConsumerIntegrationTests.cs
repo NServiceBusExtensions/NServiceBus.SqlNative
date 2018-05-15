@@ -23,7 +23,7 @@ public class ConsumerIntegrationTests : TestBase
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
         var consumer = new QueueManager(table, SqlConnection);
-        using (var message = await consumer.ConsumeStream())
+        using (var message = await consumer.Consume())
         {
             Assert.NotNull(message);
         }

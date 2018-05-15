@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using NServiceBus.Transport.SqlServerNative;
 
-static class IncomingStreamMessageHelper
+static class IncomingMessageHelper
 {
-    public static object ToVerifyTarget(this IncomingStreamMessage result)
+    public static object ToVerifyTarget(this IncomingMessage result)
     {
         string readToEnd = null;
         if (result.Body != null)
