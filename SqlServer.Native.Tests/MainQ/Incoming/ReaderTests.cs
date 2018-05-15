@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NServiceBus.Transport.SqlServerNative;
+﻿using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
 using Xunit.Abstractions;
@@ -7,7 +6,6 @@ using Xunit.Abstractions;
 public class ReaderTests : TestBase
 {
     string table = "ReaderTests";
-
 
     [Fact]
     public void Single()
@@ -37,14 +35,12 @@ public class ReaderTests : TestBase
         TestDataBuilder.SendMultipleData(table);
 
         var reader = new QueueManager(table, SqlConnection);
-        var messages = new List<object>();
         var result = reader.Read(size: 3,
                 startRowVersion: 2,
-                action: message => { messages.Add(message.ToVerifyTarget()); })
+                action: message => { })
             .Result;
         Assert.Equal(4, result.LastRowVersion);
         Assert.Equal(3, result.Count);
-        ObjectApprover.VerifyWithJson(messages);
     }
 
     public ReaderTests(ITestOutputHelper output) : base(output)
