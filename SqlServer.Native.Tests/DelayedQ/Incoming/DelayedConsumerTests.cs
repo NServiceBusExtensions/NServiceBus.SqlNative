@@ -9,25 +9,7 @@ public class DelayedConsumerTests : TestBase
     string table = "DelayedConsumerTests";
 
     [Fact]
-    public void Single_bytes()
-    {
-        DelayedTestDataBuilder.SendData(table);
-        var consumer = new DelayedQueueManager(table, SqlConnection);
-        var result = consumer.ConsumeBytes().Result;
-        ObjectApprover.VerifyWithJson(result);
-    }
-
-    [Fact]
-    public void Single_bytes_nulls()
-    {
-        DelayedTestDataBuilder.SendNullData(table);
-        var consumer = new DelayedQueueManager(table, SqlConnection);
-        var result = consumer.ConsumeBytes().Result;
-        ObjectApprover.VerifyWithJson(result);
-    }
-
-    [Fact]
-    public void Single_stream()
+    public void Single()
     {
         DelayedTestDataBuilder.SendData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
@@ -38,7 +20,7 @@ public class DelayedConsumerTests : TestBase
     }
 
     [Fact]
-    public void Single_stream_nulls()
+    public void Single_nulls()
     {
         DelayedTestDataBuilder.SendNullData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
@@ -49,23 +31,7 @@ public class DelayedConsumerTests : TestBase
     }
 
     [Fact]
-    public void Batch_bytes()
-    {
-        DelayedTestDataBuilder.SendMultipleData(table);
-
-        var consumer = new DelayedQueueManager(table, SqlConnection);
-        var messages = new List<IncomingDelayedBytesMessage>();
-        var result = consumer.ConsumeBytes(
-                size: 3,
-                action: message => { messages.Add(message); })
-            .Result;
-        Assert.Equal(3, result.LastRowVersion);
-        Assert.Equal(3, result.Count);
-        ObjectApprover.VerifyWithJson(messages);
-    }
-
-    [Fact]
-    public void Batch_stream()
+    public void Batch()
     {
         DelayedTestDataBuilder.SendMultipleData(table);
 

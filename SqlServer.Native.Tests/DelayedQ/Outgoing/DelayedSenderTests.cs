@@ -19,6 +19,7 @@ public class DelayedSenderTests : TestBase
         Send(message);
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
+
     [Fact]
     public void Single_bytes_nulls()
     {

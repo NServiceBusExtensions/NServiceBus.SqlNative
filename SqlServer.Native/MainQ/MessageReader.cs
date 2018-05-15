@@ -4,17 +4,6 @@ using NServiceBus.Transport.SqlServerNative;
 
 static class MessageReader
 {
-    public static IncomingBytesMessage ReadBytesMessage(this SqlDataReader dataReader)
-    {
-        return new IncomingBytesMessage(
-            id: dataReader.GetGuid(0),
-            rowVersion: dataReader.GetInt64(1),
-            expires: dataReader.ValueOrNull<DateTime?>(2),
-            headers: dataReader.ValueOrNull<string>(3),
-            body: dataReader.ValueOrNull<byte[]>(5)
-        );
-    }
-
     public static IncomingStreamMessage ReadStreamMessage(this SqlDataReader dataReader, params IDisposable[] cleanups)
     {
         var id = dataReader.GetGuid(0);

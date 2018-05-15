@@ -8,26 +8,9 @@ public class ReaderTests : TestBase
 {
     string table = "ReaderTests";
 
-    [Fact]
-    public void Single_bytes()
-    {
-        TestDataBuilder.SendData(table);
-        var reader = new QueueManager(table, SqlConnection);
-        var result = reader.ReadBytes(1).Result;
-        ObjectApprover.VerifyWithJson(result);
-    }
 
     [Fact]
-    public void Single_bytes_nulls()
-    {
-        TestDataBuilder.SendNullData(table);
-        var reader = new QueueManager(table, SqlConnection);
-        var result = reader.ReadBytes(1).Result;
-        ObjectApprover.VerifyWithJson(result);
-    }
-
-    [Fact]
-    public void Single_stream()
+    public void Single()
     {
         TestDataBuilder.SendData(table);
         var reader = new QueueManager(table, SqlConnection);
@@ -38,7 +21,7 @@ public class ReaderTests : TestBase
     }
 
     [Fact]
-    public void Single_stream_nulls()
+    public void Single_nulls()
     {
         TestDataBuilder.SendNullData(table);
         var reader = new QueueManager(table, SqlConnection);
@@ -49,23 +32,7 @@ public class ReaderTests : TestBase
     }
 
     [Fact]
-    public void Batch_bytes()
-    {
-        TestDataBuilder.SendMultipleData(table);
-
-        var reader = new QueueManager(table, SqlConnection);
-        var messages = new List<IncomingBytesMessage>();
-        var result = reader.ReadBytes(size: 3,
-                startRowVersion: 2,
-                action: message => { messages.Add(message); })
-            .Result;
-        Assert.Equal(4, result.LastRowVersion);
-        Assert.Equal(3, result.Count);
-        ObjectApprover.VerifyWithJson(messages);
-    }
-
-    [Fact]
-    public void Batch_stream()
+    public void Batch()
     {
         TestDataBuilder.SendMultipleData(table);
 

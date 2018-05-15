@@ -9,25 +9,7 @@ public class DelayedReaderTests : TestBase
     string table = "DelayedReaderTests";
 
     [Fact]
-    public void Single_bytes()
-    {
-        DelayedTestDataBuilder.SendData(table);
-        var reader = new DelayedQueueManager(table, SqlConnection);
-        var result = reader.ReadBytes(1).Result;
-        ObjectApprover.VerifyWithJson(result);
-    }
-
-    [Fact]
-    public void Single_bytes_nulls()
-    {
-        DelayedTestDataBuilder.SendNullData(table);
-        var reader = new DelayedQueueManager(table, SqlConnection);
-        var result = reader.ReadBytes(1).Result;
-        ObjectApprover.VerifyWithJson(result);
-    }
-
-    [Fact]
-    public void Single_stream()
+    public void Single()
     {
         DelayedTestDataBuilder.SendData(table);
         var reader = new DelayedQueueManager(table, SqlConnection);
@@ -38,7 +20,7 @@ public class DelayedReaderTests : TestBase
     }
 
     [Fact]
-    public void Single_stream_nulls()
+    public void Single_nulls()
     {
         DelayedTestDataBuilder.SendNullData(table);
         var reader = new DelayedQueueManager(table, SqlConnection);
@@ -49,23 +31,7 @@ public class DelayedReaderTests : TestBase
     }
 
     [Fact]
-    public void Batch_bytes()
-    {
-        DelayedTestDataBuilder.SendMultipleData(table);
-
-        var reader = new DelayedQueueManager(table, SqlConnection);
-        var messages = new List<IncomingDelayedBytesMessage>();
-        var result = reader.ReadBytes(size: 3,
-                startRowVersion: 2,
-                action: message => { messages.Add(message); })
-            .Result;
-        Assert.Equal(4, result.LastRowVersion);
-        Assert.Equal(3, result.Count);
-        ObjectApprover.VerifyWithJson(messages);
-    }
-
-    [Fact]
-    public void Batch_stream()
+    public void Batch()
     {
         DelayedTestDataBuilder.SendMultipleData(table);
 
