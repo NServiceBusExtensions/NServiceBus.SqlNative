@@ -1,4 +1,6 @@
-﻿using NServiceBus.Transport.SqlServerNative;
+﻿using System.Collections.Concurrent;
+using System.Linq;
+using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
 using Xunit.Abstractions;
@@ -35,11 +37,13 @@ public class ConsumerTests : TestBase
         TestDataBuilder.SendMultipleData(table);
 
         var consumer = new QueueManager(table, SqlConnection);
+        var messages = new ConcurrentBag<IncomingVerifyTarget>();
         var result = consumer.Consume(size: 3,
-                action: message => { })
+                action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
         Assert.Equal(3, result.Count);
         Assert.Equal(3, result.LastRowVersion);
+        ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Id));
     }
 
     public ConsumerTests(ITestOutputHelper output) : base(output)

@@ -17,6 +17,7 @@ static class DelayedTestDataBuilder
             sender.Send(message).Await();
         }
     }
+
     public static void SendNullData(string table)
     {
         using (var connection = Connection.OpenConnection())
@@ -27,19 +28,22 @@ static class DelayedTestDataBuilder
             sender.Send(message).Await();
         }
     }
+
     public static void SendMultipleData(string table)
     {
         using (var connection = Connection.OpenConnection())
         {
             var sender = new DelayedQueueManager(table, connection);
-            sender.Send(new List<OutgoingDelayedMessage>
-                {
-                    BuildMessage(),
-                    BuildNullMessage(),
-                    BuildMessage(),
-                    BuildNullMessage(),
-                    BuildMessage()
-                }).Await();
+            var time = dateTime;
+            sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}"))).Await();
+            time = time.AddSeconds(1);
+            sender.Send(new OutgoingDelayedMessage(time, "{}", bodyBytes: null)).Await();
+            time = time.AddSeconds(1);
+            sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}"))).Await();
+            time = time.AddSeconds(1);
+            sender.Send(new OutgoingDelayedMessage(time, "{}", bodyBytes: null)).Await();
+            time = time.AddSeconds(1);
+            sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}"))).Await();
         }
     }
 
@@ -50,6 +54,6 @@ static class DelayedTestDataBuilder
 
     public static OutgoingDelayedMessage BuildNullMessage()
     {
-        return new OutgoingDelayedMessage(dateTime, "{}",bodyBytes: null);
+        return new OutgoingDelayedMessage(dateTime, "{}", bodyBytes: null);
     }
 }

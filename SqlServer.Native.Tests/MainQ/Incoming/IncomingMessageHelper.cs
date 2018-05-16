@@ -3,7 +3,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 static class IncomingMessageHelper
 {
-    public static object ToVerifyTarget(this IncomingMessage result)
+    public static IncomingVerifyTarget ToVerifyTarget(this IncomingMessage result)
     {
         string readToEnd = null;
         if (result.Body != null)
@@ -14,13 +14,12 @@ static class IncomingMessageHelper
             }
         }
 
-        return new
+        return new IncomingVerifyTarget
         {
-            result.Expires,
-            result.Headers,
-            result.Id,
-            result.RowVersion,
-            bodyString = readToEnd
+            Expires= result.Expires,
+            Headers= result.Headers,
+            Id=result.Id,
+            Body = readToEnd
         };
     }
 }

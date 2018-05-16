@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Linq;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -36,13 +37,13 @@ public class DelayedConsumerTests : TestBase
         DelayedTestDataBuilder.SendMultipleData(table);
 
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        var messages = new List<object>();
+        var messages = new ConcurrentBag<IncomingDelayedVerifyTarget>();
         var result = consumer.Consume(size: 3,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
         Assert.Equal(3, result.Count);
         Assert.Equal(3, result.LastRowVersion);
-        ObjectApprover.VerifyWithJson(messages);
+        ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Due));
     }
 
     public DelayedConsumerTests(ITestOutputHelper output) : base(output)

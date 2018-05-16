@@ -19,6 +19,7 @@ public class WithDeduplicationTests : TestBase
         Send(message);
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
+
     [Fact]
     public void Single_WithDuplicate()
     {
@@ -47,6 +48,7 @@ public class WithDeduplicationTests : TestBase
         Send(messages);
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
+
     [Fact]
     public void Batch_WithFirstDuplicate()
     {
@@ -60,6 +62,7 @@ public class WithDeduplicationTests : TestBase
         Send(messages);
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
+
     [Fact]
     public void Batch_WithSecondDuplicate()
     {
@@ -73,7 +76,6 @@ public class WithDeduplicationTests : TestBase
         Send(messages);
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
     }
-
 
     void Send(List<OutgoingMessage> messages)
     {

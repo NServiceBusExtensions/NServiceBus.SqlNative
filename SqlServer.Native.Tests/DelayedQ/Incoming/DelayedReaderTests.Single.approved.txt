@@ -1,6 +1,5 @@
 ﻿{
-  "Due": "2000-01-01T01:01:01",
   "Headers": "headers",
-  "RowVersion": 1,
-  "bodyString": "{}"
+  "Due": "2000-01-01T01:01:01",
+  "Body": "{}"
 }

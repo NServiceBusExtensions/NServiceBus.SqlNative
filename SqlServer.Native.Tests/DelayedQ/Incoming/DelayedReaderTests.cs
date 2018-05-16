@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Linq;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -36,14 +37,15 @@ public class DelayedReaderTests : TestBase
         DelayedTestDataBuilder.SendMultipleData(table);
 
         var reader = new DelayedQueueManager(table, SqlConnection);
-        var messages = new List<object>();
-        var result = reader.Read(size: 3,
+        var messages = new ConcurrentBag<IncomingDelayedVerifyTarget>();
+        var result = reader.Read(
+                size: 3,
                 startRowVersion: 2,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
         Assert.Equal(4, result.LastRowVersion);
         Assert.Equal(3, result.Count);
-        ObjectApprover.VerifyWithJson(messages);
+        ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Due));
     }
 
     public DelayedReaderTests(ITestOutputHelper output) : base(output)
