@@ -38,11 +38,25 @@ public class ConsumerTests : TestBase
 
         var consumer = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
-        var result = consumer.Consume(size: 3,
+        var result = consumer.Consume(
+                size: 3,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
         Assert.Equal(3, result.Count);
-        Assert.Equal(3, result.LastRowVersion);
+    }
+
+    [Fact]
+    public void Batch_all()
+    {
+        TestDataBuilder.SendMultipleData(table);
+
+        var consumer = new QueueManager(table, SqlConnection);
+        var messages = new ConcurrentBag<IncomingVerifyTarget>();
+        var result = consumer.Consume(
+                size: 10,
+                action: message => { messages.Add(message.ToVerifyTarget()); })
+            .Result;
+        Assert.Equal(5, result.Count);
         ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Id));
     }
 
