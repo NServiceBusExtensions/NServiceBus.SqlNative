@@ -57,7 +57,7 @@ if(db_id('{database}') is null)
             conn.Open();
             using (var command = conn.CreateCommand())
             {
-                command.CommandText = $"SELECT * FROM {table}";
+                command.CommandText = $"SELECT Id FROM {table}";
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())

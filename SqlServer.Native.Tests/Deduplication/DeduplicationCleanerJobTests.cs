@@ -24,7 +24,10 @@ public class DeduplicationCleanerJobTests : TestBase
         var message2 = BuildBytesMessage("00000000-0000-0000-0000-000000000002");
         Send(message2);
         var expireWindow = DateTime.UtcNow - now;
-        var cleaner = new DeduplicationCleanerJob(Connection.OpenAsyncConnection, (message, exception) => { }, expireWindow,
+        var cleaner = new DeduplicationCleanerJob(
+            Connection.OpenAsyncConnection,
+            (message, exception) => { },
+            expireWindow,
             frequencyToRunCleanup: TimeSpan.FromMilliseconds(10));
         cleaner.Start();
         Thread.Sleep(100);
