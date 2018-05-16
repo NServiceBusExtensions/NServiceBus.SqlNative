@@ -17,7 +17,7 @@ public class WithDeduplicationTests : TestBase
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public class WithDeduplicationTests : TestBase
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         Send(message);
         Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
     //[Fact]
     //public void Single_WithPurgedDuplicate()
@@ -46,7 +46,7 @@ public class WithDeduplicationTests : TestBase
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public class WithDeduplicationTests : TestBase
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class WithDeduplicationTests : TestBase
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     void Send(List<OutgoingMessage> messages)

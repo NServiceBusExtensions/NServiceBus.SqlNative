@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using NServiceBus.Transport.SqlServerNative;
@@ -25,7 +24,7 @@ public class DeduplicationManagerTests : TestBase
         Send(message2);
         var cleaner = new DeduplicationManager(SqlConnection);
         cleaner.CleanupItemsOlderThan(now).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData("Deduplication").Select(x => x.Values.First()));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication"));
     }
 
     void Send(OutgoingMessage message)

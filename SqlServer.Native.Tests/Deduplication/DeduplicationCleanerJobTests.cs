@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using NServiceBus.Transport.SqlServerNative;
@@ -30,7 +29,7 @@ public class DeduplicationCleanerJobTests : TestBase
         cleaner.Start();
         Thread.Sleep(100);
         cleaner.Stop().Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData("Deduplication").Select(x=>x.Values.First()));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication"));
     }
 
     void Send(OutgoingMessage message)

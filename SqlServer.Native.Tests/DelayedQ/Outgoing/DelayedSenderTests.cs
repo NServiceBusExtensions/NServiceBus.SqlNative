@@ -17,7 +17,7 @@ public class DelayedSenderTests : TestBase
     {
         var message = BuildBytesMessage();
         Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public class DelayedSenderTests : TestBase
     {
         var message = BuildBytesNullMessage();
         Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class DelayedSenderTests : TestBase
     {
         var message = BuildStreamMessage();
         Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class DelayedSenderTests : TestBase
 
         var message = BuildBytesNullMessage();
         sender.Send( message).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public class DelayedSenderTests : TestBase
             BuildStreamMessage()
         };
         Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class DelayedSenderTests : TestBase
             BuildStreamNullMessage()
         };
         Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     void Send(OutgoingDelayedMessage message)
