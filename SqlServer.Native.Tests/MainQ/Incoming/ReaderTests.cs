@@ -38,12 +38,27 @@ public class ReaderTests : TestBase
 
         var reader = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
-        var result = reader.Read(size: 3,
+        var result = reader.Read(
+                size: 3,
                 startRowVersion: 2,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
         Assert.Equal(4, result.LastRowVersion);
         Assert.Equal(3, result.Count);
+    }
+
+    [Fact]
+    public void Batch_all()
+    {
+        TestDataBuilder.SendMultipleData(table);
+
+        var reader = new QueueManager(table, SqlConnection);
+        var messages = new ConcurrentBag<IncomingVerifyTarget>();
+        var result = reader.Read(
+                size: 10,
+                startRowVersion: 1,
+                action: message => { messages.Add(message.ToVerifyTarget()); })
+            .Result;
         ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Id));
     }
 
