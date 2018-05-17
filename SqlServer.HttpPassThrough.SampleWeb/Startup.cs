@@ -3,7 +3,6 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,7 +40,7 @@ public class Startup
         return ConnectionHelpers.OpenConnection(nsbConnectionString, cancellation);
     }
 
-    public void Configure(IApplicationBuilder builder, IHostingEnvironment env)
+    public void Configure(IApplicationBuilder builder)
     {
         builder.UseMiddleware<LogContextMiddleware>();
         builder.AddSqlHttpPassThroughBadExceptionMiddleware();
