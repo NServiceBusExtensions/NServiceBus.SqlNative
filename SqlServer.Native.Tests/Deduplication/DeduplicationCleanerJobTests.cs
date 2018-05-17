@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using NServiceBus.Transport.SqlServerNative;
@@ -25,12 +24,15 @@ public class DeduplicationCleanerJobTests : TestBase
         var message2 = BuildBytesMessage("00000000-0000-0000-0000-000000000002");
         Send(message2);
         var expireWindow = DateTime.UtcNow - now;
-        var cleaner = new DeduplicationCleanerJob(Connection.OpenAsyncConnection, (message, exception) => { }, expireWindow,
+        var cleaner = new DeduplicationCleanerJob(
+            Connection.OpenAsyncConnection,
+            (message, exception) => { },
+            expireWindow,
             frequencyToRunCleanup: TimeSpan.FromMilliseconds(10));
         cleaner.Start();
         Thread.Sleep(100);
         cleaner.Stop().Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData("Deduplication").Select(x=>x.Values.First()));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication"));
     }
 
     void Send(OutgoingMessage message)

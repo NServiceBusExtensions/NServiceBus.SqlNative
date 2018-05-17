@@ -1,24 +1,10 @@
 ﻿[
   {
-    "Id": "00000000-0000-0000-0000-000000000001",
-    "CorrelationId": null,
-    "ReplyToAddress": null,
-    "Recoverable": true,
-    "Expires": null,
     "Headers": "{}",
-    "BodyString": null,
-    "Body": null,
-    "RowVersion": 1
+    "Id": "00000000-0000-0000-0000-000000000001"
   },
   {
-    "Id": "00000000-0000-0000-0000-000000000002",
-    "CorrelationId": null,
-    "ReplyToAddress": null,
-    "Recoverable": true,
-    "Expires": null,
     "Headers": "{}",
-    "BodyString": null,
-    "Body": null,
-    "RowVersion": 2
+    "Id": "00000000-0000-0000-0000-000000000002"
   }
 ]

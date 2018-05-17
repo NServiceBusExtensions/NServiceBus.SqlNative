@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Linq;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -9,74 +10,40 @@ public class DelayedConsumerTests : TestBase
     string table = "DelayedConsumerTests";
 
     [Fact]
-    public void Single_bytes()
+    public void Single()
     {
         DelayedTestDataBuilder.SendData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        var result = consumer.ConsumeBytes().Result;
-        ObjectApprover.VerifyWithJson(result);
-    }
-
-    [Fact]
-    public void Single_bytes_nulls()
-    {
-        DelayedTestDataBuilder.SendNullData(table);
-        var consumer = new DelayedQueueManager(table, SqlConnection);
-        var result = consumer.ConsumeBytes().Result;
-        ObjectApprover.VerifyWithJson(result);
-    }
-
-    [Fact]
-    public void Single_stream()
-    {
-        DelayedTestDataBuilder.SendData(table);
-        var consumer = new DelayedQueueManager(table, SqlConnection);
-        using (var result = consumer.ConsumeStream().Result)
+        using (var result = consumer.Consume().Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
     }
 
     [Fact]
-    public void Single_stream_nulls()
+    public void Single_nulls()
     {
         DelayedTestDataBuilder.SendNullData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        using (var result = consumer.ConsumeStream().Result)
+        using (var result = consumer.Consume().Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
     }
 
     [Fact]
-    public void Batch_bytes()
+    public void Batch()
     {
         DelayedTestDataBuilder.SendMultipleData(table);
 
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        var messages = new List<IncomingDelayedBytesMessage>();
-        var result = consumer.ConsumeBytes(
-                size: 3,
-                action: message => { messages.Add(message); })
-            .Result;
-        Assert.Equal(3, result.LastRowVersion);
-        Assert.Equal(3, result.Count);
-        ObjectApprover.VerifyWithJson(messages);
-    }
-
-    [Fact]
-    public void Batch_stream()
-    {
-        DelayedTestDataBuilder.SendMultipleData(table);
-
-        var consumer = new DelayedQueueManager(table, SqlConnection);
-        var messages = new List<object>();
-        var result = consumer.ConsumeStream(size: 3,
+        var messages = new ConcurrentBag<IncomingDelayedVerifyTarget>();
+        var result = consumer.Consume(size: 3,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
         Assert.Equal(3, result.Count);
         Assert.Equal(3, result.LastRowVersion);
-        ObjectApprover.VerifyWithJson(messages);
+        ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Due));
     }
 
     public DelayedConsumerTests(ITestOutputHelper output) : base(output)

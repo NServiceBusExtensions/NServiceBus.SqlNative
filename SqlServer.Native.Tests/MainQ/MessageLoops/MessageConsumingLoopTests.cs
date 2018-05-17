@@ -47,7 +47,7 @@ public class MessageConsumingLoopTests : TestBase
 
         var count = 0;
 
-        Task Callback(SqlConnection connection, IncomingStreamMessage message, CancellationToken cancellation)
+        Task Callback(SqlConnection connection, IncomingMessage message, CancellationToken cancellation)
         {
             count++;
             if (count == 5)
@@ -71,11 +71,11 @@ public class MessageConsumingLoopTests : TestBase
         Assert.Equal(5, count);
     }
 
-    async Task SendMessages()
+    Task SendMessages()
     {
         var sender = new QueueManager(table, SqlConnection);
 
-        await sender.Send(new List<OutgoingMessage>
+        return sender.Send(new List<OutgoingMessage>
             {
                 BuildMessage("00000000-0000-0000-0000-000000000001"),
                 BuildMessage("00000000-0000-0000-0000-000000000002"),

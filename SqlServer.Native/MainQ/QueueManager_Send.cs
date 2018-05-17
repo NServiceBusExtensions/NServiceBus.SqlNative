@@ -33,11 +33,11 @@ values (
             string resultSql;
             if (deduplicate)
             {
-                resultSql = string.Format(dedupSql, deduplicationTable) + string.Format(sql, table);
+                resultSql = string.Format(dedupSql, deduplicationTable) + string.Format(sql, fullTableName);
             }
             else
             {
-                resultSql = string.Format(sql, table);
+                resultSql = string.Format(sql, fullTableName);
             }
 
             sendSql = ConnectionHelpers.WrapInNoCount(resultSql);

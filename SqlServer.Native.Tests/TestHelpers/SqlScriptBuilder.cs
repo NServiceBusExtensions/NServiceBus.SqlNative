@@ -31,8 +31,10 @@ public class SqlScriptBuilder
     {
         var builder = new SqlConnectionStringBuilder(sqlConnection.ConnectionString);
         var theServer = new Server(new ServerConnection(sqlConnection));
+
         var database = theServer.Databases[builder.InitialCatalog];
-        return string.Join("\n\n", GetScripts(database));
+        var buildScript = string.Join("\n\n", GetScripts(database));
+        return buildScript;
     }
 
     IEnumerable<string> GetScripts(Database database)
@@ -53,6 +55,7 @@ public class SqlScriptBuilder
         var options = new ScriptingOptions
         {
             ChangeTracking = true,
+            NoCollation = true,
         };
         return string.Join("\n\n", scriptable.Script(options)
             .Cast<string>()

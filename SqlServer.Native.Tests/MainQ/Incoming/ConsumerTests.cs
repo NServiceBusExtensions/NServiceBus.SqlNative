@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Linq;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -9,74 +10,54 @@ public class ConsumerTests : TestBase
     string table = "ConsumerTests";
 
     [Fact]
-    public void Single_bytes()
+    public void Single()
     {
         TestDataBuilder.SendData(table);
         var consumer = new QueueManager(table, SqlConnection);
-        var result = consumer.ConsumeBytes().Result;
-        ObjectApprover.VerifyWithJson(result);
-    }
-
-    [Fact]
-    public void Single_bytes_nulls()
-    {
-        TestDataBuilder.SendNullData(table);
-        var consumer = new QueueManager(table, SqlConnection);
-        var result = consumer.ConsumeBytes().Result;
-        ObjectApprover.VerifyWithJson(result);
-    }
-
-    [Fact]
-    public void Single_stream()
-    {
-        TestDataBuilder.SendData(table);
-        var consumer = new QueueManager(table, SqlConnection);
-        using (var result = consumer.ConsumeStream().Result)
+        using (var result = consumer.Consume().Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
     }
 
     [Fact]
-    public void Single_stream_nulls()
+    public void Single_nulls()
     {
         TestDataBuilder.SendNullData(table);
         var consumer = new QueueManager(table, SqlConnection);
-        using (var result = consumer.ConsumeStream().Result)
+        using (var result = consumer.Consume().Result)
         {
             ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
         }
     }
 
     [Fact]
-    public void Batch_bytes()
+    public void Batch()
     {
         TestDataBuilder.SendMultipleData(table);
 
         var consumer = new QueueManager(table, SqlConnection);
-        var messages = new List<IncomingBytesMessage>();
-        var result = consumer.ConsumeBytes(
+        var messages = new ConcurrentBag<IncomingVerifyTarget>();
+        var result = consumer.Consume(
                 size: 3,
-                action: message => { messages.Add(message); })
-            .Result;
-        Assert.Equal(3, result.LastRowVersion);
-        Assert.Equal(3, result.Count);
-        ObjectApprover.VerifyWithJson(messages);
-    }
-
-    [Fact]
-    public void Batch_stream()
-    {
-        TestDataBuilder.SendMultipleData(table);
-
-        var consumer = new QueueManager(table, SqlConnection);
-        var messages = new List<object>();
-        var result = consumer.ConsumeStream(size: 3,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
         Assert.Equal(3, result.Count);
-        Assert.Equal(3, result.LastRowVersion);
-        ObjectApprover.VerifyWithJson(messages);
+    }
+
+    [Fact]
+    public void Batch_all()
+    {
+        TestDataBuilder.SendMultipleData(table);
+
+        var consumer = new QueueManager(table, SqlConnection);
+        var messages = new ConcurrentBag<IncomingVerifyTarget>();
+        var result = consumer.Consume(
+                size: 10,
+                action: message => { messages.Add(message.ToVerifyTarget()); })
+            .Result;
+        Assert.Equal(5, result.Count);
+        ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Id));
     }
 
     public ConsumerTests(ITestOutputHelper output) : base(output)

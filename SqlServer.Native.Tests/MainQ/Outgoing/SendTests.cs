@@ -18,7 +18,7 @@ public class SendTests : TestBase
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class SendTests : TestBase
             transaction.Commit();
         }
 
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class SendTests : TestBase
 
         var message = BuildBytesNullMessage("00000000-0000-0000-0000-000000000001");
         sender.Send(message).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class SendTests : TestBase
     {
         var message = BuildStreamMessage("00000000-0000-0000-0000-000000000001");
         Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class SendTests : TestBase
     {
         var message = BuildStreamMessage("00000000-0000-0000-0000-000000000001");
         Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -70,7 +70,7 @@ public class SendTests : TestBase
             BuildStreamMessage("00000000-0000-0000-0000-000000000002")
         };
         Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -82,7 +82,8 @@ public class SendTests : TestBase
             BuildStreamNullMessage("00000000-0000-0000-0000-000000000002")
         };
         Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table));
+
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
 
     void Send(List<OutgoingMessage> messages)
