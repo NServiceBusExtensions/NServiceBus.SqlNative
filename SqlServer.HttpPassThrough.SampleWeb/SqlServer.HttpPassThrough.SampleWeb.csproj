@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="1.0.0-beta.26" />
+    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="1.0.0-beta.29" />
     <ProjectReference Include="..\SqlServer.HttpPassThrough\SqlServer.HttpPassThrough.csproj" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
   </ItemGroup>
