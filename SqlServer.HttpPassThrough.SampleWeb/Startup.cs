@@ -42,7 +42,7 @@ public class Startup
     public void Configure(IApplicationBuilder builder)
     {
         builder.UseMiddleware<LogContextMiddleware>();
-        builder.AddSqlHttpPassThroughBadExceptionMiddleware();
+        builder.AddSqlHttpPassThroughBadRequestMiddleware();
         builder.UseMvc();
     }
 }

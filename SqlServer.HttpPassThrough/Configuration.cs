@@ -13,7 +13,6 @@ namespace SqlHttpPassThrough
     {
         public static void AddSqlHttpPassThrough(this IServiceCollection services,
             Func<CancellationToken, Task<SqlConnection>> connectionFunc,
-
             Action<HttpContext, PassThroughMessage> sendCallback = null,
             string originatingEndpoint = "SqlHttpPassThrough",
             string originatingMachine = null)
@@ -43,7 +42,7 @@ namespace SqlHttpPassThrough
             services.AddSingleton<IHostedService>(new DedupService(connectionFunc));
         }
 
-        public static void AddSqlHttpPassThroughBadExceptionMiddleware(this IApplicationBuilder builder)
+        public static void AddSqlHttpPassThroughBadRequestMiddleware(this IApplicationBuilder builder)
         {
             builder.UseMiddleware<BadRequestMiddleware>();
         }
