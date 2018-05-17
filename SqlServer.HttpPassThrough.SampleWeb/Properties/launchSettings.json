@@ -9,7 +9,8 @@
   "profiles": {
     "MessageHttpPassThrough": {
       "commandName": "Project",
-      "launchBrowser": false,
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5000/test",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

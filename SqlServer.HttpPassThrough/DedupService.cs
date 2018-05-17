@@ -30,6 +30,11 @@ class DedupService : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        return job.Stop();
+        if (job != null)
+        {
+            return job.Stop();
+        }
+
+        return Task.CompletedTask;
     }
 }
