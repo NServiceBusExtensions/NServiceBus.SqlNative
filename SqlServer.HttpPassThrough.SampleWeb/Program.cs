@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.IO;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static void Main()
     {
-        var webHost = WebHostBuilder.Build();
-
-
+        var builder = WebHost.CreateDefaultBuilder();
+        builder.UseContentRoot(Directory.GetCurrentDirectory());
+        builder.UseStartup<Startup>();
+        var webHost = builder.Build();
         webHost.Run();
     }
 }

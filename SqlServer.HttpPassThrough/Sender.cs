@@ -53,8 +53,7 @@ class Sender
             headers: headersString,
             bodyBytes: Encoding.UTF8.GetBytes(message.Body));
         var queueManager = new QueueManager(message.Endpoint, transaction,
-            deduplicate: true,
-            deduplicationTable: "MessagePassThroughDeduplication");
+            deduplicate: true);
         var attachmentExpiry = DateTime.UtcNow.AddDays(10);
         var tasks = SendAttachments(transaction, attachmentExpiry, cancellation, message).ToList();
         tasks.Add(queueManager.Send(outgoingMessage, cancellation));

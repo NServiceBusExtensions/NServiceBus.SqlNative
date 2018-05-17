@@ -12,12 +12,11 @@ using SqlHttpPassThrough;
 
 public class Startup
 {
-    string nsbConnectionString;
+    string nsbConnectionString = @"Data Source=.\SQLExpress;Database=NServiceBusNativeTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
 
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
-        nsbConnectionString = Configuration.GetConnectionString("NServiceBus");
     }
 
     public IConfiguration Configuration { get; }

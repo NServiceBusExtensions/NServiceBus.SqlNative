@@ -23,7 +23,7 @@ class DedupService : IHostedService
             Environment.FailFast(message, exception);
         }
 
-        job = new DeduplicationCleanerJob(connectionBuilder, CriticalError, table: "MessagePassThroughDeduplication");
+        job = new DeduplicationCleanerJob(connectionBuilder, CriticalError);
         job.Start();
         return Task.CompletedTask;
     }
