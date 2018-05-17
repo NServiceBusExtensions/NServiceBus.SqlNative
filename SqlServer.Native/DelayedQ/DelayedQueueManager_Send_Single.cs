@@ -7,7 +7,7 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         protected override SqlCommand CreateSendCommand(OutgoingDelayedMessage message)
         {
-            var command = connection.CreateCommand(transaction, string.Format(SendSql, table));
+            var command = connection.CreateCommand(transaction, string.Format(SendSql, fullTableName));
             var parameters = command.Parameters;
             parameters.Add("Due", SqlDbType.DateTime).Value = message.Due;
             parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;

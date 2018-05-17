@@ -18,9 +18,9 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// Creates a queue.
         /// </summary>
-        public async Task Create(bool createDecodedBodyComputedColumn = true, CancellationToken cancellation = default)
+        public Task Create(bool createDecodedBodyComputedColumn = true, CancellationToken cancellation = default)
         {
-            await InnerCreate(createDecodedBodyComputedColumn, null, cancellation).ConfigureAwait(false);
+            return InnerCreate(createDecodedBodyComputedColumn, null, cancellation);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public Task Drop(CancellationToken cancellation = default)
         {
-            return connection.DropTable(transaction, table, cancellation);
+            return connection.DropTable(transaction, fullTableName, cancellation);
         }
 
         Task InnerCreate(bool createDecodedBodyComputedColumn, string computedColumnSql, CancellationToken cancellation)
@@ -42,7 +42,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 computedColumnSql = string.Empty;
             }
 
-            var commandText = string.Format(CreateTableSql, table, computedColumnSql);
+            var commandText = string.Format(CreateTableSql, fullTableName, computedColumnSql);
             return connection.ExecuteCommand(transaction, commandText, cancellation);
         }
 

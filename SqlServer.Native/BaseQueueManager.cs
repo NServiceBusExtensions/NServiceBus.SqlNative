@@ -5,28 +5,54 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public abstract partial class BaseQueueManager<TIncoming,TOutgoing>
-        where TIncoming: IIncomingMessage
+    public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
+        where TIncoming : IIncomingMessage
     {
-        protected string table;
+        protected string fullTableName;
         protected SqlConnection connection;
         protected SqlTransaction transaction;
 
-        protected BaseQueueManager(string table, SqlConnection connection)
+        protected BaseQueueManager(string table, SqlConnection connection, string schema) :
+            this(table, connection, schema, true)
         {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
-            Guard.AgainstNull(connection, nameof(connection));
-            this.table = table;
-            this.connection = connection;
         }
 
-        protected BaseQueueManager(string table, SqlTransaction transaction)
+        protected BaseQueueManager(string table, SqlConnection connection, string schema, bool sanitize)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNullOrEmpty(schema, nameof(schema));
+            Guard.AgainstNull(connection, nameof(connection));
+            this.connection = connection;
+
+            if (sanitize)
+            {
+                table = SqlSanitizer.Sanitize(table);
+                schema = SqlSanitizer.Sanitize(schema);
+            }
+
+            fullTableName = $"{schema}.{table}";
+        }
+
+        protected BaseQueueManager(string table, SqlTransaction transaction, string schema = "dbo") :
+            this(table, transaction, schema, true)
+        {
+        }
+
+        protected BaseQueueManager(string table, SqlTransaction transaction, string schema, bool sanitize)
+        {
+            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNullOrEmpty(schema, nameof(schema));
             Guard.AgainstNull(transaction, nameof(transaction));
-            this.table = table;
             this.transaction = transaction;
             connection = transaction.Connection;
+
+            if (sanitize)
+            {
+                table = SqlSanitizer.Sanitize(table);
+                schema = SqlSanitizer.Sanitize(schema);
+            }
+
+            fullTableName = $"{schema}.{table}";
         }
 
         async Task<IncomingResult> ReadMultiple(SqlCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
