@@ -54,11 +54,11 @@ public class ReaderTests : TestBase
 
         var reader = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
-        var result = reader.Read(
+        reader.Read(
                 size: 10,
                 startRowVersion: 1,
                 action: message => { messages.Add(message.ToVerifyTarget()); })
-            .Result;
+            .Await();
         ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Id));
     }
 
