@@ -22,8 +22,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddCors();
-        services.AddSqlHttpPassThrough(OpenConnection,AmendMessage);
+        services.AddSqlHttpPassThrough(OpenConnection, AmendMessage);
         services.AddMvcCore();
     }
 
@@ -31,7 +30,7 @@ public class Startup
     {
         message.ExtraHeaders = new Dictionary<string, string>
         {
-            { "MessagePassThrough.Version", AssemblyVersion.Version }
+            {"MessagePassThrough.Version", AssemblyVersion.Version}
         };
     }
 
@@ -44,13 +43,6 @@ public class Startup
     {
         builder.UseMiddleware<LogContextMiddleware>();
         builder.AddSqlHttpPassThroughBadExceptionMiddleware();
-        builder.UseCors(options =>
-        {
-            options.AllowAnyOrigin();
-            options.AllowAnyMethod();
-            options.AllowAnyHeader();
-            options.AllowCredentials();
-        });
-       builder.UseMvc();
+        builder.UseMvc();
     }
 }
