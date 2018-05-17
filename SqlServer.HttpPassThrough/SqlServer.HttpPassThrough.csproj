@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>NServiceBus.SqlServer.HttpPassThrough</AssemblyName>
+    <PackageName>NServiceBus.SqlServer.HttpPassThrough</PackageName>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.3" />
+    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="1.0.0-beta.26" />
+    <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
+  </ItemGroup>
+</Project>

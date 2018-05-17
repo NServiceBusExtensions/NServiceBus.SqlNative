@@ -1,0 +1,19 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": true,
+    "anonymousAuthentication": false,
+    "iisExpress": {
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "MessageHttpPassThrough": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "use64Bit": true
+    }
+  }
+}

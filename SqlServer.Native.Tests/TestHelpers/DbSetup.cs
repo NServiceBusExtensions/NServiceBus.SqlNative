@@ -11,10 +11,7 @@ public class DbSetup
         }
 
         init = true;
-        if (!Connection.IsUsingEnvironmentVariable)
-        {
-            SqlHelper.EnsureDatabaseExists(Connection.ConnectionString);
-        }
+        SqlHelper.EnsureDatabaseExists(Connection.ConnectionString);
         using (var sqlConnection = Connection.OpenConnection())
         {
             var manager = new QueueManager("error", sqlConnection);
