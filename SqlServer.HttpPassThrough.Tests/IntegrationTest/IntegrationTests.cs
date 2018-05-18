@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
 using MyNamespace;
 using NServiceBus;
 using NServiceBus.Attachments.Sql;
 using NServiceBus.Features;
+using NServiceBus.SqlServer.HttpPassThrough;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
@@ -44,32 +43,22 @@ public class IntegrationTests : TestBase
     static async Task SubmitMultipartForm()
     {
         var hostBuilder = new WebHostBuilder();
-        var dictionary = new Dictionary<string, string>
-        {
-            ["ConnectionStrings:NServiceBus"] = TestConnection.ConnectionString,
-        };
-        hostBuilder.ConfigureAppConfiguration(builder => builder.AddInMemoryCollection(dictionary));
         hostBuilder.UseStartup<Startup>();
         using (var server = new TestServer(hostBuilder))
         using (var client = server.CreateClient())
-        using (var content = new MultipartFormDataContent())
         {
             client.DefaultRequestHeaders.Referrer = new Uri("http://TheReferrer");
             var message = $"{{\"Property\": \"{JsonConvert.ToString(evilText)}\"}}";
-            content.Add(new StringContent(message), "message");
-            content.Headers.Add("MessageId", Guid.NewGuid().ToString());
-            content.Headers.Add("Destination", "Endpoint");
-            content.Headers.Add("MessageType", "MyMessage");
-            content.Headers.Add("MessageNamespace", "MyNamespace");
-            using (var file = new ByteArrayContent(Encoding.UTF8.GetBytes("foo")))
-            {
-                content.Add(file, "foofile", "foofile");
-
-                using (var response = await client.PostAsync("/SendMessage", content))
+            await ClientFormSender.Send(
+                client,
+                route: "/SendMessage",
+                message: message,
+                typeName: "MyMessage",
+                typeNamespace: "MyNamespace",
+                destination: "Endpoint", attachments: new Dictionary<string, byte[]>
                 {
-                    response.EnsureSuccessStatusCode();
-                }
-            }
+                    {"foofile", Encoding.UTF8.GetBytes("foo")}
+                });
         }
     }
 
