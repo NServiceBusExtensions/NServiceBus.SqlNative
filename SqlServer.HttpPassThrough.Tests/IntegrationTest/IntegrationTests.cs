@@ -58,14 +58,14 @@ public class IntegrationTests : TestBase
             var message = $"{{\"Property\": \"{JsonConvert.ToString(evilText)}\"}}";
             content.Add(new StringContent(message), "message");
             content.Headers.Add("MessageId", Guid.NewGuid().ToString());
-            content.Headers.Add("Endpoint", "Endpoint");
+            content.Headers.Add("Destination", "Endpoint");
             content.Headers.Add("MessageType", "MyMessage");
             content.Headers.Add("MessageNamespace", "MyNamespace");
             using (var file = new ByteArrayContent(Encoding.UTF8.GetBytes("foo")))
             {
                 content.Add(file, "foofile", "foofile");
 
-                using (var response = await client.PostAsync("/OutgoingMessage", content))
+                using (var response = await client.PostAsync("/SendMessage", content))
                 {
                     response.EnsureSuccessStatusCode();
                 }

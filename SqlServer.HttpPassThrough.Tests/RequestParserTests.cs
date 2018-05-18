@@ -22,7 +22,7 @@ public class RequestParserTests : TestBase
         {
             HeadersDictionary = new Dictionary<string, StringValues>
             {
-                {"Endpoint", "TheEndpoint"},
+                {"Destination", "TheEndpoint"},
                 {"MessageNamespace", "TheMessageNamespace"},
                 {"MessageType", "TheMessageType"},
                 {"MessageId", new Guid("00000000-0000-0000-0000-000000000001").ToString()},
@@ -45,7 +45,7 @@ public class RequestParserTests : TestBase
             extract.Attachments.Single().FileName,
             extract.Body,
             extract.ClientUrl,
-            extract.Endpoint,
+            extract.Destination,
             extract.Id,
             extract.Type
         });

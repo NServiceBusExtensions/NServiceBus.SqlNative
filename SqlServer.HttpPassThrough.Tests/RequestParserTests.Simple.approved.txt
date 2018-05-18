@@ -2,7 +2,7 @@
   "FileName": "attachment.txt",
   "Body": "{}",
   "ClientUrl": "TheReferer",
-  "Endpoint": "TheEndpoint",
+  "Destination": "TheEndpoint",
   "Id": "00000000-0000-0000-0000-000000000001",
   "Type": "TheMessageType"
 }

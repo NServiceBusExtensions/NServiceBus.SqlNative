@@ -33,7 +33,7 @@ static class HeaderReader
             MessageId = GetMessageId(headers),
             MessageType = messageType,
             MessageNamespace = messageNamespace,
-            Endpoint = headers.GetHeader("Endpoint"),
+            Destination = headers.GetHeader("Destination"),
             Referrer = headers.GetHeader(HeaderNames.Referer)
         };
     }

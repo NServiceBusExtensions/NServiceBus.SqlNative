@@ -8,7 +8,7 @@ class Program
 {
     static async Task Main()
     {
-        var connection = @"Data Source=.\SQLExpress;Database=NServiceBusNativeTests; Integrated Security=True;Max Pool Size=100";
+        var connection = @"Data Source=.\SQLExpress;Database=MessageHttpPassThroughTests; Integrated Security=True;Max Pool Size=100";
         var configuration = new EndpointConfiguration("SampleEndpoint");
         configuration.UsePersistence<LearningPersistence>();
         configuration.EnableAttachments(connection, TimeToKeep.Default);

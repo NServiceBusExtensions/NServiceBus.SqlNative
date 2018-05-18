@@ -13,7 +13,7 @@ static class RequestParser
         var form = await request.ReadFormAsync(cancellation).ConfigureAwait(false);
         return new RequestMessage
         {
-            Endpoint = incomingHeaders.Endpoint,
+            Destination = incomingHeaders.Destination,
             Id = incomingHeaders.MessageId,
             Type = incomingHeaders.MessageType,
             Namespace = incomingHeaders.MessageNamespace,

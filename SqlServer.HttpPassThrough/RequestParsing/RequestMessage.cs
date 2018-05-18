@@ -10,14 +10,14 @@ struct RequestMessage
     public string Namespace;
     public string Body;
     public List<Attachment> Attachments;
-    public string Endpoint;
+    public string Destination;
     public string ClientUrl;
     public Dictionary<string, object> ToDictionary()
     {
         return new Dictionary<string, object>
         {
             {"Id", Id},
-            {"Endpoint", Endpoint},
+            {"Destination", Destination},
             {"Type", Type},
             {"Body", Body},
             {"Attachments", Attachments.Select(x=>x.FileName).ToList()},

@@ -11,7 +11,7 @@ using SqlHttpPassThrough;
 
 public class Startup
 {
-    string nsbConnectionString = @"Data Source=.\SQLExpress;Database=NServiceBusNativeTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
+    string nsbConnectionString = @"Data Source=.\SQLExpress;Database=MessageHttpPassThroughTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
 
     public Startup(IConfiguration configuration)
     {

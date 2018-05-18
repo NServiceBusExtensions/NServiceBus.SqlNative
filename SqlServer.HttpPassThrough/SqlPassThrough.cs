@@ -21,7 +21,7 @@ class SqlPassThrough: ISqlPassThrough
         var requestMessage = await RequestParser.Extract(context.Request, cancellation).ConfigureAwait(false);
         var passThroughMessage = new PassThroughMessage
         {
-            Endpoint = requestMessage.Endpoint,
+            Endpoint = requestMessage.Destination,
             ClientUrl = requestMessage.ClientUrl,
             Type = requestMessage.Type,
             Namespace = requestMessage.Namespace,
