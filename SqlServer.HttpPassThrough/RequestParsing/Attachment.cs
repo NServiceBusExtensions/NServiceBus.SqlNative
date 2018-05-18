@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SqlHttpPassThrough
+namespace NServiceBus.SqlServer.HttpPassThrough
 {
     public class Attachment
     {

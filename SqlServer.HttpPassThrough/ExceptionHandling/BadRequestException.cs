@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SqlHttpPassThrough
+namespace NServiceBus.SqlServer.HttpPassThrough
 {
     public class BadRequestException : Exception
     {

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SqlHttpPassThrough;
+using NServiceBus.SqlServer.HttpPassThrough;
 
 [Route("SendMessage")]
 public class PassThroughController : ControllerBase

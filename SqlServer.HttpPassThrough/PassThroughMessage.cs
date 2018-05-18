@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SqlHttpPassThrough
+namespace NServiceBus.SqlServer.HttpPassThrough
 {
     public class PassThroughMessage
     {

@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NServiceBus.SqlServer.HttpPassThrough;
 using NServiceBus.Transport.SqlServerNative;
-using SqlHttpPassThrough;
 
 public class Startup
 {
@@ -22,7 +22,9 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddSqlHttpPassThrough(OpenConnection, AmendMessage);
+        var configuration = new PassThroughConfiguration(OpenConnection);
+        configuration.SendingCallback(AmendMessage);
+        services.AddSqlHttpPassThrough(configuration);
         services.AddMvcCore();
     }
 

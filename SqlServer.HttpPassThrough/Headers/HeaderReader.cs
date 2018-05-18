@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
-using SqlHttpPassThrough;
+using NServiceBus.SqlServer.HttpPassThrough;
 
 static class HeaderReader
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Text;
+using NServiceBus.SqlServer.HttpPassThrough;
 using NServiceBus.Transport.SqlServerNative;
-using SqlHttpPassThrough;
 
 class HeadersBuilder
 {
