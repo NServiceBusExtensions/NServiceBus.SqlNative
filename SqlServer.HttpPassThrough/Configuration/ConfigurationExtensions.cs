@@ -24,7 +24,6 @@ namespace NServiceBus.SqlServer.HttpPassThrough
             Guard.AgainstNull(services, nameof(services));
             Guard.AgainstNull(configuration, nameof(configuration));
 
-
             var headersBuilder = new HeadersBuilder(configuration.originatingEndpoint, configuration.originatingMachine);
             var sender = new Sender(configuration.connectionFunc, headersBuilder);
             var sqlPassThrough = new SqlPassThrough(configuration.sendCallback, sender);

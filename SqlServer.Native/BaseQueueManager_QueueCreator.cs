@@ -28,7 +28,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public Task Drop(CancellationToken cancellation = default)
         {
-            return connection.DropTable(transaction, fullTableName, cancellation);
+            return connection.DropTable(transaction, table, cancellation);
         }
 
         Task InnerCreate(bool createDecodedBodyComputedColumn, string computedColumnSql, CancellationToken cancellation)
@@ -42,7 +42,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 computedColumnSql = string.Empty;
             }
 
-            var commandText = string.Format(CreateTableSql, fullTableName, computedColumnSql);
+            var commandText = string.Format(CreateTableSql, table, computedColumnSql);
             return connection.ExecuteCommand(transaction, commandText, cancellation);
         }
 

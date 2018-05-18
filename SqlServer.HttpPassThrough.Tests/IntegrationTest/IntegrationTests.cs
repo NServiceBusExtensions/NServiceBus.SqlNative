@@ -25,7 +25,7 @@ public class IntegrationTests : TestBase
     {
         using (var connection = TestConnection.OpenConnection())
         {
-            var manager = new DeduplicationManager(connection);
+            var manager = new DeduplicationManager(connection, "Deduplication");
             await manager.Create();
         }
 

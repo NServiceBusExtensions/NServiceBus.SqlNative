@@ -9,49 +9,24 @@ namespace NServiceBus.Transport.SqlServerNative
     public class DeduplicationManager
     {
         SqlConnection connection;
+        Table table;
         SqlTransaction transaction;
-        string fullTableName;
 
-        public DeduplicationManager(SqlConnection connection, string table = "Deduplication", string schema = "dbo") :
-            this(connection, table, schema, true)
+        public DeduplicationManager(SqlConnection connection, Table table)
         {
-        }
-
-        public DeduplicationManager(SqlConnection connection, string table, string schema, bool sanitize)
-        {
-            Guard.AgainstNullOrEmpty(schema, nameof(schema));
-            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(connection, nameof(connection));
             this.connection = connection;
-
-            if (sanitize)
-            {
-                table = SqlSanitizer.Sanitize(table);
-                schema = SqlSanitizer.Sanitize(schema);
-            }
-
-            fullTableName = $"{schema}.{table}";
+            this.table = table;
         }
 
-        public DeduplicationManager(SqlTransaction transaction, string table = "Deduplication", string schema = "dbo") :
-            this(transaction, table, schema, true)
+        public DeduplicationManager(SqlTransaction transaction, Table table)
         {
-        }
-
-        public DeduplicationManager(SqlTransaction transaction, string table, string schema, bool sanitize)
-        {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
-            Guard.AgainstNullOrEmpty(schema, nameof(schema));
+            Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(transaction, nameof(transaction));
             this.transaction = transaction;
+            this.table = table;
             connection = transaction.Connection;
-            if (sanitize)
-            {
-                table = SqlSanitizer.Sanitize(table);
-                schema = SqlSanitizer.Sanitize(schema);
-            }
-
-            fullTableName = $"{schema}.{table}";
         }
 
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)
@@ -59,7 +34,7 @@ namespace NServiceBus.Transport.SqlServerNative
             using (var command = connection.CreateCommand())
             {
                 command.Transaction = transaction;
-                command.CommandText = $"delete from {fullTableName} where Created < @date";
+                command.CommandText = $"delete from {table} where Created < @date";
                 command.Parameters.Add("date", SqlDbType.DateTime2).Value = dateTime;
                 await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
             }
@@ -70,7 +45,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public Task Drop(CancellationToken cancellation = default)
         {
-            return connection.DropTable(transaction, fullTableName, cancellation);
+            return connection.DropTable(transaction, table, cancellation);
         }
 
         /// <summary>
@@ -78,7 +53,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public Task Create(CancellationToken cancellation = default)
         {
-            var dedupCommandText = string.Format(DeduplicationTableSql, fullTableName);
+            var dedupCommandText = string.Format(DeduplicationTableSql, table);
             return connection.ExecuteCommand(transaction, dedupCommandText, cancellation);
         }
 

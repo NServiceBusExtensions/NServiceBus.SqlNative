@@ -7,8 +7,8 @@ namespace NServiceBus.Transport.SqlServerNative
         bool deduplicate;
         string deduplicationTable;
 
-        public QueueManager(string table, SqlConnection connection, bool deduplicate = false, string deduplicationTable = "Deduplication", string schema = "dbo"):
-            base(table, connection, schema)
+        public QueueManager(Table table, SqlConnection connection, bool deduplicate = false, string deduplicationTable = "Deduplication"):
+            base(table, connection)
         {
             this.deduplicate = deduplicate;
             this.deduplicationTable = deduplicationTable;
@@ -16,8 +16,8 @@ namespace NServiceBus.Transport.SqlServerNative
             InitSendSql();
         }
 
-        public QueueManager(string table, SqlTransaction transaction, bool deduplicate = false, string deduplicationTable = "Deduplication", string schema = "dbo"):
-            base(table, transaction, schema)
+        public QueueManager(Table table, SqlTransaction transaction, bool deduplicate = false, string deduplicationTable = "Deduplication"):
+            base(table, transaction)
         {
             this.deduplicate = deduplicate;
             this.deduplicationTable = deduplicationTable;
