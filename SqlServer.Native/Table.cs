@@ -9,6 +9,8 @@
 
         public Table(string tableName, string schema, bool sanitize)
         {
+            Guard.AgainstNullOrEmpty(tableName, nameof(tableName));
+            Guard.AgainstNullOrEmpty(schema, nameof(schema));
             if (sanitize)
             {
                 TableName = SqlSanitizer.Sanitize(tableName);
