@@ -26,7 +26,7 @@ public class IntegrationTests : TestBase
         {
             var manager = new DeduplicationManager(connection, "Deduplication");
             await manager.Create();
-            await Installer.CreateTable(connection,"MessageAttachments");
+            await Installer.CreateTable(connection, "MessageAttachments");
         }
 
         var endpoint = await StartEndpoint();
