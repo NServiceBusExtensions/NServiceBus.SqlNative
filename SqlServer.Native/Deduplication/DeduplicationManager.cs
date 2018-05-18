@@ -8,25 +8,50 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public class DeduplicationManager
     {
-        string table;
         SqlConnection connection;
         SqlTransaction transaction;
+        string fullTableName;
 
-        public DeduplicationManager(SqlConnection connection, string table = "Deduplication")
+        public DeduplicationManager(SqlConnection connection, string table = "Deduplication", string schema = "dbo") :
+            this(connection, table, schema, true)
         {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
-            Guard.AgainstNull(connection, nameof(connection));
-            this.table = table;
-            this.connection = connection;
         }
 
-        public DeduplicationManager(SqlTransaction transaction, string table = "Deduplication")
+        public DeduplicationManager(SqlConnection connection, string table, string schema, bool sanitize)
+        {
+            Guard.AgainstNullOrEmpty(schema, nameof(schema));
+            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(connection, nameof(connection));
+            this.connection = connection;
+
+            if (sanitize)
+            {
+                table = SqlSanitizer.Sanitize(table);
+                schema = SqlSanitizer.Sanitize(schema);
+            }
+
+            fullTableName = $"{schema}.{table}";
+        }
+
+        public DeduplicationManager(SqlTransaction transaction, string table = "Deduplication", string schema = "dbo") :
+            this(transaction, table, schema, true)
+        {
+        }
+
+        public DeduplicationManager(SqlTransaction transaction, string table, string schema, bool sanitize)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNullOrEmpty(schema, nameof(schema));
             Guard.AgainstNull(transaction, nameof(transaction));
-            this.table = table;
             this.transaction = transaction;
             connection = transaction.Connection;
+            if (sanitize)
+            {
+                table = SqlSanitizer.Sanitize(table);
+                schema = SqlSanitizer.Sanitize(schema);
+            }
+
+            fullTableName = $"{schema}.{table}";
         }
 
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)
@@ -34,8 +59,8 @@ namespace NServiceBus.Transport.SqlServerNative
             using (var command = connection.CreateCommand())
             {
                 command.Transaction = transaction;
-                command.CommandText = $"delete from {table} where Created < @date";
-                command.Parameters.Add("date", SqlDbType.DateTime2).Value= dateTime;
+                command.CommandText = $"delete from {fullTableName} where Created < @date";
+                command.Parameters.Add("date", SqlDbType.DateTime2).Value = dateTime;
                 await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
             }
         }
@@ -45,7 +70,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public Task Drop(CancellationToken cancellation = default)
         {
-            return connection.DropTable(transaction, table, cancellation);
+            return connection.DropTable(transaction, fullTableName, cancellation);
         }
 
         /// <summary>
@@ -53,12 +78,12 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public Task Create(CancellationToken cancellation = default)
         {
-            var dedupCommandText = string.Format(DeduplicationTableSql, table);
+            var dedupCommandText = string.Format(DeduplicationTableSql, fullTableName);
             return connection.ExecuteCommand(transaction, dedupCommandText, cancellation);
         }
 
         /// <summary>
-        /// The sql statements used to create the deduplication table
+        /// The sql statements used to create the deduplication table.
         /// </summary>
         public static readonly string DeduplicationTableSql = @"
 if exists (

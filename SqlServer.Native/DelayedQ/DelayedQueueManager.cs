@@ -5,16 +5,17 @@ namespace NServiceBus.Transport.SqlServerNative
     public partial class DelayedQueueManager: BaseQueueManager<IncomingDelayedMessage, OutgoingDelayedMessage>
     {
         public DelayedQueueManager(string table, SqlConnection connection, string schema = "dbo") :
-            base(table, connection, schema)
+            base(table, connection, schema, true)
+        {
+        }
+
+        public DelayedQueueManager(string table, SqlConnection connection, string schema, bool sanitize) :
+            base(table, connection, schema, sanitize)
         {
         }
 
         public DelayedQueueManager(string table, SqlTransaction transaction, string schema = "dbo") :
-            base(table, transaction, schema)
-        {
-        }
-        public DelayedQueueManager(string table, SqlConnection connection, string schema, bool sanitize) :
-            base(table, connection, schema, sanitize)
+            base(table, transaction, schema, true)
         {
         }
 
