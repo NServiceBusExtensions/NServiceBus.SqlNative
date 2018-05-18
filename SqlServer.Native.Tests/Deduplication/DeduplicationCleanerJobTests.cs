@@ -25,6 +25,7 @@ public class DeduplicationCleanerJobTests : TestBase
         Send(message2);
         var expireWindow = DateTime.UtcNow - now;
         var cleaner = new DeduplicationCleanerJob(
+            "Deduplication",
             Connection.OpenAsyncConnection,
             (message, exception) => { },
             expireWindow,
@@ -32,7 +33,7 @@ public class DeduplicationCleanerJobTests : TestBase
         cleaner.Start();
         Thread.Sleep(100);
         cleaner.Stop().Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication"));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
     void Send(OutgoingMessage message)
@@ -51,7 +52,7 @@ public class DeduplicationCleanerJobTests : TestBase
         var manager = new QueueManager(table, SqlConnection, true);
         manager.Drop().Await();
         manager.Create().Await();
-        var deduplication = new DeduplicationManager(SqlConnection);
+        var deduplication = new DeduplicationManager(SqlConnection, "Deduplication");
         deduplication.Drop().Await();
         deduplication.Create().Await();
     }

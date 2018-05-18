@@ -7,16 +7,16 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public class DeduplicationCleanerJob
     {
-        string table;
+        Table table;
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
         Action<string, Exception> criticalError;
         TimeSpan expireWindow;
         TimeSpan frequencyToRunCleanup;
         Cleaner cleaner;
 
-        public DeduplicationCleanerJob(Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<string, Exception> criticalError, TimeSpan? expireWindow = null,TimeSpan? frequencyToRunCleanup = null, string table = "Deduplication")
+        public DeduplicationCleanerJob(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<string, Exception> criticalError, TimeSpan? expireWindow = null,TimeSpan? frequencyToRunCleanup = null)
         {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(criticalError, nameof(criticalError));
             Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
             Guard.AgainstNegativeAndZero(expireWindow, nameof(expireWindow));

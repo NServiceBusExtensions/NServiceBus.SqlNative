@@ -49,27 +49,22 @@ if(db_id('{database}') is null)
             .Await();
         return messages.OrderBy(x => x.Due);
     }
-
-    public static IEnumerable<IDictionary<string, object>> ReadDuplicateData(string table)
+    public static IEnumerable<IDictionary<string, object>> ReadDuplicateData(string table, SqlConnection conn)
     {
-        using (var conn = new SqlConnection(Connection.ConnectionString))
+        using (var command = conn.CreateCommand())
         {
-            conn.Open();
-            using (var command = conn.CreateCommand())
+            command.CommandText = $"SELECT Id FROM {table}";
+            using (var reader = command.ExecuteReader())
             {
-                command.CommandText = $"SELECT Id FROM {table}";
-                using (var reader = command.ExecuteReader())
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    IDictionary<string, object> record = new Dictionary<string, object>();
+                    for (var i = 0; i < reader.FieldCount; i++)
                     {
-                        IDictionary<string, object> record = new Dictionary<string, object>();
-                        for (var i = 0; i < reader.FieldCount; i++)
-                        {
-                            record.Add(reader.GetName(i), reader[i]);
-                        }
-
-                        yield return record;
+                        record.Add(reader.GetName(i), reader[i]);
                     }
+
+                    yield return record;
                 }
             }
         }

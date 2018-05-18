@@ -28,6 +28,7 @@ public class WithDeduplicationTests : TestBase
         Send(message);
         ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
     }
+
     //[Fact]
     //public void Single_WithPurgedDuplicate()
     //{
@@ -99,7 +100,7 @@ public class WithDeduplicationTests : TestBase
         var manager = new QueueManager(table, SqlConnection, true);
         manager.Drop().Await();
         manager.Create().Await();
-        var deduplication = new DeduplicationManager(SqlConnection);
+        var deduplication = new DeduplicationManager(SqlConnection, "Deduplication");
         deduplication.Drop().Await();
         deduplication.Create().Await();
     }

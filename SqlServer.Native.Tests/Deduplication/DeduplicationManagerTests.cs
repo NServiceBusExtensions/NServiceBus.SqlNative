@@ -22,9 +22,9 @@ public class DeduplicationManagerTests : TestBase
         Thread.Sleep(1000);
         var message2 = BuildBytesMessage("00000000-0000-0000-0000-000000000002");
         Send(message2);
-        var cleaner = new DeduplicationManager(SqlConnection);
+        var cleaner = new DeduplicationManager(SqlConnection, "Deduplication");
         cleaner.CleanupItemsOlderThan(now).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication"));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
     void Send(OutgoingMessage message)
@@ -43,7 +43,7 @@ public class DeduplicationManagerTests : TestBase
         var manager = new QueueManager(table, SqlConnection, true);
         manager.Drop().Await();
         manager.Create().Await();
-        var deduplication = new DeduplicationManager(SqlConnection);
+        var deduplication = new DeduplicationManager(SqlConnection, "Deduplication");
         deduplication.Drop().Await();
         deduplication.Create().Await();
     }

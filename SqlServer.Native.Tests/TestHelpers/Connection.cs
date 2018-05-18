@@ -15,18 +15,8 @@ public static class Connection
             return;
         }
 
-        var connectionEnvironmentVariable = Environment.GetEnvironmentVariable("attachmentconnection");
-        if (connectionEnvironmentVariable != null)
-        {
-            ConnectionString = connectionEnvironmentVariable;
-            IsUsingEnvironmentVariable = true;
-            return;
-        }
-
         ConnectionString = @"Data Source=.\SQLExpress;Database=NServiceBusNativeTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
     }
-
-    public static bool IsUsingEnvironmentVariable;
 
     public static SqlConnection OpenConnection()
     {

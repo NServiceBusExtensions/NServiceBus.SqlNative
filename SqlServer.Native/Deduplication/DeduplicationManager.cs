@@ -8,24 +8,24 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public class DeduplicationManager
     {
-        string table;
         SqlConnection connection;
+        Table table;
         SqlTransaction transaction;
 
-        public DeduplicationManager(SqlConnection connection, string table = "Deduplication")
+        public DeduplicationManager(SqlConnection connection, Table table)
         {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(connection, nameof(connection));
-            this.table = table;
             this.connection = connection;
+            this.table = table;
         }
 
-        public DeduplicationManager(SqlTransaction transaction, string table = "Deduplication")
+        public DeduplicationManager(SqlTransaction transaction, Table table)
         {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(transaction, nameof(transaction));
-            this.table = table;
             this.transaction = transaction;
+            this.table = table;
             connection = transaction.Connection;
         }
 
@@ -35,7 +35,7 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 command.Transaction = transaction;
                 command.CommandText = $"delete from {table} where Created < @date";
-                command.Parameters.Add("date", SqlDbType.DateTime2).Value= dateTime;
+                command.Parameters.Add("date", SqlDbType.DateTime2).Value = dateTime;
                 await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
             }
         }
@@ -58,7 +58,7 @@ namespace NServiceBus.Transport.SqlServerNative
         }
 
         /// <summary>
-        /// The sql statements used to create the deduplication table
+        /// The sql statements used to create the deduplication table.
         /// </summary>
         public static readonly string DeduplicationTableSql = @"
 if exists (
