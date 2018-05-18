@@ -32,7 +32,7 @@ public class DeduplicationCleanerJobTests : TestBase
         cleaner.Start();
         Thread.Sleep(100);
         cleaner.Stop().Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication"));
+        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
     void Send(OutgoingMessage message)
