@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using NServiceBus.Transport.SqlServerNative;
 
 namespace NServiceBus.SqlServer.HttpPassThrough
 {
@@ -12,9 +13,7 @@ namespace NServiceBus.SqlServer.HttpPassThrough
         internal string originatingMachine = Environment.MachineName;
         internal string originatingEndpoint = "SqlHttpPassThrough";
         internal Action<HttpContext, PassThroughMessage> sendCallback = (context, message) => { };
-        internal string deduplicationSchema;
-        internal string deduplicationTable;
-        internal bool deduplicationSanitize;
+        internal Table deduplicationTable = "Deduplication";
 
         public PassThroughConfiguration(
             Func<CancellationToken, Task<SqlConnection>> connectionFunc)
@@ -37,13 +36,10 @@ namespace NServiceBus.SqlServer.HttpPassThrough
             sendCallback = callback;
         }
 
-        public void Deduplication(string table, string schema, bool sanitize = true)
+        public void Deduplication(Table table)
         {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
-            Guard.AgainstNullOrEmpty(schema, nameof(schema));
-            deduplicationSchema = schema;
+            Guard.AgainstNull(table, nameof(table));
             deduplicationTable = table;
-            deduplicationSanitize = sanitize;
         }
     }
 }

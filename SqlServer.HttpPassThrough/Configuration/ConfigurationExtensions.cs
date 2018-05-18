@@ -28,11 +28,13 @@ namespace NServiceBus.SqlServer.HttpPassThrough
             var sender = new Sender(configuration.connectionFunc, headersBuilder);
             var sqlPassThrough = new SqlPassThrough(configuration.sendCallback, sender);
             services.AddSingleton<ISqlPassThrough>(sqlPassThrough);
-            services.AddSingleton<IHostedService>(new DedupService(configuration.connectionFunc));
+            services.AddSingleton<IHostedService>(new DedupService(configuration.deduplicationTable, configuration.connectionFunc));
         }
 
-        public static void AddSqlHttpPassThroughBadRequestMiddleware(this IApplicationBuilder builder)
+        public static void AddSqlHttpPassThroughBadRequestMiddleware(
+            this IApplicationBuilder builder)
         {
+            Guard.AgainstNull(builder, nameof(builder));
             builder.UseMiddleware<BadRequestMiddleware>();
         }
     }

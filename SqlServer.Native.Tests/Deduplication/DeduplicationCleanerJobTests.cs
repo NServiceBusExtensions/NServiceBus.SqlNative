@@ -25,6 +25,7 @@ public class DeduplicationCleanerJobTests : TestBase
         Send(message2);
         var expireWindow = DateTime.UtcNow - now;
         var cleaner = new DeduplicationCleanerJob(
+            "Deduplication",
             Connection.OpenAsyncConnection,
             (message, exception) => { },
             expireWindow,

@@ -7,11 +7,13 @@ using NServiceBus.Transport.SqlServerNative;
 
 class DedupService : IHostedService
 {
+    Table table;
     Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
     DeduplicationCleanerJob job;
 
-    public DedupService(Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+    public DedupService(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
     {
+        this.table = table;
         this.connectionBuilder = connectionBuilder;
     }
 
@@ -23,7 +25,7 @@ class DedupService : IHostedService
             Environment.FailFast(message, exception);
         }
 
-        job = new DeduplicationCleanerJob(connectionBuilder, CriticalError);
+        job = new DeduplicationCleanerJob(table, connectionBuilder, CriticalError);
         job.Start();
         return Task.CompletedTask;
     }
