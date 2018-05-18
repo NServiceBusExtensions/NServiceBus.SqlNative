@@ -6,18 +6,20 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
-using NServiceBus.Attachments.Sql;
+using NServiceBus.Attachments.Sql.Raw;
 using NServiceBus.SqlServer.HttpPassThrough;
+using Table = NServiceBus.Transport.SqlServerNative.Table;
 
 class Sender
 {
-    Persister attachments = new Persister();
+    Persister attachments;
     Func<CancellationToken, Task<SqlConnection>> connectionFunc;
     HeadersBuilder headersBuilder;
 
-    public Sender(Func<CancellationToken, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder)
+    public Sender(Func<CancellationToken, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable)
     {
         this.connectionFunc = connectionFunc;
+        attachments = new Persister(new  NServiceBus.Attachments.Sql.Raw.Table(attachmentsTable.TableName, attachmentsTable.Schema, false));
         this.headersBuilder = headersBuilder;
     }
 

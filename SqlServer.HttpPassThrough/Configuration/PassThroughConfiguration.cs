@@ -14,6 +14,7 @@ namespace NServiceBus.SqlServer.HttpPassThrough
         internal string originatingEndpoint = "SqlHttpPassThrough";
         internal Action<HttpContext, PassThroughMessage> sendCallback = (context, message) => { };
         internal Table deduplicationTable = "Deduplication";
+        internal Table attachmentsTable = new Table("MessageAttachments");
 
         public PassThroughConfiguration(
             Func<CancellationToken, Task<SqlConnection>> connectionFunc)
@@ -40,6 +41,12 @@ namespace NServiceBus.SqlServer.HttpPassThrough
         {
             Guard.AgainstNull(table, nameof(table));
             deduplicationTable = table;
+        }
+
+        public void Attachments(Table table)
+        {
+            Guard.AgainstNull(table, nameof(table));
+            attachmentsTable = table;
         }
     }
 }

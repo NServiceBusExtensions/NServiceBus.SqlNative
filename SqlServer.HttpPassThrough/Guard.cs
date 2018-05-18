@@ -58,7 +58,7 @@ static class Guard
     {
         if (value == Guid.Empty)
         {
-            throw new ArgumentNullException(argumentName);
+            throw new ArgumentException("Value cannot be empty.", argumentName);
         }
     }
 

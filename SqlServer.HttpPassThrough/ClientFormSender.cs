@@ -23,7 +23,6 @@ namespace NServiceBus.SqlServer.HttpPassThrough
             Guard.AgainstNullOrEmpty(typeName, nameof(typeName));
             Guard.AgainstNullOrEmpty(message, nameof(message));
             Guard.AgainstEmpty(typeNamespace, nameof(typeNamespace));
-            Guard.AgainstEmpty(messageId, nameof(messageId));
             Guard.AgainstEmpty(destination, nameof(destination));
             if (messageId == default)
             {
