@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <Version>1.0.0-beta.36</Version>
+    <Version>1.0.0-beta.37</Version>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>7.2</LangVersion>
     <Authors>Simon Cropp, Indu Alagarsamy</Authors>
