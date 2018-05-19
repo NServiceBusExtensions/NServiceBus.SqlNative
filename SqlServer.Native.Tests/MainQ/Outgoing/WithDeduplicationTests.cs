@@ -80,13 +80,13 @@ public class WithDeduplicationTests : TestBase
 
     void Send(List<OutgoingMessage> messages)
     {
-        var sender = new QueueManager(table, SqlConnection, true, "Deduplication");
+        var sender = new QueueManager(table, SqlConnection, "Deduplication");
         sender.Send(messages).Await();
     }
 
     void Send(OutgoingMessage message)
     {
-        var sender = new QueueManager(table, SqlConnection, true, "Deduplication");
+        var sender = new QueueManager(table, SqlConnection, "Deduplication");
         sender.Send(message).Await();
     }
 
@@ -97,7 +97,7 @@ public class WithDeduplicationTests : TestBase
 
     public WithDeduplicationTests(ITestOutputHelper output) : base(output)
     {
-        var manager = new QueueManager(table, SqlConnection, true, "Deduplication");
+        var manager = new QueueManager(table, SqlConnection, "Deduplication");
         manager.Drop().Await();
         manager.Create().Await();
         var deduplication = new DeduplicationManager(SqlConnection, "Deduplication");

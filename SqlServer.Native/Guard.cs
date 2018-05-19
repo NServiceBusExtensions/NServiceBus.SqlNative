@@ -14,6 +14,7 @@ static class Guard
             throw new ArgumentNullException(argumentName);
         }
     }
+
     public static void AgainstNull(SqlConnection value, string argumentName)
     {
         if (value == null)

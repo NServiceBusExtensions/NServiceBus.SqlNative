@@ -29,7 +29,7 @@ public class DeduplicationManagerTests : TestBase
 
     void Send(OutgoingMessage message)
     {
-        var sender = new QueueManager(table, SqlConnection, true, "Deduplication");
+        var sender = new QueueManager(table, SqlConnection, "Deduplication");
         sender.Send(message).Await();
     }
 
@@ -40,7 +40,7 @@ public class DeduplicationManagerTests : TestBase
 
     public DeduplicationManagerTests(ITestOutputHelper output) : base(output)
     {
-        var manager = new QueueManager(table, SqlConnection, true, "Deduplication");
+        var manager = new QueueManager(table, SqlConnection, "Deduplication");
         manager.Drop().Await();
         manager.Create().Await();
         var deduplication = new DeduplicationManager(SqlConnection, "Deduplication");
