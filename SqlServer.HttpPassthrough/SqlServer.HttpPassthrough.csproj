@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>NServiceBus.SqlServer.HttpPassThrough</AssemblyName>
-    <PackageName>NServiceBus.SqlServer.HttpPassThrough</PackageName>
+    <AssemblyName>NServiceBus.SqlServer.HttpPassthrough</AssemblyName>
+    <PackageName>NServiceBus.SqlServer.HttpPassthrough</PackageName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Description>HTTP pass through for the SQL Server transport.</Description>
+    <Description>HTTP passthrough for the SQL Server transport.</Description>
     <NoWarn>CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
