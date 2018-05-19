@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using NServiceBus.SqlServer.HttpPassThrough;
+using NServiceBus.SqlServer.HttpPassthrough;
 
 static class RequestParser
 {

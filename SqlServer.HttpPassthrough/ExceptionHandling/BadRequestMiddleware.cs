@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using NServiceBus.SqlServer.HttpPassThrough;
+using NServiceBus.SqlServer.HttpPassthrough;
 
 class BadRequestMiddleware
 {

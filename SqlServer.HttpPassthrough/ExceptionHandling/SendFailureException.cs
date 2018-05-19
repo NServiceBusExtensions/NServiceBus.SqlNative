@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NServiceBus.SqlServer.HttpPassThrough
+namespace NServiceBus.SqlServer.HttpPassthrough
 {
     public class SendFailureException : Exception
     {

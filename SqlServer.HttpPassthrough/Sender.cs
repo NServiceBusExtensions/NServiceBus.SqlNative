@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 using NServiceBus.Attachments.Sql.Raw;
-using NServiceBus.SqlServer.HttpPassThrough;
+using NServiceBus.SqlServer.HttpPassthrough;
 using Table = NServiceBus.Transport.SqlServerNative.Table;
 
 class Sender

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NServiceBus.SqlServer.HttpPassThrough;
+using NServiceBus.SqlServer.HttpPassthrough;
 
 struct RequestMessage
 {

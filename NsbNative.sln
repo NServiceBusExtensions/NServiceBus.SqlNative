@@ -11,13 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.Native", "SqlServ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.Native.Tests", "SqlServer.Native.Tests\SqlServer.Native.Tests.csproj", "{E0A26E76-1434-4D5B-9397-83E16999EAC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.HttpPassThrough", "SqlServer.HttpPassThrough\SqlServer.HttpPassThrough.csproj", "{C55E2A08-8C18-4D0E-922E-0CFFEC533310}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.HttpPassthrough", "SqlServer.HttpPassthrough\SqlServer.HttpPassthrough.csproj", "{C55E2A08-8C18-4D0E-922E-0CFFEC533310}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.HttpPassThrough.SampleEndpoint", "SqlServer.HttpPassThrough.SampleEndpoint\SqlServer.HttpPassThrough.SampleEndpoint.csproj", "{0875950E-5FC3-4573-A692-2E24DEE15F53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.HttpPassthrough.SampleEndpoint", "SqlServer.HttpPassthrough.SampleEndpoint\SqlServer.HttpPassthrough.SampleEndpoint.csproj", "{0875950E-5FC3-4573-A692-2E24DEE15F53}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.HttpPassThrough.Tests", "SqlServer.HttpPassThrough.Tests\SqlServer.HttpPassThrough.Tests.csproj", "{3FCAC7D4-1F20-47C4-95BF-01EBCA475946}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.HttpPassthrough.Tests", "SqlServer.HttpPassthrough.Tests\SqlServer.HttpPassthrough.Tests.csproj", "{3FCAC7D4-1F20-47C4-95BF-01EBCA475946}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.HttpPassThrough.SampleWeb", "SqlServer.HttpPassThrough.SampleWeb\SqlServer.HttpPassThrough.SampleWeb.csproj", "{22560E28-F3E1-4E86-96B0-80175EC4B6EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.HttpPassthrough.SampleWeb", "SqlServer.HttpPassthrough.SampleWeb\SqlServer.HttpPassthrough.SampleWeb.csproj", "{22560E28-F3E1-4E86-96B0-80175EC4B6EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

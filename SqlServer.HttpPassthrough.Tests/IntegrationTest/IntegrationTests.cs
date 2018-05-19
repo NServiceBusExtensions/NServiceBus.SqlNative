@@ -9,7 +9,7 @@ using MyNamespace;
 using NServiceBus;
 using NServiceBus.Attachments.Sql;
 using NServiceBus.Features;
-using NServiceBus.SqlServer.HttpPassThrough;
+using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;

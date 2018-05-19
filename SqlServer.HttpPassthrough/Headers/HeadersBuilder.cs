@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using NServiceBus.SqlServer.HttpPassThrough;
+using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 
 class HeadersBuilder

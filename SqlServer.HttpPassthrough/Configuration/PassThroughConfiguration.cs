@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NServiceBus.Transport.SqlServerNative;
 
-namespace NServiceBus.SqlServer.HttpPassThrough
+namespace NServiceBus.SqlServer.HttpPassthrough
 {
     public class PassThroughConfiguration
     {

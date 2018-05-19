@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace NServiceBus.SqlServer.HttpPassThrough
+namespace NServiceBus.SqlServer.HttpPassthrough
 {
     public interface ISqlPassThrough
     {

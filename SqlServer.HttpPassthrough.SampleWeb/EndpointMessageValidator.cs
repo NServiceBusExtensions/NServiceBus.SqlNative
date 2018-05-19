@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NServiceBus.SqlServer.HttpPassThrough;
+using NServiceBus.SqlServer.HttpPassthrough;
 
 public static class EndpointMessageValidator
 {
