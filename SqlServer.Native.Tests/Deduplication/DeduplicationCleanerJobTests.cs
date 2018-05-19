@@ -38,7 +38,7 @@ public class DeduplicationCleanerJobTests : TestBase
 
     void Send(OutgoingMessage message)
     {
-        var sender = new QueueManager(table, SqlConnection, true);
+        var sender = new QueueManager(table, SqlConnection, true, "Deduplication");
         sender.Send(message).Await();
     }
 
@@ -49,7 +49,7 @@ public class DeduplicationCleanerJobTests : TestBase
 
     public DeduplicationCleanerJobTests(ITestOutputHelper output) : base(output)
     {
-        var manager = new QueueManager(table, SqlConnection, true);
+        var manager = new QueueManager(table, SqlConnection, true, "Deduplication");
         manager.Drop().Await();
         manager.Create().Await();
         var deduplication = new DeduplicationManager(SqlConnection, "Deduplication");

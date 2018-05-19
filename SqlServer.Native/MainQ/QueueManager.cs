@@ -5,9 +5,9 @@ namespace NServiceBus.Transport.SqlServerNative
     public partial class QueueManager : BaseQueueManager<IncomingMessage, OutgoingMessage>
     {
         bool deduplicate;
-        string deduplicationTable;
+        Table deduplicationTable;
 
-        public QueueManager(Table table, SqlConnection connection, bool deduplicate = false, string deduplicationTable = "Deduplication"):
+        public QueueManager(Table table, SqlConnection connection, bool deduplicate = false, Table deduplicationTable = null):
             base(table, connection)
         {
             this.deduplicate = deduplicate;
@@ -16,7 +16,7 @@ namespace NServiceBus.Transport.SqlServerNative
             InitSendSql();
         }
 
-        public QueueManager(Table table, SqlTransaction transaction, bool deduplicate = false, string deduplicationTable = "Deduplication"):
+        public QueueManager(Table table, SqlTransaction transaction, bool deduplicate = false, Table deduplicationTable = null) :
             base(table, transaction)
         {
             this.deduplicate = deduplicate;
@@ -29,7 +29,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             if (deduplicate)
             {
-                Guard.AgainstNullOrEmpty(deduplicationTable, nameof(deduplicationTable));
+                Guard.AgainstNull(deduplicationTable, nameof(deduplicationTable));
             }
         }
     }
