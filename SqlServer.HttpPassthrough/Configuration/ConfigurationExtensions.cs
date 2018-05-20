@@ -26,7 +26,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
 
             var headersBuilder = new HeadersBuilder(configuration.originatingEndpoint, configuration.originatingMachine);
             var sender = new Sender(configuration.connectionFunc, headersBuilder,configuration.attachmentsTable);
-            var sqlPassThrough = new SqlPassThrough(configuration.sendCallback, sender);
+            var sqlPassThrough = new SqlPassThrough(configuration.sendCallback, sender, configuration.convertDestination);
             services.AddSingleton<ISqlPassThrough>(sqlPassThrough);
             services.AddSingleton<IHostedService>(new DedupService(configuration.deduplicationTable, configuration.connectionFunc));
         }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using NServiceBus.SqlServer.HttpPassthrough;
+using NServiceBus.Transport.SqlServerNative;
 
 public static class EndpointMessageValidator
 {
     public static Dictionary<string, HashSet<string>> Lookup = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase)
     {
         {
-            "SampleEndpoint",
+            "[dbo].[SampleEndpoint]",
             new HashSet<string>
             {
                 "SampleNamespace"
@@ -17,15 +18,15 @@ public static class EndpointMessageValidator
 
     public static void ValidateMessage(PassThroughMessage message)
     {
-        var messageEndpoint = message.Endpoint;
+        var messageEndpoint = message.Destination;
         var messageNamespace = message.Namespace;
         var messageType = message.Type;
         ValidateMessage(messageEndpoint, messageNamespace, messageType);
     }
 
-    public static void ValidateMessage(string messageEndpoint, string messageNamespace, string messageType)
+    public static void ValidateMessage(Table messageEndpoint, string messageNamespace, string messageType)
     {
-        if (!Lookup.TryGetValue(messageEndpoint, out var messages))
+        if (!Lookup.TryGetValue(messageEndpoint.FullTableName, out var messages))
         {
             throw new BadRequestException($"Not a valid endpoint. Endpoint: {messageEndpoint}");
         }
