@@ -33,7 +33,7 @@ static class HeaderReader
             MessageId = GetMessageId(headers),
             MessageType = messageType,
             MessageNamespace = messageNamespace,
-            Destination = headers.GetHeader("Destination"),
+            Destination = headers.TryGetHeader("Destination"),
             Referrer = headers.GetHeader(HeaderNames.Referer)
         };
     }
@@ -56,6 +56,16 @@ static class HeaderReader
             || string.IsNullOrWhiteSpace(value))
         {
             throw new BadRequestException($"Header '{key}' expected to exist.");
+        }
+
+        return value.ToString();
+    }
+
+    static string TryGetHeader(this IHeaderDictionary headers, string key)
+    {
+        if (!headers.TryGetValue(key, out var value))
+        {
+            return null;
         }
 
         return value.ToString();
