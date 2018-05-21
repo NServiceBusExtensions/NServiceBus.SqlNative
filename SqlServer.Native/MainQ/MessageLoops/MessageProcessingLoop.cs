@@ -36,7 +36,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
             this.table = table;
             this.startingRow = startingRow;
-            this.transactionBuilder = transactionBuilder;
+            this.transactionBuilder = transactionBuilder.WrapFunc(nameof(transactionBuilder));
             transactionCallback = callback;
             transactionPersistRowVersion = persistRowVersion;
             this.batchSize = batchSize;
@@ -62,7 +62,7 @@ namespace NServiceBus.Transport.SqlServerNative
             connectionCallback = callback;
             this.table = table;
             this.startingRow = startingRow;
-            this.connectionBuilder = connectionBuilder;
+            this.connectionBuilder = connectionBuilder.WrapFunc(nameof(connectionBuilder));
             connectionPersistRowVersion = persistRowVersion;
             this.batchSize = batchSize;
         }

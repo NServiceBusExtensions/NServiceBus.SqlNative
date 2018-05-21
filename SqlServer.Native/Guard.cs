@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using System.Threading.Tasks;
 
 static class Guard
@@ -21,19 +20,20 @@ static class Guard
         {
             throw new ArgumentNullException(argumentName);
         }
+
         if (value.State == ConnectionState.Closed)
         {
             throw new ArgumentException("Connection must be open.", argumentName);
         }
     }
 
-    public static void AgainstSqlDelimiters(string argumentName, string value)
-    {
-        if (value.Contains("]") || value.Contains("[") || value.Contains("`"))
-        {
-            throw new ArgumentException($"The argument '{value}' contains a ']', '[' or '`'. Names and schemas automatically quoted.");
-        }
-    }
+    //public static void AgainstSqlDelimiters(string argumentName, string value)
+    //{
+    //    if (value.Contains("]") || value.Contains("[") || value.Contains("`"))
+    //    {
+    //        throw new ArgumentException($"The argument '{value}' contains a ']', '[' or '`'. Names and schemas automatically quoted.");
+    //    }
+    //}
 
     public static void AgainstNullOrEmpty(string value, string argumentName)
     {
@@ -49,6 +49,7 @@ static class Guard
         {
             return;
         }
+
         if (string.IsNullOrWhiteSpace(value))
         {
             throw new ArgumentNullException(argumentName);
@@ -79,7 +80,7 @@ static class Guard
 
     public static void AgainstNegativeAndZero(int value, string argumentName)
     {
-        if (value<1)
+        if (value < 1)
         {
             throw new ArgumentNullException(argumentName);
         }
@@ -87,99 +88,97 @@ static class Guard
 
     public static void AgainstNegativeAndZero(long value, string argumentName)
     {
-        if (value<1)
+        if (value < 1)
         {
             throw new ArgumentNullException(argumentName);
         }
     }
 
-    public static Func<T> WrapFuncInCheck<T>(this Func<T> func, string name)
+    public static Func<T, K> WrapFunc<T, K>(this Func<T, K> func, string name)
     {
-        return () => func.EvaluateAndCheck(name);
-    }
-
-    static T EvaluateAndCheck<T>(this Func<T> func, string attachmentName)
-    {
-        var message = $"Provided delegate threw an exception. Attachment name: {attachmentName}.";
-        T value;
-        try
+        var exceptionMessage = $"Provided {name} delegate threw an exception.";
+        var nullMessage = $"Provided {name} delegate returned a null.";
+        return (T x) =>
         {
-            value = func();
-        }
-        catch (Exception exception)
-        {
-            throw new Exception(message, exception);
-        }
-
-        ThrowIfNullReturned(null, attachmentName, value);
-        return value;
-    }
-
-    public static Action WrapCleanupInCheck(this Action cleanup, string attachmentName)
-    {
-        if (cleanup == null)
-        {
-            return null;
-        }
-
-        return () =>
-        {
+            K value;
             try
             {
-                cleanup();
+                value = func(x);
             }
             catch (Exception exception)
             {
-                throw new Exception($"Cleanup threw an exception. Attachment name: {attachmentName}.", exception);
+                throw new Exception(exceptionMessage, exception);
             }
-        };
-    }
 
-    public static Func<Task<T>> WrapFuncTaskInCheck<T>(this Func<Task<T>> func, string attachmentName)
-    {
-        return async () =>
-        {
-            var task = func.EvaluateAndCheck(attachmentName);
-            ThrowIfNullReturned(null, attachmentName, task);
-            var value = await task.ConfigureAwait(false);
-            ThrowIfNullReturned(null, attachmentName, value);
+            if (value == null)
+            {
+                throw new Exception(nullMessage);
+            }
+
             return value;
         };
     }
 
-    public static Func<Task<Stream>> WrapStreamFuncTaskInCheck<T>(this Func<Task<T>> func, string attachmentName)
-        where T : Stream
+    public static Action<T> WrapFunc<T>(this Action<T> func, string name)
     {
-        return async () =>
+        var exceptionMessage = $"Provided {name} delegate threw an exception.";
+        return (T x) =>
         {
-            var task = func.EvaluateAndCheck(attachmentName);
-            ThrowIfNullReturned(null, attachmentName, task);
-            var value = await task.ConfigureAwait(false);
-            ThrowIfNullReturned(null,attachmentName, value);
-            return value;
+            try
+            {
+                func(x);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exceptionMessage, exception);
+            }
+        };
+    }
+    public static Action<T, K> WrapFunc<T, K>(this Action<T, K> func, string name)
+    {
+        var exceptionMessage = $"Provided {name} delegate threw an exception.";
+        return (T x, K y) =>
+        {
+            try
+            {
+                func(x, y);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exceptionMessage, exception);
+            }
         };
     }
 
-    public static void ThrowIfNullReturned(string messageId, string attachmentName, object value)
+    public static Func<T, Task<K>> WrapFunc<T, K>(this Func<T, Task<K>> func, string name)
     {
-        if (value == null)
+        var exceptionMessage = $"Provided {name} delegate threw an exception.";
+        var nullMessage = $"Provided {name} delegate returned a null.";
+        return async (T x) =>
         {
-            if (attachmentName != null && messageId != null)
+            Task<K> task;
+            try
             {
-                throw new Exception($"Provided delegate returned a null. MessageId: '{messageId}', Attachment: '{attachmentName}'.");
+                task = func(x);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exceptionMessage, exception);
             }
 
-            if (attachmentName != null)
+            if (task == null)
             {
-                throw new Exception($"Provided delegate returned a null. Attachment: '{attachmentName}'.");
+                throw new Exception(nullMessage);
             }
 
-            if (messageId != null)
+            try
             {
-                throw new Exception($"Provided delegate returned a null. MessageId: '{messageId}'.");
+                return await task.ConfigureAwait(false);
             }
-
-            throw new Exception("Provided delegate returned a null.");
-        }
+            catch (Exception exception)
+            {
+                throw new Exception(exceptionMessage, exception);
+            }
+        };
     }
 }

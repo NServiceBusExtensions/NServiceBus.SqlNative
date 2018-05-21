@@ -17,7 +17,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNull(errorCallback, nameof(errorCallback));
             Guard.AgainstNegativeAndZero(delay, nameof(delay));
-            this.errorCallback = errorCallback;
+            this.errorCallback = errorCallback.WrapFunc(nameof(errorCallback));
             this.delay = delay.GetValueOrDefault(TimeSpan.FromMinutes(1));
         }
 

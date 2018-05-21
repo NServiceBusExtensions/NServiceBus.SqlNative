@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 
-class SqlPassThrough: ISqlPassThrough
+class SqlPassThrough : ISqlPassThrough
 {
     Sender sender;
     Action<HttpContext, PassThroughMessage> sendCallback;
@@ -20,7 +20,7 @@ class SqlPassThrough: ISqlPassThrough
 
     public async Task Send(HttpContext context, CancellationToken cancellation = default)
     {
-        Guard.AgainstNull(context,nameof(context));
+        Guard.AgainstNull(context, nameof(context));
         var requestMessage = await RequestParser.Extract(context.Request, cancellation).ConfigureAwait(false);
         var destination = convertDestination(requestMessage.Destination);
         var passThroughMessage = new PassThroughMessage
