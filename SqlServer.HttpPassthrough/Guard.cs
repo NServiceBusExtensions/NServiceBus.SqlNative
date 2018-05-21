@@ -93,10 +93,51 @@ static class Guard
         }
     }
 
+    public static Func<T, K> WrapFunc<T, K>(this Func<T, K> func, string name)
+    {
+        var exceptionMessage = $"Provided {name} delegate threw an exception.";
+        var nullMessage = $"Provided {name} delegate returned a null.";
+        return (T x) =>
+        {
+            K value;
+            try
+            {
+                value = func(x);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exceptionMessage, exception);
+            }
+
+            if (value == null)
+            {
+                throw new Exception(nullMessage);
+            }
+
+            return value;
+        };
+    }
+
+    public static Action<T, K> WrapFunc<T, K>(this Action<T, K> func, string name)
+    {
+        var exceptionMessage = $"Provided {name} delegate threw an exception.";
+        return (T x, K y) =>
+        {
+            try
+            {
+                func(x, y);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exceptionMessage, exception);
+            }
+        };
+    }
+
     public static Func<T, Task<K>> WrapFunc<T, K>(this Func<T, Task<K>> func, string name)
     {
         var exceptionMessage = $"Provided {name} delegate threw an exception.";
-        var nullMessage = $"Provided {name} delegate return a null.";
+        var nullMessage = $"Provided {name} delegate returned a null.";
         return async (T x) =>
         {
             Task<K> task;

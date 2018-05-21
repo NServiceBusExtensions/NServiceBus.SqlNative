@@ -35,13 +35,13 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         public void SendingCallback(Action<HttpContext, PassThroughMessage> callback)
         {
             Guard.AgainstNull(callback, nameof(callback));
-            sendCallback = callback;
+            sendCallback = callback.WrapFunc(nameof(SendingCallback));
         }
 
         public void DestinationConverter(Func<string, Table> convert)
         {
             Guard.AgainstNull(convert, nameof(convert));
-            convertDestination = convert;
+            convertDestination = convert.WrapFunc(nameof(DestinationConverter));
         }
 
         public void Deduplication(Table table)
