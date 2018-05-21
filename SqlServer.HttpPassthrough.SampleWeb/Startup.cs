@@ -11,7 +11,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 public class Startup
 {
-    string nsbConnectionString = @"Data Source=.\SQLExpress;Database=MessageHttpPassThroughTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
+    string nsbConnectionString = @"Server=.\SQLExpress;Database=MessageHttpPassThroughTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
 
     public Startup(IConfiguration configuration)
     {

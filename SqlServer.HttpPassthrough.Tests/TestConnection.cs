@@ -2,7 +2,7 @@
 
 public static class TestConnection
 {
-    public static string ConnectionString = @"Data Source=.\SQLExpress;Database=MessageHttpPassThroughTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
+    public static string ConnectionString = @"Server=.\SQLExpress;Database=MessageHttpPassThroughTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
 
     static TestConnection()
     {
