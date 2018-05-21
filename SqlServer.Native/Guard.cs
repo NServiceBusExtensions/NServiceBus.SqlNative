@@ -98,7 +98,7 @@ static class Guard
     {
         var exceptionMessage = $"Provided {name} delegate threw an exception.";
         var nullMessage = $"Provided {name} delegate returned a null.";
-        return (T x) =>
+        return x =>
         {
             K value;
             try
@@ -122,7 +122,7 @@ static class Guard
     public static Action<T> WrapFunc<T>(this Action<T> func, string name)
     {
         var exceptionMessage = $"Provided {name} delegate threw an exception.";
-        return (T x) =>
+        return x =>
         {
             try
             {
@@ -134,10 +134,11 @@ static class Guard
             }
         };
     }
+
     public static Action<T, K> WrapFunc<T, K>(this Action<T, K> func, string name)
     {
         var exceptionMessage = $"Provided {name} delegate threw an exception.";
-        return (T x, K y) =>
+        return (x, y) =>
         {
             try
             {
@@ -150,11 +151,42 @@ static class Guard
         };
     }
 
+    public static Func<T1,T2,T3, Task> WrapFunc<T1, T2, T3>(this Func<T1, T2, T3, Task> func, string name)
+    {
+        var exceptionMessage = $"Provided {name} delegate threw an exception.";
+        var nullMessage = $"Provided {name} delegate returned a null.";
+        return async (x,y,z) =>
+        {
+            Task task;
+            try
+            {
+                task = func(x, y, z);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exceptionMessage, exception);
+            }
+
+            if (task == null)
+            {
+                throw new Exception(nullMessage);
+            }
+
+            try
+            {
+                await task.ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exceptionMessage, exception);
+            }
+        };
+    }
     public static Func<T, Task<K>> WrapFunc<T, K>(this Func<T, Task<K>> func, string name)
     {
         var exceptionMessage = $"Provided {name} delegate threw an exception.";
         var nullMessage = $"Provided {name} delegate returned a null.";
-        return async (T x) =>
+        return async x =>
         {
             Task<K> task;
             try

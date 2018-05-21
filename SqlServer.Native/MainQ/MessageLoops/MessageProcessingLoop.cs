@@ -37,7 +37,7 @@ namespace NServiceBus.Transport.SqlServerNative
             this.table = table;
             this.startingRow = startingRow;
             this.transactionBuilder = transactionBuilder.WrapFunc(nameof(transactionBuilder));
-            transactionCallback = callback;
+            transactionCallback = callback.WrapFunc(nameof(transactionCallback));
             transactionPersistRowVersion = persistRowVersion;
             this.batchSize = batchSize;
         }
@@ -59,7 +59,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNull(persistRowVersion, nameof(persistRowVersion));
             Guard.AgainstNull(callback, nameof(callback));
             Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
-            connectionCallback = callback;
+            connectionCallback = callback.WrapFunc(nameof(connectionCallback));
             this.table = table;
             this.startingRow = startingRow;
             this.connectionBuilder = connectionBuilder.WrapFunc(nameof(connectionBuilder));
