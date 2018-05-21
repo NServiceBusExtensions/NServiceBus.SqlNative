@@ -21,7 +21,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             Func<CancellationToken, Task<SqlConnection>> connectionFunc)
         {
             Guard.AgainstNull(connectionFunc, nameof(connectionFunc));
-            this.connectionFunc = connectionFunc;
+            this.connectionFunc = connectionFunc.WrapFunc(nameof(connectionFunc));
         }
 
         public void OriginatingInfo(string endpoint, string machine)
@@ -37,7 +37,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             Guard.AgainstNull(callback, nameof(callback));
             sendCallback = callback;
         }
-
 
         public void DestinationConverter(Func<string, Table> convert)
         {
