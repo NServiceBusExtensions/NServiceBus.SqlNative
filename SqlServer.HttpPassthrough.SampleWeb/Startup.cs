@@ -28,7 +28,7 @@ public class Startup
         services.AddMvcCore();
     }
 
-    void AmendMessage(HttpContext context, PassThroughMessage message)
+    void AmendMessage(HttpContext context, PassthroughMessage message)
     {
         message.ExtraHeaders = new Dictionary<string, string>
         {

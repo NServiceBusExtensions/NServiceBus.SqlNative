@@ -17,7 +17,6 @@ class DedupService : IHostedService
         this.connectionBuilder = connectionBuilder;
     }
 
-    //TODO: verify
     public Task StartAsync(CancellationToken cancellationToken)
     {
         void CriticalError(string message, Exception exception)

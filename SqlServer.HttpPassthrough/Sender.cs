@@ -23,7 +23,7 @@ class Sender
         this.headersBuilder = headersBuilder;
     }
 
-    public async Task Send(PassThroughMessage message, CancellationToken cancellation)
+    public async Task Send(PassthroughMessage message, CancellationToken cancellation)
     {
         try
         {
@@ -35,7 +35,7 @@ class Sender
         }
     }
 
-    async Task InnerSend(PassThroughMessage message, CancellationToken cancellation)
+    async Task InnerSend(PassthroughMessage message, CancellationToken cancellation)
     {
         using (var connection = await connectionFunc(cancellation).ConfigureAwait(false))
         using (var transaction = connection.BeginTransaction())
@@ -46,7 +46,7 @@ class Sender
         }
     }
 
-    Task SendInsideTransaction(PassThroughMessage message, CancellationToken cancellation, SqlTransaction transaction)
+    Task SendInsideTransaction(PassthroughMessage message, CancellationToken cancellation, SqlTransaction transaction)
     {
         var headersString = headersBuilder.GetHeadersString(message);
 
@@ -61,7 +61,7 @@ class Sender
         return Task.WhenAll(tasks);
     }
 
-    IEnumerable<Task> SendAttachments(SqlTransaction transaction, DateTime expiry, CancellationToken cancellation, PassThroughMessage message)
+    IEnumerable<Task> SendAttachments(SqlTransaction transaction, DateTime expiry, CancellationToken cancellation, PassthroughMessage message)
     {
         var connection = transaction.Connection;
         foreach (var file in message.Attachments)

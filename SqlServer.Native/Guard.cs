@@ -151,11 +151,11 @@ static class Guard
         };
     }
 
-    public static Func<T1,T2,T3, Task> WrapFunc<T1, T2, T3>(this Func<T1, T2, T3, Task> func, string name)
+    public static Func<T1, T2, T3, Task> WrapFunc<T1, T2, T3>(this Func<T1, T2, T3, Task> func, string name)
     {
         var exceptionMessage = $"Provided {name} delegate threw an exception.";
         var nullMessage = $"Provided {name} delegate returned a null.";
-        return async (x,y,z) =>
+        return async (x, y, z) =>
         {
             Task task;
             try
@@ -182,6 +182,7 @@ static class Guard
             }
         };
     }
+
     public static Func<T, Task<K>> WrapFunc<T, K>(this Func<T, Task<K>> func, string name)
     {
         var exceptionMessage = $"Provided {name} delegate threw an exception.";

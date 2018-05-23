@@ -14,7 +14,7 @@ class HeadersBuilder
         this.originatingMachine = originatingMachine;
     }
 
-    public string GetHeadersString(PassThroughMessage message)
+    public string GetHeadersString(PassthroughMessage message)
     {
         var encodedMessageType = GetEncodedMessageName(message);
         var encodedClientUrl = JsonConvert.ToString(message.ClientUrl);
@@ -35,7 +35,7 @@ class HeadersBuilder
         return builder.ToString();
     }
 
-    static void AddExtraHeaders(PassThroughMessage message, StringBuilder builder)
+    static void AddExtraHeaders(PassthroughMessage message, StringBuilder builder)
     {
         if (message.ExtraHeaders == null)
         {
@@ -51,7 +51,7 @@ class HeadersBuilder
         }
     }
 
-    public string GetEncodedMessageName(PassThroughMessage message)
+    public string GetEncodedMessageName(PassthroughMessage message)
     {
         if (message.Namespace == null)
         {

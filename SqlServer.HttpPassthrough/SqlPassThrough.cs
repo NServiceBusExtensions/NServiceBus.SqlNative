@@ -8,10 +8,10 @@ using NServiceBus.Transport.SqlServerNative;
 class SqlPassThrough : ISqlPassThrough
 {
     Sender sender;
-    Action<HttpContext, PassThroughMessage> sendCallback;
+    Action<HttpContext, PassthroughMessage> sendCallback;
     Func<string, Table> convertDestination;
 
-    public SqlPassThrough(Action<HttpContext, PassThroughMessage> sendCallback, Sender sender, Func<string, Table> convertDestination)
+    public SqlPassThrough(Action<HttpContext, PassthroughMessage> sendCallback, Sender sender, Func<string, Table> convertDestination)
     {
         this.sendCallback = sendCallback;
         this.sender = sender;
@@ -23,7 +23,7 @@ class SqlPassThrough : ISqlPassThrough
         Guard.AgainstNull(context, nameof(context));
         var requestMessage = await RequestParser.Extract(context.Request, cancellation).ConfigureAwait(false);
         var destination = convertDestination(requestMessage.Destination);
-        var passThroughMessage = new PassThroughMessage
+        var passThroughMessage = new PassthroughMessage
         {
             Destination = destination,
             ClientUrl = requestMessage.ClientUrl,

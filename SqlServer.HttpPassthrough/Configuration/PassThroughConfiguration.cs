@@ -13,7 +13,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         internal string originatingMachine = Environment.MachineName;
         internal string originatingEndpoint = "SqlHttpPassThrough";
         internal Func<string, Table> convertDestination = destination => destination;
-        internal Action<HttpContext, PassThroughMessage> sendCallback = (context, message) => { };
+        internal Action<HttpContext, PassthroughMessage> sendCallback = (context, message) => { };
         internal Table deduplicationTable = "Deduplication";
         internal Table attachmentsTable = new Table("MessageAttachments");
 
@@ -32,7 +32,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             originatingEndpoint = endpoint;
         }
 
-        public void SendingCallback(Action<HttpContext, PassThroughMessage> callback)
+        public void SendingCallback(Action<HttpContext, PassthroughMessage> callback)
         {
             Guard.AgainstNull(callback, nameof(callback));
             sendCallback = callback.WrapFunc(nameof(SendingCallback));

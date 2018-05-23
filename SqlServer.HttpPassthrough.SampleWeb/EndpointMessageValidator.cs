@@ -16,7 +16,7 @@ public static class EndpointMessageValidator
         },
     };
 
-    public static void ValidateMessage(PassThroughMessage message)
+    public static void ValidateMessage(PassthroughMessage message)
     {
         var messageEndpoint = message.Destination;
         var messageNamespace = message.Namespace;

@@ -5,7 +5,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
-    public class PassThroughMessage
+    public class PassthroughMessage
     {
         public Guid Id { get; set; }
         public Guid CorrelationId { get; set; }
@@ -15,7 +15,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         public Table Destination { get; set; }
         public string ClientUrl { get; set; }
         public List<Attachment> Attachments;
-        public IReadOnlyDictionary<string, string> ExtraHeaders;
+        public Dictionary<string, string> ExtraHeaders;
 
         public Dictionary<string, object> ToDictionary()
         {
