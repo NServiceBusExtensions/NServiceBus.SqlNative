@@ -7,7 +7,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
-    public class PassThroughConfiguration
+    public class PassthroughConfiguration
     {
         internal Func<CancellationToken, Task<SqlConnection>> connectionFunc;
         internal string originatingMachine = Environment.MachineName;
@@ -17,7 +17,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         internal Table deduplicationTable = "Deduplication";
         internal Table attachmentsTable = new Table("MessageAttachments");
 
-        public PassThroughConfiguration(
+        public PassthroughConfiguration(
             Func<CancellationToken, Task<SqlConnection>> connectionFunc)
         {
             Guard.AgainstNull(connectionFunc, nameof(connectionFunc));

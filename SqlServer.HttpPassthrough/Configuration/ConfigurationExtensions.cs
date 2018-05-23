@@ -14,12 +14,12 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             this IServiceCollection services,
             Func<CancellationToken, Task<SqlConnection>> connectionFunc)
         {
-            AddSqlHttpPassThrough(services, new PassThroughConfiguration(connectionFunc));
+            AddSqlHttpPassThrough(services, new PassthroughConfiguration(connectionFunc));
         }
 
         public static void AddSqlHttpPassThrough(
             this IServiceCollection services,
-            PassThroughConfiguration configuration)
+            PassthroughConfiguration configuration)
         {
             Guard.AgainstNull(services, nameof(services));
             Guard.AgainstNull(configuration, nameof(configuration));
