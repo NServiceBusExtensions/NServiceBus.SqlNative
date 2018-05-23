@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 
-class SqlPassThrough : ISqlPassThrough
+class SqlPassThrough : ISqlPassthrough
 {
     Sender sender;
     Action<HttpContext, PassthroughMessage> sendCallback;

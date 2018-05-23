@@ -14,8 +14,8 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         public string Body { get; set; }
         public Table Destination { get; set; }
         public string ClientUrl { get; set; }
-        public List<Attachment> Attachments;
-        public Dictionary<string, string> ExtraHeaders;
+        public List<Attachment> Attachments { get; set; }
+        public Dictionary<string, string> ExtraHeaders { get; set; }
 
         public Dictionary<string, object> ToDictionary()
         {

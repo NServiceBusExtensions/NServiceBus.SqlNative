@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
-    public interface ISqlPassThrough
+    public interface ISqlPassthrough
     {
         Task Send(HttpContext context, CancellationToken cancellation = default);
     }
