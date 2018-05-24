@@ -5,8 +5,12 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public abstract partial class BaseQueueManager<TIncoming,TOutgoing>
-        where TIncoming: IIncomingMessage
+    /// <summary>
+    /// Base class for <see cref="DelayedQueueManager"/> and <see cref="QueueManager"/>.
+    /// Not to be used as an extension point.
+    /// </summary>
+    public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
+        where TIncoming : IIncomingMessage
     {
         protected abstract SqlCommand BuildConsumeCommand(int batchSize);
 
@@ -24,7 +28,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNull(func, nameof(func));
             using (var command = BuildConsumeCommand(size))
             {
-                return await ReadMultiple(command,func, cancellation).ConfigureAwait(false);
+                return await ReadMultiple(command, func, cancellation).ConfigureAwait(false);
             }
         }
     }

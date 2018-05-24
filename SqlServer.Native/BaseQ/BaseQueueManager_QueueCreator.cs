@@ -9,7 +9,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// Creates a queue.
         /// </summary>
-        public Task Create(string computedColumnSql, CancellationToken cancellation = default)
+        public virtual Task Create(string computedColumnSql, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(computedColumnSql, nameof(computedColumnSql));
             return InnerCreate(true, computedColumnSql, cancellation);
@@ -18,7 +18,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// Creates a queue.
         /// </summary>
-        public Task Create(bool createDecodedBodyComputedColumn = true, CancellationToken cancellation = default)
+        public virtual Task Create(bool createDecodedBodyComputedColumn = true, CancellationToken cancellation = default)
         {
             return InnerCreate(createDecodedBodyComputedColumn, null, cancellation);
         }
@@ -26,7 +26,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// Drops a queue.
         /// </summary>
-        public Task Drop(CancellationToken cancellation = default)
+        public virtual Task Drop(CancellationToken cancellation = default)
         {
             return connection.DropTable(transaction, table, cancellation);
         }
@@ -49,6 +49,6 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// The sql statements used to create the queue.
         /// </summary>
-        public abstract string CreateTableSql { get;}
+        public abstract string CreateTableSql { get; }
     }
 }

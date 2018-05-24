@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public abstract partial class BaseQueueManager<TIncoming,TOutgoing>
-        where TIncoming: IIncomingMessage
+    public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
+        where TIncoming : IIncomingMessage
     {
         protected abstract SqlCommand BuildReadCommand(int batchSize, long startRowVersion);
 
@@ -25,7 +25,7 @@ namespace NServiceBus.Transport.SqlServerNative
                         return default;
                     }
 
-                    return ReadMessage(reader,reader);
+                    return ReadMessage(reader, reader);
                 }
             }
             catch

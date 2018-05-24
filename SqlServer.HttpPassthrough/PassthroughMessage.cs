@@ -5,6 +5,10 @@ using NServiceBus.Transport.SqlServerNative;
 
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
+    /// <summary>
+    /// A message to be sent.
+    /// Used as a DTO for manipulation and verification purposes when <see cref="PassthroughConfiguration.SendingCallback"/> is in use.
+    /// </summary>
     public class PassthroughMessage
     {
         public Guid Id { get; set; }
