@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NServiceBus.Transport.SqlServerNative;
 
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
@@ -12,7 +11,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         public string Type { get; set; }
         public string Namespace { get; set; }
         public string Body { get; set; }
-        public Table Destination { get; set; }
+        public string Destination { get; internal set; }
         public string ClientUrl { get; set; }
         public List<Attachment> Attachments { get; set; }
         public Dictionary<string, string> ExtraHeaders { get; set; }
@@ -23,7 +22,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             {
                 {"Id", Id},
                 {"CorrelationId", CorrelationId},
-                {"Destination", Destination.FullTableName},
+                {"Destination", Destination},
                 {"Type", Type},
                 {"Namespace", Namespace},
                 {"Body", Body},

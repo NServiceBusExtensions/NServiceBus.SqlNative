@@ -23,11 +23,11 @@ class Sender
         this.headersBuilder = headersBuilder;
     }
 
-    public async Task Send(PassthroughMessage message, CancellationToken cancellation)
+    public async Task Send(PassthroughMessage message, Table destination, CancellationToken cancellation)
     {
         try
         {
-            await InnerSend(message, cancellation);
+            await InnerSend(message, destination, cancellation);
         }
         catch (Exception exception)
         {
@@ -35,18 +35,18 @@ class Sender
         }
     }
 
-    async Task InnerSend(PassthroughMessage message, CancellationToken cancellation)
+    async Task InnerSend(PassthroughMessage message, Table destination, CancellationToken cancellation)
     {
         using (var connection = await connectionFunc(cancellation).ConfigureAwait(false))
         using (var transaction = connection.BeginTransaction())
         {
-            await SendInsideTransaction(message, cancellation, transaction)
+            await SendInsideTransaction(message, destination, cancellation, transaction)
                 .ConfigureAwait(false);
             transaction.Commit();
         }
     }
 
-    Task SendInsideTransaction(PassthroughMessage message, CancellationToken cancellation, SqlTransaction transaction)
+    Task SendInsideTransaction(PassthroughMessage message, Table destination, CancellationToken cancellation, SqlTransaction transaction)
     {
         var headersString = headersBuilder.GetHeadersString(message);
 
@@ -54,7 +54,7 @@ class Sender
             message.Id,
             headers: headersString,
             bodyBytes: Encoding.UTF8.GetBytes(message.Body));
-        var queueManager = new QueueManager(message.Destination, transaction, "Deduplication");
+        var queueManager = new QueueManager(destination, transaction, "Deduplication");
         var attachmentExpiry = DateTime.UtcNow.AddDays(10);
         var tasks = SendAttachments(transaction, attachmentExpiry, cancellation, message).ToList();
         tasks.Add(queueManager.Send(outgoingMessage, cancellation));

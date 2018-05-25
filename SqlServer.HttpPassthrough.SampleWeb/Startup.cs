@@ -28,12 +28,13 @@ public class Startup
         services.AddMvcCore();
     }
 
-    void AmendMessage(HttpContext context, PassthroughMessage message)
+    Task<Table> AmendMessage(HttpContext context, PassthroughMessage message)
     {
         message.ExtraHeaders = new Dictionary<string, string>
         {
             {"MessagePassThrough.Version", AssemblyVersion.Version}
         };
+        return Task.FromResult((Table) message.Destination);
     }
 
     Task<SqlConnection> OpenConnection(CancellationToken cancellation)
