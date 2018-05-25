@@ -15,6 +15,7 @@ return
 
 insert into {0} (Id)
 values (@Id);";
+
             const string sql = @"
 insert into {0} (
     Id,

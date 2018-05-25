@@ -50,8 +50,8 @@ public class IntegrationTests : TestBase
         {
             client.DefaultRequestHeaders.Referrer = new Uri("http://TheReferrer");
             var message = $"{{\"Property\": \"{JsonConvert.ToString(evilText)}\"}}";
-            await ClientFormSender.Send(
-                client,
+            var clientFormSender = new ClientFormSender(client);
+            await clientFormSender.Send(
                 route: "/SendMessage",
                 message: message,
                 typeName: "MyMessage",

@@ -6,19 +6,38 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
-    public static class ClientFormSender
+    /// <summary>
+    /// Helper class for sending passthrough messages from a clien in .net
+    /// </summary>
+    public class ClientFormSender
     {
-        public static Task<Guid> Send(HttpClient client, string route, string message, Type messageType, Guid messageId = default, string destination = null, Dictionary<string, byte[]> attachments = null, CancellationToken cancellation = default)
+        HttpClient client;
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="ClientFormSender"/>.
+        /// </summary>
+        public ClientFormSender(HttpClient client)
+        {
+            Guard.AgainstNull(client, nameof(client));
+            this.client = client;
+        }
+
+        /// <summary>
+        /// Sedn a pass through message request.
+        /// </summary>
+        public virtual Task<Guid> Send(string route, string message, Type messageType, Guid messageId = default, string destination = null, Dictionary<string, byte[]> attachments = null, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(messageType, nameof(messageType));
             var typeName = messageType.Name;
             var typeNamespace = messageType.Namespace;
-            return Send(client, route, message, typeName, messageId, typeNamespace, destination, attachments, cancellation);
+            return Send(route, message, typeName, messageId, typeNamespace, destination, attachments, cancellation);
         }
 
-        public static async Task<Guid> Send(HttpClient client, string route, string message, string typeName, Guid messageId = default, string typeNamespace = null, string destination = null, Dictionary<string, byte[]> attachments = null, CancellationToken cancellation = default)
+        /// <summary>
+        /// Sedn a pass through message request.
+        /// </summary>
+        public virtual async Task<Guid> Send(string route, string message, string typeName, Guid messageId = default, string typeNamespace = null, string destination = null, Dictionary<string, byte[]> attachments = null, CancellationToken cancellation = default)
         {
-            Guard.AgainstNull(client, nameof(client));
             Guard.AgainstNullOrEmpty(route, nameof(route));
             Guard.AgainstNullOrEmpty(typeName, nameof(typeName));
             Guard.AgainstNullOrEmpty(message, nameof(message));
@@ -28,6 +47,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             {
                 messageId = Guid.NewGuid();
             }
+
             using (var content = new MultipartFormDataContent())
             using (var stringContent = new StringContent(message))
             {

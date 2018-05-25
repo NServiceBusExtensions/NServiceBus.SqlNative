@@ -43,7 +43,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// Drops a queue.
         /// </summary>
-        public Task Drop(CancellationToken cancellation = default)
+        public virtual Task Drop(CancellationToken cancellation = default)
         {
             return connection.DropTable(transaction, table, cancellation);
         }
@@ -51,7 +51,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// Creates a queue.
         /// </summary>
-        public Task Create(CancellationToken cancellation = default)
+        public virtual Task Create(CancellationToken cancellation = default)
         {
             var dedupCommandText = string.Format(DeduplicationTableSql, table);
             return connection.ExecuteCommand(transaction, dedupCommandText, cancellation);
