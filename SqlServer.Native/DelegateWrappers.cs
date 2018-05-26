@@ -22,43 +22,6 @@ static class DelegateWrappers
         };
     }
 
-    public static Action<T, K> WrapFunc<T, K>(this Action<T, K> func, string name)
-    {
-        return (x, y) =>
-        {
-            try
-            {
-                func(x, y);
-            }
-            catch (Exception exception)
-            {
-                var message = string.Format(threwAnException, name);
-                throw new Exception(message, exception);
-            }
-        };
-    }
-
-    public static Func<T, K> WrapFunc<T, K>(this Func<T, K> func, string name)
-    {
-        return x =>
-        {
-            K value;
-            try
-            {
-                value = func(x);
-            }
-            catch (Exception exception)
-            {
-                var exceptionMessage = string.Format(threwAnException, name);
-                throw new Exception(exceptionMessage, exception);
-            }
-
-            ThrowIfNull(name, value);
-
-            return value;
-        };
-    }
-
     static void ThrowIfNull(string name, object value)
     {
         if (value == null)
