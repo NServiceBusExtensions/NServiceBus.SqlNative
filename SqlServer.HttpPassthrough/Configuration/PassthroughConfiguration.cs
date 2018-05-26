@@ -9,7 +9,7 @@ using NServiceBus.Transport.SqlServerNative;
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
     /// <summary>
-    /// Configuration stat to be passed to <see cref="ConfigurationExtensions.AddSqlHttpPassthrough(Microsoft.Extensions.DependencyInjection.IServiceCollection,NServiceBus.SqlServer.HttpPassthrough.PassthroughConfiguration)"/>.
+    /// Configuration stat to be passed to <see cref="ConfigurationExtensions.AddSqlHttpPassthrough(IServiceCollection,PassthroughConfiguration)"/>.
     /// </summary>
     public class PassthroughConfiguration
     {

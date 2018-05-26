@@ -7,7 +7,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
 {
     /// <summary>
     /// Used to send a passthrough message.
-    /// Can be accessed by dependency inject after using <see cref="ConfigurationExtensions.AddSqlHttpPassthrough(Microsoft.Extensions.DependencyInjection.IServiceCollection,NServiceBus.SqlServer.HttpPassthrough.PassthroughConfiguration)"/>.
+    /// Can be accessed by dependency inject after using <see cref="ConfigurationExtensions.AddSqlHttpPassthrough(IServiceCollection,PassthroughConfiguration)"/>.
     /// </summary>
     public interface ISqlPassthrough
     {
