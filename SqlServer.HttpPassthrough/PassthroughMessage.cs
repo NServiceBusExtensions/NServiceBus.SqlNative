@@ -6,7 +6,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
 {
     /// <summary>
     /// A message to be sent.
-    /// Used as a DTO for manipulation and verification purposes when <see cref="PassthroughConfiguration.SendingCallback"/> is in use.
+    /// Used as a DTO for manipulation and verification purposes.
     /// </summary>
     public class PassthroughMessage
     {

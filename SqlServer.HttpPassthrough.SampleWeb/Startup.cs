@@ -22,8 +22,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var configuration = new PassthroughConfiguration(OpenConnection);
-        configuration.SendingCallback(AmendMessage);
+        var configuration = new PassthroughConfiguration(OpenConnection, AmendMessage);
         services.AddSqlHttpPassThrough(configuration);
         services.AddMvcCore();
     }

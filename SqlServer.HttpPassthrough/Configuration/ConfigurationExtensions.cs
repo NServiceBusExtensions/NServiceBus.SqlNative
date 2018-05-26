@@ -4,8 +4,10 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NServiceBus.Transport.SqlServerNative;
 
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
@@ -19,11 +21,13 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// Used from <code>Startup.ConfigureServices.</code>
         /// </summary>
         /// <param name="connectionFunc">Creates a instance of a new and open <see cref="SqlConnection"/>.</param>
+        /// <param name="callback">Manipulate or verify a <see cref="PassthroughMessage"/> prior to it being sent. Returns the destination <see cref="Table"/>.</param>
         public static void AddSqlHttpPassThrough(
             this IServiceCollection services,
-            Func<CancellationToken, Task<SqlConnection>> connectionFunc)
+            Func<CancellationToken, Task<SqlConnection>> connectionFunc,
+            Func<HttpContext, PassthroughMessage, Task<Table>> callback)
         {
-            AddSqlHttpPassThrough(services, new PassthroughConfiguration(connectionFunc));
+            AddSqlHttpPassThrough(services, new PassthroughConfiguration(connectionFunc, callback));
         }
 
         /// <summary>
