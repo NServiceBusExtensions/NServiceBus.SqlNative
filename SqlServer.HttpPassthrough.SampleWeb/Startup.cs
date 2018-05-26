@@ -11,7 +11,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 public class Startup
 {
-    string nsbConnectionString = @"Server=.\SQLExpress;Database=MessageHttpPassThroughTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
+    string nsbConnectionString = @"Server=.\SQLExpress;Database=MessageHttpPassthroughTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
 
     public Startup(IConfiguration configuration)
     {
@@ -23,7 +23,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var configuration = new PassthroughConfiguration(OpenConnection, AmendMessage);
-        services.AddSqlHttpPassThrough(configuration);
+        services.AddSqlHttpPassthrough(configuration);
         services.AddMvcCore();
     }
 
@@ -31,7 +31,7 @@ public class Startup
     {
         message.ExtraHeaders = new Dictionary<string, string>
         {
-            {"MessagePassThrough.Version", AssemblyVersion.Version}
+            {"MessagePassthrough.Version", AssemblyVersion.Version}
         };
         return Task.FromResult((Table) message.Destination);
     }
@@ -44,7 +44,7 @@ public class Startup
     public void Configure(IApplicationBuilder builder)
     {
         builder.UseMiddleware<LogContextMiddleware>();
-        builder.AddSqlHttpPassThroughBadRequestMiddleware();
+        builder.AddSqlHttpPassthroughBadRequestMiddleware();
         builder.UseMvc();
     }
 }

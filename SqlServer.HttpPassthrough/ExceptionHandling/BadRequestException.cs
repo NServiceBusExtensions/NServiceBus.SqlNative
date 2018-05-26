@@ -5,7 +5,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
 {
     /// <summary>
     /// Indicates some problem with the state of the incoming passthrough request.
-    /// Can optionally be caught, but using <see cref="ConfigurationExtensions.AddSqlHttpPassThroughBadRequestMiddleware"/>,
+    /// Can optionally be caught, but using <see cref="ConfigurationExtensions.AddSqlHttpPassthroughBadRequestMiddleware"/>,
     /// and converted to a <see cref="HttpStatusCode.BadRequest"/> to be returned to the client.
     /// </summary>
     public class BadRequestException : Exception

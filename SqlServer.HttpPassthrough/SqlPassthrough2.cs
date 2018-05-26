@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Http;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 
-class SqlPassThrough : ISqlPassthrough
+class SqlPassthrough : ISqlPassthrough
 {
     Sender sender;
     Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback;
 
-    public SqlPassThrough(Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback, Sender sender)
+    public SqlPassthrough(Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback, Sender sender)
     {
         this.sendCallback = sendCallback;
         this.sender = sender;

@@ -27,7 +27,7 @@ class HeadersBuilder
   ""NServiceBus.TimeSent"": ""{Headers.ToWireFormattedString(DateTime.UtcNow)}"",
   ""NServiceBus.OriginatingMachine"": ""{originatingMachine}"",
   ""NServiceBus.OriginatingEndpoint"": ""{originatingEndpoint}"",
-  ""MessagePassThrough.ClientUrl"": ""{encodedClientUrl}""");
+  ""MessagePassthrough.ClientUrl"": ""{encodedClientUrl}""");
         AddExtraHeaders(message, builder);
 
         builder.AppendLine(@"

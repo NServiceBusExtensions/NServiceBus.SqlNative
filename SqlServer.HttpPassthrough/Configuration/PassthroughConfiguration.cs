@@ -9,13 +9,13 @@ using NServiceBus.Transport.SqlServerNative;
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
     /// <summary>
-    /// Configuration stat to be passed to <see cref="ConfigurationExtensions.AddSqlHttpPassThrough(IServiceCollection,PassthroughConfiguration)"/>.
+    /// Configuration stat to be passed to <see cref="ConfigurationExtensions.AddSqlHttpPassthrough(Microsoft.Extensions.DependencyInjection.IServiceCollection,NServiceBus.SqlServer.HttpPassthrough.PassthroughConfiguration)"/>.
     /// </summary>
     public class PassthroughConfiguration
     {
         internal Func<CancellationToken, Task<SqlConnection>> ConnectionFunc;
         internal string OriginatingMachine = Environment.MachineName;
-        internal string OriginatingEndpoint = "SqlHttpPassThrough";
+        internal string OriginatingEndpoint = "SqlHttpPassthrough";
         internal Func<HttpContext, PassthroughMessage, Task<Table>> SendCallback;
         internal Table DeduplicationTable = "Deduplication";
         internal Table AttachmentsTable = "MessageAttachments";

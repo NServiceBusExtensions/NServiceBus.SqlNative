@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using NServiceBus.SqlServer.HttpPassthrough;
 
 [Route("SendMessage")]
-public class PassThroughController : ControllerBase
+public class PassthroughController : ControllerBase
 {
     ISqlPassthrough sender;
 
-    public PassThroughController(ISqlPassthrough sender)
+    public PassthroughController(ISqlPassthrough sender)
     {
         this.sender = sender;
     }
@@ -23,7 +23,7 @@ public class PassThroughController : ControllerBase
         }
         catch (SendFailureException exception)
         {
-            exception.Data.Add("message", exception.PassThroughMessage.ToDictionary());
+            exception.Data.Add("message", exception.PassthroughMessage.ToDictionary());
             exception.CaptureAndThrow();
         }
     }
