@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
     /// <summary>
-    /// Helper class for sending passthrough messages from a clien in .net
+    /// Helper class for sending passthrough messages from a client in .net
     /// </summary>
     public class ClientFormSender
     {
@@ -23,7 +23,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         }
 
         /// <summary>
-        /// Sedn a pass through message request.
+        /// Send a pass through message request.
         /// </summary>
         public virtual Task<Guid> Send(string route, string message, Type messageType, Guid messageId = default, string destination = null, Dictionary<string, byte[]> attachments = null, CancellationToken cancellation = default)
         {
@@ -34,7 +34,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         }
 
         /// <summary>
-        /// Sedn a pass through message request.
+        /// Send a pass through message request.
         /// </summary>
         public virtual async Task<Guid> Send(string route, string message, string typeName, Guid messageId = default, string typeNamespace = null, string destination = null, Dictionary<string, byte[]> attachments = null, CancellationToken cancellation = default)
         {

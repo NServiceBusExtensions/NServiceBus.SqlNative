@@ -59,7 +59,7 @@ public class AsyncTimerTests
             interval: TimeSpan.FromDays(7),
             errorCallback: e =>
             {
-                //noop
+                // noop
             },
             delayStrategy: async (delayTime, token) =>
             {

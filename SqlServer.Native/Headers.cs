@@ -65,7 +65,7 @@ namespace NServiceBus.Transport.SqlServerNative
         }
 
         /// <summary>
-        /// The format used to stor dates in NServiceBus headers.
+        /// The format used to store dates in NServiceBus headers.
         /// </summary>
         public const string WireDateTimeFormat = "yyyy-MM-dd HH:mm:ss:ffffff Z";
 
