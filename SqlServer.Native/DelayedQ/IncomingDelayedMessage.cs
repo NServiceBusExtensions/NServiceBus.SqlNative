@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 
@@ -7,6 +8,7 @@ namespace NServiceBus.Transport.SqlServerNative
     /// <summary>
     /// Represents a message.
     /// </summary>
+    [DebuggerDisplay("RowVersion = {RowVersion}, Due = {Due}")]
     public class IncomingDelayedMessage : IIncomingMessage
     {
         IDisposable[] cleanups;

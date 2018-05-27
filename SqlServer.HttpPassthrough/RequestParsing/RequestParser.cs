@@ -7,18 +7,19 @@ using NServiceBus.SqlServer.HttpPassthrough;
 
 static class RequestParser
 {
-    public static async Task<RequestMessage> Extract(HttpRequest request, CancellationToken cancellation)
+    public static async Task<PassthroughMessage> Extract(HttpRequest request, CancellationToken cancellation)
     {
         var incomingHeaders = HeaderReader.GetIncomingHeaders(request.Headers);
         var form = await request.ReadFormAsync(cancellation).ConfigureAwait(false);
-        return new RequestMessage
+        return new PassthroughMessage
         {
             Destination = incomingHeaders.Destination,
             Id = incomingHeaders.MessageId,
+            CorrelationId = incomingHeaders.MessageId,
             Type = incomingHeaders.MessageType,
             Namespace = incomingHeaders.MessageNamespace,
             ClientUrl = incomingHeaders.Referrer,
-            Body = GetMessageJson(form),
+            Body = GetMessageBody(form),
             Attachments = GetAttachments(form).ToList()
         };
     }
@@ -34,7 +35,7 @@ static class RequestParser
                 });
     }
 
-    static string GetMessageJson(IFormCollection form)
+    static string GetMessageBody(IFormCollection form)
     {
         if (form.TryGetValue("message", out var stringValues))
         {

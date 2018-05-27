@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace NServiceBus.Transport.SqlServerNative
@@ -6,6 +7,7 @@ namespace NServiceBus.Transport.SqlServerNative
     /// <summary>
     /// Represents a message.
     /// </summary>
+    [DebuggerDisplay("Id = {Id}, Expires = {Expires}")]
     public class OutgoingMessage
     {
         public OutgoingMessage(Guid id, DateTime? expires = null, string headers = null)
