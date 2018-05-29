@@ -8,25 +8,25 @@ namespace NServiceBus.Transport.SqlServerNative
     public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
         where TIncoming : IIncomingMessage
     {
-        protected Table table;
-        protected SqlConnection connection;
-        protected SqlTransaction transaction;
+        protected Table Table;
+        protected SqlConnection Connection;
+        protected SqlTransaction Transaction;
 
         protected BaseQueueManager(Table table, SqlConnection connection)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(connection, nameof(connection));
-            this.table = table;
-            this.connection = connection;
+            Table = table;
+            Connection = connection;
         }
 
         protected BaseQueueManager(Table table, SqlTransaction transaction)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(transaction, nameof(transaction));
-            this.table = table;
-            this.transaction = transaction;
-            connection = transaction.Connection;
+            Table = table;
+            Transaction = transaction;
+            Connection = transaction.Connection;
         }
 
         async Task<IncomingResult> ReadMultiple(SqlCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)

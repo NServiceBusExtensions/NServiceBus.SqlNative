@@ -7,7 +7,7 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         protected override SqlCommand CreateSendCommand(OutgoingMessage message)
         {
-            var command = connection.CreateCommand(transaction, string.Format(sendSql, table));
+            var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
             var parameters = command.Parameters;
             parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = message.Id;
             parameters.Add("Expires", SqlDbType.DateTime).SetValueOrDbNull(message.Expires);

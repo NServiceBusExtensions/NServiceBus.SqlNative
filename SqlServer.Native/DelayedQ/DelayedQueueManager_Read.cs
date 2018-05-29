@@ -8,7 +8,7 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         protected override SqlCommand BuildReadCommand(int batchSize, long startRowVersion)
         {
-            var command = connection.CreateCommand(transaction, string.Format(ReadSql, table, batchSize));
+            var command = Connection.CreateCommand(Transaction, string.Format(ReadSql, Table, batchSize));
             command.Parameters.Add("RowVersion", SqlDbType.BigInt).Value = startRowVersion;
             return command;
         }

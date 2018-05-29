@@ -6,7 +6,7 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         protected override SqlCommand BuildConsumeCommand(int batchSize)
         {
-            return connection.CreateCommand(transaction, string.Format(ConsumeSql, table, batchSize));
+            return Connection.CreateCommand(Transaction, string.Format(ConsumeSql, Table, batchSize));
         }
 
         public static readonly string ConsumeSql = ConnectionHelpers.WrapInNoCount(@"
