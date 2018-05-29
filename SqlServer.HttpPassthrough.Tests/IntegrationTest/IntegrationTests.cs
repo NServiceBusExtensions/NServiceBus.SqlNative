@@ -17,8 +17,6 @@ using Xunit.Abstractions;
 [Trait("Category", "Integration")]
 public class IntegrationTests : TestBase
 {
-    static ManualResetEvent resetEvent = new ManualResetEvent(false);
-
     [Fact]
     public async Task Integration()
     {
@@ -29,7 +27,8 @@ public class IntegrationTests : TestBase
             await Installer.CreateTable(connection, "MessageAttachments");
         }
 
-        var endpoint = await StartEndpoint();
+        var resetEvent = new ManualResetEvent(false);
+        var endpoint = await StartEndpoint(resetEvent);
 
         await SubmitMultipartForm();
 
@@ -56,14 +55,15 @@ public class IntegrationTests : TestBase
                 message: message,
                 typeName: "MyMessage",
                 typeNamespace: "MyNamespace",
-                destination: "Endpoint", attachments: new Dictionary<string, byte[]>
+                destination: "Endpoint",
+                attachments: new Dictionary<string, byte[]>
                 {
                     {"foofile", Encoding.UTF8.GetBytes("foo")}
                 });
         }
     }
 
-    static Task<IEndpointInstance> StartEndpoint()
+    static Task<IEndpointInstance> StartEndpoint(ManualResetEvent resetEvent)
     {
         var configuration = new EndpointConfiguration("Endpoint");
         configuration.UsePersistence<LearningPersistence>();
@@ -71,6 +71,7 @@ public class IntegrationTests : TestBase
         configuration.PurgeOnStartup(true);
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<TimeoutManager>();
+        configuration.RegisterComponents(x => x.RegisterSingleton(resetEvent));
         configuration.DisableFeature<MessageDrivenSubscriptions>();
         configuration.EnableAttachments(TestConnection.ConnectionString, TimeToKeep.Default);
         var transport = configuration.UseTransport<SqlServerTransport>();
@@ -80,6 +81,13 @@ public class IntegrationTests : TestBase
 
     class Handler : IHandleMessages<MyMessage>
     {
+        ManualResetEvent resetEvent;
+
+        public Handler(ManualResetEvent resetEvent)
+        {
+            this.resetEvent = resetEvent;
+        }
+
         public async Task Handle(MyMessage message, IMessageHandlerContext context)
         {
             var incomingAttachment = context.Attachments();

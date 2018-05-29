@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Transport.SqlServerNative;
 
 static class EndpointCreator
 {
-    public static async Task<EndpointConfiguration> Create(string endpointName)
+    public static async Task<EndpointConfiguration> Create(string endpointName, ManualResetEvent resetEvent = null)
     {
         using (var connection = Connection.OpenConnection())
         {
@@ -14,6 +15,11 @@ static class EndpointCreator
         }
 
         var configuration = new EndpointConfiguration(endpointName);
+        if (resetEvent != null)
+        {
+            configuration.RegisterComponents(x => { x.RegisterSingleton(resetEvent); });
+        }
+
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<MessageDrivenSubscriptions>();
