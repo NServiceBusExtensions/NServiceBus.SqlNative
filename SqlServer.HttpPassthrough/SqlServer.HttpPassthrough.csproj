@@ -9,11 +9,8 @@
     <Description>HTTP passthrough for the SQL Server transport.</Description>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Data.SqlClient" Version="4.5.0" />
-  </ItemGroup>
-
   <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.0" />
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.1.0" />
