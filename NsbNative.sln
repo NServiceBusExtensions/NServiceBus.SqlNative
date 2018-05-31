@@ -4,6 +4,8 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 15.0.26430.12
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85DA24EC-DD95-48EA-852C-37E3EED8B77F}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		appveyor.yml = appveyor.yml
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject

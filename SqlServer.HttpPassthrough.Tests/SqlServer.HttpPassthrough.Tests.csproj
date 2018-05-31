@@ -8,16 +8,16 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ApprovalTests" Version="3.0.14" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0-beta0001" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0" />
     <PackageReference Include="ObjectApproval" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NServiceBus" Version="7.0.0-rc0002" />
-    <PackageReference Include="NServiceBus.SqlServer" Version="4.0.0-rc0003" />
-    <PackageReference Include="NServiceBus.Testing" Version="7.0.0-rc0001" />
+    <PackageReference Include="NServiceBus" Version="7.0.1" />
+    <PackageReference Include="NServiceBus.SqlServer" Version="4.0.0" />
+    <PackageReference Include="NServiceBus.Testing" Version="7.0.0" />
     <PackageReference Include="NServiceBus.Attachments.Sql" Version="1.0.0-beta.31" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SqlServer.HttpPassthrough.SampleWeb\SqlServer.HttpPassthrough.SampleWeb.csproj" />
