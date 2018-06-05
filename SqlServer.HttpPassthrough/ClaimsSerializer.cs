@@ -21,7 +21,7 @@ static class ClaimsSerializer
         }
     }
 
-    private static string Serialize(IEnumerable<string> items)
+    static string Serialize(IEnumerable<string> items)
     {
         var serializer = BuildSerializer();
         using (var stream = new MemoryStream())
