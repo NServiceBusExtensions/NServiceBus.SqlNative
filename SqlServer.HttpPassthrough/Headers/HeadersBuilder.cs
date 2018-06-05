@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 
@@ -16,43 +15,27 @@ class HeadersBuilder
 
     public string GetHeadersString(PassthroughMessage message)
     {
-        var encodedMessageType = GetEncodedMessageName(message);
-        var encodedClientUrl = JsonConvert.ToString(message.ClientUrl);
+        var messageType = GetMessageName(message);
         var messageId = message.Id.ToString();
         var correlationId = message.CorrelationId.ToString();
-        var builder = new StringBuilder($@"{{
-  ""NServiceBus.MessageId"": ""{messageId}"",
-  ""NServiceBus.CorrelationId"": ""{correlationId}"",
-  ""NServiceBus.EnclosedMessageTypes"": ""{encodedMessageType}"",
-  ""NServiceBus.TimeSent"": ""{Headers.ToWireFormattedString(DateTime.UtcNow)}"",
-  ""NServiceBus.OriginatingMachine"": ""{originatingMachine}"",
-  ""NServiceBus.OriginatingEndpoint"": ""{originatingEndpoint}"",
-  ""MessagePassthrough.ClientUrl"": ""{encodedClientUrl}""");
-        AddExtraHeaders(message, builder);
-
-        builder.AppendLine(@"
-}");
-        return builder.ToString();
+        var dictionary = message.ExtraHeaders;
+        dictionary.Add("NServiceBus.MessageId", messageId);
+        dictionary.Add("NServiceBus.CorrelationId", correlationId);
+        dictionary.Add("NServiceBus.EnclosedMessageTypes", messageType);
+        dictionary.Add("NServiceBus.TimeSent", Headers.ToWireFormattedString(DateTime.UtcNow));
+        dictionary.Add("NServiceBus.OriginatingMachine", originatingMachine);
+        dictionary.Add("NServiceBus.OriginatingEndpoint", originatingEndpoint);
+        dictionary.Add("MessagePassthrough.ClientUrl", message.ClientUrl);
+        return Headers.Serialize(dictionary);
     }
 
-    static void AddExtraHeaders(PassthroughMessage message, StringBuilder builder)
-    {
-        foreach (var header in message.ExtraHeaders)
-        {
-            var key = JsonConvert.ToString(header.Key);
-            var value = JsonConvert.ToString(header.Value);
-            builder.Append($@",
-  ""{key}"": ""{value}""");
-        }
-    }
-
-    public string GetEncodedMessageName(PassthroughMessage message)
+    public string GetMessageName(PassthroughMessage message)
     {
         if (message.Namespace == null)
         {
-            return JsonConvert.ToString(message.Type);
+            return message.Type;
         }
 
-        return JsonConvert.ToString($"{message.Namespace}.{message.Type}");
+        return $"{message.Namespace}.{message.Type}";
     }
 }

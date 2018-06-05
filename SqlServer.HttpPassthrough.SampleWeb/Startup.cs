@@ -32,7 +32,8 @@ public class Startup
     {
         message.ExtraHeaders = new Dictionary<string, string>
         {
-            {"MessagePassthrough.Version", AssemblyVersion.Version}
+            {"MessagePassthrough.Version", AssemblyVersion.Version},
+            {"{}\":", "{}\":"},
         };
         return Task.FromResult((Table) message.Destination);
     }

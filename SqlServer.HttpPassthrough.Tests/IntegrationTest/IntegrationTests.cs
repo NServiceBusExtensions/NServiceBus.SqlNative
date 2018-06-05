@@ -48,7 +48,7 @@ public class IntegrationTests : TestBase
         using (var client = server.CreateClient())
         {
             client.DefaultRequestHeaders.Referrer = new Uri("http://TheReferrer");
-            var message = $"{{\"Property\": \"{JsonConvert.ToString(evilText)}\"}}";
+            var message = $"{{\"Property\": \"Value\"}}";
             var clientFormSender = new ClientFormSender(client);
             await clientFormSender.Send(
                 route: "/SendMessage",
@@ -92,20 +92,10 @@ public class IntegrationTests : TestBase
         {
             var incomingAttachment = context.Attachments();
             await incomingAttachment.GetBytes("foofile");
-            Assert.Equal(evilText, message.Property);
+            Assert.Equal("Value", message.Property);
             resetEvent.Set();
         }
     }
-
-    const string evilText = @"
-田中さんにあげて下さい
-ヽ༼ຈل͜ຈ༽ﾉ ヽ༼ຈل͜ຈ༽ﾉ
-👾 🙇 💁 🙅 🙆 🙋 🙎 🙍
- بولندا، الإطلاق عل إيو
-̡͓̞ͅI̗̘̦͝n͇͇͙v̮̫ok̲̫̙͈i̖͙̭̹̠̞n̡̻̮̣̺g̲͈͙̭͙̬͎ ̰t͔̦h̞̲e̢̤ ͍̬̲͖f̴̘͕̣è͖ẹ̥̩l͖͔͚i͓͚̦͠n͖͍̗͓̳̮g͍ ̨o͚̪͡f̘̣̬ ̖̘͖̟͙̮c҉͔̫͖͓͇͖ͅh̵̤̣͚͔á̗̼͕ͅo̼̣̥s̱͈̺̖̦̻͢.̛̖̞̠̫̰
-
-Ω≈ç√∫˜µ≤≥÷
-";
 
     public IntegrationTests(ITestOutputHelper output) : base(output)
     {
