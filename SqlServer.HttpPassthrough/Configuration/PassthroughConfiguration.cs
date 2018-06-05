@@ -20,7 +20,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         internal Func<HttpContext, PassthroughMessage, Task<Table>> SendCallback;
         internal Table DeduplicationTable = "Deduplication";
         internal Table AttachmentsTable = "MessageAttachments";
-        internal string ClaimsHeaderKey;
+        internal string ClaimsHeaderPrefix;
         internal bool AppendClaims;
 
         /// <summary>
@@ -72,12 +72,12 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// <summary>
         /// Append the <see cref="Claim"/>s of the <see cref="ClaimsPrincipal"/> from <see cref="HttpContext.User"/>.
         /// </summary>
-        /// <param name="headerKey">The key to use on the outgoing message header. Defaults to 'SqlHttpPassthrough.Claims'.</param>
-        public void AppendClaimsToMessageHeaders(string headerKey = "SqlHttpPassthrough.Claims")
+        /// <param name="headerPrefix">The key prefix to use on the outgoing message header. Defaults to 'SqlHttpPassthrough.Claim.'.</param>
+        public void AppendClaimsToMessageHeaders(string headerPrefix = "SqlHttpPassthrough.Claim.")
         {
-            Guard.AgainstNullOrEmpty(headerKey, nameof(headerKey));
+            Guard.AgainstNullOrEmpty(headerPrefix, nameof(headerPrefix));
             AppendClaims = true;
-            ClaimsHeaderKey = headerKey;
+            ClaimsHeaderPrefix = headerPrefix;
         }
     }
 }

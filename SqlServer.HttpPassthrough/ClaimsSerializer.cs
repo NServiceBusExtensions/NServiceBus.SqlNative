@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Security.Claims;
 using System.Text;
@@ -11,29 +12,27 @@ static class ClaimsSerializer
         UseSimpleDictionaryFormat = true
     };
 
-    public static string Serialize(IEnumerable<Claim> claims)
+    public static void Append(IEnumerable<Claim> claims, Dictionary<string, string> extraHeaders, string prefix)
     {
-        var dictionary = new Dictionary<string, List<string>>();
-        foreach (var claim in claims)
+        foreach (var claim in claims.GroupBy(x => x.Type))
         {
-            if (!dictionary.TryGetValue(claim.Type, out var list))
-            {
-                list = new List<string>();
-                dictionary[claim.Type] = list;
-            }
-            list.Add(claim.Value);
+            var items = claim.Select(x => x.Value).ToList();
+            extraHeaders.Add(prefix + claim.Key, Serialize(items));
         }
+    }
 
+    private static string Serialize(IEnumerable<string> items)
+    {
         var serializer = BuildSerializer();
         using (var stream = new MemoryStream())
         {
-            serializer.WriteObject(stream, dictionary);
+            serializer.WriteObject(stream, items);
             return Encoding.UTF8.GetString(stream.ToArray());
         }
     }
 
     static DataContractJsonSerializer BuildSerializer()
     {
-        return new DataContractJsonSerializer(typeof(Dictionary<string, List<string>>), serializerSettings);
+        return new DataContractJsonSerializer(typeof(List<string>), serializerSettings);
     }
 }

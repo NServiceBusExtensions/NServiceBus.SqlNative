@@ -10,15 +10,15 @@ class SqlPassthrough : ISqlPassthrough
 {
     Sender sender;
     bool appendClaims;
-    string claimsHeaderKey;
+    string claimsHeaderPrefix;
     Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback;
 
-    public SqlPassthrough(Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback, Sender sender, bool appendClaims, string claimsHeaderKey)
+    public SqlPassthrough(Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback, Sender sender, bool appendClaims, string claimsHeaderPrefix)
     {
         this.sendCallback = sendCallback;
         this.sender = sender;
         this.appendClaims = appendClaims;
-        this.claimsHeaderKey = claimsHeaderKey;
+        this.claimsHeaderPrefix = claimsHeaderPrefix;
     }
 
     public async Task Send(HttpContext context, CancellationToken cancellation = default)
@@ -48,6 +48,6 @@ class SqlPassthrough : ISqlPassthrough
             return;
         }
 
-        passThroughMessage.ExtraHeaders[claimsHeaderKey] = ClaimsSerializer.Serialize(user.Claims);
+        ClaimsSerializer.Append(user.Claims, passThroughMessage.ExtraHeaders, claimsHeaderPrefix);
     }
 }
