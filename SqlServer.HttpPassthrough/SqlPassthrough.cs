@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -25,10 +26,28 @@ class SqlPassthrough : ISqlPassthrough
         Guard.AgainstNull(context, nameof(context));
         var passThroughMessage = await RequestParser.Extract(context.Request, cancellation).ConfigureAwait(false);
         var destinationTable = await sendCallback(context, passThroughMessage).ConfigureAwait(true);
-        if (appendClaims)
-        {
-            passThroughMessage.ExtraHeaders[claimsHeaderKey] = ClaimsSerializer.Serialize(context.User.Claims);
-        }
+        ProcessClaims(context, passThroughMessage);
         await sender.Send(passThroughMessage, destinationTable, cancellation).ConfigureAwait(true);
+    }
+
+    void ProcessClaims(HttpContext context, PassthroughMessage passThroughMessage)
+    {
+        if (!appendClaims)
+        {
+            return;
+        }
+
+        var user = context.User;
+        if (user?.Claims == null)
+        {
+            return;
+        }
+
+        if (!user.Claims.Any())
+        {
+            return;
+        }
+
+        passThroughMessage.ExtraHeaders[claimsHeaderKey] = ClaimsSerializer.Serialize(user.Claims);
     }
 }

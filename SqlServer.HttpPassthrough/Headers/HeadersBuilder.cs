@@ -37,11 +37,6 @@ class HeadersBuilder
 
     static void AddExtraHeaders(PassthroughMessage message, StringBuilder builder)
     {
-        if (message.ExtraHeaders == null)
-        {
-            return;
-        }
-
         foreach (var header in message.ExtraHeaders)
         {
             var key = JsonConvert.ToString(header.Key);

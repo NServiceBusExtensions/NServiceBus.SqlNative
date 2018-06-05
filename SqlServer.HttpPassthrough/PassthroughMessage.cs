@@ -19,8 +19,8 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         Guid correlationId;
         string type;
         string ns;
-        List<Attachment> attachments;
-        Dictionary<string, string> extraHeaders;
+        List<Attachment> attachments = new List<Attachment>();
+        Dictionary<string, string> extraHeaders = new Dictionary<string, string>();
         string body;
         string clientUrl;
 
