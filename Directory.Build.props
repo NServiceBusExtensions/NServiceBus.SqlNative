@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <Version>1.0.1</Version>
+    <Version>1.1.0-beta.1</Version>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>latest</LangVersion>
@@ -17,6 +17,7 @@
     <SignAssembly>true</SignAssembly>
     <NoWarn>1573</NoWarn>
     <AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
   <Target Name="IncludePDBsInPackage">
     <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +20,8 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         internal Func<HttpContext, PassthroughMessage, Task<Table>> SendCallback;
         internal Table DeduplicationTable = "Deduplication";
         internal Table AttachmentsTable = "MessageAttachments";
+        internal string ClaimsHeaderKey;
+        internal bool AppendClaims;
 
         /// <summary>
         /// Initialize a new instance of <see cref="PassthroughConfiguration"/>.
@@ -64,6 +67,17 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         {
             Guard.AgainstNull(table, nameof(table));
             AttachmentsTable = table;
+        }
+
+        /// <summary>
+        /// Append the <see cref="Claim"/>s of the <see cref="ClaimsPrincipal"/> from <see cref="HttpContext.User"/>.
+        /// </summary>
+        /// <param name="headerKey">The key to use on the outgoing message header. Defaults to 'SqlHttpPassthrough.Claims'.</param>
+        public void AppendClaimsToMessageHeaders(string headerKey = "SqlHttpPassthrough.Claims")
+        {
+            Guard.AgainstNullOrEmpty(headerKey, nameof(headerKey));
+            AppendClaims = true;
+            ClaimsHeaderKey = headerKey;
         }
     }
 }

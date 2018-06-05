@@ -15,6 +15,11 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public readonly static string EmptyHeadersJson = "{}";
 
+        static DataContractJsonSerializerSettings serializerSettings = new DataContractJsonSerializerSettings
+        {
+            UseSimpleDictionaryFormat = true
+        };
+
         /// <summary>
         /// An empty <see cref="IReadOnlyDictionary{TKey,TValue}"/>, for when empty headers are required.
         /// </summary>
@@ -57,11 +62,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         static DataContractJsonSerializer BuildSerializer()
         {
-            var settings = new DataContractJsonSerializerSettings
-            {
-                UseSimpleDictionaryFormat = true
-            };
-            return new DataContractJsonSerializer(typeof(Dictionary<string, string>), settings);
+            return new DataContractJsonSerializer(typeof(Dictionary<string, string>), serializerSettings);
         }
 
         /// <summary>

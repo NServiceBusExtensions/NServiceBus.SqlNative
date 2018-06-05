@@ -43,7 +43,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
 
             var headersBuilder = new HeadersBuilder(configuration.OriginatingEndpoint, configuration.OriginatingMachine);
             var sender = new Sender(configuration.ConnectionFunc, headersBuilder,configuration.AttachmentsTable);
-            var sqlPassthrough = new SqlPassthrough(configuration.SendCallback, sender);
+            var sqlPassthrough = new SqlPassthrough(configuration.SendCallback, sender, configuration.AppendClaims, configuration.ClaimsHeaderKey);
             services.AddSingleton<ISqlPassthrough>(sqlPassthrough);
             var dedupService = new DedupService(configuration.DeduplicationTable, configuration.ConnectionFunc);
             services.AddSingleton<IHostedService>(dedupService);
