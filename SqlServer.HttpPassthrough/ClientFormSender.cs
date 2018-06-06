@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace NServiceBus.SqlServer.HttpPassthrough
 {
     /// <summary>
-    /// Helper class for sending passthrough messages from a client in .net
+    /// Helper class for sending passthrough messages from a client.
     /// </summary>
     public class ClientFormSender
     {
