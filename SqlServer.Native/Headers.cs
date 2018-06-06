@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
@@ -14,11 +11,6 @@ namespace NServiceBus.Transport.SqlServerNative
         /// The string '{}', for when empty json headers are required.
         /// </summary>
         public readonly static string EmptyHeadersJson = "{}";
-
-        static DataContractJsonSerializerSettings serializerSettings = new DataContractJsonSerializerSettings
-        {
-            UseSimpleDictionaryFormat = true
-        };
 
         /// <summary>
         /// An empty <see cref="IReadOnlyDictionary{TKey,TValue}"/>, for when empty headers are required.
@@ -35,12 +27,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 return null;
             }
 
-            var serializer = BuildSerializer();
-            using (var stream = new MemoryStream())
-            {
-                serializer.WriteObject(stream, instance);
-                return Encoding.UTF8.GetString(stream.ToArray());
-            }
+            return Serializer.SerializeDictionary(instance);
         }
 
         /// <summary>
@@ -53,16 +40,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 return emptyHeaders;
             }
 
-            var serializer = BuildSerializer();
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
-            {
-                return (Dictionary<string, string>) serializer.ReadObject(stream);
-            }
-        }
-
-        static DataContractJsonSerializer BuildSerializer()
-        {
-            return new DataContractJsonSerializer(typeof(Dictionary<string, string>), serializerSettings);
+            return Serializer.DeSerializeDictionary(json);
         }
 
         /// <summary>
