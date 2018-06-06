@@ -42,7 +42,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             Guard.AgainstNull(configuration, nameof(configuration));
 
             var headersBuilder = new HeadersBuilder(configuration.OriginatingEndpoint, configuration.OriginatingMachine);
-            var sender = new Sender(configuration.ConnectionFunc, headersBuilder,configuration.AttachmentsTable);
+            var sender = new Sender(configuration.ConnectionFunc, headersBuilder,configuration.AttachmentsTable, configuration.DeduplicationTable);
             var sqlPassthrough = new SqlPassthrough(configuration.SendCallback, sender, configuration.AppendClaims, configuration.ClaimsHeaderPrefix);
             services.AddSingleton<ISqlPassthrough>(sqlPassthrough);
             var dedupService = new DedupService(configuration.DeduplicationTable, configuration.ConnectionFunc);
