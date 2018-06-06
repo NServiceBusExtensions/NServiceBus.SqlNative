@@ -16,7 +16,7 @@ static class Serializer
         using (var stream = new MemoryStream())
         {
             serializer.WriteObject(stream, instance);
-            return Encoding.UTF8.GetString(stream.ToArray()).Replace(@"\/", "/"); ;
+            return Encoding.UTF8.GetString(stream.ToArray()).Replace(@"\/", "/");
         }
     }
 
