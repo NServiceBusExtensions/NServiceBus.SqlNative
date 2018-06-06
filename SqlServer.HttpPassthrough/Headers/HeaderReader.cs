@@ -9,19 +9,7 @@ static class HeaderReader
     {
         var messageType = headers.GetHeader("MessageType");
 
-        string messageNamespace = null;
-        if (headers.TryGetValue("MessageNamespace", out var value))
-        {
-            messageNamespace = value.ToString();
-            if (string.IsNullOrWhiteSpace(messageNamespace))
-            {
-                throw new BadRequestException("Header 'MessageNamespace' existed but had no value.");
-            }
-            if (messageNamespace.Contains("."))
-            {
-                throw new BadRequestException($"Invalid 'MessageNamespace' header. Contains '.'. MessageNamespace: {messageNamespace}");
-            }
-        }
+        var messageNamespace = GetMessageNamespace(headers);
 
         if (messageType.Contains("."))
         {
@@ -36,6 +24,26 @@ static class HeaderReader
             Destination = headers.TryGetHeader("Destination"),
             Referrer = headers.GetHeader(HeaderNames.Referer)
         };
+    }
+
+    static string GetMessageNamespace(IHeaderDictionary headers)
+    {
+        if (!headers.TryGetValue("MessageNamespace", out var value))
+        {
+            return null;
+        }
+        var messageNamespace = value.ToString();
+        if (string.IsNullOrWhiteSpace(messageNamespace))
+        {
+            throw new BadRequestException("Header 'MessageNamespace' existed but had no value.");
+        }
+
+        if (messageNamespace.Contains("."))
+        {
+            throw new BadRequestException($"Invalid 'MessageNamespace' header. Contains '.'. MessageNamespace: {messageNamespace}");
+        }
+
+        return messageNamespace;
     }
 
     static Guid GetMessageId(IHeaderDictionary headers)
@@ -63,11 +71,11 @@ static class HeaderReader
 
     static string TryGetHeader(this IHeaderDictionary headers, string key)
     {
-        if (!headers.TryGetValue(key, out var value))
+        if (headers.TryGetValue(key, out var value))
         {
-            return null;
+            return value.ToString();
         }
+        return null;
 
-        return value.ToString();
     }
 }

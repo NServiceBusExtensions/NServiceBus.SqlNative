@@ -29,7 +29,7 @@ class HeadersBuilder
         return Headers.Serialize(dictionary);
     }
 
-    public string GetMessageName(PassthroughMessage message)
+    string GetMessageName(PassthroughMessage message)
     {
         if (message.Namespace == null)
         {
