@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using MyNamespace;
+using My.Namespace;
 using NServiceBus;
 using NServiceBus.Attachments.Sql;
 using NServiceBus.Features;
@@ -54,7 +54,7 @@ public class IntegrationTests : TestBase
                 route: "/SendMessage",
                 message: message,
                 typeName: "MyMessage",
-                typeNamespace: "MyNamespace",
+                typeNamespace: "My.Namespace",
                 destination: "Endpoint",
                 attachments: new Dictionary<string, byte[]>
                 {

@@ -1,6 +1,6 @@
 ﻿using NServiceBus;
 
-namespace MyNamespace
+namespace My.Namespace
 {
     class MyMessage : IMessage
     {

@@ -38,11 +38,6 @@ static class HeaderReader
             throw new BadRequestException("Header 'MessageNamespace' existed but had no value.");
         }
 
-        if (messageNamespace.Contains("."))
-        {
-            throw new BadRequestException($"Invalid 'MessageNamespace' header. Contains '.'. MessageNamespace: {messageNamespace}");
-        }
-
         return messageNamespace;
     }
 
