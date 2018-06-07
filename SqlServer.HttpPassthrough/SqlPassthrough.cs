@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -27,7 +28,12 @@ class SqlPassthrough : ISqlPassthrough
         var passThroughMessage = await RequestParser.Extract(context.Request, cancellation).ConfigureAwait(false);
         var destinationTable = await sendCallback(context, passThroughMessage).ConfigureAwait(true);
         ProcessClaims(context, passThroughMessage);
-        await sender.Send(passThroughMessage, destinationTable, cancellation).ConfigureAwait(true);
+        var rowVersion = await sender.Send(passThroughMessage, destinationTable, cancellation).ConfigureAwait(true);
+        var wasDedup = rowVersion == 0;
+        if (wasDedup)
+        {
+            context.Response.StatusCode = (int) HttpStatusCode.Conflict;
+        }
     }
 
     void ProcessClaims(HttpContext context, PassthroughMessage passThroughMessage)
