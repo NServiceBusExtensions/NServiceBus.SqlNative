@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 
@@ -12,14 +13,16 @@ class SqlPassthrough : ISqlPassthrough
     Sender sender;
     bool appendClaims;
     string claimsHeaderPrefix;
+    ILogger logger;
     Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback;
 
-    public SqlPassthrough(Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback, Sender sender, bool appendClaims, string claimsHeaderPrefix)
+    public SqlPassthrough(Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback, Sender sender, bool appendClaims, string claimsHeaderPrefix, ILogger logger)
     {
         this.sendCallback = sendCallback;
         this.sender = sender;
         this.appendClaims = appendClaims;
         this.claimsHeaderPrefix = claimsHeaderPrefix;
+        this.logger = logger;
     }
 
     public async Task Send(HttpContext context, CancellationToken cancellation = default)
@@ -32,6 +35,7 @@ class SqlPassthrough : ISqlPassthrough
         var wasDedup = rowVersion == 0;
         if (wasDedup)
         {
+            logger.LogInformation("Dedup detected. Setting response to HttpStatusCode.Conflict (409). Id:{id}", passThroughMessage.Id);
             context.Response.StatusCode = (int) HttpStatusCode.Conflict;
         }
     }

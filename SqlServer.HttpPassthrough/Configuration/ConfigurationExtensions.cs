@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NServiceBus.Transport.SqlServerNative;
 
 namespace NServiceBus.SqlServer.HttpPassthrough
@@ -44,9 +45,13 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             Guard.AgainstNull(configuration, nameof(configuration));
 
             var headersBuilder = new HeadersBuilder(configuration.OriginatingEndpoint, configuration.OriginatingMachine);
-            var sender = new Sender(configuration.ConnectionFunc, headersBuilder,configuration.AttachmentsTable, configuration.DeduplicationTable);
-            var sqlPassthrough = new SqlPassthrough(configuration.SendCallback, sender, configuration.AppendClaims, configuration.ClaimsHeaderPrefix);
-            services.AddSingleton<ISqlPassthrough>(sqlPassthrough);
+            services.AddSingleton<ISqlPassthrough>(serviceProvider =>
+            {
+                var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+                var logger = loggerFactory.CreateLogger<ISqlPassthrough>();
+                var sender = new Sender(configuration.ConnectionFunc, headersBuilder, configuration.AttachmentsTable, configuration.DeduplicationTable, logger);
+                return new SqlPassthrough(configuration.SendCallback, sender, configuration.AppendClaims, configuration.ClaimsHeaderPrefix, logger);
+            });
             var dedupService = new DedupService(configuration.DeduplicationTable, configuration.ConnectionFunc, configuration.DedupCriticalError);
             services.AddSingleton<IHostedService>(dedupService);
         }
