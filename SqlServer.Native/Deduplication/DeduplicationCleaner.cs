@@ -2,9 +2,16 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-class Cleaner
+class DeduplicationCleaner
 {
-    public Cleaner(Func<CancellationToken, Task> cleanup, Action<string, Exception> criticalError, TimeSpan frequencyToRunCleanup, AsyncTimer timer)
+    public virtual Task Stop() => timer.Stop();
+
+    AsyncTimer timer;
+    Action<Exception> criticalError;
+    Func<CancellationToken, Task> cleanup;
+    TimeSpan frequencyToRunCleanup;
+
+    public DeduplicationCleaner(Func<CancellationToken, Task> cleanup, Action<Exception> criticalError, TimeSpan frequencyToRunCleanup, AsyncTimer timer)
     {
         this.cleanup = cleanup;
         this.frequencyToRunCleanup = frequencyToRunCleanup;
@@ -28,17 +35,11 @@ class Cleaner
                 cleanupFailures++;
                 if (cleanupFailures >= 10)
                 {
-                    criticalError("Failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.", exception);
+                    criticalError(exception);
                     cleanupFailures = 0;
                 }
             },
             delayStrategy: Task.Delay);
     }
 
-    public virtual Task Stop() => timer.Stop();
-
-    AsyncTimer timer;
-    Action<string, Exception> criticalError;
-    Func<CancellationToken, Task> cleanup;
-    TimeSpan frequencyToRunCleanup;
 }

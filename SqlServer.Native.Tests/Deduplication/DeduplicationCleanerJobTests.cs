@@ -27,7 +27,7 @@ public class DeduplicationCleanerJobTests : TestBase
         var cleaner = new DeduplicationCleanerJob(
             "Deduplication",
             Connection.OpenAsyncConnection,
-            (message, exception) => { },
+            exception => { },
             expireWindow,
             frequencyToRunCleanup: TimeSpan.FromMilliseconds(10));
         cleaner.Start();

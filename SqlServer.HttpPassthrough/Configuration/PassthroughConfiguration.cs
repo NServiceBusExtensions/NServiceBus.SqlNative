@@ -14,6 +14,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
     /// </summary>
     public class PassthroughConfiguration
     {
+        internal Action<Exception> DedupCriticalError;
         internal Func<CancellationToken, Task<SqlConnection>> ConnectionFunc;
         internal string OriginatingMachine = Environment.MachineName;
         internal string OriginatingEndpoint = "SqlHttpPassthrough";
@@ -28,10 +29,13 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// </summary>
         /// <param name="connectionFunc">Creates a instance of a new and open <see cref="SqlConnection"/>.</param>
         /// <param name="callback">Manipulate or verify a <see cref="PassthroughMessage"/> prior to it being sent. Returns the destination <see cref="Table"/>.</param>
+        /// <param name="dedupCriticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
         public PassthroughConfiguration(
             Func<CancellationToken, Task<SqlConnection>> connectionFunc,
-            Func<HttpContext, PassthroughMessage, Task<Table>> callback)
+            Func<HttpContext, PassthroughMessage, Task<Table>> callback,
+            Action<Exception> dedupCriticalError)
         {
+            DedupCriticalError = dedupCriticalError;
             Guard.AgainstNull(connectionFunc, nameof(connectionFunc));
             Guard.AgainstNull(callback, nameof(callback));
             SendCallback = callback.WrapFunc(nameof(callback));

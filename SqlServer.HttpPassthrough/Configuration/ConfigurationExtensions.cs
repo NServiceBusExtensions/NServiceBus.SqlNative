@@ -22,12 +22,14 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// </summary>
         /// <param name="connectionFunc">Creates a instance of a new and open <see cref="SqlConnection"/>.</param>
         /// <param name="callback">Manipulate or verify a <see cref="PassthroughMessage"/> prior to it being sent. Returns the destination <see cref="Table"/>.</param>
+        /// <param name="dedupCriticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
         public static void AddSqlHttpPassthrough(
             this IServiceCollection services,
             Func<CancellationToken, Task<SqlConnection>> connectionFunc,
-            Func<HttpContext, PassthroughMessage, Task<Table>> callback)
+            Func<HttpContext, PassthroughMessage, Task<Table>> callback,
+            Action<Exception> dedupCriticalError)
         {
-            AddSqlHttpPassthrough(services, new PassthroughConfiguration(connectionFunc, callback));
+            AddSqlHttpPassthrough(services, new PassthroughConfiguration(connectionFunc, callback, dedupCriticalError));
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             var sender = new Sender(configuration.ConnectionFunc, headersBuilder,configuration.AttachmentsTable, configuration.DeduplicationTable);
             var sqlPassthrough = new SqlPassthrough(configuration.SendCallback, sender, configuration.AppendClaims, configuration.ClaimsHeaderPrefix);
             services.AddSingleton<ISqlPassthrough>(sqlPassthrough);
-            var dedupService = new DedupService(configuration.DeduplicationTable, configuration.ConnectionFunc);
+            var dedupService = new DedupService(configuration.DeduplicationTable, configuration.ConnectionFunc, configuration.DedupCriticalError);
             services.AddSingleton<IHostedService>(dedupService);
         }
 

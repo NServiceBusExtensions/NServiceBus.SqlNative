@@ -10,8 +10,8 @@ public class CleanerTests
     {
         var criticalActionTriggered = false;
         var timer = new FakeTimer();
-        var cleaner = new Cleaner(token => Task.FromResult(0),
-            (m, e) => criticalActionTriggered = true,  TimeSpan.Zero, timer);
+        var cleaner = new DeduplicationCleaner(token => Task.FromResult(0),
+            e => criticalActionTriggered = true,  TimeSpan.Zero, timer);
 
         cleaner.Start();
 
@@ -37,8 +37,8 @@ public class CleanerTests
     {
         var criticalActionTriggered = false;
         var timer = new FakeTimer();
-        var cleaner = new Cleaner(token => Task.FromResult(0),
-            (m, e) => criticalActionTriggered = true, TimeSpan.Zero, timer);
+        var cleaner = new DeduplicationCleaner(token => Task.FromResult(0),
+            e => criticalActionTriggered = true, TimeSpan.Zero, timer);
 
         cleaner.Start();
 

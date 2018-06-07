@@ -9,12 +9,16 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         Table table;
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
-        Action<string, Exception> criticalError;
+        Action<Exception> criticalError;
         TimeSpan expireWindow;
         TimeSpan frequencyToRunCleanup;
-        Cleaner cleaner;
+        DeduplicationCleaner cleaner;
 
-        public DeduplicationCleanerJob(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<string, Exception> criticalError, TimeSpan? expireWindow = null,TimeSpan? frequencyToRunCleanup = null)
+        /// <summary>
+        /// Initializes a new instance of <see cref="DeduplicationCleanerJob"/>.
+        /// </summary>
+        /// <param name="criticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
+        public DeduplicationCleanerJob(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<Exception> criticalError, TimeSpan? expireWindow = null,TimeSpan? frequencyToRunCleanup = null)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(criticalError, nameof(criticalError));
@@ -30,7 +34,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public virtual void Start()
         {
-            cleaner = new Cleaner(async cancellation =>
+            cleaner = new DeduplicationCleaner(async cancellation =>
                 {
                     using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
                     {
