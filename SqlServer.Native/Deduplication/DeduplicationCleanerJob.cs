@@ -21,7 +21,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
             Guard.AgainstNegativeAndZero(expireWindow, nameof(expireWindow));
             Guard.AgainstNegativeAndZero(frequencyToRunCleanup, nameof(frequencyToRunCleanup));
-            this.expireWindow = expireWindow.GetValueOrDefault(TimeSpan.FromDays(10));
+            this.expireWindow = expireWindow.GetValueOrDefault(TimeSpan.FromDays(1));
             this.frequencyToRunCleanup = frequencyToRunCleanup.GetValueOrDefault(TimeSpan.FromHours(1));
             this.table = table;
             this.connectionBuilder = connectionBuilder;
