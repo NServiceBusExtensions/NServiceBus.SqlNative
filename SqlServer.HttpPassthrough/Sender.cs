@@ -28,7 +28,8 @@ class Sender
     {
         try
         {
-           return await InnerSend(message, destination, cancellation);
+           return await InnerSend(message, destination, cancellation)
+               .ConfigureAwait(false);
         }
         catch (Exception exception)
         {
