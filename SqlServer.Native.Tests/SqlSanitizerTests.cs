@@ -6,6 +6,6 @@ public class SqlSanitizerTests
     public void Table_name_and_schema_should_be_quoted()
     {
         Assert.Equal("[MyEndpoint]", SqlSanitizer.Sanitize("MyEndpoint"));
-        Assert.Equal("[MyEndoint]]; SOME OTHER SQL;--]", SqlSanitizer.Sanitize("MyEndoint]; SOME OTHER SQL;--"));
+        Assert.Equal("[MyEndpoint]]; SOME OTHER SQL;--]", SqlSanitizer.Sanitize("MyEndpoint]; SOME OTHER SQL;--"));
     }
 }

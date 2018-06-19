@@ -58,7 +58,7 @@ public class IntegrationTests : TestBase
                 destination: "Endpoint",
                 attachments: new Dictionary<string, byte[]>
                 {
-                    {"foofile", Encoding.UTF8.GetBytes("foo")}
+                    {"fooFile", Encoding.UTF8.GetBytes("foo")}
                 });
         }
     }
@@ -91,7 +91,7 @@ public class IntegrationTests : TestBase
         public async Task Handle(MyMessage message, IMessageHandlerContext context)
         {
             var incomingAttachment = context.Attachments();
-            await incomingAttachment.GetBytes("foofile");
+            await incomingAttachment.GetBytes("fooFile");
             Assert.Equal("Value", message.Property);
             resetEvent.Set();
         }
