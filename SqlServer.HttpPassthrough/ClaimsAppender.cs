@@ -16,7 +16,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
     {
         /// <summary>
         /// Append a list of <see cref="Claim"/> to a to a headers <see cref="IDictionary{TKey,TValue}"/>.
-        /// Note that only the <see cref="Claim.Type"/>s and  <see cref="Claim.Value"/>s are persisted.
+        /// Note that only the <see cref="Claim.Type"/>s and <see cref="Claim.Value"/>s are persisted.
         /// </summary>
         public static void Append(IEnumerable<Claim> claims, IDictionary<string, string> headers, string prefix)
         {
