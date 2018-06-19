@@ -37,7 +37,9 @@ static class Serializer
         }
     }
 
-    public static string SerializeList(IEnumerable<string> items)
+    // Items needs to be a list since the DataContractJsonSerializer
+    // attempts to walk into the state machine if an IEnumerable is used.
+    public static string SerializeList(List<string> items)
     {
         var serializer = BuildListSerializer();
         using (var stream = new MemoryStream())
