@@ -1,0 +1,14 @@
+﻿[
+  {
+    "Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+    "Value": "User@foo.bar"
+  },
+  {
+    "Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+    "Value": "User1"
+  },
+  {
+    "Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+    "Value": "User2"
+  }
+]

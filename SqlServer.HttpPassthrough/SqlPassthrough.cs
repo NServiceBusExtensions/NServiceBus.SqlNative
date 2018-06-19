@@ -58,6 +58,6 @@ class SqlPassthrough : ISqlPassthrough
             return;
         }
 
-        ClaimsSerializer.Append(user.Claims, passThroughMessage.ExtraHeaders, claimsHeaderPrefix);
+        ClaimsAppender.Append(user.Claims, passThroughMessage.ExtraHeaders, claimsHeaderPrefix);
     }
 }
