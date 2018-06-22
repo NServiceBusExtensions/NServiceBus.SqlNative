@@ -25,7 +25,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             Guard.AgainstNullOrEmpty(prefix, nameof(prefix));
             foreach (var claim in claims.GroupBy(x => x.Type))
             {
-                var items = claim.Select(x => x.Value);
+                var items = claim.Select(x => x.Value).ToList();
                 headers.Add(prefix + claim.Key, Serializer.SerializeList(items));
             }
         }
