@@ -10,7 +10,7 @@
     <PackageReference Include="ApprovalTests" Version="3.0.14" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NServiceBus.SqlServer" Version="4.0.0" />
+    <PackageReference Include="NServiceBus.SqlServer" Version="4.1.0" />
     <PackageReference Include="NServiceBus" Version="7.0.1" />
     <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="140.17265.0" />
     <PackageReference Include="ObjectApproval" Version="2.2.0" />
