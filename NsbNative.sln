@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.HttpPassthrough.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.HttpPassthrough.SampleWeb", "SqlServer.HttpPassthrough.SampleWeb\SqlServer.HttpPassthrough.SampleWeb.csproj", "{22560E28-F3E1-4E86-96B0-80175EC4B6EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlServer.Deduplication", "SqlServer.Deduplication\SqlServer.Deduplication.csproj", "{5EB1F36C-FAED-4BC6-87CC-A598613B6103}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServer.Deduplication.SampleEndpoint", "SqlServer.Deduplication.SampleEndpoint\SqlServer.Deduplication.SampleEndpoint.csproj", "{961F19B8-D79B-43CC-8070-F1F998AE8FB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{22560E28-F3E1-4E86-96B0-80175EC4B6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22560E28-F3E1-4E86-96B0-80175EC4B6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22560E28-F3E1-4E86-96B0-80175EC4B6EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EB1F36C-FAED-4BC6-87CC-A598613B6103}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EB1F36C-FAED-4BC6-87CC-A598613B6103}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EB1F36C-FAED-4BC6-87CC-A598613B6103}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EB1F36C-FAED-4BC6-87CC-A598613B6103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{961F19B8-D79B-43CC-8070-F1F998AE8FB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{961F19B8-D79B-43CC-8070-F1F998AE8FB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{961F19B8-D79B-43CC-8070-F1F998AE8FB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{961F19B8-D79B-43CC-8070-F1F998AE8FB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

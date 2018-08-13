@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>NServiceBus.SqlServer.Deduplication</AssemblyName>
+    <PackageName>NServiceBus.SqlServer.Deduplication</PackageName>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>Message deduplication for the SQL Server transport.</Description>
+    <PackageProjectUrl>https://docs.particular.net/nuget/$(PackageId)</PackageProjectUrl>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <DefineConstants>$(DefineConstants);SqlServerDeduplication</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SqlServer.Native\Deduplication\*.cs" />
+    <Compile Include="..\SqlServer.Native\ConnectionHelpers.cs" />
+    <Compile Include="..\SqlServer.Native\Extensions.cs" />
+    <Compile Include="..\SqlServer.Native\Guard.cs" />
+    <Compile Include="..\SqlServer.Native\SqlSanitizer.cs" />
+    <Compile Include="..\SqlServer.Native\Table.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NServiceBus" Version="7.0.1" />
+    <PackageReference Include="NServiceBus.SqlServer" Version="4.1.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-62925-02" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>

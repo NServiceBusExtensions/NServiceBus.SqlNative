@@ -2,7 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+#if (SqlServerDeduplication)
+namespace NServiceBus.Transport.SqlServerDeduplication
+#else
 namespace NServiceBus.Transport.SqlServerNative
+#endif
 {
     /// <summary>
     /// ConnectionHelpers.
