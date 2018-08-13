@@ -1,7 +1,18 @@
 image: Visual Studio 2017
 services:
 - mssql2017
-build_script:
-- cmd: dotnet build --configuration Release
+configuration: Release
+platform: Any CPU
+install:
+- cmd: appveyor downloadfile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+before_build:
+- ps: nuget restore
+build:
+  verbosity: minimal
+test_script:
+- cmd: >-
+    %xunit20%\xunit.console SqlServer.Native.Tests\bin\Release\net471\SqlServer.Native.Tests.dll
+
+
 artifacts:
 - path: nugets\**\*.nupkg
