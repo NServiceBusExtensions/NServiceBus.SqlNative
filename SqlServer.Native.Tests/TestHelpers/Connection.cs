@@ -9,7 +9,7 @@ public static class Connection
 
     static Connection()
     {
-        if (Environment.GetEnvironmentVariable("APPVEYOR") == "True")
+        if (Environment.GetEnvironmentVariable("AppVeyor") == "True")
         {
             ConnectionString = @"Server=(local)\SQL2017;Database=master;User ID=sa;Password=Password12!;Max Pool Size=100;MultipleActiveResultSets=True";
             return;

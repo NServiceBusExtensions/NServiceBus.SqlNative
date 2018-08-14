@@ -1,4 +1,8 @@
-﻿namespace NServiceBus.Transport.SqlServerNative
+﻿#if (SqlServerDeduplication)
+namespace NServiceBus.Transport.SqlServerDeduplication
+#else
+namespace NServiceBus.Transport.SqlServerNative
+#endif
 {
     /// <summary>
     /// Represents a table and schema.

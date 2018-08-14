@@ -3,11 +3,24 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-
+#if (SqlServerDeduplication)
+namespace NServiceBus.Transport.SqlServerDeduplication
+#else
 namespace NServiceBus.Transport.SqlServerNative
+#endif
 {
     public class DeduplicationManager
     {
+        internal const string dedupSql = @"
+if exists (
+    select *
+    from {0}
+    where Id = @Id)
+return
+
+insert into {0} (Id)
+values (@Id);";
+
         SqlConnection connection;
         Table table;
         SqlTransaction transaction;
@@ -18,6 +31,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNull(connection, nameof(connection));
             this.connection = connection;
             this.table = table;
+            InitSendSql();
         }
 
         public DeduplicationManager(SqlTransaction transaction, Table table)
@@ -27,6 +41,35 @@ namespace NServiceBus.Transport.SqlServerNative
             this.transaction = transaction;
             this.table = table;
             connection = transaction.Connection;
+            InitSendSql();
+        }
+
+        void InitSendSql()
+        {
+            var resultSql = string.Format(dedupSql, table);
+            sendSql = ConnectionHelpers.WrapInNoCount(resultSql);
+        }
+
+        SqlCommand CreateDedupRecordCommand(Guid messageId)
+        {
+            var command = connection.CreateCommand(transaction, string.Format(sendSql, table));
+            var parameters = command.Parameters;
+            parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = messageId;
+            return command;
+        }
+
+        public async Task<long> WriteDedupRecord(CancellationToken cancellation, Guid messageId)
+        {
+            using (var command = CreateDedupRecordCommand(messageId))
+            {
+                var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
+                if (rowVersion == null)
+                {
+                    return 0;
+                }
+
+                return (long) rowVersion;
+            }
         }
 
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)
@@ -73,5 +116,7 @@ create table {0} (
     Created datetime2(0) not null default sysutcdatetime(),
 );
 ";
+
+        string sendSql;
     }
 }
