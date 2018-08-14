@@ -14,8 +14,7 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-[Trait("Category", "Integration")]
-public class IntegrationTests : TestBase
+public class HttpPassthroughIntegrationTests : TestBase
 {
     [Fact]
     public async Task Integration()
@@ -97,7 +96,7 @@ public class IntegrationTests : TestBase
         }
     }
 
-    public IntegrationTests(ITestOutputHelper output) : base(output)
+    public HttpPassthroughIntegrationTests(ITestOutputHelper output) : base(output)
     {
     }
 }
