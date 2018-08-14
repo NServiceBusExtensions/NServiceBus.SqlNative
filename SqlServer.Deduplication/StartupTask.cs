@@ -6,14 +6,15 @@ using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Transport.SqlServerDeduplication;
 
-class MyStartupTask:FeatureStartupTask
+class StartupTask : FeatureStartupTask
 {
     Table table;
     CriticalError criticalError;
     Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
     DeduplicationCleanerJob job;
 
-    public MyStartupTask(Table table, CriticalError criticalError, Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+    public StartupTask(Table table, CriticalError criticalError,
+        Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
     {
         this.table = table;
         this.criticalError = criticalError;
@@ -22,9 +23,14 @@ class MyStartupTask:FeatureStartupTask
 
     protected override Task OnStart(IMessageSession session)
     {
-        job = new DeduplicationCleanerJob(table, connectionBuilder, x => criticalError.Raise("Dedup cleanup failed", x));
+        job = new DeduplicationCleanerJob(table, connectionBuilder, RaiseError);
         job.Start();
         return Task.CompletedTask;
+    }
+
+    void RaiseError(Exception exception)
+    {
+        criticalError.Raise("Dedup cleanup failed", exception);
     }
 
     protected override Task OnStop(IMessageSession session)

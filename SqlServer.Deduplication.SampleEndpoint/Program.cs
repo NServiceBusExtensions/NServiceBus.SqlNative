@@ -29,8 +29,26 @@ class Program
         Console.Title = "SampleEndpoint Press Ctrl-C to Exit.";
         Console.TreatControlCAsInput = true;
         var endpoint = await Endpoint.Start(configuration).ConfigureAwait(false);
-        await endpoint.SendLocal(new SampleMessage());
+        await SendMessages(endpoint);
         Console.ReadKey(true);
         await endpoint.Stop();
+    }
+
+    static async Task SendMessages(IEndpointInstance endpoint)
+    {
+        var message = new SampleMessage();
+        var sendOptions = new SendOptions();
+        sendOptions.RouteToThisEndpoint();
+        sendOptions.SetMessageId(Guid.NewGuid().ToString());
+        await endpoint.Send(message, sendOptions);
+        Console.WriteLine("send succeeded");
+        try
+        {
+            await endpoint.Send(message, sendOptions);
+        }
+        finally
+        {
+            Console.WriteLine("Re-send failed");
+        }
     }
 }

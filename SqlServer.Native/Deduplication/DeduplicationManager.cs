@@ -43,26 +43,24 @@ values (@Id);";
             connection = transaction.Connection;
             InitSendSql();
         }
+
         void InitSendSql()
         {
             var resultSql = string.Format(dedupSql, table);
-
             sendSql = ConnectionHelpers.WrapInNoCount(resultSql);
         }
 
-#if (SqlServerDeduplication)
-
-        SqlCommand CreateSendCommand(OutgoingMessage message)
+        SqlCommand CreateDedupRecordCommand(Guid messageId)
         {
             var command = connection.CreateCommand(transaction, string.Format(sendSql, table));
             var parameters = command.Parameters;
-            parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = message.MessageId;
+            parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = messageId;
             return command;
         }
 
-        async Task<long> InnerSend(OutgoingMessage message, CancellationToken cancellation)
+        public async Task<long> WriteDedupRecord(CancellationToken cancellation, Guid messageId)
         {
-            using (var command = CreateSendCommand(message))
+            using (var command = CreateDedupRecordCommand(messageId))
             {
                 var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
                 if (rowVersion == null)
@@ -70,11 +68,9 @@ values (@Id);";
                     return 0;
                 }
 
-                return (long)rowVersion;
+                return (long) rowVersion;
             }
         }
-
-#endif
 
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)
         {
