@@ -16,6 +16,7 @@
     <PackageReference Include="ObjectApproval" Version="2.2.0" />
     <PackageReference Include="Xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>

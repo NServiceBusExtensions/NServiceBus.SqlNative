@@ -12,8 +12,6 @@ using NServiceBus.Transport.SqlServerNative;
 
 public class Startup
 {
-    string nsbConnectionString = @"Server=.\SQLExpress;Database=MessageHttpPassthroughTests; Integrated Security=True;Max Pool Size=100;MultipleActiveResultSets=True";
-
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
@@ -42,7 +40,7 @@ public class Startup
 
     Task<SqlConnection> OpenConnection(CancellationToken cancellation)
     {
-        return ConnectionHelpers.OpenConnection(nsbConnectionString, cancellation);
+        return ConnectionHelpers.OpenConnection(Connection.ConnectionString, cancellation);
     }
 
     public void Configure(IApplicationBuilder builder)

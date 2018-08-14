@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using NServiceBus;
+﻿using NServiceBus;
 using NServiceBus.Features;
 
 class DeduplicationFeature : Feature

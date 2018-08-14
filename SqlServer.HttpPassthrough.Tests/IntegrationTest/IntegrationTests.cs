@@ -20,7 +20,7 @@ public class IntegrationTests : TestBase
     [Fact]
     public async Task Integration()
     {
-        using (var connection = TestConnection.OpenConnection())
+        using (var connection = Connection.OpenConnection())
         {
             var manager = new DeduplicationManager(connection, "Deduplication");
             await manager.Create();
@@ -73,9 +73,9 @@ public class IntegrationTests : TestBase
         configuration.DisableFeature<TimeoutManager>();
         configuration.RegisterComponents(x => x.RegisterSingleton(resetEvent));
         configuration.DisableFeature<MessageDrivenSubscriptions>();
-        configuration.EnableAttachments(TestConnection.ConnectionString, TimeToKeep.Default);
+        configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
         var transport = configuration.UseTransport<SqlServerTransport>();
-        transport.ConnectionString(TestConnection.ConnectionString);
+        transport.ConnectionString(Connection.ConnectionString);
         return Endpoint.Start(configuration);
     }
 

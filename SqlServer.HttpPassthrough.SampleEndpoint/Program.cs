@@ -8,16 +8,15 @@ class Program
 {
     static async Task Main()
     {
-        var connection = @"Server=.\SQLExpress;Database=MessageHttpPassthroughTests; Integrated Security=True;Max Pool Size=100";
         var configuration = new EndpointConfiguration("SampleEndpoint");
         configuration.UsePersistence<LearningPersistence>();
-        configuration.EnableAttachments(connection, TimeToKeep.Default);
+        configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<MessageDrivenSubscriptions>();
         configuration.DisableFeature<TimeoutManager>();
         configuration.PurgeOnStartup(true);
         var transport = configuration.UseTransport<SqlServerTransport>();
-        transport.ConnectionString(connection);
+        transport.ConnectionString(Connection.ConnectionString);
         configuration.EnableInstallers();
         Console.Title = "SampleEndpoint Press Ctrl-C to Exit.";
         Console.TreatControlCAsInput = true;
