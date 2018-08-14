@@ -9,7 +9,7 @@ class DeduplicationFeature : Feature
         var settings = readOnlySettings.Get<DeduplicationSettings>();
 
         var pipeline = context.Pipeline;
-        pipeline.Register(new SendRegistration(settings.Table, settings.ConnectionBuilder));
+        pipeline.Register(new SendRegistration(settings.Table, settings.ConnectionBuilder, settings.CallbackAction));
         if (settings.RunCleanTask)
         {
             context.RegisterStartupTask(builder =>

@@ -16,6 +16,17 @@ namespace NServiceBus
         /// </summary>
         public static DeduplicationSettings EnableDedup(
             this EndpointConfiguration configuration,
+            string connection)
+        {
+            Guard.AgainstNullOrEmpty(connection, nameof(connection));
+            return EnableDedup(configuration, cancellation => OpenConnection(connection, cancellation));
+        }
+
+        /// <summary>
+        /// Enable SQL attachments for this endpoint.
+        /// </summary>
+        public static DeduplicationSettings EnableDedup(
+            this EndpointConfiguration configuration,
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
         {
             Guard.AgainstNull(configuration, nameof(configuration));
@@ -25,6 +36,20 @@ namespace NServiceBus
             settings.Set<DeduplicationSettings>(deduplicationSettings);
             configuration.EnableFeature<DeduplicationFeature>();
             return deduplicationSettings;
+        }
+        static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation)
+        {
+            var connection = new SqlConnection(connectionString);
+            try
+            {
+                await connection.OpenAsync(cancellation).ConfigureAwait(false);
+                return connection;
+            }
+            catch
+            {
+                connection.Dispose();
+                throw;
+            }
         }
     }
 }

@@ -8,12 +8,12 @@ using NServiceBus.Transport.SqlServerDeduplication;
 class SendRegistration :
     RegisterStep
 {
-    public SendRegistration(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+    public SendRegistration(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<IOutgoingPhysicalMessageContext> callback)
         : base(
             stepId: $"{AssemblyHelper.Name}Send",
             behavior: typeof(SendBehavior),
             description: "Saves the outgoing message id to a secondary store to allow message deduplication",
-            factoryMethod: builder => new SendBehavior(table, connectionBuilder))
+            factoryMethod: builder => new SendBehavior(table, connectionBuilder, callback))
     {
     }
 }
