@@ -11,15 +11,7 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public class DeduplicationManager
     {
-        internal const string dedupSql = @"
-if exists (
-    select *
-    from {0}
-    where Id = @Id)
-return
-
-insert into {0} (Id)
-values (@Id);";
+        const string dedupSql = @"insert into {0} (Id) values (@Id);";
 
         SqlConnection connection;
         Table table;
@@ -58,18 +50,29 @@ values (@Id);";
             return command;
         }
 
-        public async Task<long> WriteDedupRecord(CancellationToken cancellation, Guid messageId)
+        public async Task<bool> WriteDedupRecord(CancellationToken cancellation, Guid messageId)
         {
             using (var command = CreateDedupRecordCommand(messageId))
             {
-                var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
-                if (rowVersion == null)
+                try
                 {
-                    return 0;
+                    await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
                 }
-
-                return (long) rowVersion;
+                catch (SqlException sqlException)
+                {
+                    foreach (SqlError sqlError in sqlException.Errors)
+                    {
+                        //Unique Key Violation = 2627
+                        if (sqlError.Number == 2627)
+                        {
+                            return true;
+                        }
+                    }
+                    throw;
+                }
             }
+
+            return false;
         }
 
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)

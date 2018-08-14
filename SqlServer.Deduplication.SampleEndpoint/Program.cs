@@ -3,12 +3,16 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Features;
+using NServiceBus.Logging;
 using SampleNamespace;
 
 class Program
 {
     static async Task Main()
     {
+        var defaultFactory = LogManager.Use<DefaultFactory>();
+        defaultFactory.Level(LogLevel.Info);
+
         var connection = @"Server=.\SQLExpress;Database=DeduplicationSample; Integrated Security=True;Max Pool Size=100";
         var configuration = new EndpointConfiguration("SampleEndpoint");
         configuration.EnableInstallers();
@@ -42,13 +46,6 @@ class Program
         sendOptions.SetMessageId(Guid.NewGuid().ToString());
         await endpoint.Send(message, sendOptions);
         Console.WriteLine("send succeeded");
-        try
-        {
-            await endpoint.Send(message, sendOptions);
-        }
-        finally
-        {
-            Console.WriteLine("Re-send failed");
-        }
+        await endpoint.Send(message, sendOptions);
     }
 }

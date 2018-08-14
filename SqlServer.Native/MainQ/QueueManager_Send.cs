@@ -4,6 +4,15 @@
     {
         string sendSql;
 
+        const string dedupSql = @"
+if exists (
+    select *
+    from {0}
+    where Id = @Id)
+return
+
+insert into {0} (Id)
+values (@Id);";
         const string sql = @"
 insert into {0} (
     Id,
@@ -24,7 +33,7 @@ values (
             string resultSql;
             if (deduplicate)
             {
-                resultSql = string.Format(DeduplicationManager.dedupSql, deduplicationTable) + string.Format(sql, Table);
+                resultSql = string.Format(dedupSql, deduplicationTable) + string.Format(sql, Table);
             }
             else
             {

@@ -2,12 +2,14 @@
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
+using NServiceBus.Logging;
 using NServiceBus.Pipeline;
 using NServiceBus.Transport.SqlServerDeduplication;
 
 class SendBehavior :
     Behavior<IOutgoingPhysicalMessageContext>
 {
+    ILog logger = LogManager.GetLogger("DeduplicationSendBehavior");
     Table table;
     Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
 
@@ -29,7 +31,13 @@ class SendBehavior :
         using (var connection = await connectionTask)
         {
             var deduplicationManager = new DeduplicationManager(connection, table);
-            await deduplicationManager.WriteDedupRecord(CancellationToken.None, messageId).ConfigureAwait(false);
+            if (await deduplicationManager.WriteDedupRecord(CancellationToken.None, messageId).ConfigureAwait(false))
+            {
+                logger.Info($"Message deduplicated. MessageId: {messageId}");
+                return;
+            }
+
+            await next().ConfigureAwait(false);
         }
     }
 }
