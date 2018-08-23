@@ -57,35 +57,18 @@ namespace NServiceBus.SqlServer.HttpPassthrough
                 headers.Add("Destination", destination);
                 headers.Add("MessageType", typeName);
                 headers.Add("MessageNamespace", typeNamespace);
-                List<ByteArrayContent> files;
-                if (attachments == null)
+                if (attachments != null)
                 {
-                    files = new List<ByteArrayContent>();
-                }
-                else
-                {
-                    files = new List<ByteArrayContent>(attachments.Count);
                     foreach (var attachment in attachments)
                     {
                         var file = new ByteArrayContent(attachment.Value);
                         content.Add(file, attachment.Key, attachment.Key);
-                        files.Add(file);
                     }
                 }
 
-                try
+                using (var response = await client.PostAsync(route, content, cancellation).ConfigureAwait(false))
                 {
-                    using (var response = await client.PostAsync(route, content, cancellation).ConfigureAwait(false))
-                    {
-                        response.EnsureSuccessStatusCode();
-                    }
-                }
-                finally
-                {
-                    foreach (var file in files)
-                    {
-                        file.Dispose();
-                    }
+                    response.EnsureSuccessStatusCode();
                 }
 
                 return messageId;
