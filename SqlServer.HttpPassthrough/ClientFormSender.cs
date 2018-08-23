@@ -49,9 +49,8 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             }
 
             using (var content = new MultipartFormDataContent())
-            using (var stringContent = new StringContent(message))
             {
-                content.Add(stringContent, "message");
+                content.Add(new StringContent(message), "message");
                 var headers = content.Headers;
                 headers.Add("MessageId", messageId.ToString());
                 headers.Add("Destination", destination);
