@@ -33,10 +33,11 @@ namespace NServiceBus
             Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
             var settings = configuration.GetSettings();
             var deduplicationSettings = new DeduplicationSettings(connectionBuilder);
-            settings.Set<DeduplicationSettings>(deduplicationSettings);
+            settings.Set(deduplicationSettings);
             configuration.EnableFeature<DeduplicationFeature>();
             return deduplicationSettings;
         }
+
         static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation)
         {
             var connection = new SqlConnection(connectionString);
