@@ -8,12 +8,12 @@ using SampleNamespace;
 
 class Program
 {
+    const string connection = @"Server=.\SQLExpress;Database=DeduplicationSample; Integrated Security=True;Max Pool Size=100";
     static async Task Main()
     {
         var defaultFactory = LogManager.Use<DefaultFactory>();
         defaultFactory.Level(LogLevel.Info);
 
-        var connection = @"Server=.\SQLExpress;Database=DeduplicationSample; Integrated Security=True;Max Pool Size=100";
         var configuration = new EndpointConfiguration("SampleEndpoint");
         configuration.EnableInstallers();
         configuration.UsePersistence<LearningPersistence>();
@@ -40,12 +40,17 @@ class Program
 
     static async Task SendMessages(IEndpointInstance endpoint)
     {
-        var message = new SampleMessage();
-        var sendOptions = new SendOptions();
-        sendOptions.RouteToThisEndpoint();
-        sendOptions.SetMessageId(Guid.NewGuid().ToString());
-        await endpoint.Send(message, sendOptions);
+        var guid = Guid.NewGuid();
+        await SendMessage(endpoint, guid);
         Console.WriteLine("send succeeded");
-        await endpoint.Send(message, sendOptions);
+        await SendMessage(endpoint, guid);
+    }
+
+    static Task SendMessage(IEndpointInstance endpoint, Guid guid)
+    {
+        var message = new SampleMessage();
+        var options = new SendOptions();
+        options.RouteToThisEndpoint();
+        return endpoint.SendWithDeduplication(guid, message, options);
     }
 }

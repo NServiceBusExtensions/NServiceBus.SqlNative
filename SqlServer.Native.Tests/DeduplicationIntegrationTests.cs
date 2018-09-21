@@ -15,17 +15,22 @@ public class DeduplicationIntegrationTests : TestBase
     public async Task Integration()
     {
         var endpoint = await StartEndpoint();
-        var sendOptions = new SendOptions();
-        sendOptions.RouteToThisEndpoint();
-        sendOptions.SetMessageId(Guid.NewGuid().ToString());
-        await endpoint.Send(new MyMessage(), sendOptions);
-        await endpoint.Send(new MyMessage(), sendOptions);
+        var messageId = Guid.NewGuid();
+        await SendMessage(messageId, endpoint);
+        await SendMessage(messageId, endpoint);
         if (!countdown.Wait(TimeSpan.FromSeconds(20)))
         {
             throw new Exception("Expected dedup");
         }
 
         await endpoint.Stop();
+    }
+
+    static Task SendMessage(Guid messageId, IEndpointInstance endpoint)
+    {
+        var sendOptions = new SendOptions();
+        sendOptions.RouteToThisEndpoint();
+        return endpoint.SendWithDeduplication(messageId, new MyMessage(), sendOptions);
     }
 
     static Task<IEndpointInstance> StartEndpoint()

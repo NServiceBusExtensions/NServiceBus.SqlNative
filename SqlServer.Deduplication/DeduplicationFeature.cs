@@ -9,13 +9,12 @@ class DeduplicationFeature : Feature
         var settings = readOnlySettings.Get<DeduplicationSettings>();
 
         var pipeline = context.Pipeline;
-        pipeline.Register(new SendRegistration(settings.Table, settings.ConnectionBuilder, settings.CallbackAction));
+        var table = settings.Table;
+        var connectionBuilder = settings.ConnectionBuilder;
+        pipeline.Register(new SendRegistration(table, connectionBuilder, settings.CallbackAction));
         if (settings.RunCleanTask)
         {
-            context.RegisterStartupTask(builder =>
-            {
-                return new StartupTask(settings.Table, builder.Build<CriticalError>(), settings.ConnectionBuilder);
-            });
+            context.RegisterStartupTask(builder => new StartupTask(table, builder.Build<CriticalError>(), connectionBuilder));
         }
     }
 }

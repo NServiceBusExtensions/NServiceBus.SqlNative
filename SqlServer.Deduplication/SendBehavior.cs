@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Logging;
 using NServiceBus.Pipeline;
+using NServiceBus.Transport;
 using NServiceBus.Transport.SqlServerDeduplication;
 
 class SendBehavior :
@@ -23,16 +24,26 @@ class SendBehavior :
 
     public override async Task Invoke(IOutgoingPhysicalMessageContext context, Func<Task> next)
     {
-        var connectionTask = connectionBuilder(CancellationToken.None).ConfigureAwait(false);
-
-        if (!Guid.TryParse(context.MessageId, out var messageId))
+        var shouldDeduplicate = context.Extensions.Get<bool>("SqlServer.Deduplication");
+        if (!shouldDeduplicate)
         {
-            throw new Exception($"Only Guids are supported for message Ids. Invalid value: {context.MessageId}");
+            await next().ConfigureAwait(false);
+            return;
         }
 
+        var connectionTask = connectionBuilder(CancellationToken.None).ConfigureAwait(false);
+
+        var messageId = GetMessageId(context);
+
+        var transportTransaction = new TransportTransaction();
+        context.Extensions.Set(transportTransaction);
         using (var connection = await connectionTask)
+        using (var transaction = connection.BeginTransaction())
         {
-            var deduplicationManager = new DeduplicationManager(connection, table);
+            transportTransaction.Set(connection);
+            transportTransaction.Set(transaction);
+
+            var deduplicationManager = new DeduplicationManager(transaction, table);
             if (await deduplicationManager.WriteDedupRecord(CancellationToken.None, messageId).ConfigureAwait(false))
             {
                 logger.Info($"Message deduplicated. MessageId: {messageId}");
@@ -41,6 +52,16 @@ class SendBehavior :
             }
 
             await next().ConfigureAwait(false);
+            transaction.Commit();
         }
+    }
+
+    static Guid GetMessageId(IOutgoingPhysicalMessageContext context)
+    {
+        if (Guid.TryParse(context.MessageId, out var messageId))
+        {
+            return messageId;
+        }
+        throw new Exception($"Only Guids are supported for message Ids. Invalid value: {context.MessageId}");
     }
 }
