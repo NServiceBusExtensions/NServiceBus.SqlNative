@@ -4,8 +4,8 @@
     <AssemblyName>NServiceBus.SqlServer.Native</AssemblyName>
     <PackageName>NServiceBus.SqlServer.Native</PackageName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile Condition="'$(Configuration)'=='Release'">true</GenerateDocumentationFile>
     <PackageProjectUrl>https://docs.particular.net/nuget/$(PackageId)</PackageProjectUrl>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
