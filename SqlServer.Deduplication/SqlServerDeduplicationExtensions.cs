@@ -60,7 +60,7 @@ namespace NServiceBus
         {
             if (options.GetMessageId() != null)
             {
-                throw new ArgumentException("Expected SendOptions with no MessageId defined", nameof(options));
+                throw new ArgumentException("Expected a SendOptions with no MessageId defined", nameof(options));
             }
         }
 
