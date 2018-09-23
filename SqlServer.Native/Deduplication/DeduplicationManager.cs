@@ -86,6 +86,16 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
+        public virtual async Task PurgeItems(CancellationToken cancellation = default)
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.Transaction = transaction;
+                command.CommandText = $"delete from {table}";
+                await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
+            }
+        }
+
         /// <summary>
         /// Drops a queue.
         /// </summary>
@@ -99,8 +109,8 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public virtual Task Create(CancellationToken cancellation = default)
         {
-            var dedupCommandText = string.Format(DeduplicationTableSql, table);
-            return connection.ExecuteCommand(transaction, dedupCommandText, cancellation);
+            var command = string.Format(DeduplicationTableSql, table);
+            return connection.ExecuteCommand(transaction, command, cancellation);
         }
 
         /// <summary>

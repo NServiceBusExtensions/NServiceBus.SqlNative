@@ -6,14 +6,14 @@ using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Transport.SqlServerDeduplication;
 
-class StartupTask : FeatureStartupTask
+class CleanupTask : FeatureStartupTask
 {
     Table table;
     CriticalError criticalError;
     Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
     DeduplicationCleanerJob job;
 
-    public StartupTask(Table table, CriticalError criticalError,
+    public CleanupTask(Table table, CriticalError criticalError,
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
     {
         this.table = table;

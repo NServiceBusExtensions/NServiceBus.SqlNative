@@ -54,6 +54,9 @@ namespace NServiceBus.Transport.SqlServerNative
             cleaner.Start();
         }
 
-        public virtual Task Stop() => cleaner.Stop();
+        public virtual Task Stop()
+        {
+            return cleaner.Stop();
+        }
     }
 }

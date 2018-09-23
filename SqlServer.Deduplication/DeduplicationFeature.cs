@@ -12,9 +12,13 @@ class DeduplicationFeature : Feature
         var table = settings.Table;
         var connectionBuilder = settings.ConnectionBuilder;
         pipeline.Register(new SendRegistration(table, connectionBuilder, settings.CallbackAction));
+        if (context.Settings.PurgeOnStartup())
+        {
+            context.RegisterStartupTask(builder => new PurgeTask(table, connectionBuilder));
+        }
         if (settings.RunCleanTask)
         {
-            context.RegisterStartupTask(builder => new StartupTask(table, builder.Build<CriticalError>(), connectionBuilder));
+            context.RegisterStartupTask(builder => new CleanupTask(table, builder.Build<CriticalError>(), connectionBuilder));
         }
     }
 }
