@@ -24,8 +24,7 @@ class SendBehavior :
 
     public override async Task Invoke(IOutgoingPhysicalMessageContext context, Func<Task> next)
     {
-        var shouldDeduplicate = context.Extensions.Get<bool>("SqlServer.Deduplication");
-        if (!shouldDeduplicate)
+        if (!ShouldDeduplicate(context))
         {
             await next().ConfigureAwait(false);
             return;
@@ -58,6 +57,16 @@ class SendBehavior :
             await next().ConfigureAwait(false);
             transaction.Commit();
         }
+    }
+
+    static bool ShouldDeduplicate(IOutgoingPhysicalMessageContext context)
+    {
+        if (context.Extensions.TryGet(out bool shouldDeduplicate))
+        {
+            return shouldDeduplicate;
+        }
+
+        return false;
     }
 
     static Guid GetMessageId(IOutgoingPhysicalMessageContext context)
