@@ -33,7 +33,7 @@ class SendBehavior :
         var connectionTask = connectionBuilder(CancellationToken.None).ConfigureAwait(false);
         if (context.Extensions.TryGet(out TransportTransaction transportTransaction))
         {
-            throw new Exception("Deduplication is currently designed to be used from outside the NServiceBus pipeline. For example to dedup messages being sent from inside a web service endpoint.");
+            throw new NotSupportedException("Deduplication is currently designed to be used from outside the NServiceBus pipeline. For example to dedup messages being sent from inside a web service endpoint.");
         }
 
         var messageId = GetMessageId(context);

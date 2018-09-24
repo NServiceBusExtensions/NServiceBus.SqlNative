@@ -32,6 +32,8 @@ namespace NServiceBus
         {
             Guard.AgainstNull(configuration, nameof(configuration));
             Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
+            var recoverability = configuration.Recoverability();
+            recoverability.AddUnrecoverableException<NotSupportedException>();
             var settings = configuration.GetSettings();
             var deduplicationSettings = new DeduplicationSettings(connectionBuilder);
             settings.Set(deduplicationSettings);
