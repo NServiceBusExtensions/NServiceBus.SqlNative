@@ -10,7 +10,8 @@ class Program
     {
         var configuration = new EndpointConfiguration("SampleEndpoint");
         configuration.UsePersistence<LearningPersistence>();
-        configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
+        var attachments = configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
+        attachments.UseTransportConnectivity();
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<MessageDrivenSubscriptions>();
         configuration.DisableFeature<TimeoutManager>();

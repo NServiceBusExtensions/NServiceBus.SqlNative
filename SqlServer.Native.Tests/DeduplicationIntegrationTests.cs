@@ -47,7 +47,10 @@ public class DeduplicationIntegrationTests : TestBase
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<TimeoutManager>();
         configuration.DisableFeature<MessageDrivenSubscriptions>();
-        configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
+
+        var attachments = configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
+        attachments.UseTransportConnectivity();
+
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
         return Endpoint.Start(configuration);

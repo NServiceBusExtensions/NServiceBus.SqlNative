@@ -72,7 +72,8 @@ public class HttpPassthroughIntegrationTests : TestBase
         configuration.DisableFeature<TimeoutManager>();
         configuration.RegisterComponents(x => x.RegisterSingleton(resetEvent));
         configuration.DisableFeature<MessageDrivenSubscriptions>();
-        configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
+        var attachments = configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
+        attachments.UseTransportConnectivity();
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
         return Endpoint.Start(configuration);
