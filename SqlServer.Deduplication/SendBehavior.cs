@@ -61,7 +61,7 @@ class SendBehavior :
 
     static bool ShouldDeduplicate(IOutgoingPhysicalMessageContext context)
     {
-        if (context.Extensions.TryGet(out bool shouldDeduplicate))
+        if (context.Extensions.TryGet("SqlServer.Deduplication", out bool shouldDeduplicate))
         {
             return shouldDeduplicate;
         }
