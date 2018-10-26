@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Logging;
+using NServiceBus.Transport.SqlServerDeduplication;
 using SampleNamespace;
 
 class Program

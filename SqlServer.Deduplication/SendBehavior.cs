@@ -48,10 +48,11 @@ class SendBehavior :
             transportTransaction.Set(transaction);
 
             var deduplicationManager = new DeduplicationManager(transaction, table);
-            if (await deduplicationManager.WriteDedupRecord(CancellationToken.None, messageId).ConfigureAwait(false))
+            var deduplicationOutcome = await deduplicationManager.WriteDedupRecord(CancellationToken.None, messageId).ConfigureAwait(false);
+            deduplicationPipelineState.DeduplicationOutcome = deduplicationOutcome;
+            if (deduplicationOutcome == DeduplicationOutcome.Deduplicated)
             {
                 logger.Info($"Message deduplicated. MessageId: {messageId}");
-                deduplicationPipelineState.DeduplicationOccured = true;
                 callback?.Invoke(context);
                 return;
             }

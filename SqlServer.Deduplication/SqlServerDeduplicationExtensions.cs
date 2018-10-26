@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Configuration.AdvancedExtensibility;
-using NServiceBus.Extensibility;
+using NServiceBus.Transport.SqlServerDeduplication;
 
 namespace NServiceBus
 {
@@ -74,11 +74,7 @@ namespace NServiceBus
 
             await session.Send(message, options).ConfigureAwait(false);
 
-            if (deduplicationPipelineState.DeduplicationOccured)
-            {
-                return DeduplicationOutcome.Deduplicated;
-            }
-            return DeduplicationOutcome.Sent;
+            return deduplicationPipelineState.DeduplicationOutcome;
         }
 
         static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation)

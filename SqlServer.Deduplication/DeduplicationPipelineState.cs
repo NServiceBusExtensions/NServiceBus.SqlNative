@@ -1,10 +1,11 @@
 ﻿using NServiceBus;
 using NServiceBus.Extensibility;
 using NServiceBus.Pipeline;
+using NServiceBus.Transport.SqlServerDeduplication;
 
 class DeduplicationPipelineState
 {
-    public bool DeduplicationOccured;
+    public DeduplicationOutcome DeduplicationOutcome;
 
     public static bool TryGet(IOutgoingPhysicalMessageContext context, out DeduplicationPipelineState state)
     {

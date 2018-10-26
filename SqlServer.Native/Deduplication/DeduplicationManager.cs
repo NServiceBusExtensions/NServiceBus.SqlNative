@@ -50,7 +50,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return command;
         }
 
-        public async Task<bool> WriteDedupRecord(CancellationToken cancellation, Guid messageId)
+        public async Task<DeduplicationOutcome> WriteDedupRecord(CancellationToken cancellation, Guid messageId)
         {
             using (var command = CreateDedupRecordCommand(messageId))
             {
@@ -65,14 +65,14 @@ namespace NServiceBus.Transport.SqlServerNative
                         //Unique Key Violation = 2627
                         if (sqlError.Number == 2627)
                         {
-                            return true;
+                            return DeduplicationOutcome.Deduplicated;
                         }
                     }
                     throw;
                 }
             }
 
-            return false;
+            return DeduplicationOutcome.Sent;
         }
 
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)
