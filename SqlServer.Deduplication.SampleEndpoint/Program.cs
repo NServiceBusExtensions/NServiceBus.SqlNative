@@ -41,12 +41,12 @@ class Program
     static async Task SendMessages(IEndpointInstance endpoint)
     {
         var guid = Guid.NewGuid();
-        await SendMessage(endpoint, guid);
+        var deduplicationOutcome1 = await SendMessage(endpoint, guid);
         Console.WriteLine("send succeeded");
-        await SendMessage(endpoint, guid);
+        var deduplicationOutcome2 = await SendMessage(endpoint, guid);
     }
 
-    static Task SendMessage(IEndpointInstance endpoint, Guid guid)
+    static Task<DeduplicationOutcome> SendMessage(IEndpointInstance endpoint, Guid guid)
     {
         var message = new SampleMessage();
         var options = new SendOptions();

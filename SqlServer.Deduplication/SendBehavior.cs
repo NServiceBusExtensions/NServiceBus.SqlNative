@@ -24,7 +24,8 @@ class SendBehavior :
 
     public override async Task Invoke(IOutgoingPhysicalMessageContext context, Func<Task> next)
     {
-        if (!ShouldDeduplicate(context))
+
+        if (!DeduplicationPipelineState.TryGet(context, out var deduplicationPipelineState))
         {
             await next().ConfigureAwait(false);
             return;
@@ -50,6 +51,7 @@ class SendBehavior :
             if (await deduplicationManager.WriteDedupRecord(CancellationToken.None, messageId).ConfigureAwait(false))
             {
                 logger.Info($"Message deduplicated. MessageId: {messageId}");
+                deduplicationPipelineState.DeduplicationOccured = true;
                 callback?.Invoke(context);
                 return;
             }

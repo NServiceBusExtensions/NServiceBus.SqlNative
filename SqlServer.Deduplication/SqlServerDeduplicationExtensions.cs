@@ -41,7 +41,7 @@ namespace NServiceBus
             return deduplicationSettings;
         }
 
-        public static Task SendWithDeduplication(this IMessageSession session, Guid messageId, object message, SendOptions options = null)
+        public static Task<DeduplicationOutcome> SendWithDeduplication(this IMessageSession session, Guid messageId, object message, SendOptions options = null)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
             Guard.AgainstNull(message, nameof(message));
@@ -66,11 +66,19 @@ namespace NServiceBus
             }
         }
 
-        static Task InnerSendWithDeduplication(IMessageSession session, object message, Guid messageId, SendOptions options)
+        static async Task<DeduplicationOutcome> InnerSendWithDeduplication(IMessageSession session, object message, Guid messageId, SendOptions options)
         {
-            options.GetExtensions().Set("SqlServer.Deduplication", true);
+            var deduplicationPipelineState = new DeduplicationPipelineState();
+            DeduplicationPipelineState.Set(options, deduplicationPipelineState);
             options.SetMessageId(messageId.ToString());
-            return session.Send(message, options);
+
+            await session.Send(message, options).ConfigureAwait(false);
+
+            if (deduplicationPipelineState.DeduplicationOccured)
+            {
+                return DeduplicationOutcome.Deduplicated;
+            }
+            return DeduplicationOutcome.Sent;
         }
 
         static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation)
