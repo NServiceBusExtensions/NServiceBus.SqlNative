@@ -60,14 +60,11 @@ namespace NServiceBus.Transport.SqlServerNative
                 }
                 catch (SqlException sqlException)
                 {
-                    foreach (SqlError sqlError in sqlException.Errors)
+                    if (sqlException.IsKeyViolation())
                     {
-                        //Unique Key Violation = 2627
-                        if (sqlError.Number == 2627)
-                        {
-                            return DeduplicationOutcome.Deduplicated;
-                        }
+                        return DeduplicationOutcome.Deduplicated;
                     }
+
                     throw;
                 }
             }

@@ -29,8 +29,8 @@ namespace NServiceBus.Transport.SqlServerNative
             Schema = schema;
             if (sanitize)
             {
-                TableName = SqlSanitizer.Sanitize(TableName);
-                Schema = SqlSanitizer.Sanitize(Schema);
+                TableName = SqlExtensions.Sanitize(TableName);
+                Schema = SqlExtensions.Sanitize(Schema);
             }
 
             FullTableName = $"{Schema}.{TableName}";

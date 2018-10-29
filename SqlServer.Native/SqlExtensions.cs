@@ -1,6 +1,7 @@
-﻿using System.Text;
+﻿using System.Data.SqlClient;
+using System.Text;
 
-static class SqlSanitizer
+static class SqlExtensions
 {
     static string quoteSuffix = "]";
     static string quotePrefix = "[";
@@ -24,5 +25,19 @@ static class SqlSanitizer
         }
 
         return builder.ToString();
+    }
+
+    public static bool IsKeyViolation(this SqlException sqlException)
+    {
+        foreach (SqlError sqlError in sqlException.Errors)
+        {
+            //Unique Key Violation = 2627
+            if (sqlError.Number == 2627)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

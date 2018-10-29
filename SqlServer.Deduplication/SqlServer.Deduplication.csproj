@@ -17,7 +17,7 @@
     <Compile Include="..\SqlServer.Native\ConnectionHelpers.cs" />
     <Compile Include="..\SqlServer.Native\Extensions.cs" />
     <Compile Include="..\SqlServer.Native\Guard.cs" />
-    <Compile Include="..\SqlServer.Native\SqlSanitizer.cs" />
+    <Compile Include="..\SqlServer.Native\SqlExtensions.cs" />
     <Compile Include="..\SqlServer.Native\Table.cs" />
   </ItemGroup>
 
