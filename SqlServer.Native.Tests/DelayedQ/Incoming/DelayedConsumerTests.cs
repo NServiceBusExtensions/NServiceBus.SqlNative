@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -10,9 +11,9 @@ public class DelayedConsumerTests : TestBase
     string table = "DelayedConsumerTests";
 
     [Fact]
-    public void Single()
+    public async Task Single()
     {
-        DelayedTestDataBuilder.SendData(table);
+       await DelayedTestDataBuilder.SendData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
         using (var result = consumer.Consume().Result)
         {
@@ -21,9 +22,9 @@ public class DelayedConsumerTests : TestBase
     }
 
     [Fact]
-    public void Single_nulls()
+    public async Task Single_nulls()
     {
-        DelayedTestDataBuilder.SendNullData(table);
+        await DelayedTestDataBuilder.SendNullData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
         using (var result = consumer.Consume().Result)
         {
@@ -32,9 +33,9 @@ public class DelayedConsumerTests : TestBase
     }
 
     [Fact]
-    public void Batch()
+    public async Task Batch()
     {
-        DelayedTestDataBuilder.SendMultipleData(table);
+        await DelayedTestDataBuilder.SendMultipleData(table);
 
         var consumer = new DelayedQueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingDelayedVerifyTarget>();

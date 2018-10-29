@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -10,9 +11,9 @@ public class ConsumerTests : TestBase
     string table = "ConsumerTests";
 
     [Fact]
-    public void Single()
+    public async Task Single()
     {
-        TestDataBuilder.SendData(table);
+        await TestDataBuilder.SendData(table);
         var consumer = new QueueManager(table, SqlConnection);
         using (var result = consumer.Consume().Result)
         {
@@ -21,9 +22,9 @@ public class ConsumerTests : TestBase
     }
 
     [Fact]
-    public void Single_nulls()
+    public async Task Single_nulls()
     {
-        TestDataBuilder.SendNullData(table);
+        await TestDataBuilder.SendNullData(table);
         var consumer = new QueueManager(table, SqlConnection);
         using (var result = consumer.Consume().Result)
         {
@@ -32,9 +33,9 @@ public class ConsumerTests : TestBase
     }
 
     [Fact]
-    public void Batch()
+    public async Task Batch()
     {
-        TestDataBuilder.SendMultipleData(table);
+        await TestDataBuilder.SendMultipleDataAsync(table);
 
         var consumer = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
@@ -46,9 +47,9 @@ public class ConsumerTests : TestBase
     }
 
     [Fact]
-    public void Batch_all()
+    public async Task Batch_all()
     {
-        TestDataBuilder.SendMultipleData(table);
+        await TestDataBuilder.SendMultipleDataAsync(table);
 
         var consumer = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -13,75 +14,75 @@ public class DelayedSenderTests : TestBase
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     [Fact]
-    public void Single_bytes()
+    public async Task Single_bytes()
     {
         var message = BuildBytesMessage();
-        Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Send(message);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
-    public void Single_bytes_nulls()
+    public async Task Single_bytes_nulls()
     {
         var message = BuildBytesNullMessage();
-        Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Send(message);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
-    public void Single_stream()
+    public async Task Single_stream()
     {
         var message = BuildStreamMessage();
-        Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await  Send(message);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
-    public void Single_stream_nulls()
+    public async Task Single_stream_nulls()
     {
         var sender = new DelayedQueueManager(table, SqlConnection);
 
         var message = BuildBytesNullMessage();
-        sender.Send( message).Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await sender.Send(message);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
-    public void Batch()
+    public async Task Batch()
     {
         var messages = new List<OutgoingDelayedMessage>
         {
             BuildBytesMessage(),
             BuildStreamMessage()
         };
-        Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Send(messages);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
-    public void Batch_nulls()
+    public async Task Batch_nulls()
     {
         var messages = new List<OutgoingDelayedMessage>
         {
             BuildBytesNullMessage(),
             BuildStreamNullMessage()
         };
-        Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Send(messages);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
-    void Send(OutgoingDelayedMessage message)
+    Task<long> Send(OutgoingDelayedMessage message)
     {
         var sender = new DelayedQueueManager(table, SqlConnection);
 
-        sender.Send(message).Await();
+        return sender.Send(message);
     }
 
-    void Send(List<OutgoingDelayedMessage> messages)
+    Task Send(List<OutgoingDelayedMessage> messages)
     {
         var sender = new DelayedQueueManager(table, SqlConnection);
 
-        sender.Send(messages).Await();
+        return sender.Send(messages);
     }
 
     static OutgoingDelayedMessage BuildBytesMessage()

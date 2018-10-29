@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 
 static class SqlHelper
@@ -28,25 +29,23 @@ if(db_id('{database}') is null)
         }
     }
 
-    public static IEnumerable<IncomingVerifyTarget> ReadData(string table, SqlConnection connection)
+    public static async Task<IEnumerable<IncomingVerifyTarget>> ReadData(string table, SqlConnection connection)
     {
         var reader = new QueueManager(table, connection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
-        reader.Read(size: 10,
-                startRowVersion: 1,
-                action: message => { messages.Add(message.ToVerifyTarget()); })
-            .Await();
+        await reader.Read(size: 10,
+            startRowVersion: 1,
+            action: message => { messages.Add(message.ToVerifyTarget()); });
         return messages.OrderBy(x => x.Id);
     }
 
-    public static IOrderedEnumerable<IncomingDelayedVerifyTarget> ReadDelayedData(string table, SqlConnection connection)
+    public static async Task<IOrderedEnumerable<IncomingDelayedVerifyTarget>> ReadDelayedData(string table, SqlConnection connection)
     {
         var reader = new DelayedQueueManager(table, connection);
         var messages = new ConcurrentBag<IncomingDelayedVerifyTarget>();
-        reader.Read(size: 10,
+        await reader.Read(size: 10,
                 startRowVersion: 1,
-                action: message => { messages.Add(message.ToVerifyTarget()); })
-            .Await();
+                action: message => { messages.Add(message.ToVerifyTarget()); });
         return messages.OrderBy(x => x.Due);
     }
     public static IEnumerable<IDictionary<string, object>> ReadDuplicateData(string table, SqlConnection conn)

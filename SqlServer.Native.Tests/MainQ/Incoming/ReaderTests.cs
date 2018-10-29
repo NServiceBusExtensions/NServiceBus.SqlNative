@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -10,9 +11,9 @@ public class ReaderTests : TestBase
     string table = "ReaderTests";
 
     [Fact]
-    public void Single()
+    public async Task Single()
     {
-        TestDataBuilder.SendData(table);
+        await TestDataBuilder.SendData(table);
         var reader = new QueueManager(table, SqlConnection);
         using (var result = reader.Read(1).Result)
         {
@@ -21,9 +22,9 @@ public class ReaderTests : TestBase
     }
 
     [Fact]
-    public void Single_nulls()
+    public async Task Single_nulls()
     {
-        TestDataBuilder.SendNullData(table);
+        await TestDataBuilder.SendNullData(table);
         var reader = new QueueManager(table, SqlConnection);
         using (var result = reader.Read(1).Result)
         {
@@ -32,9 +33,9 @@ public class ReaderTests : TestBase
     }
 
     [Fact]
-    public void Batch()
+    public async Task Batch()
     {
-        TestDataBuilder.SendMultipleData(table);
+        await TestDataBuilder.SendMultipleDataAsync(table);
 
         var reader = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
@@ -48,17 +49,16 @@ public class ReaderTests : TestBase
     }
 
     [Fact]
-    public void Batch_all()
+    public async Task Batch_all()
     {
-        TestDataBuilder.SendMultipleData(table);
+        await TestDataBuilder.SendMultipleDataAsync(table);
 
         var reader = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
-        reader.Read(
+        await reader.Read(
                 size: 10,
                 startRowVersion: 1,
-                action: message => { messages.Add(message.ToVerifyTarget()); })
-            .Await();
+                action: message => { messages.Add(message.ToVerifyTarget()); });
         ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Id));
     }
 

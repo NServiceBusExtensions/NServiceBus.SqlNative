@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 using ObjectApproval;
 using Xunit;
@@ -13,20 +14,20 @@ public class WithDeduplicationTests : TestBase
     string table = "WithDeduplicationTests";
 
     [Fact]
-    public void Single()
+    public async Task Single()
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
-        Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
+        await Send(message);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
-    public void Single_WithDuplicate()
+    public async Task Single_WithDuplicate()
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
-        Send(message);
-        Send(message);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
+        await Send(message);
+        await Send(message);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     //[Fact]
@@ -39,55 +40,55 @@ public class WithDeduplicationTests : TestBase
     //}
 
     [Fact]
-    public void Batch()
+    public async Task Batch()
     {
         var messages = new List<OutgoingMessage>
         {
             BuildBytesMessage("00000000-0000-0000-0000-000000000001"),
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
-        Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
+        await Send(messages);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
-    public void Batch_WithFirstDuplicate()
+    public async Task Batch_WithFirstDuplicate()
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
-        Send(message);
+        await Send(message);
         var messages = new List<OutgoingMessage>
         {
             BuildBytesMessage("00000000-0000-0000-0000-000000000001"),
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
-        Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
+        await Send(messages);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
-    public void Batch_WithSecondDuplicate()
+    public async Task Batch_WithSecondDuplicate()
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000002");
-        Send(message);
+        await Send(message);
         var messages = new List<OutgoingMessage>
         {
             BuildBytesMessage("00000000-0000-0000-0000-000000000001"),
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
-        Send(messages);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadData(table, SqlConnection));
+        await Send(messages);
+        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
     }
 
-    void Send(List<OutgoingMessage> messages)
+    Task Send(List<OutgoingMessage> messages)
     {
         var sender = new QueueManager(table, SqlConnection, "Deduplication");
-        sender.Send(messages).Await();
+        return sender.Send(messages);
     }
 
-    void Send(OutgoingMessage message)
+    Task<long> Send(OutgoingMessage message)
     {
         var sender = new QueueManager(table, SqlConnection, "Deduplication");
-        sender.Send(message).Await();
+        return sender.Send(message);
     }
 
     static OutgoingMessage BuildBytesMessage(string guid)
