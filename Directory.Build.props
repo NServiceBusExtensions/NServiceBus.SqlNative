@@ -18,7 +18,6 @@
     <NoWarn>1573</NoWarn>
     <AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
     <NoPackageAnalysis>true</NoPackageAnalysis>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
   <Target Name="IncludePDBsInPackage">
