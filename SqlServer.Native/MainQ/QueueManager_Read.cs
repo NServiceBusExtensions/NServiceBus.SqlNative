@@ -13,7 +13,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return command;
         }
 
-        public static readonly string ReadSql = @"
+        public static readonly string ReadSql = ConnectionHelpers.WrapInNoCount(@"
 select top({1})
     Id,
     RowVersion,
@@ -25,7 +25,7 @@ from {0}
 with (readpast)
 where RowVersion >= @RowVersion
 order by RowVersion
-";
+");
 
         protected override IncomingMessage ReadMessage(SqlDataReader dataReader, params IDisposable[] cleanups)
         {

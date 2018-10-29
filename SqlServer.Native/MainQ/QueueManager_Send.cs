@@ -40,7 +40,7 @@ values (
                 resultSql = string.Format(sql, Table);
             }
 
-            sendSql = resultSql;
+            sendSql = ConnectionHelpers.WrapInNoCount(resultSql);
         }
     }
 }

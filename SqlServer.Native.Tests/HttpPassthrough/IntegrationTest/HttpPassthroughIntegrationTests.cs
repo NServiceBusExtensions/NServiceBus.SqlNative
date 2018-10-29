@@ -47,7 +47,7 @@ public class HttpPassthroughIntegrationTests : TestBase
         using (var client = server.CreateClient())
         {
             client.DefaultRequestHeaders.Referrer = new Uri("http://TheReferrer");
-            var message = "{\"Property\": \"Value\"}";
+            var message = $"{{\"Property\": \"Value\"}}";
             var clientFormSender = new ClientFormSender(client);
             await clientFormSender.Send(
                 route: "/SendMessage",

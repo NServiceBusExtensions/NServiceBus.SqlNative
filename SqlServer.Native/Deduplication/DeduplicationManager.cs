@@ -38,7 +38,8 @@ namespace NServiceBus.Transport.SqlServerNative
 
         void InitSendSql()
         {
-            sendSql = string.Format(dedupSql, table);
+            var resultSql = string.Format(dedupSql, table);
+            sendSql = ConnectionHelpers.WrapInNoCount(resultSql);
         }
 
         SqlCommand CreateDedupRecordCommand(Guid messageId)
