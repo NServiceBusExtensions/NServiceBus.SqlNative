@@ -10,7 +10,6 @@ public class TestBase:IDisposable
     {
         DbSetup.Setup();
         var jsonSerializer = ObjectApprover.JsonSerializer;
-        jsonSerializer.DefaultValueHandling = DefaultValueHandling.Ignore;
         jsonSerializer.ContractResolver = new CustomContractResolver();
     }
 
