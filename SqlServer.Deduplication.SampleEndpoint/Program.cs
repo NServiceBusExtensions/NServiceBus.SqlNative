@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Features;
@@ -18,12 +17,7 @@ class Program
         var configuration = new EndpointConfiguration("SampleEndpoint");
         configuration.EnableInstallers();
         configuration.UsePersistence<LearningPersistence>();
-        configuration.EnableDedup(async token =>
-        {
-            var sqlConnection = new SqlConnection(connection);
-            await sqlConnection.OpenAsync(token);
-            return sqlConnection;
-        });
+        configuration.EnableDedup(connection);
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<MessageDrivenSubscriptions>();
         configuration.DisableFeature<TimeoutManager>();
@@ -43,8 +37,9 @@ class Program
     {
         var guid = Guid.NewGuid();
         var deduplicationOutcome1 = await SendMessage(endpoint, guid);
-        Console.WriteLine("send succeeded");
+        Console.WriteLine($"DeduplicationOutcome {deduplicationOutcome1}");
         var deduplicationOutcome2 = await SendMessage(endpoint, guid);
+        Console.WriteLine($"DeduplicationOutcome {deduplicationOutcome2}");
     }
 
     static Task<DeduplicationOutcome> SendMessage(IEndpointInstance endpoint, Guid guid)
