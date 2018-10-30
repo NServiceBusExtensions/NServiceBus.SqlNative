@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Data.SqlClient;
-using Newtonsoft.Json;
-using ObjectApproval;
 using Xunit.Abstractions;
 
 public class TestBase:IDisposable
@@ -9,8 +7,6 @@ public class TestBase:IDisposable
     static TestBase()
     {
         DbSetup.Setup();
-        var jsonSerializer = ObjectApprover.JsonSerializer;
-        jsonSerializer.ContractResolver = new CustomContractResolver();
     }
 
     public TestBase(ITestOutputHelper output)

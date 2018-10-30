@@ -1,10 +1,15 @@
-﻿[
-  {
-    "Headers": "{}",
-    "Id": "00000000-0000-0000-0000-000000000001"
-  },
-  {
-    "Headers": "{}",
-    "Id": "00000000-0000-0000-0000-000000000002"
-  }
-]
+﻿{
+  "$type": "OrderedEnumerable<IncomingVerifyTarget, Guid>",
+  "$values": [
+    {
+      "$type": "IncomingVerifyTarget",
+      "Headers": "{}",
+      "Id": "Guid 1"
+    },
+    {
+      "$type": "IncomingVerifyTarget",
+      "Headers": "{}",
+      "Id": "Guid 2"
+    }
+  ]
+}

@@ -1,14 +1,19 @@
-﻿[
-  {
-    "Expires": "2000-01-01T01:01:01",
-    "Headers": "headers",
-    "Id": "00000000-0000-0000-0000-000000000001",
-    "Body": "{}"
-  },
-  {
-    "Expires": "2000-01-01T01:01:01",
-    "Headers": "headers",
-    "Id": "00000000-0000-0000-0000-000000000002",
-    "Body": "{}"
-  }
-]
+﻿{
+  "$type": "OrderedEnumerable<IncomingVerifyTarget, Guid>",
+  "$values": [
+    {
+      "$type": "IncomingVerifyTarget",
+      "Expires": "DateTime 1",
+      "Headers": "headers",
+      "Id": "Guid 1",
+      "Body": "{}"
+    },
+    {
+      "$type": "IncomingVerifyTarget",
+      "Expires": "DateTime 1",
+      "Headers": "headers",
+      "Id": "Guid 2",
+      "Body": "{}"
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 ﻿{
+  "$type": "dynamic",
   "FileName": "attachment.txt",
   "Body": "{}",
   "ClientUrl": "TheReferer",
   "Destination": "TheEndpoint",
-  "Id": "00000000-0000-0000-0000-000000000001",
+  "Id": "Guid 1",
   "Type": "TheMessageType"
 }

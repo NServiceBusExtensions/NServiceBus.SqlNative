@@ -1,5 +1,9 @@
-﻿[
-  {
-    "Id": "00000000-0000-0000-0000-000000000002"
-  }
-]
+﻿{
+  "$type": "IEnumerable<IDictionary<string, object>>",
+  "$values": [
+    {
+      "$type": "Dictionary<string, object>",
+      "Id": "Guid 1"
+    }
+  ]
+}

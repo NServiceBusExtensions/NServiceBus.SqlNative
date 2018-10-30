@@ -1,14 +1,20 @@
-﻿[
-  {
-    "Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
-    "Value": "User@foo.bar"
-  },
-  {
-    "Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
-    "Value": "User1"
-  },
-  {
-    "Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
-    "Value": "User2"
-  }
-]
+﻿{
+  "$type": "IEnumerable<dynamic>",
+  "$values": [
+    {
+      "$type": "dynamic",
+      "Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+      "Value": "User@foo.bar"
+    },
+    {
+      "$type": "dynamic",
+      "Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+      "Value": "User1"
+    },
+    {
+      "$type": "dynamic",
+      "Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+      "Value": "User2"
+    }
+  ]
+}

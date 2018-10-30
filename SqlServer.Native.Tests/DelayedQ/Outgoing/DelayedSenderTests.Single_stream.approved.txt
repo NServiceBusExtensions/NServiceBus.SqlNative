@@ -1,7 +1,11 @@
-﻿[
-  {
-    "Headers": "headers",
-    "Due": "2000-01-01T01:01:01",
-    "Body": "{}"
-  }
-]
+﻿{
+  "$type": "OrderedEnumerable<IncomingDelayedVerifyTarget, DateTime>",
+  "$values": [
+    {
+      "$type": "IncomingDelayedVerifyTarget",
+      "Headers": "headers",
+      "Due": "DateTime 1",
+      "Body": "{}"
+    }
+  ]
+}

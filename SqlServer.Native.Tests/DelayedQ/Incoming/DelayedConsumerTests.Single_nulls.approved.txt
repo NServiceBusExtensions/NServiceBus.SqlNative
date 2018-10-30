@@ -1,4 +1,5 @@
 ﻿{
+  "$type": "IncomingDelayedVerifyTarget",
   "Headers": "{}",
-  "Due": "2000-01-01T01:01:01"
+  "Due": "DateTime 1"
 }
