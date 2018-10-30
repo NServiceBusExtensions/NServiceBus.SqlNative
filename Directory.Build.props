@@ -12,6 +12,7 @@
     <PackageTags>NServiceBus, Native, Raw</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/NServiceBusExtensions/NServiceBus.Native/master/icon.png</PackageIconUrl>
     <PackageOutputPath>..\nugets</PackageOutputPath>
+    <RepositoryUrl>https://github.com/NServiceBusExtensions/NServiceBus.Native</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
     <NoWarn>1573</NoWarn>
     <AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
