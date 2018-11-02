@@ -47,7 +47,7 @@ class SendBehavior :
             transportTransaction.Set(transaction);
 
             var dedupeManager = new DedupeManager(transaction, table);
-            var outcome = await dedupeManager.WriteDedupRecord(CancellationToken.None, messageId).ConfigureAwait(false);
+            var outcome = await dedupeManager.WriteDedupRecord(messageId).ConfigureAwait(false);
             dedupePipelineState.DedupeOutcome = outcome;
             if (outcome == DedupeOutcome.Deduplicated)
             {

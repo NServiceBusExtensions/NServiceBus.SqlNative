@@ -50,7 +50,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return command;
         }
 
-        public async Task<DedupeOutcome> WriteDedupRecord(CancellationToken cancellation, Guid messageId)
+        public async Task<DedupeOutcome> WriteDedupRecord(Guid messageId, CancellationToken cancellation = default)
         {
             using (var command = CreateDedupeRecordCommand(messageId))
             {
