@@ -2,7 +2,6 @@
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using NServiceBus.Pipeline;
 using NServiceBus.Transport.SqlServerDeduplication;
 
 namespace NServiceBus
@@ -27,17 +26,6 @@ namespace NServiceBus
         {
             RunCleanTask = false;
         }
-
-        /// <summary>
-        /// Called when a message is deduplicated.
-        /// </summary>
-        public void Callback(Action<IOutgoingPhysicalMessageContext> action)
-        {
-            Guard.AgainstNull(action, nameof(action));
-            CallbackAction = action;
-        }
-
-        internal Action<IOutgoingPhysicalMessageContext> CallbackAction;
 
         /// <summary>
         /// Control the table and schema used for deduplication.

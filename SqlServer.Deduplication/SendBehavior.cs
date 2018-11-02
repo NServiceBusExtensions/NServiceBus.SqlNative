@@ -13,13 +13,11 @@ class SendBehavior :
     ILog logger = LogManager.GetLogger("DeduplicationSendBehavior");
     Table table;
     Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
-    Action<IOutgoingPhysicalMessageContext> callback;
 
-    public SendBehavior(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<IOutgoingPhysicalMessageContext> callback)
+    public SendBehavior(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
     {
         this.table = table;
         this.connectionBuilder = connectionBuilder;
-        this.callback = callback;
     }
 
     public override async Task Invoke(IOutgoingPhysicalMessageContext context, Func<Task> next)
@@ -52,7 +50,6 @@ class SendBehavior :
             if (outcome == DedupeOutcome.Deduplicated)
             {
                 logger.Info($"Message deduplicated. MessageId: {messageId}");
-                callback?.Invoke(context);
                 return;
             }
 

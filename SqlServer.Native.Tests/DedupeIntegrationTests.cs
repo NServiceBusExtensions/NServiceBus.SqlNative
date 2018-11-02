@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Attachments.Sql;
 using NServiceBus.Features;
+using NServiceBus.Transport.SqlServerDeduplication;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -26,11 +27,15 @@ public class DedupeIntegrationTests : TestBase
         await endpoint.Stop();
     }
 
-    static Task SendMessage(Guid messageId, IEndpointInstance endpoint)
+    static async Task SendMessage(Guid messageId, IEndpointInstance endpoint)
     {
         var sendOptions = new SendOptions();
         sendOptions.RouteToThisEndpoint();
-        return endpoint.SendWithDedupe(messageId, new MyMessage(), sendOptions);
+        var sendWithDedupe = await endpoint.SendWithDedupe(messageId, new MyMessage(), sendOptions);
+        if (sendWithDedupe == DedupeOutcome.Deduplicated)
+        {
+            countdown.Signal();
+        }
     }
 
     static Task<IEndpointInstance> StartEndpoint()
@@ -38,11 +43,7 @@ public class DedupeIntegrationTests : TestBase
         var configuration = new EndpointConfiguration(nameof(DedupeIntegrationTests));
         configuration.UsePersistence<LearningPersistence>();
         configuration.EnableInstallers();
-        var dedup = configuration.EnableDedupe(Connection.ConnectionString);
-        dedup.Callback(context =>
-        {
-            countdown.Signal();
-        });
+        configuration.EnableDedupe(Connection.ConnectionString);
         configuration.PurgeOnStartup(true);
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<TimeoutManager>();

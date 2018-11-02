@@ -11,7 +11,7 @@ class DeduplicationFeature : Feature
         var pipeline = context.Pipeline;
         var table = settings.Table;
         var connectionBuilder = settings.ConnectionBuilder;
-        pipeline.Register(new SendRegistration(table, connectionBuilder, settings.CallbackAction));
+        pipeline.Register(new SendRegistration(table, connectionBuilder));
         if (context.Settings.PurgeOnStartup())
         {
             context.RegisterStartupTask(builder => new PurgeTask(table, connectionBuilder));
