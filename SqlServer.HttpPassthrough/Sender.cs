@@ -16,15 +16,15 @@ class Sender
     Persister attachments;
     Func<CancellationToken, Task<SqlConnection>> connectionFunc;
     HeadersBuilder headersBuilder;
-    Table deduplicationTable;
+    Table dedupeTable;
     ILogger logger;
 
-    public Sender(Func<CancellationToken, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table deduplicationTable, ILogger logger)
+    public Sender(Func<CancellationToken, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
     {
         this.connectionFunc = connectionFunc;
         attachments = new Persister(new  NServiceBus.Attachments.Sql.Raw.Table(attachmentsTable.TableName, attachmentsTable.Schema, false));
         this.headersBuilder = headersBuilder;
-        this.deduplicationTable = deduplicationTable;
+        this.dedupeTable = dedupeTable;
         this.logger = logger;
     }
 
@@ -61,7 +61,7 @@ class Sender
             message.Id,
             headers: headersString,
             bodyBytes: Encoding.UTF8.GetBytes(message.Body));
-        var queueManager = new QueueManager(destination, transaction, deduplicationTable);
+        var queueManager = new QueueManager(destination, transaction, dedupeTable);
         var attachmentExpiry = DateTime.UtcNow.AddDays(10);
         await Task.WhenAll(SendAttachments(transaction, attachmentExpiry, cancellation, message)).ConfigureAwait(false);
         return await queueManager.Send(outgoingMessage, cancellation).ConfigureAwait(false);

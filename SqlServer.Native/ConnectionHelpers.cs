@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-#if (SqlServerDeduplication)
+#if (SqlServerDedupe)
 namespace NServiceBus.Transport.SqlServerDeduplication
 #else
 namespace NServiceBus.Transport.SqlServerNative

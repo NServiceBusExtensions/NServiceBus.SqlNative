@@ -7,11 +7,11 @@ using NServiceBus.Transport.SqlServerDeduplication;
 
 class NeedToInstallSomething : INeedToInstallSomething
 {
-    DeduplicationSettings settings;
+    DedupeSettings settings;
 
     public NeedToInstallSomething(ReadOnlySettings settings)
     {
-        this.settings = settings.GetOrDefault<DeduplicationSettings>();
+        this.settings = settings.GetOrDefault<DedupeSettings>();
     }
 
     public async Task Install(string identity)
@@ -23,7 +23,7 @@ class NeedToInstallSomething : INeedToInstallSomething
 
         using (var connection = await settings.ConnectionBuilder(CancellationToken.None).ConfigureAwait(false))
         {
-            var manager = new DeduplicationManager(connection, settings.Table);
+            var manager = new DedupeManager(connection, settings.Table);
             await manager.Create().ConfigureAwait(false);
         }
     }

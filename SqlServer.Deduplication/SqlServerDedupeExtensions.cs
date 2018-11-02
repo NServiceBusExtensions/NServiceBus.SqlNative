@@ -10,23 +10,23 @@ namespace NServiceBus
     /// <summary>
     /// Extensions to control what messages are audited.
     /// </summary>
-    public static class SqlServerDeduplicationExtensions
+    public static class SqlServerDedupeExtensions
     {
         /// <summary>
         /// Enable SQL attachments for this endpoint.
         /// </summary>
-        public static DeduplicationSettings EnableDedup(
+        public static DedupeSettings EnableDedupe(
             this EndpointConfiguration configuration,
             string connection)
         {
             Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            return EnableDedup(configuration, cancellation => OpenConnection(connection, cancellation));
+            return EnableDedupe(configuration, cancellation => OpenConnection(connection, cancellation));
         }
 
         /// <summary>
         /// Enable SQL attachments for this endpoint.
         /// </summary>
-        public static DeduplicationSettings EnableDedup(
+        public static DedupeSettings EnableDedupe(
             this EndpointConfiguration configuration,
             Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
         {
@@ -35,13 +35,13 @@ namespace NServiceBus
             var recoverability = configuration.Recoverability();
             recoverability.AddUnrecoverableException<NotSupportedException>();
             var settings = configuration.GetSettings();
-            var deduplicationSettings = new DeduplicationSettings(connectionBuilder);
-            settings.Set(deduplicationSettings);
+            var dedupeSettings = new DedupeSettings(connectionBuilder);
+            settings.Set(dedupeSettings);
             configuration.EnableFeature<DeduplicationFeature>();
-            return deduplicationSettings;
+            return dedupeSettings;
         }
 
-        public static Task<DeduplicationOutcome> SendWithDeduplication(this IMessageSession session, Guid messageId, object message, SendOptions options = null)
+        public static Task<DedupeOutcome> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions options = null)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
             Guard.AgainstNull(message, nameof(message));
@@ -55,7 +55,7 @@ namespace NServiceBus
                 ValidateMessageId(options);
             }
 
-            return InnerSendWithDeduplication(session, message, messageId, options);
+            return InnerSendWithDedupe(session, message, messageId, options);
         }
 
         static void ValidateMessageId(SendOptions options)
@@ -66,15 +66,15 @@ namespace NServiceBus
             }
         }
 
-        static async Task<DeduplicationOutcome> InnerSendWithDeduplication(IMessageSession session, object message, Guid messageId, SendOptions options)
+        static async Task<DedupeOutcome> InnerSendWithDedupe(IMessageSession session, object message, Guid messageId, SendOptions options)
         {
-            var deduplicationPipelineState = new DeduplicationPipelineState();
-            DeduplicationPipelineState.Set(options, deduplicationPipelineState);
+            var pipelineState = new DedupePipelineState();
+            DedupePipelineState.Set(options, pipelineState);
             options.SetMessageId(messageId.ToString());
 
             await session.Send(message, options).ConfigureAwait(false);
 
-            return deduplicationPipelineState.DeduplicationOutcome;
+            return pipelineState.DedupeOutcome;
         }
 
         static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation)

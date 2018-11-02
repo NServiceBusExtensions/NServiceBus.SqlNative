@@ -21,7 +21,7 @@ public class HttpPassthroughIntegrationTests : TestBase
     {
         using (var connection = Connection.OpenConnection())
         {
-            var manager = new DeduplicationManager(connection, "Deduplication");
+            var manager = new DedupeManager(connection, "Deduplication");
             await manager.Create();
             await Installer.CreateTable(connection, "MessageAttachments");
         }

@@ -31,9 +31,9 @@ values (
         void InitSendSql()
         {
             string resultSql;
-            if (deduplicate)
+            if (dedupe)
             {
-                resultSql = string.Format(dedupSql, deduplicationTable) + string.Format(sql, Table);
+                resultSql = string.Format(dedupSql, dedupeTable) + string.Format(sql, Table);
             }
             else
             {

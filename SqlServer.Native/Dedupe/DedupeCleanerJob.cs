@@ -3,26 +3,26 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
-#if (SqlServerDeduplication)
+#if (SqlServerDedupe)
 namespace NServiceBus.Transport.SqlServerDeduplication
 #else
 namespace NServiceBus.Transport.SqlServerNative
 #endif
 {
-    public class DeduplicationCleanerJob
+    public class DedupeCleanerJob
     {
         Table table;
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
         Action<Exception> criticalError;
         TimeSpan expireWindow;
         TimeSpan frequencyToRunCleanup;
-        DeduplicationCleaner cleaner;
+        DedupeCleaner cleaner;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="DeduplicationCleanerJob"/>.
+        /// Initializes a new instance of <see cref="DedupeCleanerJob"/>.
         /// </summary>
         /// <param name="criticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
-        public DeduplicationCleanerJob(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<Exception> criticalError, TimeSpan? expireWindow = null,TimeSpan? frequencyToRunCleanup = null)
+        public DedupeCleanerJob(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<Exception> criticalError, TimeSpan? expireWindow = null,TimeSpan? frequencyToRunCleanup = null)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(criticalError, nameof(criticalError));
@@ -38,13 +38,13 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public virtual void Start()
         {
-            cleaner = new DeduplicationCleaner(async cancellation =>
+            cleaner = new DedupeCleaner(async cancellation =>
                 {
                     using (var connection = await connectionBuilder(cancellation).ConfigureAwait(false))
                     {
-                        var deduplicationCleaner = new DeduplicationManager(connection, table);
+                        var dedupeCleaner = new DedupeManager(connection, table);
                         var expiry = DateTime.UtcNow.Subtract(expireWindow);
-                        await deduplicationCleaner.CleanupItemsOlderThan(expiry, cancellation)
+                        await dedupeCleaner.CleanupItemsOlderThan(expiry, cancellation)
                             .ConfigureAwait(false);
                     }
                 },

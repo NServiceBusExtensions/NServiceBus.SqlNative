@@ -11,7 +11,7 @@ class CleanupTask : FeatureStartupTask
     Table table;
     CriticalError criticalError;
     Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
-    DeduplicationCleanerJob job;
+    DedupeCleanerJob job;
 
     public CleanupTask(Table table, CriticalError criticalError,
         Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
@@ -23,7 +23,7 @@ class CleanupTask : FeatureStartupTask
 
     protected override Task OnStart(IMessageSession session)
     {
-        job = new DeduplicationCleanerJob(table, connectionBuilder, RaiseError);
+        job = new DedupeCleanerJob(table, connectionBuilder, RaiseError);
         job.Start();
         return Task.CompletedTask;
     }

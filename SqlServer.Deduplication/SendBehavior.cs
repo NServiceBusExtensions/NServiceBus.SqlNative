@@ -24,8 +24,7 @@ class SendBehavior :
 
     public override async Task Invoke(IOutgoingPhysicalMessageContext context, Func<Task> next)
     {
-
-        if (!DeduplicationPipelineState.TryGet(context, out var deduplicationPipelineState))
+        if (!DedupePipelineState.TryGet(context, out var dedupePipelineState))
         {
             await next().ConfigureAwait(false);
             return;
@@ -47,10 +46,10 @@ class SendBehavior :
             transportTransaction.Set(connection);
             transportTransaction.Set(transaction);
 
-            var deduplicationManager = new DeduplicationManager(transaction, table);
-            var deduplicationOutcome = await deduplicationManager.WriteDedupRecord(CancellationToken.None, messageId).ConfigureAwait(false);
-            deduplicationPipelineState.DeduplicationOutcome = deduplicationOutcome;
-            if (deduplicationOutcome == DeduplicationOutcome.Deduplicated)
+            var dedupeManager = new DedupeManager(transaction, table);
+            var outcome = await dedupeManager.WriteDedupRecord(CancellationToken.None, messageId).ConfigureAwait(false);
+            dedupePipelineState.DedupeOutcome = outcome;
+            if (outcome == DedupeOutcome.Deduplicated)
             {
                 logger.Info($"Message deduplicated. MessageId: {messageId}");
                 callback?.Invoke(context);
@@ -62,7 +61,7 @@ class SendBehavior :
         }
     }
 
-    static bool ShouldDeduplicate(IOutgoingPhysicalMessageContext context)
+    static bool ShouldDedupe(IOutgoingPhysicalMessageContext context)
     {
         if (context.Extensions.TryGet("SqlServer.Deduplication", out bool shouldDeduplicate))
         {

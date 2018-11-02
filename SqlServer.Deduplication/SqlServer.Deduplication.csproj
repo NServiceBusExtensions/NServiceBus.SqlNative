@@ -9,11 +9,11 @@
     <Description>Message deduplication for the SQL Server transport.</Description>
     <PackageProjectUrl>https://docs.particular.net/nuget/$(PackageId)</PackageProjectUrl>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <DefineConstants>$(DefineConstants);SqlServerDeduplication</DefineConstants>
+    <DefineConstants>$(DefineConstants);SqlServerDedupe</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\SqlServer.Native\Deduplication\*.cs" />
+    <Compile Include="..\SqlServer.Native\Dedupe\*.cs" />
     <Compile Include="..\SqlServer.Native\ConnectionHelpers.cs" />
     <Compile Include="..\SqlServer.Native\Extensions.cs" />
     <Compile Include="..\SqlServer.Native\Guard.cs" />

@@ -49,10 +49,10 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             {
                 var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
                 var logger = loggerFactory.CreateLogger<ISqlPassthrough>();
-                var sender = new Sender(configuration.ConnectionFunc, headersBuilder, configuration.AttachmentsTable, configuration.DeduplicationTable, logger);
+                var sender = new Sender(configuration.ConnectionFunc, headersBuilder, configuration.AttachmentsTable, configuration.DedupeTable, logger);
                 return new SqlPassthrough(configuration.SendCallback, sender, configuration.AppendClaims, configuration.ClaimsHeaderPrefix, logger);
             });
-            var dedupService = new DedupService(configuration.DeduplicationTable, configuration.ConnectionFunc, configuration.DedupCriticalError);
+            var dedupService = new DedupService(configuration.DedupeTable, configuration.ConnectionFunc, configuration.DedupCriticalError);
             services.AddSingleton<IHostedService>(dedupService);
         }
 

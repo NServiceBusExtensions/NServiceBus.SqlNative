@@ -10,7 +10,7 @@ class DedupService : IHostedService
     Table table;
     Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
     Action<Exception> criticalError;
-    DeduplicationCleanerJob job;
+    DedupeCleanerJob job;
 
     public DedupService(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<Exception> criticalError)
     {
@@ -21,7 +21,7 @@ class DedupService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        job = new DeduplicationCleanerJob(table, connectionBuilder, criticalError);
+        job = new DedupeCleanerJob(table, connectionBuilder, criticalError);
         job.Start();
         return Task.CompletedTask;
     }

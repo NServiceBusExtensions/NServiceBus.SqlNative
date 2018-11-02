@@ -8,7 +8,7 @@ using SampleNamespace;
 
 class Program
 {
-    const string connection = @"Server=.\SQLExpress;Database=DeduplicationSample; Integrated Security=True;Max Pool Size=100";
+    const string connection = @"Server=.\SQLExpress;Database=DedupeSample; Integrated Security=True;Max Pool Size=100";
     static async Task Main()
     {
         var defaultFactory = LogManager.Use<DefaultFactory>();
@@ -17,7 +17,7 @@ class Program
         var configuration = new EndpointConfiguration("SampleEndpoint");
         configuration.EnableInstallers();
         configuration.UsePersistence<LearningPersistence>();
-        configuration.EnableDedup(connection);
+        configuration.EnableDedupe(connection);
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<MessageDrivenSubscriptions>();
         configuration.DisableFeature<TimeoutManager>();
@@ -36,17 +36,17 @@ class Program
     static async Task SendMessages(IEndpointInstance endpoint)
     {
         var guid = Guid.NewGuid();
-        var deduplicationOutcome1 = await SendMessage(endpoint, guid);
-        Console.WriteLine($"DeduplicationOutcome {deduplicationOutcome1}");
-        var deduplicationOutcome2 = await SendMessage(endpoint, guid);
-        Console.WriteLine($"DeduplicationOutcome {deduplicationOutcome2}");
+        var dedupeOutcome1 = await SendMessage(endpoint, guid);
+        Console.WriteLine($"DedupeOutcome {dedupeOutcome1}");
+        var dedupeOutcome2 = await SendMessage(endpoint, guid);
+        Console.WriteLine($"DedupeOutcome {dedupeOutcome2}");
     }
 
-    static Task<DeduplicationOutcome> SendMessage(IEndpointInstance endpoint, Guid guid)
+    static Task<DedupeOutcome> SendMessage(IEndpointInstance endpoint, Guid guid)
     {
         var message = new SampleMessage();
         var options = new SendOptions();
         options.RouteToThisEndpoint();
-        return endpoint.SendWithDeduplication(guid, message, options);
+        return endpoint.SendWithDedupe(guid, message, options);
     }
 }

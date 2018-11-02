@@ -6,7 +6,7 @@ class DeduplicationFeature : Feature
     protected override void Setup(FeatureConfigurationContext context)
     {
         var readOnlySettings = context.Settings;
-        var settings = readOnlySettings.Get<DeduplicationSettings>();
+        var settings = readOnlySettings.Get<DedupeSettings>();
 
         var pipeline = context.Pipeline;
         var table = settings.Table;

@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-class DeduplicationCleaner
+class DedupeCleaner
 {
     public virtual Task Stop() => timer.Stop();
 
@@ -11,7 +11,7 @@ class DeduplicationCleaner
     Func<CancellationToken, Task> cleanup;
     TimeSpan frequencyToRunCleanup;
 
-    public DeduplicationCleaner(Func<CancellationToken, Task> cleanup, Action<Exception> criticalError, TimeSpan frequencyToRunCleanup, AsyncTimer timer)
+    public DedupeCleaner(Func<CancellationToken, Task> cleanup, Action<Exception> criticalError, TimeSpan frequencyToRunCleanup, AsyncTimer timer)
     {
         this.cleanup = cleanup;
         this.frequencyToRunCleanup = frequencyToRunCleanup;

@@ -7,12 +7,12 @@ using NServiceBus.Transport.SqlServerDeduplication;
 
 namespace NServiceBus
 {
-    public class DeduplicationSettings
+    public class DedupeSettings
     {
         internal Table Table = "Deduplication";
         internal Func<CancellationToken, Task<SqlConnection>> ConnectionBuilder;
 
-        internal DeduplicationSettings(Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+        internal DedupeSettings(Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
         {
             ConnectionBuilder = connectionBuilder;
         }

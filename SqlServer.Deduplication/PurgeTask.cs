@@ -21,8 +21,8 @@ class PurgeTask : FeatureStartupTask
     {
         using (var connection = await connectionBuilder(CancellationToken.None).ConfigureAwait(false))
         {
-            var deduplicationCleaner = new DeduplicationManager(connection, table);
-            await deduplicationCleaner.PurgeItems().ConfigureAwait(false);
+            var dedupeManager = new DedupeManager(connection, table);
+            await dedupeManager.PurgeItems().ConfigureAwait(false);
         }
     }
 

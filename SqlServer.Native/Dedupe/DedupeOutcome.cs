@@ -1,11 +1,11 @@
 ﻿
-#if (SqlServerDeduplication)
+#if (SqlServerDedupe)
 namespace NServiceBus.Transport.SqlServerDeduplication
 #else
 namespace NServiceBus.Transport.SqlServerNative
 #endif
 {
-    public enum DeduplicationOutcome
+    public enum DedupeOutcome
     {
         Sent,
         Deduplicated

@@ -7,11 +7,11 @@ using ObjectApproval;
 using Xunit;
 using Xunit.Abstractions;
 
-public class WithDeduplicationTests : TestBase
+public class WithDedupeTests : TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
-    string table = "WithDeduplicationTests";
+    string table = "WithDedupeTests";
 
     [Fact]
     public async Task Single()
@@ -96,13 +96,13 @@ public class WithDeduplicationTests : TestBase
         return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
-    public WithDeduplicationTests(ITestOutputHelper output) : base(output)
+    public WithDedupeTests(ITestOutputHelper output) : base(output)
     {
         var manager = new QueueManager(table, SqlConnection, "Deduplication");
         manager.Drop().Await();
         manager.Create().Await();
-        var deduplication = new DeduplicationManager(SqlConnection, "Deduplication");
-        deduplication.Drop().Await();
-        deduplication.Create().Await();
+        var dedupeManager = new DedupeManager(SqlConnection, "Deduplication");
+        dedupeManager.Drop().Await();
+        dedupeManager.Create().Await();
     }
 }

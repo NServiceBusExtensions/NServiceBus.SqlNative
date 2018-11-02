@@ -19,7 +19,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         internal string OriginatingMachine = Environment.MachineName;
         internal string OriginatingEndpoint = "SqlHttpPassthrough";
         internal Func<HttpContext, PassthroughMessage, Task<Table>> SendCallback;
-        internal Table DeduplicationTable = "Deduplication";
+        internal Table DedupeTable = "Deduplication";
         internal Table AttachmentsTable = "MessageAttachments";
         internal string ClaimsHeaderPrefix;
         internal bool AppendClaims;
@@ -60,7 +60,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         public void Deduplication(Table table)
         {
             Guard.AgainstNull(table, nameof(table));
-            DeduplicationTable = table;
+            DedupeTable = table;
         }
 
         /// <summary>

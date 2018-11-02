@@ -3,13 +3,13 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-#if (SqlServerDeduplication)
+#if (SqlServerDedupe)
 namespace NServiceBus.Transport.SqlServerDeduplication
 #else
 namespace NServiceBus.Transport.SqlServerNative
 #endif
 {
-    public class DeduplicationManager
+    public class DedupeManager
     {
         const string dedupSql = @"insert into {0} (Id) values (@Id);";
 
@@ -17,7 +17,7 @@ namespace NServiceBus.Transport.SqlServerNative
         Table table;
         SqlTransaction transaction;
 
-        public DeduplicationManager(SqlConnection connection, Table table)
+        public DedupeManager(SqlConnection connection, Table table)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(connection, nameof(connection));
@@ -26,7 +26,7 @@ namespace NServiceBus.Transport.SqlServerNative
             InitSendSql();
         }
 
-        public DeduplicationManager(SqlTransaction transaction, Table table)
+        public DedupeManager(SqlTransaction transaction, Table table)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(transaction, nameof(transaction));
@@ -42,7 +42,7 @@ namespace NServiceBus.Transport.SqlServerNative
             sendSql = ConnectionHelpers.WrapInNoCount(resultSql);
         }
 
-        SqlCommand CreateDedupRecordCommand(Guid messageId)
+        SqlCommand CreateDedupeRecordCommand(Guid messageId)
         {
             var command = connection.CreateCommand(transaction, string.Format(sendSql, table));
             var parameters = command.Parameters;
@@ -50,9 +50,9 @@ namespace NServiceBus.Transport.SqlServerNative
             return command;
         }
 
-        public async Task<DeduplicationOutcome> WriteDedupRecord(CancellationToken cancellation, Guid messageId)
+        public async Task<DedupeOutcome> WriteDedupRecord(CancellationToken cancellation, Guid messageId)
         {
-            using (var command = CreateDedupRecordCommand(messageId))
+            using (var command = CreateDedupeRecordCommand(messageId))
             {
                 try
                 {
@@ -62,14 +62,14 @@ namespace NServiceBus.Transport.SqlServerNative
                 {
                     if (sqlException.IsKeyViolation())
                     {
-                        return DeduplicationOutcome.Deduplicated;
+                        return DedupeOutcome.Deduplicated;
                     }
 
                     throw;
                 }
             }
 
-            return DeduplicationOutcome.Sent;
+            return DedupeOutcome.Sent;
         }
 
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)
@@ -106,14 +106,14 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public virtual Task Create(CancellationToken cancellation = default)
         {
-            var command = string.Format(DeduplicationTableSql, table);
+            var command = string.Format(DedupeTableSql, table);
             return connection.ExecuteCommand(transaction, command, cancellation);
         }
 
         /// <summary>
         /// The sql statements used to create the deduplication table.
         /// </summary>
-        public static readonly string DeduplicationTableSql = @"
+        public static readonly string DedupeTableSql = @"
 if exists (
     select *
     from sys.objects

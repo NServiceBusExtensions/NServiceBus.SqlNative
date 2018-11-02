@@ -7,7 +7,7 @@ using NServiceBus.Features;
 using Xunit;
 using Xunit.Abstractions;
 
-public class DeduplicationIntegrationTests : TestBase
+public class DedupeIntegrationTests : TestBase
 {
     static CountdownEvent countdown = new CountdownEvent(2);
 
@@ -30,15 +30,15 @@ public class DeduplicationIntegrationTests : TestBase
     {
         var sendOptions = new SendOptions();
         sendOptions.RouteToThisEndpoint();
-        return endpoint.SendWithDeduplication(messageId, new MyMessage(), sendOptions);
+        return endpoint.SendWithDedupe(messageId, new MyMessage(), sendOptions);
     }
 
     static Task<IEndpointInstance> StartEndpoint()
     {
-        var configuration = new EndpointConfiguration(nameof(DeduplicationIntegrationTests));
+        var configuration = new EndpointConfiguration(nameof(DedupeIntegrationTests));
         configuration.UsePersistence<LearningPersistence>();
         configuration.EnableInstallers();
-        var dedup = configuration.EnableDedup(Connection.ConnectionString);
+        var dedup = configuration.EnableDedupe(Connection.ConnectionString);
         dedup.Callback(context =>
         {
             countdown.Signal();
@@ -65,7 +65,7 @@ public class DeduplicationIntegrationTests : TestBase
         }
     }
 
-    public DeduplicationIntegrationTests(ITestOutputHelper output) : base(output)
+    public DedupeIntegrationTests(ITestOutputHelper output) : base(output)
     {
     }
 
