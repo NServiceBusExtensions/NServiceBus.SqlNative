@@ -67,8 +67,6 @@ public class HttpPassthroughIntegrationTests : TestBase
         var configuration = await EndpointCreator.Create("HttpPassthroughIntegrationTests");
         var attachments = configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
         attachments.UseTransportConnectivity();
-        var transport = configuration.UseTransport<SqlServerTransport>();
-        transport.ConnectionString(Connection.ConnectionString);
         return await Endpoint.Start(configuration);
     }
 
