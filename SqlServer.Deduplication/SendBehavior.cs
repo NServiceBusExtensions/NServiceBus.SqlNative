@@ -54,7 +54,10 @@ class SendBehavior :
             }
 
             await next().ConfigureAwait(false);
-            transaction.Commit();
+            if (DedupeManager.CommitWithDedupCheck(transaction) == DedupeOutcome.Deduplicated)
+            {
+                logger.Info($"Message deduplicated. MessageId: {messageId}");
+            }
         }
     }
 

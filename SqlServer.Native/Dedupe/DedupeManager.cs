@@ -72,6 +72,25 @@ namespace NServiceBus.Transport.SqlServerNative
             return DedupeOutcome.Sent;
         }
 
+        public static DedupeOutcome CommitWithDedupCheck(SqlTransaction transaction)
+        {
+            try
+            {
+                transaction.Commit();
+            }
+            catch (SqlException sqlException)
+            {
+                if (sqlException.IsKeyViolation())
+                {
+                    return DedupeOutcome.Deduplicated;
+                }
+
+                throw;
+            }
+
+            return DedupeOutcome.Sent;
+        }
+
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)
         {
             using (var command = connection.CreateCommand())
