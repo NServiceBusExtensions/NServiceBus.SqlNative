@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.TestHost;
 using My.Namespace;
 using NServiceBus;
 using NServiceBus.Attachments.Sql;
-using NServiceBus.Features;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
@@ -55,7 +54,7 @@ public class HttpPassthroughIntegrationTests : TestBase
                 message: message,
                 typeName: "MyMessage",
                 typeNamespace: "My.Namespace",
-                destination: "Endpoint",
+                destination: "HttpPassthroughIntegrationTests",
                 attachments: new Dictionary<string, byte[]>
                 {
                     {"fooFile", Encoding.UTF8.GetBytes("foo")}
@@ -63,21 +62,14 @@ public class HttpPassthroughIntegrationTests : TestBase
         }
     }
 
-    static Task<IEndpointInstance> StartEndpoint()
+    static async Task<IEndpointInstance> StartEndpoint()
     {
-        var configuration = new EndpointConfiguration("Endpoint");
-        configuration.UsePersistence<LearningPersistence>();
-        configuration.EnableInstallers();
-        configuration.PurgeOnStartup(true);
-        configuration.UseSerialization<NewtonsoftSerializer>();
-        configuration.DisableFeature<TimeoutManager>();
-        configuration.RegisterComponents(x => x.RegisterSingleton(resetEvent));
-        configuration.DisableFeature<MessageDrivenSubscriptions>();
+        var configuration = await EndpointCreator.Create("HttpPassthroughIntegrationTests");
         var attachments = configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
         attachments.UseTransportConnectivity();
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
-        return Endpoint.Start(configuration);
+        return await Endpoint.Start(configuration);
     }
 
     class Handler : IHandleMessages<MyMessage>
