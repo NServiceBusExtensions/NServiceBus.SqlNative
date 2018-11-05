@@ -16,6 +16,7 @@ using Xunit.Abstractions;
 
 public class HttpPassthroughIntegrationTests : TestBase
 {
+    static ManualResetEvent resetEvent;
     [Fact]
     public async Task Integration()
     {
@@ -26,8 +27,8 @@ public class HttpPassthroughIntegrationTests : TestBase
             await Installer.CreateTable(connection, "MessageAttachments");
         }
 
-        var resetEvent = new ManualResetEvent(false);
-        var endpoint = await StartEndpoint(resetEvent);
+        resetEvent = new ManualResetEvent(false);
+        var endpoint = await StartEndpoint();
 
         await SubmitMultipartForm();
 
@@ -62,7 +63,7 @@ public class HttpPassthroughIntegrationTests : TestBase
         }
     }
 
-    static Task<IEndpointInstance> StartEndpoint(ManualResetEvent resetEvent)
+    static Task<IEndpointInstance> StartEndpoint()
     {
         var configuration = new EndpointConfiguration("Endpoint");
         configuration.UsePersistence<LearningPersistence>();
@@ -81,13 +82,6 @@ public class HttpPassthroughIntegrationTests : TestBase
 
     class Handler : IHandleMessages<MyMessage>
     {
-        ManualResetEvent resetEvent;
-
-        public Handler(ManualResetEvent resetEvent)
-        {
-            this.resetEvent = resetEvent;
-        }
-
         public async Task Handle(MyMessage message, IMessageHandlerContext context)
         {
             var incomingAttachment = context.Attachments();

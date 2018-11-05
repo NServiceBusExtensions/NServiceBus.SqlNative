@@ -12,11 +12,12 @@ using Headers = NServiceBus.Transport.SqlServerNative.Headers;
 
 public class SendIntegration : TestBase
 {
+   static ManualResetEvent resetEvent;
     [Fact]
     public async Task Run()
     {
-        var resetEvent = new ManualResetEvent(false);
-        var configuration = await EndpointCreator.Create("IntegrationSend", resetEvent);
+        resetEvent = new ManualResetEvent(false);
+        var configuration = await EndpointCreator.Create("IntegrationSend");
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
         configuration.DisableFeature<TimeoutManager>();
@@ -40,13 +41,6 @@ public class SendIntegration : TestBase
 
     class SendHandler : IHandleMessages<SendMessage>
     {
-        ManualResetEvent resetEvent;
-
-        public SendHandler(ManualResetEvent resetEvent)
-        {
-            this.resetEvent = resetEvent;
-        }
-
         public Task Handle(SendMessage message, IMessageHandlerContext context)
         {
             resetEvent.Set();
