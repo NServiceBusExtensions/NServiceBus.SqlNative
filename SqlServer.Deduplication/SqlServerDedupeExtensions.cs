@@ -41,7 +41,7 @@ namespace NServiceBus
             return dedupeSettings;
         }
 
-        public static Task<DedupeOutcome> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions options = null)
+        public static Task<DedupeResult> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions options = null, string context = null)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
             Guard.AgainstNull(message, nameof(message));
@@ -55,7 +55,7 @@ namespace NServiceBus
                 ValidateMessageId(options);
             }
 
-            return InnerSendWithDedupe(session, message, messageId, options);
+            return InnerSendWithDedupe(session, message, messageId, options, context);
         }
 
         static void ValidateMessageId(SendOptions options)
@@ -66,15 +66,22 @@ namespace NServiceBus
             }
         }
 
-        static async Task<DedupeOutcome> InnerSendWithDedupe(IMessageSession session, object message, Guid messageId, SendOptions options)
+        static async Task<DedupeResult> InnerSendWithDedupe(IMessageSession session, object message, Guid messageId, SendOptions options, string context)
         {
-            var pipelineState = new DedupePipelineState();
+            var pipelineState = new DedupePipelineState
+            {
+                Context = context
+            };
             DedupePipelineState.Set(options, pipelineState);
             options.SetMessageId(messageId.ToString());
 
             await session.Send(message, options).ConfigureAwait(false);
 
-            return pipelineState.DedupeOutcome;
+            return new DedupeResult
+            {
+                DedupeOutcome = pipelineState.DedupeOutcome,
+                Context = pipelineState.Context
+            };
         }
 
         static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation)

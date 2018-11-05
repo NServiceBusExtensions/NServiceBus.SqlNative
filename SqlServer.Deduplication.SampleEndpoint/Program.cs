@@ -37,12 +37,12 @@ class Program
     {
         var guid = Guid.NewGuid();
         var dedupeOutcome1 = await SendMessage(endpoint, guid);
-        Console.WriteLine($"DedupeOutcome {dedupeOutcome1}");
+        Console.WriteLine($"DedupeOutcome:{dedupeOutcome1.DedupeOutcome}. Context:{dedupeOutcome1.Context}");
         var dedupeOutcome2 = await SendMessage(endpoint, guid);
-        Console.WriteLine($"DedupeOutcome {dedupeOutcome2}");
+        Console.WriteLine($"DedupeOutcome:{dedupeOutcome2.DedupeOutcome}. Context:{dedupeOutcome2.Context}");
     }
 
-    static Task<DedupeOutcome> SendMessage(IEndpointInstance endpoint, Guid guid)
+    static Task<DedupeResult> SendMessage(IEndpointInstance endpoint, Guid guid)
     {
         var message = new SampleMessage();
         var options = new SendOptions();

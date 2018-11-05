@@ -11,6 +11,7 @@ using Xunit.Abstractions;
 public class DedupeIntegrationTests : TestBase
 {
     static CountdownEvent countdown = new CountdownEvent(2);
+    static string contextResult ;
 
     [Fact]
     public async Task Integration()
@@ -32,8 +33,9 @@ public class DedupeIntegrationTests : TestBase
         var sendOptions = new SendOptions();
         sendOptions.RouteToThisEndpoint();
         var sendWithDedupe = await endpoint.SendWithDedupe(messageId, new MyMessage(), sendOptions);
-        if (sendWithDedupe == DedupeOutcome.Deduplicated)
+        if (sendWithDedupe.DedupeOutcome == DedupeOutcome.Deduplicated)
         {
+            contextResult = sendWithDedupe.Context;
             countdown.Signal();
         }
     }

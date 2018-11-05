@@ -45,30 +45,24 @@ class SendBehavior :
             transportTransaction.Set(transaction);
 
             var dedupeManager = new DedupeManager(transaction, table);
-            var outcome = await dedupeManager.WriteDedupRecord(messageId).ConfigureAwait(false);
-            dedupePipelineState.DedupeOutcome = outcome;
-            if (outcome == DedupeOutcome.Deduplicated)
+            var writeResult = await dedupeManager.WriteDedupRecord(messageId, dedupePipelineState.Context).ConfigureAwait(false);
+            dedupePipelineState.DedupeOutcome = writeResult.DedupeOutcome;
+            dedupePipelineState.Context = writeResult.Context;
+            if (dedupePipelineState.DedupeOutcome == DedupeOutcome.Deduplicated)
             {
                 logger.Info($"Message deduplicated. MessageId: {messageId}");
                 return;
             }
 
             await next().ConfigureAwait(false);
-            if (DedupeManager.CommitWithDedupCheck(transaction) == DedupeOutcome.Deduplicated)
+            var commitResult = await dedupeManager.CommitWithDedupCheck(messageId, dedupePipelineState.Context);
+            dedupePipelineState.DedupeOutcome = commitResult.DedupeOutcome;
+            dedupePipelineState.Context = commitResult.Context;
+            if (commitResult.DedupeOutcome == DedupeOutcome.Deduplicated)
             {
                 logger.Info($"Message deduplicated. MessageId: {messageId}");
             }
         }
-    }
-
-    static bool ShouldDedupe(IOutgoingPhysicalMessageContext context)
-    {
-        if (context.Extensions.TryGet("SqlServer.Deduplication", out bool shouldDeduplicate))
-        {
-            return shouldDeduplicate;
-        }
-
-        return false;
     }
 
     static Guid GetMessageId(IOutgoingPhysicalMessageContext context)
