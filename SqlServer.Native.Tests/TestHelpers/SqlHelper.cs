@@ -44,10 +44,11 @@ if(db_id('{database}') is null)
         var reader = new DelayedQueueManager(table, connection);
         var messages = new ConcurrentBag<IncomingDelayedVerifyTarget>();
         await reader.Read(size: 10,
-                startRowVersion: 1,
-                action: message => { messages.Add(message.ToVerifyTarget()); });
+            startRowVersion: 1,
+            action: message => { messages.Add(message.ToVerifyTarget()); });
         return messages.OrderBy(x => x.Due);
     }
+
     public static IEnumerable<IDictionary<string, object>> ReadDuplicateData(string table, SqlConnection conn)
     {
         using (var command = conn.CreateCommand())
