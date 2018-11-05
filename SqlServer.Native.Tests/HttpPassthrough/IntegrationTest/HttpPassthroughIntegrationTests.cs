@@ -16,6 +16,7 @@ using Xunit.Abstractions;
 public class HttpPassthroughIntegrationTests : TestBase
 {
     static ManualResetEvent resetEvent;
+
     [Fact]
     public async Task Integration()
     {
@@ -54,7 +55,7 @@ public class HttpPassthroughIntegrationTests : TestBase
                 message: message,
                 typeName: "MyMessage",
                 typeNamespace: "My.Namespace",
-                destination: "HttpPassthroughIntegrationTests",
+                destination: nameof(HttpPassthroughIntegrationTests),
                 attachments: new Dictionary<string, byte[]>
                 {
                     {"fooFile", Encoding.UTF8.GetBytes("foo")}
@@ -64,7 +65,7 @@ public class HttpPassthroughIntegrationTests : TestBase
 
     static async Task<IEndpointInstance> StartEndpoint()
     {
-        var configuration = await EndpointCreator.Create("HttpPassthroughIntegrationTests");
+        var configuration = await EndpointCreator.Create(nameof(HttpPassthroughIntegrationTests));
         var attachments = configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
         attachments.UseTransportConnectivity();
         return await Endpoint.Start(configuration);

@@ -17,6 +17,7 @@ static class EndpointCreator
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
         configuration.DisableFeature<TimeoutManager>();
+        configuration.PurgeOnStartup(true);
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<MessageDrivenSubscriptions>();

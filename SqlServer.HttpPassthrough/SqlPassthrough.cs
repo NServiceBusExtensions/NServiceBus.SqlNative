@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -36,8 +35,11 @@ class SqlPassthrough : ISqlPassthrough
         if (wasDedup)
         {
             logger.LogInformation("Dedup detected. Setting response to HttpStatusCode.Conflict (409). Id:{id}", passThroughMessage.Id);
-            context.Response.StatusCode = (int) HttpStatusCode.Conflict;
+            // 208 already reported
+            context.Response.StatusCode = 208;
+            return;
         }
+        context.Response.StatusCode = StatusCodes.Status202Accepted;
     }
 
     void ProcessClaims(HttpContext context, PassthroughMessage passThroughMessage)
