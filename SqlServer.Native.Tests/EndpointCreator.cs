@@ -14,6 +14,9 @@ static class EndpointCreator
         }
 
         var configuration = new EndpointConfiguration(endpointName);
+        var transport = configuration.UseTransport<SqlServerTransport>();
+        transport.ConnectionString(Connection.ConnectionString);
+        configuration.DisableFeature<TimeoutManager>();
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<MessageDrivenSubscriptions>();

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
-using NServiceBus.Features;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
@@ -17,9 +16,6 @@ public class ConsumerIntegrationTests : TestBase
         await manager.Create();
         var configuration = await EndpointCreator.Create("IntegrationConsumer");
         configuration.SendOnly();
-        var transport = configuration.UseTransport<SqlServerTransport>();
-        transport.ConnectionString(Connection.ConnectionString);
-        configuration.DisableFeature<TimeoutManager>();
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
         var consumer = new QueueManager(table, SqlConnection);
