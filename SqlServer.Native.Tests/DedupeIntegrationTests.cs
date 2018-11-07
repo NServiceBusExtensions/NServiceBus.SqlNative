@@ -8,19 +8,23 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 using DedupeOutcome = NServiceBus.Transport.SqlServerDeduplication.DedupeOutcome;
+using DedupeResult = NServiceBus.Transport.SqlServerDeduplication.DedupeResult;
 
 public class DedupeIntegrationTests : TestBase
 {
     static CountdownEvent countdown = new CountdownEvent(2);
-    static string contextResult;
 
     [Fact]
     public async Task Integration()
     {
         var endpoint = await StartEndpoint();
         var messageId = Guid.NewGuid();
-        await SendMessage(messageId, endpoint);
-        await SendMessage(messageId, endpoint);
+        var result = await SendMessage(messageId, endpoint, "context1");
+        Assert.Equal("context1", result.Context);
+        Assert.Equal(DedupeOutcome.Sent, result.DedupeOutcome);
+        result = await SendMessage(messageId, endpoint, "context2");
+        Assert.Equal("context1", result.Context);
+        Assert.Equal(DedupeOutcome.Deduplicated, result.DedupeOutcome);
         if (!countdown.Wait(TimeSpan.FromSeconds(20)))
         {
             throw new Exception("Expected dedup");
@@ -29,16 +33,16 @@ public class DedupeIntegrationTests : TestBase
         await endpoint.Stop();
     }
 
-    static async Task SendMessage(Guid messageId, IEndpointInstance endpoint)
+    static async Task<DedupeResult> SendMessage(Guid messageId, IEndpointInstance endpoint, string context)
     {
         var sendOptions = new SendOptions();
         sendOptions.RouteToThisEndpoint();
-        var sendWithDedupe = await endpoint.SendWithDedupe(messageId, new MyMessage(), sendOptions);
+        var sendWithDedupe = await endpoint.SendWithDedupe(messageId, new MyMessage(), sendOptions,context);
         if (sendWithDedupe.DedupeOutcome == DedupeOutcome.Deduplicated)
         {
-            contextResult = sendWithDedupe.Context;
             countdown.Signal();
         }
+        return sendWithDedupe;
     }
 
     static Task<IEndpointInstance> StartEndpoint()
