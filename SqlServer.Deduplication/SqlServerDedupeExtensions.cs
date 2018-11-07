@@ -41,6 +41,13 @@ namespace NServiceBus
             return dedupeSettings;
         }
 
+        public static Task<DedupeResult> SendLocalWithDedupe(this IMessageSession session, Guid messageId, object message, string context = null)
+        {
+            var options = new SendOptions();
+            options.RouteToThisEndpoint();
+            return SendWithDedupe(session, messageId, message, options, context);
+        }
+
         public static Task<DedupeResult> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions options = null, string context = null)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
