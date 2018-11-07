@@ -11,8 +11,8 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public class DedupeManager
     {
-        const string writeSqlFormat = @"insert into {0} (Id, Context) values (@Id, @Context);";
-        const string readSqlFormat = @"select Context from {0} where Id = @Id";
+        const string writeSqlFormat = "insert into {0} (Id, Context) values (@Id, @Context);";
+        const string readSqlFormat = "select Context from {0} where Id = @Id";
         string writeSql;
         string readSql;
 
