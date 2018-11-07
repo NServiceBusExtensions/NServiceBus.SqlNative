@@ -13,7 +13,7 @@ public static class EndpointMessageValidator
             {
                 "SampleNamespace"
             }
-        },
+        }
     };
 
     public static void ValidateMessage(PassthroughMessage message)

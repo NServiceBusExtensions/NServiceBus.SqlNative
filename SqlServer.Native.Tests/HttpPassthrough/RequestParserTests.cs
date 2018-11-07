@@ -26,7 +26,7 @@ public class RequestParserTests : TestBase
                 {"MessageNamespace", "TheMessageNamespace"},
                 {"MessageType", "TheMessageType"},
                 {"MessageId", new Guid("00000000-0000-0000-0000-000000000001").ToString()},
-                {HeaderNames.Referer, "TheReferer"},
+                {HeaderNames.Referer, "TheReferer"}
             },
             Body = new MemoryStream(Encoding.UTF8.GetBytes("{}")),
             Form = new FormCollection(

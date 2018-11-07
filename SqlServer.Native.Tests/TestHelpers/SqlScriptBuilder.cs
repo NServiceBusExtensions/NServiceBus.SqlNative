@@ -55,7 +55,7 @@ public class SqlScriptBuilder
         var options = new ScriptingOptions
         {
             ChangeTracking = true,
-            NoCollation = true,
+            NoCollation = true
         };
         return string.Join("\n\n", scriptable.Script(options)
             .Cast<string>()

@@ -153,7 +153,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
                 {"Body", Body},
                 {"ClientUrl", ClientUrl},
                 {"Attachments", Attachments.Select(x => x.FileName).ToList()},
-                {"ExtraHeaders", ExtraHeaders},
+                {"ExtraHeaders", ExtraHeaders}
             };
         }
     }

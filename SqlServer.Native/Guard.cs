@@ -68,7 +68,6 @@ static class Guard
         }
     }
 
-
     public static void AgainstNegativeAndZero(int value, string argumentName)
     {
         if (value < 1)

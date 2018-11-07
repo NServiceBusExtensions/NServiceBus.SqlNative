@@ -16,7 +16,7 @@ public class SerializerTests
                 {"a\"b", "a\"b"},
                 {"a/b", "a/b"},
                 {"a//b", "a//b"},
-                {@"a\/b", @"a\/b"},
+                {@"a\/b", @"a\/b"}
             });
         ObjectApprover.VerifyWithJson(Serializer.DeSerializeDictionary(serialized));
     }
@@ -33,7 +33,7 @@ public class SerializerTests
                 "a\"b",
                 "a/b",
                 "a//b",
-                @"a\/b",
+                @"a\/b"
             });
         ObjectApprover.VerifyWithJson(Serializer.DeSerializeList(serialized));
     }
