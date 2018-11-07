@@ -4,14 +4,15 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Attachments.Sql;
 using NServiceBus.Features;
-using NServiceBus.Transport.SqlServerDeduplication;
+using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
+using DedupeOutcome = NServiceBus.Transport.SqlServerDeduplication.DedupeOutcome;
 
 public class DedupeIntegrationTests : TestBase
 {
     static CountdownEvent countdown = new CountdownEvent(2);
-    static string contextResult ;
+    static string contextResult;
 
     [Fact]
     public async Task Integration()
@@ -70,6 +71,9 @@ public class DedupeIntegrationTests : TestBase
 
     public DedupeIntegrationTests(ITestOutputHelper output) : base(output)
     {
+        var dedupeManager = new DedupeManager(SqlConnection, "Deduplication");
+        dedupeManager.Drop().Await();
+        dedupeManager.Create().Await();
     }
 
     class MyMessage : IMessage
