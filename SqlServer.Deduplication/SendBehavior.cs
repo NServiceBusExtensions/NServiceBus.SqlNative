@@ -55,7 +55,7 @@ class SendBehavior :
             }
 
             await next().ConfigureAwait(false);
-            var commitResult = await dedupeManager.CommitWithDedupCheck(messageId, dedupePipelineState.Context);
+            var commitResult = await dedupeManager.CommitWithDedupCheck(messageId, dedupePipelineState.Context).ConfigureAwait(false);
             dedupePipelineState.DedupeOutcome = commitResult.DedupeOutcome;
             dedupePipelineState.Context = commitResult.Context;
             if (commitResult.DedupeOutcome == DedupeOutcome.Deduplicated)

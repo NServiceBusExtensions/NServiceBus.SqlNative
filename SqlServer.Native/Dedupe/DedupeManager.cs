@@ -131,7 +131,7 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 if (sqlException.IsKeyViolation())
                 {
-                    return await BuildDedupeResult(messageId);
+                    return await BuildDedupeResult(messageId).ConfigureAwait(false);
                 }
 
                 throw;
