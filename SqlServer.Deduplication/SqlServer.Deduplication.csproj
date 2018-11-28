@@ -8,7 +8,6 @@
     <GenerateDocumentationFile Condition="'$(Configuration)'=='Release'">true</GenerateDocumentationFile>
     <Description>Message deduplication for the SQL Server transport.</Description>
     <PackageProjectUrl>https://docs.particular.net/nuget/$(PackageId)</PackageProjectUrl>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
     <DefineConstants>$(DefineConstants);SqlServerDedupe</DefineConstants>
   </PropertyGroup>
 

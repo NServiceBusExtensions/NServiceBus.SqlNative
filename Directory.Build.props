@@ -19,5 +19,8 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <!--TODO: remove NU5125 when license url moves to license node-->
+    <!--TODO: remove NU1608 when particular updates newtonsoft -->
+    <NoWarn>NU5125;NU1608;CS1591;CS1573;NU5105</NoWarn>
   </PropertyGroup>
 </Project>

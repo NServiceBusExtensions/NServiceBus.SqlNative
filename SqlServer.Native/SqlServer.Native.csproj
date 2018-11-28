@@ -7,7 +7,6 @@
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile Condition="'$(Configuration)'=='Release'">true</GenerateDocumentationFile>
     <PackageProjectUrl>https://docs.particular.net/nuget/$(PackageId)</PackageProjectUrl>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
