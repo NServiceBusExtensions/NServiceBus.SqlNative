@@ -1,9 +1,4 @@
-![Icon](https://raw.githubusercontent.com/NServiceBusExtensions/NServiceBus.Native/master/icon.png)
-
-NServiceBus.Native
-===========================
-
-Adds low level APIs for [NServiceBus](https://docs.particular.net/nservicebus/) Transports.
+<img src="https://raw.github.com/NServiceBusExtensions/NServiceBus.Native/master/src/icon.png" height="25px"> Adds low level APIs for [NServiceBus](https://docs.particular.net/nservicebus/) Transports.
 
 <!--- StartOpenCollectiveBackers -->
 
