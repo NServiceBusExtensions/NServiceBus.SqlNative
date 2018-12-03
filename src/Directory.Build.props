@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <Version>4.0.0-beta.3</Version>
+    <Version>4.0.0-beta.4</Version>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>latest</LangVersion>
     <Description>Low level .net wrapper for the SQL Server transport.</Description>
-    <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Copyright>Copyright $([System.DateTime]::UtcNow.ToString(yyyy)). All rights reserved</Copyright>
     <PackageTags>NServiceBus, Native, Raw</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/NServiceBusExtensions/NServiceBus.Native/master/icon.png</PackageIconUrl>
-    <PackageOutputPath>..\nugets</PackageOutputPath>
+    <PackageIconUrl>https://raw.githubusercontent.com/NServiceBusExtensions/NServiceBus.Native/master/src/icon.png</PackageIconUrl>
+    <PackageOutputPath>..\..\nugets</PackageOutputPath>
     <RepositoryUrl>https://github.com/NServiceBusExtensions/NServiceBus.Native</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
     <NoWarn>1573</NoWarn>
