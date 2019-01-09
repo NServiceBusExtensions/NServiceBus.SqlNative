@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>NServiceBus.SqlServer.Deduplication</AssemblyName>
     <PackageName>NServiceBus.SqlServer.Deduplication</PackageName>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile Condition="'$(Configuration)'=='Release'">true</GenerateDocumentationFile>
     <Description>Message deduplication for the SQL Server transport.</Description>
