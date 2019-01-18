@@ -1,6 +1,6 @@
 ﻿[
   {
-    "$type": "Dictionary<string, object>",
-    "Id": "Guid 1"
+    $type: 'Dictionary<string, object>',
+    Id: 'Guid 1'
   }
 ]

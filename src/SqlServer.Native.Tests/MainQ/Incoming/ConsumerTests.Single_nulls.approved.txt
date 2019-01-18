@@ -1,5 +1,5 @@
 ﻿{
-  "$type": "IncomingVerifyTarget",
-  "Headers": "{}",
-  "Id": "Guid 1"
+  $type: 'IncomingVerifyTarget',
+  Headers: '{}',
+  Id: 'Guid 1'
 }

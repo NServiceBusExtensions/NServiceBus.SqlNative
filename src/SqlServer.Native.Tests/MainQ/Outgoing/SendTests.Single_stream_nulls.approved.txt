@@ -1,9 +1,9 @@
 ﻿[
   {
-    "$type": "IncomingVerifyTarget",
-    "Expires": "DateTime 1",
-    "Headers": "headers",
-    "Id": "Guid 1",
-    "Body": "{}"
+    $type: 'IncomingVerifyTarget',
+    Expires: 'DateTime 1',
+    Headers: 'headers',
+    Id: 'Guid 1',
+    Body: '{}'
   }
 ]
