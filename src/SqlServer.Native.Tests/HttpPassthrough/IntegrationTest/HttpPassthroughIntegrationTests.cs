@@ -58,7 +58,8 @@ public class HttpPassthroughIntegrationTests : TestBase
                 destination: nameof(HttpPassthroughIntegrationTests),
                 attachments: new Dictionary<string, byte[]>
                 {
-                    {"fooFile", Encoding.UTF8.GetBytes("foo")}
+                    {"fooFile", Encoding.UTF8.GetBytes("foo")},
+                    {"default", Encoding.UTF8.GetBytes("bar")}
                 });
         }
     }
@@ -76,7 +77,8 @@ public class HttpPassthroughIntegrationTests : TestBase
         public async Task Handle(MyMessage message, IMessageHandlerContext context)
         {
             var incomingAttachment = context.Attachments();
-            await incomingAttachment.GetBytes("fooFile");
+            Assert.NotNull(await incomingAttachment.GetBytes("fooFile"));
+            Assert.NotNull(await incomingAttachment.GetBytes());
             Assert.Equal("Value", message.Property);
             resetEvent.Set();
         }
