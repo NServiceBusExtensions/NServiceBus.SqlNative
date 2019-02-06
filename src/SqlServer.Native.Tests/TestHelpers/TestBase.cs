@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
+using ObjectApproval;
 using Xunit.Abstractions;
 
 public class TestBase:IDisposable
 {
     static TestBase()
     {
-        ObjectApproval.SerializerBuilder.ExtraSettings = settings => { settings.TypeNameHandling = TypeNameHandling.Objects; };
+        SerializerBuilder.ExtraSettings = settings =>
+        {
+            settings.TypeNameHandling = TypeNameHandling.Objects;
+        };
         DbSetup.Setup();
     }
 
