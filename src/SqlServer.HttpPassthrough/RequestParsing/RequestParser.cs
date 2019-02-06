@@ -26,13 +26,24 @@ static class RequestParser
 
     static IEnumerable<Attachment> GetAttachments(IFormCollection form)
     {
-        return form.Files
-            .Select(x =>
-                new Attachment
-                {
-                    FileName = x.FileName,
-                    Stream = x.OpenReadStream
-                });
+        var attachments = new Dictionary<string, Attachment>();
+        foreach (var file in form.Files)
+        {
+            var attachment = new Attachment
+            {
+                Stream = file.OpenReadStream,
+                FileName = file.FileName
+            };
+
+            if (attachments.ContainsKey(attachment.FileName))
+            {
+                throw new Exception($"Duplicate filename: {attachment.FileName}");
+            }
+
+            attachments.Add(attachment.FileName, attachment);
+        }
+
+        return attachments.Values;
     }
 
     static string GetMessageBody(IFormCollection form)
