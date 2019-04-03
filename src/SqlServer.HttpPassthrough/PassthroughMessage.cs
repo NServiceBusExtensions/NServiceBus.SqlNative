@@ -106,7 +106,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             get => clientUrl;
             set
             {
-                Guard.AgainstNullOrEmpty(value, nameof(ClientUrl));
+                Guard.AgainstEmpty(value, nameof(ClientUrl));
                 clientUrl = value;
             }
         }
@@ -143,7 +143,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// </summary>
         public Dictionary<string, object> ToDictionary()
         {
-            return new Dictionary<string, object>
+            var objects = new Dictionary<string, object>
             {
                 {"Id", Id},
                 {"CorrelationId", CorrelationId},
@@ -151,10 +151,15 @@ namespace NServiceBus.SqlServer.HttpPassthrough
                 {"Type", Type},
                 {"Namespace", Namespace},
                 {"Body", Body},
-                {"ClientUrl", ClientUrl},
                 {"Attachments", Attachments.Select(x => x.FileName).ToList()},
                 {"ExtraHeaders", ExtraHeaders}
             };
+            if (ClientUrl != null)
+            {
+                objects.Add("ClientUrl", ClientUrl);
+            }
+
+            return objects;
         }
     }
 }

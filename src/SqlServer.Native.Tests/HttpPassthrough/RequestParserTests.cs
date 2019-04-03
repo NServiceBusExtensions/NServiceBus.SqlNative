@@ -15,9 +15,23 @@ using Xunit.Abstractions;
 public class RequestParserTests : TestBase
 {
     [Fact]
+    public void Optional()
+    {
+        var request = new FakeHttpRequest
+        {
+            HeadersDictionary = new Dictionary<string, StringValues>
+            {
+                {"MessageType", "TheMessageType"},
+                {"MessageId", new Guid("00000000-0000-0000-0000-000000000001").ToString()},
+            },
+            Body = Body(),
+            Form = Form()
+        };
+        Verify(request);
+    }
+    [Fact]
     public void Simple()
     {
-        var attachmentBytes = Encoding.UTF8.GetBytes("Attachment Text");
         var request = new FakeHttpRequest
         {
             HeadersDictionary = new Dictionary<string, StringValues>
@@ -28,17 +42,19 @@ public class RequestParserTests : TestBase
                 {"MessageId", new Guid("00000000-0000-0000-0000-000000000001").ToString()},
                 {HeaderNames.Referer, "TheReferer"}
             },
-            Body = new MemoryStream(Encoding.UTF8.GetBytes("{}")),
-            Form = new FormCollection(
-                new Dictionary<string, StringValues>
-                {
-                    {"message", "{}"}
-                },
-                new FormFileCollection
-                {
-                    new FormFile(new MemoryStream(attachmentBytes), 0, attachmentBytes.Length, "attachment", "attachment.txt")
-                })
+            Body = Body(),
+            Form = Form()
         };
+        Verify(request);
+    }
+
+    static MemoryStream Body()
+    {
+        return new MemoryStream(Encoding.UTF8.GetBytes("{}"));
+    }
+
+    static void Verify(FakeHttpRequest request)
+    {
         var extract = RequestParser.Extract(request, CancellationToken.None).GetAwaiter().GetResult();
         ObjectApprover.VerifyWithJson(new
         {
@@ -49,6 +65,20 @@ public class RequestParserTests : TestBase
             extract.Id,
             extract.Type
         });
+    }
+
+    static FormCollection Form()
+    {
+        var attachmentBytes = Encoding.UTF8.GetBytes("Attachment Text");
+        return new FormCollection(
+            new Dictionary<string, StringValues>
+            {
+                {"message", "{}"}
+            },
+            new FormFileCollection
+            {
+                new FormFile(new MemoryStream(attachmentBytes), 0, attachmentBytes.Length, "attachment", "attachment.txt")
+            });
     }
 
     public RequestParserTests(ITestOutputHelper output) : base(output)

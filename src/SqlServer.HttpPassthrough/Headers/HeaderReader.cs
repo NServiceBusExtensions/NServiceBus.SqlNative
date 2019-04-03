@@ -22,7 +22,7 @@ static class HeaderReader
             MessageType = messageType,
             MessageNamespace = messageNamespace,
             Destination = headers.TryGetHeader("Destination"),
-            Referrer = headers.GetHeader(HeaderNames.Referer)
+            Referrer = headers.TryGetHeader(HeaderNames.Referer)
         };
     }
 

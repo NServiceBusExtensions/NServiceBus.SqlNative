@@ -25,7 +25,11 @@ class HeadersBuilder
         dictionary.Add("NServiceBus.TimeSent", Headers.ToWireFormattedString(DateTime.UtcNow));
         dictionary.Add("NServiceBus.OriginatingMachine", originatingMachine);
         dictionary.Add("NServiceBus.OriginatingEndpoint", originatingEndpoint);
-        dictionary.Add("MessagePassthrough.ClientUrl", message.ClientUrl);
+        if (message.ClientUrl != null)
+        {
+            dictionary.Add("MessagePassthrough.ClientUrl", message.ClientUrl);
+        }
+
         return Headers.Serialize(dictionary);
     }
 
