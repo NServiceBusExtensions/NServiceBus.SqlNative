@@ -32,9 +32,9 @@ namespace NServiceBus.Transport.SqlServerNative
                 {
                     try
                     {
-                        await RunBatch(cancellation).ConfigureAwait(false);
+                        await RunBatch(cancellation);
 
-                        await Task.Delay(delay, cancellation).ConfigureAwait(false);
+                        await Task.Delay(delay, cancellation);
                     }
                     catch (OperationCanceledException)
                     {

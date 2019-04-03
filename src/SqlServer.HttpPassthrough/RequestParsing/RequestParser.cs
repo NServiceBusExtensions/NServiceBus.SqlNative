@@ -11,7 +11,7 @@ static class RequestParser
     public static async Task<PassthroughMessage> Extract(HttpRequest request, CancellationToken cancellation)
     {
         var incomingHeaders = HeaderReader.GetIncomingHeaders(request.Headers);
-        var form = await request.ReadFormAsync(cancellation).ConfigureAwait(false);
+        var form = await request.ReadFormAsync(cancellation);
         return new PassthroughMessage
         {
             Destination = incomingHeaders.Destination,

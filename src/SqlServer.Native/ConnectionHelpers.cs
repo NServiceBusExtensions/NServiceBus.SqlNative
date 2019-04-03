@@ -20,7 +20,7 @@ namespace NServiceBus.Transport.SqlServerNative
             var connection = new SqlConnection(connectionString);
             try
             {
-                await connection.OpenAsync(cancellation).ConfigureAwait(false);
+                await connection.OpenAsync(cancellation);
                 return connection;
             }
             catch
@@ -34,7 +34,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNullOrEmpty(connectionString, nameof(connectionString));
 
-            var connection = await OpenConnection(connectionString, cancellation).ConfigureAwait(false);
+            var connection = await OpenConnection(connectionString, cancellation);
             return connection.BeginTransaction();
         }
 

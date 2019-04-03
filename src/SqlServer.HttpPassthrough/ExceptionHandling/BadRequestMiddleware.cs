@@ -19,7 +19,7 @@ class BadRequestMiddleware
     {
         try
         {
-            await next(context).ConfigureAwait(false);
+            await next(context);
         }
         catch (BadRequestException exception)
         {
@@ -27,7 +27,7 @@ class BadRequestMiddleware
             var response = context.Response;
             response.StatusCode = (int) HttpStatusCode.BadRequest;
             response.ContentType = "text/plain";
-            await response.WriteAsync(exception.Message).ConfigureAwait(false);
+            await response.WriteAsync(exception.Message);
         }
     }
 }

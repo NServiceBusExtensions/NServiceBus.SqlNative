@@ -50,7 +50,7 @@ static class DelegateWrappers
 
             try
             {
-                await task.ConfigureAwait(false);
+                await task;
             }
             catch (Exception exception)
             {
@@ -79,7 +79,7 @@ static class DelegateWrappers
 
             try
             {
-                return await task.ConfigureAwait(false);
+                return await task;
             }
             catch (Exception exception)
             {
@@ -108,7 +108,7 @@ static class DelegateWrappers
 
             try
             {
-                return await task.ConfigureAwait(false);
+                return await task;
             }
             catch (Exception exception)
             {

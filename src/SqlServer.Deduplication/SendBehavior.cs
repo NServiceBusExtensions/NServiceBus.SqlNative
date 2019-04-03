@@ -24,11 +24,11 @@ class SendBehavior :
     {
         if (!DedupePipelineState.TryGet(context, out var dedupePipelineState))
         {
-            await next().ConfigureAwait(false);
+            await next();
             return;
         }
 
-        var connectionTask = connectionBuilder(CancellationToken.None).ConfigureAwait(false);
+        var connectionTask = connectionBuilder(CancellationToken.None);
         if (context.Extensions.TryGet(out TransportTransaction transportTransaction))
         {
             throw new NotSupportedException("Deduplication is currently designed to be used from outside the NServiceBus pipeline. For example to dedup messages being sent from inside a web service endpoint.");
@@ -45,7 +45,7 @@ class SendBehavior :
             transportTransaction.Set(transaction);
 
             var dedupeManager = new DedupeManager(transaction, table);
-            var writeResult = await dedupeManager.WriteDedupRecord(messageId, dedupePipelineState.Context).ConfigureAwait(false);
+            var writeResult = await dedupeManager.WriteDedupRecord(messageId, dedupePipelineState.Context);
             dedupePipelineState.DedupeOutcome = writeResult.DedupeOutcome;
             dedupePipelineState.Context = writeResult.Context;
             if (dedupePipelineState.DedupeOutcome == DedupeOutcome.Deduplicated)
@@ -54,8 +54,8 @@ class SendBehavior :
                 return;
             }
 
-            await next().ConfigureAwait(false);
-            var commitResult = await dedupeManager.CommitWithDedupCheck(messageId, dedupePipelineState.Context).ConfigureAwait(false);
+            await next();
+            var commitResult = await dedupeManager.CommitWithDedupCheck(messageId, dedupePipelineState.Context);
             dedupePipelineState.DedupeOutcome = commitResult.DedupeOutcome;
             dedupePipelineState.Context = commitResult.Context;
             if (commitResult.DedupeOutcome == DedupeOutcome.Deduplicated)

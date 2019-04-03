@@ -75,7 +75,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstEmpty(messageId, nameof(messageId));
             using (var command = BuildReadCommand(messageId))
             {
-                var o = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
+                var o = await command.ExecuteScalarAsync(cancellation);
                 if (o == DBNull.Value)
                 {
                     return null;
@@ -91,7 +91,7 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 using (var command = BuildWriteCommand(messageId, context))
                 {
-                    await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
+                    await command.ExecuteNonQueryAsync(cancellation);
                 }
             }
             catch (SqlException sqlException)
@@ -131,7 +131,7 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 if (sqlException.IsKeyViolation())
                 {
-                    return await BuildDedupeResult(messageId).ConfigureAwait(false);
+                    return await BuildDedupeResult(messageId);
                 }
 
                 throw;
@@ -151,7 +151,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 command.Transaction = transaction;
                 command.CommandText = $"delete from {table} where Created < @date";
                 command.Parameters.Add("date", SqlDbType.DateTime2).Value = dateTime;
-                await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
+                await command.ExecuteNonQueryAsync(cancellation);
             }
         }
 
@@ -161,7 +161,7 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 command.Transaction = transaction;
                 command.CommandText = $"delete from {table}";
-                await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
+                await command.ExecuteNonQueryAsync(cancellation);
             }
         }
 

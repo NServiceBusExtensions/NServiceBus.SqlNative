@@ -21,7 +21,7 @@ public class PassthroughController : ControllerBase
         try
         {
             await sender.Send(HttpContext, cancellation)
-                .ConfigureAwait(false);
+                ;
         }
         catch (SendFailureException exception)
         {

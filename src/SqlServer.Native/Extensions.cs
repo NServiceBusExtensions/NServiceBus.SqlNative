@@ -43,7 +43,7 @@ static class Extensions
         Guard.AgainstNull(connection, nameof(connection));
         using (var command = connection.CreateCommand(transaction, sql))
         {
-            await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
+            await command.ExecuteNonQueryAsync(cancellation);
         }
     }
 

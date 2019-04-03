@@ -82,7 +82,7 @@ namespace NServiceBus
             DedupePipelineState.Set(options, pipelineState);
             options.SetMessageId(messageId.ToString());
 
-            await session.Send(message, options).ConfigureAwait(false);
+            await session.Send(message, options);
 
             return new DedupeResult
             {
@@ -96,7 +96,7 @@ namespace NServiceBus
             var connection = new SqlConnection(connectionString);
             try
             {
-                await connection.OpenAsync(cancellation).ConfigureAwait(false);
+                await connection.OpenAsync(cancellation);
                 return connection;
             }
             catch

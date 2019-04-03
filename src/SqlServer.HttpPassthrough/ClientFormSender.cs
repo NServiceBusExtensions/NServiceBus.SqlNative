@@ -78,7 +78,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
                     }
                 }
 
-                using (var response = await client.PostAsync(route, content, cancellation).ConfigureAwait(false))
+                using (var response = await client.PostAsync(route, content, cancellation))
                 {
                     response.EnsureSuccessStatusCode();
                     return (messageId, (int)response.StatusCode);

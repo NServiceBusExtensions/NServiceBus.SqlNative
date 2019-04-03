@@ -18,8 +18,8 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 using (var command = BuildReadCommand(1, rowVersion))
                 {
-                    reader = await command.ExecuteSingleRowReader(cancellation).ConfigureAwait(false);
-                    if (!await reader.ReadAsync(cancellation).ConfigureAwait(false))
+                    reader = await command.ExecuteSingleRowReader(cancellation);
+                    if (!await reader.ReadAsync(cancellation))
                     {
                         shouldCleanup = true;
                         return default;

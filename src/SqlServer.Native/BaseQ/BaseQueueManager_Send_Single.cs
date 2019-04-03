@@ -17,7 +17,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             using (var command = CreateSendCommand(message))
             {
-                var rowVersion = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
+                var rowVersion = await command.ExecuteScalarAsync(cancellation);
                 if (rowVersion == null)
                 {
                     return 0;

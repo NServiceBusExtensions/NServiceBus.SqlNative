@@ -21,7 +21,7 @@ class Program
         configuration.EnableInstallers();
         Console.Title = "SampleEndpoint Press Ctrl-C to Exit.";
         Console.TreatControlCAsInput = true;
-        var endpoint = await Endpoint.Start(configuration).ConfigureAwait(false);
+        var endpoint = await Endpoint.Start(configuration);
         Console.ReadKey(true);
         await endpoint.Stop();
     }

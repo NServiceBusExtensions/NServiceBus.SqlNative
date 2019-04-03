@@ -59,7 +59,7 @@ if @@rowcount = 0
 "))
             {
                 command.Parameters.Add("RowVersion", SqlDbType.BigInt).Value = rowVersion;
-                await command.ExecuteNonQueryAsync(cancellation).ConfigureAwait(false);
+                await command.ExecuteNonQueryAsync(cancellation);
             }
         }
 
@@ -71,7 +71,7 @@ if @@rowcount = 0
                 command.CommandText = $@"
 select top (1) RowVersion
 from {table}";
-                var result = await command.ExecuteScalarAsync(cancellation).ConfigureAwait(false);
+                var result = await command.ExecuteScalarAsync(cancellation);
                 if (result == null)
                 {
                     return 1;

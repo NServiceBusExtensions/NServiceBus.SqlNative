@@ -57,10 +57,10 @@ namespace NServiceBus.Transport.SqlServerNative
             SqlConnection connection = null;
             if (connectionBuilder != null)
             {
-                using (connection = await connectionBuilder(cancellation).ConfigureAwait(false))
+                using (connection = await connectionBuilder(cancellation))
                 {
                     var consumer = new QueueManager(table, connection);
-                    await RunBatch(consumer, message => connectionCallback(connection, message, cancellation), cancellation).ConfigureAwait(false);
+                    await RunBatch(consumer, message => connectionCallback(connection, message, cancellation), cancellation);
                 }
 
                 return;
@@ -68,12 +68,12 @@ namespace NServiceBus.Transport.SqlServerNative
             SqlTransaction transaction = null;
             try
             {
-                transaction = await transactionBuilder(cancellation).ConfigureAwait(false);
+                transaction = await transactionBuilder(cancellation);
                 connection = transaction.Connection;
                 var consumer = new QueueManager(table, transaction);
                 try
                 {
-                    await RunBatch(consumer, message => transactionCallback(transaction, message, cancellation), cancellation).ConfigureAwait(false);
+                    await RunBatch(consumer, message => transactionCallback(transaction, message, cancellation), cancellation);
 
                     transaction.Commit();
                 }
@@ -95,7 +95,7 @@ namespace NServiceBus.Transport.SqlServerNative
             while (true)
             {
                 var result = await consumer.Consume(batchSize, action, cancellation)
-                    .ConfigureAwait(false);
+                    ;
                 if (result.Count < batchSize)
                 {
                     break;

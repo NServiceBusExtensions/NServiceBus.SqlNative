@@ -46,7 +46,7 @@ public class CleanerTests
         {
             if (i % 9 == 0) //Succeed every 9th attempt
             {
-                await timer.Tick(DateTime.UtcNow, CancellationToken.None).ConfigureAwait(false);
+                await timer.Tick(DateTime.UtcNow, CancellationToken.None);
             }
             else
             {

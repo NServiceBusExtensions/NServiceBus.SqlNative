@@ -33,7 +33,7 @@ class Sender
         try
         {
            return await InnerSend(message, destination, cancellation)
-               .ConfigureAwait(false);
+               ;
         }
         catch (Exception exception)
         {
@@ -43,11 +43,11 @@ class Sender
 
     async Task<long> InnerSend(PassthroughMessage message, Table destination, CancellationToken cancellation)
     {
-        using (var connection = await connectionFunc(cancellation).ConfigureAwait(false))
+        using (var connection = await connectionFunc(cancellation))
         using (var transaction = connection.BeginTransaction())
         {
             var rowVersion = await SendInsideTransaction(message, destination, cancellation, transaction)
-                .ConfigureAwait(false);
+                ;
             transaction.Commit();
             return rowVersion;
         }
@@ -63,8 +63,8 @@ class Sender
             bodyBytes: Encoding.UTF8.GetBytes(message.Body));
         var queueManager = new QueueManager(destination, transaction, dedupeTable);
         var attachmentExpiry = DateTime.UtcNow.AddDays(10);
-        await Task.WhenAll(SendAttachments(transaction, attachmentExpiry, cancellation, message)).ConfigureAwait(false);
-        return await queueManager.Send(outgoingMessage, cancellation).ConfigureAwait(false);
+        await Task.WhenAll(SendAttachments(transaction, attachmentExpiry, cancellation, message));
+        return await queueManager.Send(outgoingMessage, cancellation);
     }
 
     void LogSend(PassthroughMessage message)
@@ -97,7 +97,7 @@ class Sender
         using (var stream = file.Stream())
         {
             await attachments.SaveStream(connection, transaction, messageId, file.FileName, expiry, stream, cancellation: cancellation)
-                .ConfigureAwait(false);
+                ;
         }
     }
 }

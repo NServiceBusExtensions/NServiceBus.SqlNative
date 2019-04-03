@@ -72,7 +72,7 @@ namespace NServiceBus.Transport.SqlServerNative
             SqlConnection connection = null;
             if (connectionBuilder != null)
             {
-                using (connection = await connectionBuilder(cancellation).ConfigureAwait(false))
+                using (connection = await connectionBuilder(cancellation))
                 {
                     var reader = new QueueManager(table, connection);
                     await RunBatch(
@@ -80,7 +80,7 @@ namespace NServiceBus.Transport.SqlServerNative
                             messageFunc: message => connectionCallback(connection, message, cancellation),
                             persistFunc: () => connectionPersistRowVersion(connection, startingRow, cancellation),
                             cancellation)
-                        .ConfigureAwait(false);
+                        ;
                 }
 
                 return;
@@ -89,7 +89,7 @@ namespace NServiceBus.Transport.SqlServerNative
             SqlTransaction transaction = null;
             try
             {
-                transaction = await transactionBuilder(cancellation).ConfigureAwait(false);
+                transaction = await transactionBuilder(cancellation);
                 connection = transaction.Connection;
                 var reader = new QueueManager(table, transaction);
                 try
@@ -99,7 +99,7 @@ namespace NServiceBus.Transport.SqlServerNative
                             messageFunc: message => transactionCallback(transaction, message, cancellation),
                             persistFunc: () => transactionPersistRowVersion(transaction, startingRow, cancellation),
                             cancellation)
-                        .ConfigureAwait(false);
+                        ;
                     transaction.Commit();
                 }
                 catch
@@ -120,14 +120,14 @@ namespace NServiceBus.Transport.SqlServerNative
             while (true)
             {
                 var result = await reader.Read(batchSize, startingRow, messageFunc, cancellation)
-                    .ConfigureAwait(false);
+                    ;
                 if (result.Count == 0)
                 {
                     break;
                 }
 
                 startingRow = result.LastRowVersion.Value + 1;
-                await persistFunc().ConfigureAwait(false);
+                await persistFunc();
                 if (result.Count < batchSize)
                 {
                     break;
