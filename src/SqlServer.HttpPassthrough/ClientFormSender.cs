@@ -52,10 +52,23 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             {
                 content.Add(new StringContent(message), "message");
                 var headers = content.Headers;
-                headers.Add("MessageId", messageId.ToString());
-                headers.Add("Destination", destination);
+
                 headers.Add("MessageType", typeName);
-                headers.Add("MessageNamespace", typeNamespace);
+                if (typeNamespace != null)
+                {
+                    headers.Add("MessageNamespace", typeNamespace);
+                }
+
+                if (messageId != default)
+                {
+                    headers.Add("MessageId", messageId.ToString());
+                }
+
+                if (destination != null)
+                {
+                    headers.Add("Destination", destination);
+                }
+
                 if (attachments != null)
                 {
                     foreach (var attachment in attachments)
