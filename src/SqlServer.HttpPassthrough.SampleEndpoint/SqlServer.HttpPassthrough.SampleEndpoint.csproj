@@ -9,7 +9,7 @@
     <PackageReference Include="NServiceBus" Version="7.1.6" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
     <PackageReference Include="NServiceBus.SqlServer" Version="4.1.2" />
-    <PackageReference Include="NServiceBus.Attachments.Sql" Version="1.9.0" />
+    <PackageReference Include="NServiceBus.Attachments.Sql" Version="1.10.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj" />
