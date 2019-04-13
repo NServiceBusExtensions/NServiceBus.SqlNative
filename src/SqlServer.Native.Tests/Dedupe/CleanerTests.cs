@@ -2,8 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
-public class CleanerTests
+public class CleanerTests :
+    XunitLoggingBase
 {
     [Fact]
     public void If_triggers_critical_action_after_10_failures()
@@ -82,5 +84,10 @@ public class CleanerTests
 
         Func<DateTime, CancellationToken, Task> callback;
         Action<Exception> errorCallback;
+    }
+
+    public CleanerTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

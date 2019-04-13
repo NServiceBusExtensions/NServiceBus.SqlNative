@@ -1,8 +1,10 @@
 ﻿using ApprovalTests;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
+using Xunit.Abstractions;
 
-public class MainQueueCreationTests
+public class MainQueueCreationTests :
+    XunitLoggingBase
 {
     [Fact]
     public void Run()
@@ -16,5 +18,10 @@ public class MainQueueCreationTests
             var sqlScriptBuilder = new SqlScriptBuilder(tables: true, namesToInclude: "MainQueueCreationTests");
             Approvals.Verify(sqlScriptBuilder.BuildScript(connection));
         }
+    }
+
+    public MainQueueCreationTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using ObjectApproval;
 using Xunit;
+using Xunit.Abstractions;
 
-public class SerializerTests
+public class SerializerTests :
+    XunitLoggingBase
 {
     [Fact]
     public void Dictionary()
@@ -36,5 +38,10 @@ public class SerializerTests
                 @"a\/b"
             });
         ObjectApprover.VerifyWithJson(Serializer.DeSerializeList(serialized));
+    }
+
+    public SerializerTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

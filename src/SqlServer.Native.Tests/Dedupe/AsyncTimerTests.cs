@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
-public class AsyncTimerTests
+public class AsyncTimerTests :
+    XunitLoggingBase
 {
     [Fact]
     public async Task It_calls_error_callback()
@@ -142,5 +144,10 @@ public class AsyncTimerTests
         callbackCompleted.SetResult(true);
 
         await stopTask;
+    }
+
+    public AsyncTimerTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }

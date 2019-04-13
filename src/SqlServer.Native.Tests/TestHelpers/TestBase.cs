@@ -4,8 +4,16 @@ using Newtonsoft.Json;
 using ObjectApproval;
 using Xunit.Abstractions;
 
-public class TestBase:IDisposable
+public class TestBase:
+    XunitLoggingBase,
+    IDisposable
 {
+    public TestBase(ITestOutputHelper output) :
+        base(output)
+    {
+        SqlConnection = Connection.OpenConnection();
+    }
+
     static TestBase()
     {
         SerializerBuilder.ExtraSettings = settings =>
@@ -15,18 +23,11 @@ public class TestBase:IDisposable
         DbSetup.Setup();
     }
 
-    public TestBase(ITestOutputHelper output)
-    {
-        Output = output;
-        SqlConnection = Connection.OpenConnection();
-    }
-
     public SqlConnection SqlConnection;
 
-    protected readonly ITestOutputHelper Output;
-
-    public void Dispose()
+    public override void Dispose()
     {
         SqlConnection?.Dispose();
+        base.Dispose();
     }
 }

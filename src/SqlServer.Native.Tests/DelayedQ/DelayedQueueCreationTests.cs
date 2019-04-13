@@ -1,8 +1,10 @@
 ﻿using ApprovalTests;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
+using Xunit.Abstractions;
 
-public class DelayedQueueCreationTests
+public class DelayedQueueCreationTests :
+    XunitLoggingBase
 {
     [Fact]
     public void Run()
@@ -16,5 +18,10 @@ public class DelayedQueueCreationTests
             var sqlScriptBuilder = new SqlScriptBuilder(tables:true, namesToInclude: "DelayedQueueCreationTests");
             Approvals.Verify(sqlScriptBuilder.BuildScript(connection));
         }
+    }
+
+    public DelayedQueueCreationTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }
