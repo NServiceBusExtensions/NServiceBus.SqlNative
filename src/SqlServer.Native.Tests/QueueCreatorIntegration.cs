@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using NServiceBus;
 using Xunit;
+using Xunit.Abstractions;
 
-public class QueueCreatorIntegration
+public class QueueCreatorIntegration:
+    XunitLoggingBase
 {
     static ManualResetEvent resetEvent;
 
@@ -40,6 +42,11 @@ public class QueueCreatorIntegration
     }
 
     class SendMessage : IMessage
+    {
+    }
+
+    public QueueCreatorIntegration(ITestOutputHelper output) :
+        base(output)
     {
     }
 }

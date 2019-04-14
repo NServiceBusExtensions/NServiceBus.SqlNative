@@ -1,12 +1,10 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using Newtonsoft.Json;
 using ObjectApproval;
 using Xunit.Abstractions;
 
 public class TestBase:
-    XunitLoggingBase,
-    IDisposable
+    XunitLoggingBase
 {
     public TestBase(ITestOutputHelper output) :
         base(output)
