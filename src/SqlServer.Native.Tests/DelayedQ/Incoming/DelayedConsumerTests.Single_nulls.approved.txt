@@ -1,5 +1,5 @@
 ﻿{
   $type: 'IncomingDelayedVerifyTarget',
   Headers: '{}',
-  Due: 'DateTime 1'
+  Due: DateTime_1
 }

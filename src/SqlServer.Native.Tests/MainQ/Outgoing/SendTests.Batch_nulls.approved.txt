@@ -2,11 +2,11 @@
   {
     $type: 'IncomingVerifyTarget',
     Headers: '{}',
-    Id: 'Guid 1'
+    Id: Guid_1
   },
   {
     $type: 'IncomingVerifyTarget',
     Headers: '{}',
-    Id: 'Guid 2'
+    Id: Guid_2
   }
 ]

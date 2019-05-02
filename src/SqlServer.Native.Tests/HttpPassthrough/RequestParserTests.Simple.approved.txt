@@ -4,6 +4,6 @@
   Body: '{}',
   ClientUrl: 'TheReferer',
   Destination: 'TheEndpoint',
-  Id: 'Guid 1',
+  Id: Guid_1,
   Type: 'TheMessageType'
 }
