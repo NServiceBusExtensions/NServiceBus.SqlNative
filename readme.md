@@ -33,7 +33,7 @@ Thanks to all the backing developers! Support this project by [becoming a patron
 https://docs.particular.net/nuget/NServiceBus.SqlServer.Native
 
 
-### The NuGet package [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.Native.svg?style=flat)](https://www.nuget.org/packages/NServiceBus.SqlServer.Native/)
+### The NuGet package [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.Native.svg)](https://www.nuget.org/packages/NServiceBus.SqlServer.Native/)
 
 https://nuget.org/packages/NServiceBus.SqlServer.Native
 
@@ -48,7 +48,7 @@ https://nuget.org/packages/NServiceBus.SqlServer.Native
 https://docs.particular.net/nuget/NServiceBus.SqlServer.HttpPassthrough
 
 
-### The NuGet package [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.HttpPassthrough.svg?style=flat)](https://www.nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough/)
+### The NuGet package [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.HttpPassthrough.svg)](https://www.nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough/)
 
 https://nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough
 
