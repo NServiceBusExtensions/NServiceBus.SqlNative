@@ -9,7 +9,6 @@ public class DelayedQueueCreationTests :
     [Fact]
     public void Run()
     {
-        DbSetup.Setup();
         using (var connection = Connection.OpenConnection())
         {
             var manager = new DelayedQueueManager("DelayedQueueCreationTests", connection);

@@ -18,7 +18,6 @@ public class TestBase:
         {
             settings.TypeNameHandling = TypeNameHandling.Objects;
         };
-        DbSetup.Setup();
     }
 
     public SqlConnection SqlConnection;

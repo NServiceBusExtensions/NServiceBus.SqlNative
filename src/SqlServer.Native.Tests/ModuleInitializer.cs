@@ -1,16 +1,9 @@
 ﻿using NServiceBus.Transport.SqlServerNative;
 
-public class DbSetup
+public static class ModuleInitializer
 {
-    static bool init;
-    public static void Setup()
+    public static void Initialize()
     {
-        if (init)
-        {
-            return;
-        }
-
-        init = true;
         SqlHelper.EnsureDatabaseExists(Connection.ConnectionString);
         using (var sqlConnection = Connection.OpenConnection())
         {

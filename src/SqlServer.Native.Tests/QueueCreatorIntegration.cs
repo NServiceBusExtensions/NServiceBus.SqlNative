@@ -9,11 +9,6 @@ public class QueueCreatorIntegration:
 {
     static ManualResetEvent resetEvent;
 
-    static QueueCreatorIntegration()
-    {
-        DbSetup.Setup();
-    }
-
     [Fact]
     public async Task Run()
     {

@@ -9,7 +9,6 @@ public class MainQueueCreationTests :
     [Fact]
     public void Run()
     {
-        DbSetup.Setup();
         using (var connection = Connection.OpenConnection())
         {
             var manager = new QueueManager("MainQueueCreationTests", connection);
