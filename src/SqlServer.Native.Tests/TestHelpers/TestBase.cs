@@ -1,6 +1,4 @@
 ﻿using System.Data.SqlClient;
-using Newtonsoft.Json;
-using ObjectApproval;
 using Xunit.Abstractions;
 
 public class TestBase:
@@ -10,14 +8,6 @@ public class TestBase:
         base(output)
     {
         SqlConnection = Connection.OpenConnection();
-    }
-
-    static TestBase()
-    {
-        SerializerBuilder.ExtraSettings = settings =>
-        {
-            settings.TypeNameHandling = TypeNameHandling.Objects;
-        };
     }
 
     public SqlConnection SqlConnection;
