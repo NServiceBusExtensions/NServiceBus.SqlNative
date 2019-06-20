@@ -18,7 +18,7 @@
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="1.10.0" />
+    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="1.11.0" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
   </ItemGroup>
 </Project>
