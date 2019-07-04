@@ -12,7 +12,11 @@ public class SqlScriptBuilder
     bool views;
     Func<string, bool> include;
 
-    public SqlScriptBuilder(bool storedProcedures = false, bool tables = false, bool views = false, params string[] namesToInclude)
+    public SqlScriptBuilder(
+        bool storedProcedures = false,
+        bool tables = false,
+        bool views = false,
+        params string[] namesToInclude)
     {
         this.storedProcedures = storedProcedures;
         this.tables = tables;
@@ -23,7 +27,7 @@ public class SqlScriptBuilder
         }
         else
         {
-            include = s => namesToInclude.Contains(s);
+            include = namesToInclude.Contains;
         }
     }
 
@@ -33,8 +37,7 @@ public class SqlScriptBuilder
         var theServer = new Server(new ServerConnection(sqlConnection));
 
         var database = theServer.Databases[builder.InitialCatalog];
-        var buildScript = string.Join("\n\n", GetScripts(database));
-        return buildScript;
+        return string.Join("\r\n", GetScripts(database));
     }
 
     IEnumerable<string> GetScripts(Database database)

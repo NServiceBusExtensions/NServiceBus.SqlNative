@@ -48,8 +48,7 @@ namespace NServiceBus.Transport.SqlServerNative
                     {
                         var dedupeCleaner = new DedupeManager(connection, table);
                         var expiry = DateTime.UtcNow.Subtract(expireWindow);
-                        await dedupeCleaner.CleanupItemsOlderThan(expiry, cancellation)
-                            ;
+                        await dedupeCleaner.CleanupItemsOlderThan(expiry, cancellation);
                     }
                 },
                 criticalError: criticalError,
