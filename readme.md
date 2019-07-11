@@ -37,8 +37,6 @@ https://docs.particular.net/nuget/NServiceBus.SqlServer.Native
 
 https://nuget.org/packages/NServiceBus.SqlServer.Native
 
-    PM> Install-Package NServiceBus.SqlServer.Native
-
 
 ## SqlServer.HttpPassthrough
 
@@ -51,8 +49,6 @@ https://docs.particular.net/nuget/NServiceBus.SqlServer.HttpPassthrough
 ### The NuGet package [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.HttpPassthrough.svg)](https://www.nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough/)
 
 https://nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough
-
-    PM> Install-Package NServiceBus.SqlServer.HttpPassthrough
 
 
 ## Icon
