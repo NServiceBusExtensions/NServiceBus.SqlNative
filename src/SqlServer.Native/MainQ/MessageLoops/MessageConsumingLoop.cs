@@ -94,8 +94,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             while (true)
             {
-                var result = await consumer.Consume(batchSize, action, cancellation)
-                    ;
+                var result = await consumer.Consume(batchSize, action, cancellation);
                 if (result.Count < batchSize)
                 {
                     break;
