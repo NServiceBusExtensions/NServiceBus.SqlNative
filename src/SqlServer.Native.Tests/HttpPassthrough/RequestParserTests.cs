@@ -56,7 +56,7 @@ public class RequestParserTests : TestBase
     static void Verify(FakeHttpRequest request)
     {
         var extract = RequestParser.Extract(request, CancellationToken.None).GetAwaiter().GetResult();
-        ObjectApprover.VerifyWithJson(new
+        ObjectApprover.Verify(new
         {
             extract.Attachments.Single().FileName,
             extract.Body,

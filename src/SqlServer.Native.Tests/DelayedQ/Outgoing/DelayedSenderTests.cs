@@ -18,7 +18,7 @@ public class DelayedSenderTests : TestBase
     {
         var message = BuildBytesMessage();
         await Send(message);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public class DelayedSenderTests : TestBase
     {
         var message = BuildBytesNullMessage();
         await Send(message);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class DelayedSenderTests : TestBase
     {
         var message = BuildStreamMessage();
         await  Send(message);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class DelayedSenderTests : TestBase
 
         var message = BuildBytesNullMessage();
         await sender.Send(message);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public class DelayedSenderTests : TestBase
             BuildStreamMessage()
         };
         await Send(messages);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -68,7 +68,7 @@ public class DelayedSenderTests : TestBase
             BuildStreamNullMessage()
         };
         await Send(messages);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     Task<long> Send(OutgoingDelayedMessage message)

@@ -17,7 +17,7 @@ public class DelayedReaderTests : TestBase
         var reader = new DelayedQueueManager(table, SqlConnection);
         using (var result = reader.Read(1).Result)
         {
-            ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
+            ObjectApprover.Verify(result.ToVerifyTarget());
         }
     }
 
@@ -28,7 +28,7 @@ public class DelayedReaderTests : TestBase
         var reader = new DelayedQueueManager(table, SqlConnection);
         using (var result = reader.Read(1).Result)
         {
-            ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
+            ObjectApprover.Verify(result.ToVerifyTarget());
         }
     }
 
@@ -46,7 +46,7 @@ public class DelayedReaderTests : TestBase
             .Result;
         Assert.Equal(4, result.LastRowVersion);
         Assert.Equal(3, result.Count);
-        ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Due));
+        ObjectApprover.Verify(messages.OrderBy(x => x.Due));
     }
 
     public DelayedReaderTests(ITestOutputHelper output) : base(output)

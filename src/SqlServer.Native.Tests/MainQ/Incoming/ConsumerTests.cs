@@ -17,7 +17,7 @@ public class ConsumerTests : TestBase
         var consumer = new QueueManager(table, SqlConnection);
         using (var result = consumer.Consume().Result)
         {
-            ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
+            ObjectApprover.Verify(result.ToVerifyTarget());
         }
     }
 
@@ -28,7 +28,7 @@ public class ConsumerTests : TestBase
         var consumer = new QueueManager(table, SqlConnection);
         using (var result = consumer.Consume().Result)
         {
-            ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
+            ObjectApprover.Verify(result.ToVerifyTarget());
         }
     }
 
@@ -58,7 +58,7 @@ public class ConsumerTests : TestBase
                 action: message => { messages.Add(message.ToVerifyTarget()); })
             .Result;
         Assert.Equal(5, result.Count);
-        ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Id));
+        ObjectApprover.Verify(messages.OrderBy(x => x.Id));
     }
 
     public ConsumerTests(ITestOutputHelper output) : base(output)

@@ -34,7 +34,7 @@ public class DedupeCleanerJobTests : TestBase
         cleaner.Start();
         Thread.Sleep(100);
         cleaner.Stop().Await();
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
+        ObjectApprover.Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
     Task<long> Send(OutgoingMessage message)

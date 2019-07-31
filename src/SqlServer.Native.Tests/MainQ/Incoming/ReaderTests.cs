@@ -17,7 +17,7 @@ public class ReaderTests : TestBase
         var reader = new QueueManager(table, SqlConnection);
         using (var result = reader.Read(1).Result)
         {
-            ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
+            ObjectApprover.Verify(result.ToVerifyTarget());
         }
     }
 
@@ -28,7 +28,7 @@ public class ReaderTests : TestBase
         var reader = new QueueManager(table, SqlConnection);
         using (var result = reader.Read(1).Result)
         {
-            ObjectApprover.VerifyWithJson(result.ToVerifyTarget());
+            ObjectApprover.Verify(result.ToVerifyTarget());
         }
     }
 
@@ -59,7 +59,7 @@ public class ReaderTests : TestBase
                 size: 10,
                 startRowVersion: 1,
                 action: message => { messages.Add(message.ToVerifyTarget()); });
-        ObjectApprover.VerifyWithJson(messages.OrderBy(x => x.Id));
+        ObjectApprover.Verify(messages.OrderBy(x => x.Id));
     }
 
     public ReaderTests(ITestOutputHelper output) : base(output)

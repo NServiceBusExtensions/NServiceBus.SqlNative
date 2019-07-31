@@ -20,7 +20,7 @@ public class SerializerTests :
                 {"a//b", "a//b"},
                 {@"a\/b", @"a\/b"}
             });
-        ObjectApprover.VerifyWithJson(Serializer.DeSerializeDictionary(serialized));
+        ObjectApprover.Verify(Serializer.DeSerializeDictionary(serialized));
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class SerializerTests :
                 "a//b",
                 @"a\/b"
             });
-        ObjectApprover.VerifyWithJson(Serializer.DeSerializeList(serialized));
+        ObjectApprover.Verify(Serializer.DeSerializeList(serialized));
     }
 
     public SerializerTests(ITestOutputHelper output) :

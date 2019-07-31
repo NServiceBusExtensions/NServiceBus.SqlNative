@@ -19,7 +19,7 @@ public class SendTests : TestBase
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class SendTests : TestBase
             transaction.Commit();
         }
 
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class SendTests : TestBase
 
         var message = BuildBytesNullMessage("00000000-0000-0000-0000-000000000001");
         await sender.Send(message);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class SendTests : TestBase
     {
         var message = BuildStreamMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public class SendTests : TestBase
     {
         var message = BuildStreamMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class SendTests : TestBase
             BuildStreamMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -84,7 +84,7 @@ public class SendTests : TestBase
         };
         await Send(messages);
 
-        ObjectApprover.VerifyWithJson(await SqlHelper.ReadData(table, SqlConnection));
+        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     Task Send(List<OutgoingMessage> messages)

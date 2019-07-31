@@ -25,7 +25,7 @@ public class DedupeManagerTests : TestBase
         await Send(message2);
         var cleaner = new DedupeManager(SqlConnection, "Deduplication");
         await cleaner.CleanupItemsOlderThan(now);
-        ObjectApprover.VerifyWithJson(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
+        ObjectApprover.Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
     Task Send(OutgoingMessage message)

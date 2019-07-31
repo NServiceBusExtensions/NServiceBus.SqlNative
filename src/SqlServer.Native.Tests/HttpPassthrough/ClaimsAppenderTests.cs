@@ -14,7 +14,7 @@ public class ClaimsAppenderTests : TestBase
         var headers = new Dictionary<string, string>();
         var claims = BuildClaims();
         ClaimsAppender.Append(claims, headers, "prefix.");
-        ObjectApprover.VerifyWithJson(headers);
+        ObjectApprover.Verify(headers);
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public class ClaimsAppenderTests : TestBase
                 x.Type,
                 x.Value
             });
-        ObjectApprover.VerifyWithJson(result);
+        ObjectApprover.Verify(result);
     }
 
     static IEnumerable<Claim> BuildClaims()
