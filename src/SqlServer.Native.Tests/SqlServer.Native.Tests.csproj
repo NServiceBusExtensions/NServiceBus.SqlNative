@@ -16,7 +16,7 @@
     <PackageReference Include="NServiceBus" Version="7.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0" />
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
-    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="150.18131.0" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="150.18147.0" />
     <PackageReference Include="ObjectApproval" Version="9.1.0" />
     <PackageReference Include="Xunit" Version="2.4.1" />
     <PackageReference Include="XunitLogger" Version="2.4.0" />
