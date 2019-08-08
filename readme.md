@@ -1,4 +1,4 @@
-<img src="https://raw.github.com/NServiceBusExtensions/NServiceBus.Native/master/src/icon.png" height="25px"> Adds low level APIs for [NServiceBus](https://docs.particular.net/nservicebus/) Transports.
+<img src="/src/icon.png" height="25px"> Adds low level APIs for [NServiceBus](https://docs.particular.net/nservicebus/) Transports.
 
 <!--- StartOpenCollectiveBackers -->
 
@@ -33,9 +33,9 @@ Thanks to all the backing developers! Support this project by [becoming a patron
 https://docs.particular.net/nuget/NServiceBus.SqlServer.Native
 
 
-### The NuGet package [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.Native.svg)](https://www.nuget.org/packages/NServiceBus.SqlServer.Native/)
+### NuGet package
 
-https://nuget.org/packages/NServiceBus.SqlServer.Native
+https://nuget.org/packages/NServiceBus.SqlServer.Native [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.Native.svg)](https://www.nuget.org/packages/NServiceBus.SqlServer.Native/)
 
 
 ## SqlServer.HttpPassthrough
@@ -46,11 +46,11 @@ https://nuget.org/packages/NServiceBus.SqlServer.Native
 https://docs.particular.net/nuget/NServiceBus.SqlServer.HttpPassthrough
 
 
-### The NuGet package [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.HttpPassthrough.svg)](https://www.nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough/)
+### NuGet package
 
-https://nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough
+https://nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.HttpPassthrough.svg)](https://www.nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough/)
 
 
 ## Icon
 
-<a href="http://thenounproject.com/term/spear/814550/" target="_blank">Spear</a> designed by Aldric Rodríguez from <a href="http://thenounproject.com/" target="_blank">The Noun Project</a>
+[Spear](https://thenounproject.com/term/spear/814550/) designed by [Aldric Rodríguez](https://thenounproject.com/aldricroib2/) from [The Noun Project](https://thenounproject.com/).
