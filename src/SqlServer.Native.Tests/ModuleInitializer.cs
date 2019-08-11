@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NServiceBus.Transport.SqlServerNative;
+using ObjectApproval;
 
 public static class ModuleInitializer
 {
