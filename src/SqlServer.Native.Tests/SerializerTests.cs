@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ObjectApproval;
 using Xunit;
 using Xunit.Abstractions;
 

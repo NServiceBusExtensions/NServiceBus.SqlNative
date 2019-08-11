@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Security.Claims;
 using NServiceBus.SqlServer.HttpPassthrough;
-using ObjectApproval;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
-using ObjectApproval;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
-using ObjectApproval;
 using Xunit;
 using Xunit.Abstractions;
 
