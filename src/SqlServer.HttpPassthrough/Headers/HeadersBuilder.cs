@@ -33,7 +33,7 @@ class HeadersBuilder
         return Headers.Serialize(dictionary);
     }
 
-    string GetMessageName(PassthroughMessage message)
+    static string GetMessageName(PassthroughMessage message)
     {
         if (message.Namespace == null)
         {

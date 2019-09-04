@@ -5,7 +5,8 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class DelayedConsumerTests : TestBase
+public class DelayedConsumerTests :
+    TestBase
 {
     string table = "DelayedConsumerTests";
 
@@ -14,7 +15,7 @@ public class DelayedConsumerTests : TestBase
     {
        await DelayedTestDataBuilder.SendData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        using (var result = consumer.Consume().Result)
+        using (var result = await consumer.Consume())
         {
             ObjectApprover.Verify(result.ToVerifyTarget());
         }
@@ -25,7 +26,7 @@ public class DelayedConsumerTests : TestBase
     {
         await DelayedTestDataBuilder.SendNullData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        using (var result = consumer.Consume().Result)
+        using (var result = await consumer.Consume())
         {
             ObjectApprover.Verify(result.ToVerifyTarget());
         }
@@ -38,9 +39,8 @@ public class DelayedConsumerTests : TestBase
 
         var consumer = new DelayedQueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingDelayedVerifyTarget>();
-        var result = consumer.Consume(size: 3,
-                action: message => { messages.Add(message.ToVerifyTarget()); })
-            .Result;
+        var result = await consumer.Consume(size: 3,
+            action: message => { messages.Add(message.ToVerifyTarget()); }).ConfigureAwait(false);
         Assert.Equal(3, result.Count);
         Assert.Equal(3, result.LastRowVersion);
         ObjectApprover.Verify(messages.OrderBy(x => x.Due));

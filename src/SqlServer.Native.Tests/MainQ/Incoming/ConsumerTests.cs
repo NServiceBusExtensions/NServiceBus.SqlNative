@@ -14,7 +14,7 @@ public class ConsumerTests : TestBase
     {
         await TestDataBuilder.SendData(table);
         var consumer = new QueueManager(table, SqlConnection);
-        using (var result = consumer.Consume().Result)
+        using (var result = await consumer.Consume())
         {
             ObjectApprover.Verify(result.ToVerifyTarget());
         }
@@ -25,7 +25,7 @@ public class ConsumerTests : TestBase
     {
         await TestDataBuilder.SendNullData(table);
         var consumer = new QueueManager(table, SqlConnection);
-        using (var result = consumer.Consume().Result)
+        using (var result = await consumer.Consume())
         {
             ObjectApprover.Verify(result.ToVerifyTarget());
         }
@@ -38,10 +38,9 @@ public class ConsumerTests : TestBase
 
         var consumer = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
-        var result = consumer.Consume(
-                size: 3,
-                action: message => { messages.Add(message.ToVerifyTarget()); })
-            .Result;
+        var result = await consumer.Consume(
+            size: 3,
+            action: message => { messages.Add(message.ToVerifyTarget()); });
         Assert.Equal(3, result.Count);
     }
 
@@ -52,10 +51,9 @@ public class ConsumerTests : TestBase
 
         var consumer = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
-        var result = consumer.Consume(
-                size: 10,
-                action: message => { messages.Add(message.ToVerifyTarget()); })
-            .Result;
+        var result = await consumer.Consume(
+            size: 10,
+            action: message => { messages.Add(message.ToVerifyTarget()); });
         Assert.Equal(5, result.Count);
         ObjectApprover.Verify(messages.OrderBy(x => x.Id));
     }

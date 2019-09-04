@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using NServiceBus;
 using SampleNamespace;
 
-class MyHandler : IHandleMessages<SampleMessage>
+class MyHandler :
+    IHandleMessages<SampleMessage>
 {
     public Task Handle(SampleMessage message, IMessageHandlerContext context)
     {
@@ -16,7 +17,7 @@ class MyHandler : IHandleMessages<SampleMessage>
         return context.Attachments().ProcessStreams(WriteAttachment);
     }
 
-    async Task WriteAttachment(string name, Stream stream)
+    static async Task WriteAttachment(string name, Stream stream)
     {
         using (var reader = new StreamReader(stream))
         {

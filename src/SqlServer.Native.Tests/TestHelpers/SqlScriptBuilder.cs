@@ -53,7 +53,7 @@ public class SqlScriptBuilder
         }
     }
 
-    string Script(IScriptable scriptable)
+    static string Script(IScriptable scriptable)
     {
         var options = new ScriptingOptions
         {

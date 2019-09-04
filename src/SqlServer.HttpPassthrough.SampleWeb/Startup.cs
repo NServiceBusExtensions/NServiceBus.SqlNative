@@ -28,7 +28,7 @@ public class Startup
         services.AddMvcCore();
     }
 
-    Task<Table> AmendMessage(HttpContext context, PassthroughMessage message)
+    static Task<Table> AmendMessage(HttpContext context, PassthroughMessage message)
     {
         message.ExtraHeaders = new Dictionary<string, string>
         {
@@ -38,7 +38,7 @@ public class Startup
         return Task.FromResult((Table) message.Destination);
     }
 
-    Task<SqlConnection> OpenConnection(CancellationToken cancellation)
+    static Task<SqlConnection> OpenConnection(CancellationToken cancellation)
     {
         return ConnectionHelpers.OpenConnection(Connection.ConnectionString, cancellation);
     }

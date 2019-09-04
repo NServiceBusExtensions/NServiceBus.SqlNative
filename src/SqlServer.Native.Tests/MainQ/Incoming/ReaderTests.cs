@@ -14,7 +14,7 @@ public class ReaderTests : TestBase
     {
         await TestDataBuilder.SendData(table);
         var reader = new QueueManager(table, SqlConnection);
-        using (var result = reader.Read(1).Result)
+        using (var result = await reader.Read(1))
         {
             ObjectApprover.Verify(result.ToVerifyTarget());
         }
@@ -25,7 +25,7 @@ public class ReaderTests : TestBase
     {
         await TestDataBuilder.SendNullData(table);
         var reader = new QueueManager(table, SqlConnection);
-        using (var result = reader.Read(1).Result)
+        using (var result = await reader.Read(1))
         {
             ObjectApprover.Verify(result.ToVerifyTarget());
         }
@@ -38,11 +38,10 @@ public class ReaderTests : TestBase
 
         var reader = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
-        var result = reader.Read(
-                size: 3,
-                startRowVersion: 2,
-                action: message => { messages.Add(message.ToVerifyTarget()); })
-            .Result;
+        var result = await reader.Read(
+            size: 3,
+            startRowVersion: 2,
+            action: message => { messages.Add(message.ToVerifyTarget()); });
         Assert.Equal(4, result.LastRowVersion);
         Assert.Equal(3, result.Count);
     }
