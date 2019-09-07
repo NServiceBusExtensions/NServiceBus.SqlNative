@@ -4,7 +4,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class MainQueueCreationTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void Run()

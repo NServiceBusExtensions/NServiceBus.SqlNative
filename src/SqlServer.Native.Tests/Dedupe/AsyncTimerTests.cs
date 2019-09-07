@@ -4,7 +4,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class AsyncTimerTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public async Task It_calls_error_callback()

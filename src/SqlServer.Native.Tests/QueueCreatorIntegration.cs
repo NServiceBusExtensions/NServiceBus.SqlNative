@@ -5,7 +5,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class QueueCreatorIntegration:
-    XunitLoggingBase
+    XunitApprovalBase
 {
     static ManualResetEvent resetEvent;
 

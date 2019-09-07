@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class SerializerTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void Dictionary()

@@ -5,7 +5,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class CleanerTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void If_triggers_critical_action_after_10_failures()
