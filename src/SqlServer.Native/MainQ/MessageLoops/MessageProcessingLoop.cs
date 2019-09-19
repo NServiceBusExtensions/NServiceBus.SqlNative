@@ -79,8 +79,7 @@ namespace NServiceBus.Transport.SqlServerNative
                             reader,
                             messageFunc: message => connectionCallback(connection, message, cancellation),
                             persistFunc: () => connectionPersistRowVersion(connection, startingRow, cancellation),
-                            cancellation)
-                        ;
+                            cancellation);
                 }
 
                 return;
@@ -98,8 +97,7 @@ namespace NServiceBus.Transport.SqlServerNative
                             reader,
                             messageFunc: message => transactionCallback(transaction, message, cancellation),
                             persistFunc: () => transactionPersistRowVersion(transaction, startingRow, cancellation),
-                            cancellation)
-                        ;
+                            cancellation);
                     transaction.Commit();
                 }
                 catch
@@ -119,8 +117,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             while (true)
             {
-                var result = await reader.Read(batchSize, startingRow, messageFunc, cancellation)
-                    ;
+                var result = await reader.Read(batchSize, startingRow, messageFunc, cancellation);
                 if (result.Count == 0)
                 {
                     break;

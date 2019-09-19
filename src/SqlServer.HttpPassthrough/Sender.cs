@@ -32,8 +32,7 @@ class Sender
     {
         try
         {
-           return await InnerSend(message, destination, cancellation)
-               ;
+           return await InnerSend(message, destination, cancellation);
         }
         catch (Exception exception)
         {
@@ -46,8 +45,7 @@ class Sender
         using (var connection = await connectionFunc(cancellation))
         using (var transaction = connection.BeginTransaction())
         {
-            var rowVersion = await SendInsideTransaction(message, destination, cancellation, transaction)
-                ;
+            var rowVersion = await SendInsideTransaction(message, destination, cancellation, transaction);
             transaction.Commit();
             return rowVersion;
         }
@@ -96,8 +94,7 @@ class Sender
     {
         using (var stream = file.Stream())
         {
-            await attachments.SaveStream(connection, transaction, messageId, file.FileName, expiry, stream, cancellation: cancellation)
-                ;
+            await attachments.SaveStream(connection, transaction, messageId, file.FileName, expiry, stream, cancellation: cancellation);
         }
     }
 }
