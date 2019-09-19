@@ -1,27 +1,28 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data.Common;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public partial class QueueManager : BaseQueueManager<IncomingMessage, OutgoingMessage>
+    public partial class QueueManager :
+        BaseQueueManager<IncomingMessage, OutgoingMessage>
     {
         bool dedupe;
         Table dedupeTable;
 
-        public QueueManager(Table table, SqlConnection connection) :
+        public QueueManager(Table table, DbConnection connection) :
             base(table, connection)
         {
             dedupe = false;
             InitSendSql();
         }
 
-        public QueueManager(Table table, SqlTransaction transaction) :
+        public QueueManager(Table table, DbTransaction transaction) :
             base(table, transaction)
         {
             dedupe = false;
             InitSendSql();
         }
 
-        public QueueManager(Table table, SqlConnection connection, Table dedupeTable) :
+        public QueueManager(Table table, DbConnection connection, Table dedupeTable) :
             base(table, connection)
         {
             Guard.AgainstNull(dedupeTable, nameof(dedupeTable));
@@ -31,7 +32,7 @@ namespace NServiceBus.Transport.SqlServerNative
             InitSendSql();
         }
 
-        public QueueManager(Table table, SqlTransaction transaction, Table dedupeTable) :
+        public QueueManager(Table table, DbTransaction transaction, Table dedupeTable) :
             base(table, transaction)
         {
             Guard.AgainstNull(dedupeTable, nameof(dedupeTable));

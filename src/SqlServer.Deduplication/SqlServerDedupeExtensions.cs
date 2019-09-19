@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace NServiceBus
         /// </summary>
         public static DedupeSettings EnableDedupe(
             this EndpointConfiguration configuration,
-            Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+            Func<CancellationToken, Task<DbConnection>> connectionBuilder)
         {
             Guard.AgainstNull(configuration, nameof(configuration));
             Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
@@ -91,7 +92,7 @@ namespace NServiceBus
             };
         }
 
-        static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation)
+        static async Task<DbConnection> OpenConnection(string connectionString, CancellationToken cancellation)
         {
             var connection = new SqlConnection(connectionString);
             try

@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,38 +15,38 @@ namespace NServiceBus.Transport.SqlServerNative
             this.table = table;
         }
 
-        public Task CreateTable(SqlConnection connection, CancellationToken cancellation = default)
+        public Task CreateTable(DbConnection connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             return CreateTable(connection, null, cancellation);
         }
 
-        public Task CreateTable(SqlTransaction transaction, CancellationToken cancellation = default)
+        public Task CreateTable(DbTransaction transaction, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(transaction, nameof(transaction));
             return CreateTable(transaction.Connection, transaction, cancellation);
         }
 
-        Task CreateTable(SqlConnection sqlConnection, SqlTransaction transaction, CancellationToken cancellation)
+        Task CreateTable(DbConnection sqlConnection, DbTransaction transaction, CancellationToken cancellation)
         {
             return sqlConnection.ExecuteCommand(transaction, string.Format(Sql, table), cancellation);
         }
 
-        public Task Save(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
+        public Task Save(DbConnection connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             return Save(connection, null, rowVersion, cancellation);
         }
 
-        public Task Save(SqlTransaction transaction, long rowVersion, CancellationToken cancellation = default)
+        public Task Save(DbTransaction transaction, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(transaction, nameof(transaction));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             return Save(transaction.Connection, transaction, rowVersion, cancellation);
         }
 
-        async Task Save(SqlConnection connection, SqlTransaction transaction, long rowVersion, CancellationToken cancellation)
+        async Task Save(DbConnection connection, DbTransaction transaction, long rowVersion, CancellationToken cancellation)
         {
             using (var command = connection.CreateCommand(
                 transaction: transaction,
@@ -58,12 +58,16 @@ if @@rowcount = 0
     values (@RowVersion)
 "))
             {
-                command.Parameters.Add("RowVersion", SqlDbType.BigInt).Value = rowVersion;
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = "RowVersion";
+                parameter.DbType = DbType.Int64;
+                parameter.Value = rowVersion;
+                command.Parameters.Add(parameter);
                 await command.ExecuteNonQueryAsync(cancellation);
             }
         }
 
-        public async Task<long> Get(SqlConnection connection, CancellationToken cancellation = default)
+        public async Task<long> Get(DbConnection connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             using (var command = connection.CreateCommand())

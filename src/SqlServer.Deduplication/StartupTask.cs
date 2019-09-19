@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -10,11 +10,11 @@ class CleanupTask : FeatureStartupTask
 {
     Table table;
     CriticalError criticalError;
-    Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+    Func<CancellationToken, Task<DbConnection>> connectionBuilder;
     DedupeCleanerJob job;
 
     public CleanupTask(Table table, CriticalError criticalError,
-        Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+        Func<CancellationToken, Task<DbConnection>> connectionBuilder)
     {
         this.table = table;
         this.criticalError = criticalError;

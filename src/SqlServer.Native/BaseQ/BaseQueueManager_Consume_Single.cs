@@ -1,4 +1,4 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +10,7 @@ namespace NServiceBus.Transport.SqlServerNative
         public virtual async Task<TIncoming> Consume(CancellationToken cancellation = default)
         {
             var shouldCleanup = false;
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 using (var command = BuildConsumeCommand(1))

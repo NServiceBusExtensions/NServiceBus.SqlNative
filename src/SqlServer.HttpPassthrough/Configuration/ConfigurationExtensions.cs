@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,12 +21,12 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// Add Sql HTTP Passthrough to an instance of <see cref="IServiceCollection"/>.
         /// Used from <code>Startup.ConfigureServices.</code>
         /// </summary>
-        /// <param name="connectionFunc">Creates a instance of a new and open <see cref="SqlConnection"/>.</param>
+        /// <param name="connectionFunc">Creates a instance of a new and open <see cref="DbConnection"/>.</param>
         /// <param name="callback">Manipulate or verify a <see cref="PassthroughMessage"/> prior to it being sent. Returns the destination <see cref="Table"/>.</param>
         /// <param name="dedupCriticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
         public static void AddSqlHttpPassthrough(
             this IServiceCollection services,
-            Func<CancellationToken, Task<SqlConnection>> connectionFunc,
+            Func<CancellationToken, Task<DbConnection>> connectionFunc,
             Func<HttpContext, PassthroughMessage, Task<Table>> callback,
             Action<Exception> dedupCriticalError)
         {

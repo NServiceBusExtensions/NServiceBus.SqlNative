@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,9 +12,9 @@ namespace NServiceBus.Transport.SqlServerNative
     public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
         where TIncoming : IIncomingMessage
     {
-        protected abstract SqlCommand BuildConsumeCommand(int batchSize);
+        protected abstract DbCommand BuildConsumeCommand(int batchSize);
 
-        protected abstract TIncoming ReadMessage(SqlDataReader dataReader, params IDisposable[] cleanups);
+        protected abstract TIncoming ReadMessage(DbDataReader dataReader, params IDisposable[] cleanups);
 
         public virtual Task<IncomingResult> Consume(int size, Action<TIncoming> action, CancellationToken cancellation = default)
         {

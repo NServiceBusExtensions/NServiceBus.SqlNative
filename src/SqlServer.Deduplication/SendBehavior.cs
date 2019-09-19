@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Logging;
@@ -12,9 +12,9 @@ class SendBehavior :
 {
     ILog logger = LogManager.GetLogger("DeduplicationSendBehavior");
     Table table;
-    Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+    Func<CancellationToken, Task<DbConnection>> connectionBuilder;
 
-    public SendBehavior(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+    public SendBehavior(Table table, Func<CancellationToken, Task<DbConnection>> connectionBuilder)
     {
         this.table = table;
         this.connectionBuilder = connectionBuilder;

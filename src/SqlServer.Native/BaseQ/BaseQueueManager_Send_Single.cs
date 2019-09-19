@@ -1,4 +1,4 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,6 +27,6 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        protected abstract SqlCommand CreateSendCommand(TOutgoing message);
+        protected abstract DbCommand CreateSendCommand(TOutgoing message);
     }
 }

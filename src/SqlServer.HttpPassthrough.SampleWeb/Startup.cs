@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -38,7 +38,7 @@ public class Startup
         return Task.FromResult((Table) message.Destination);
     }
 
-    static Task<SqlConnection> OpenConnection(CancellationToken cancellation)
+    static Task<DbConnection> OpenConnection(CancellationToken cancellation)
     {
         return ConnectionHelpers.OpenConnection(Connection.ConnectionString, cancellation);
     }

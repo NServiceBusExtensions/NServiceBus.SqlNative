@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerDeduplication;
@@ -9,9 +9,9 @@ namespace NServiceBus
     public class DedupeSettings
     {
         internal Table Table = "Deduplication";
-        internal Func<CancellationToken, Task<SqlConnection>> ConnectionBuilder;
+        internal Func<CancellationToken, Task<DbConnection>> ConnectionBuilder;
 
-        internal DedupeSettings(Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+        internal DedupeSettings(Func<CancellationToken, Task<DbConnection>> connectionBuilder)
         {
             ConnectionBuilder = connectionBuilder;
         }
