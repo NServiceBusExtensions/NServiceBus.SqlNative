@@ -46,19 +46,29 @@ namespace NServiceBus.Transport.SqlServerNative
             readSql = ConnectionHelpers.WrapInNoCount(string.Format(readSqlFormat, table));
         }
 
-        SqlCommand BuildReadCommand(Guid messageId)
+        DbCommand BuildReadCommand(Guid messageId)
         {
             var command = connection.CreateCommand(transaction, readSql);
-            command.Parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = messageId;
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "Id";
+            parameter.Value = messageId;
+            parameter.DbType = DbType.Guid;
+            command.Parameters.Add(parameter);
             return command;
         }
 
-        SqlCommand BuildWriteCommand(Guid messageId, string context)
+        DbCommand BuildWriteCommand(Guid messageId, string context)
         {
             var command = connection.CreateCommand(transaction, writeSql);
             var parameters = command.Parameters;
-            parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = messageId;
-            var contextParam = parameters.Add("Context", SqlDbType.NVarChar);
+            var idParameter = command.CreateParameter();
+            idParameter.ParameterName = "Id";
+            idParameter.DbType = DbType.Guid;
+            idParameter.Value = messageId;
+            parameters.Add(idParameter);
+            var contextParam = command.CreateParameter();
+            contextParam.ParameterName = "Context";
+            contextParam.DbType = DbType.String;
             if (context == null)
             {
                 contextParam.Value = DBNull.Value;
@@ -67,7 +77,8 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 contextParam.Value = context;
             }
-
+            
+            parameters.Add(contextParam);
             return command;
         }
 
@@ -151,7 +162,11 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 command.Transaction = transaction;
                 command.CommandText = $"delete from {table} where Created < @date";
-                command.Parameters.Add("date", SqlDbType.DateTime2).Value = dateTime;
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = "date";
+                parameter.DbType = DbType.DateTime2;
+                parameter.Value = dateTime;
+                command.Parameters.Add(parameter);
                 await command.ExecuteNonQueryAsync(cancellation);
             }
         }

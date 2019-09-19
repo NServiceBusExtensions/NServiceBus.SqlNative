@@ -1,5 +1,4 @@
 ﻿using System.Data.Common;
-using System.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
@@ -16,7 +15,7 @@ namespace NServiceBus.Transport.SqlServerNative
             InitSendSql();
         }
 
-        public QueueManager(Table table, SqlTransaction transaction) :
+        public QueueManager(Table table, DbTransaction transaction) :
             base(table, transaction)
         {
             dedupe = false;
@@ -33,7 +32,7 @@ namespace NServiceBus.Transport.SqlServerNative
             InitSendSql();
         }
 
-        public QueueManager(Table table, SqlTransaction transaction, Table dedupeTable) :
+        public QueueManager(Table table, DbTransaction transaction, Table dedupeTable) :
             base(table, transaction)
         {
             Guard.AgainstNull(dedupeTable, nameof(dedupeTable));

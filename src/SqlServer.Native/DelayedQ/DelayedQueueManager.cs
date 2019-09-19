@@ -1,5 +1,4 @@
 ﻿using System.Data.Common;
-using System.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
@@ -11,7 +10,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
         }
 
-        public DelayedQueueManager(Table table, SqlTransaction transaction) :
+        public DelayedQueueManager(Table table, DbTransaction transaction) :
             base(table, transaction)
         {
         }

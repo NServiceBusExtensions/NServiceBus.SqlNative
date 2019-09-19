@@ -1,18 +1,39 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class QueueManager
     {
-        protected override SqlCommand CreateSendCommand(OutgoingMessage message)
+        protected override DbCommand CreateSendCommand(OutgoingMessage message)
         {
             var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
             var parameters = command.Parameters;
-            parameters.Add("Id", SqlDbType.UniqueIdentifier).Value = message.Id;
-            parameters.Add("Expires", SqlDbType.DateTime).SetValueOrDbNull(message.Expires);
-            parameters.Add("Headers", SqlDbType.NVarChar).Value = message.Headers;
-            parameters.Add("Body", SqlDbType.VarBinary).SetBinaryOrDbNull(message.Body);
+
+            var idParameter = command.CreateParameter();
+            idParameter.ParameterName = "Id";
+            idParameter.DbType = DbType.Guid;
+            idParameter.Value = message.Id;
+            parameters.Add(idParameter);
+
+            var expiresParameter = command.CreateParameter();
+            expiresParameter.ParameterName = "Expires";
+            expiresParameter.DbType = DbType.DateTime;
+            expiresParameter.SetValueOrDbNull(message.Expires);
+            parameters.Add(expiresParameter);
+
+            var headersParameter = command.CreateParameter();
+            headersParameter.ParameterName = "Headers";
+            headersParameter.DbType = DbType.String;
+            headersParameter.Value = message.Headers;
+            parameters.Add(headersParameter);
+
+            var bodyParameter = command.CreateParameter();
+            bodyParameter.ParameterName = "Body";
+            bodyParameter.DbType = DbType.Binary;
+            bodyParameter.SetBinaryOrDbNull(message.Body);
+            parameters.Add(bodyParameter);
+
             return command;
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -66,7 +65,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
                 return;
             }
-            SqlTransaction transaction = null;
+            DbTransaction transaction = null;
             try
             {
                 transaction = await transactionBuilder(cancellation);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         protected abstract DbCommand BuildConsumeCommand(int batchSize);
 
-        protected abstract TIncoming ReadMessage(SqlDataReader dataReader, params IDisposable[] cleanups);
+        protected abstract TIncoming ReadMessage(DbDataReader dataReader, params IDisposable[] cleanups);
 
         public virtual Task<IncomingResult> Consume(int size, Action<TIncoming> action, CancellationToken cancellation = default)
         {

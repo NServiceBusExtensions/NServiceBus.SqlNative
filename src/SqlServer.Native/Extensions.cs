@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,7 +16,7 @@ static class Extensions
         };
     }
 
-    public static void SetValueOrDbNull(this SqlParameter corrParam, DateTime? value)
+    public static void SetValueOrDbNull(this DbParameter corrParam, DateTime? value)
     {
         if (value == null)
         {
@@ -28,7 +27,7 @@ static class Extensions
         corrParam.Value = value;
     }
 
-    public static void SetBinaryOrDbNull(this SqlParameter corrParam, object value)
+    public static void SetBinaryOrDbNull(this DbParameter corrParam, object value)
     {
         if (value == null)
         {

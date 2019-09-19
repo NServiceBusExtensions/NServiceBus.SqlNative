@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,20 +10,20 @@ namespace NServiceBus.Transport.SqlServerNative
         string table;
         long startingRow;
         Func<CancellationToken, Task<DbConnection>> connectionBuilder;
-        Func<CancellationToken, Task<SqlTransaction>> transactionBuilder;
-        Func<SqlTransaction, IncomingMessage, CancellationToken, Task> transactionCallback;
+        Func<CancellationToken, Task<DbTransaction>> transactionBuilder;
+        Func<DbTransaction, IncomingMessage, CancellationToken, Task> transactionCallback;
         Func<DbConnection, IncomingMessage, CancellationToken, Task> connectionCallback;
-        Func<SqlTransaction, long, CancellationToken, Task> transactionPersistRowVersion;
+        Func<DbTransaction, long, CancellationToken, Task> transactionPersistRowVersion;
         Func<DbConnection, long, CancellationToken, Task> connectionPersistRowVersion;
         int batchSize;
 
         public MessageProcessingLoop(
             string table,
             long startingRow,
-            Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
-            Func<SqlTransaction, IncomingMessage, CancellationToken, Task> callback,
+            Func<CancellationToken, Task<DbTransaction>> transactionBuilder,
+            Func<DbTransaction, IncomingMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
-            Func<SqlTransaction, long, CancellationToken, Task> persistRowVersion,
+            Func<DbTransaction, long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
             TimeSpan? delay = null)
             : base(errorCallback, delay)
@@ -86,7 +85,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 return;
             }
 
-            SqlTransaction transaction = null;
+            DbTransaction transaction = null;
             try
             {
                 transaction = await transactionBuilder(cancellation);

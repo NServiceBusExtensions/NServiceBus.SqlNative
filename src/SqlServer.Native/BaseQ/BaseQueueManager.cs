@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         protected Table Table;
         protected DbConnection Connection;
-        protected SqlTransaction Transaction;
+        protected DbTransaction Transaction;
 
         protected BaseQueueManager(Table table, DbConnection connection)
         {
@@ -21,7 +20,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Connection = connection;
         }
 
-        protected BaseQueueManager(Table table, SqlTransaction transaction)
+        protected BaseQueueManager(Table table, DbTransaction transaction)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(transaction, nameof(transaction));

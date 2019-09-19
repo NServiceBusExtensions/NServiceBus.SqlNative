@@ -1,5 +1,4 @@
 ﻿using System.Data.Common;
-using System.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative
 {

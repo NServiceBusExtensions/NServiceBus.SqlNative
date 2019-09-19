@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -82,7 +81,7 @@ class Sender
             message.Attachments.Select(x => x.FileName));
     }
 
-    IEnumerable<Task> SendAttachments(SqlTransaction transaction, DateTime expiry, CancellationToken cancellation, PassthroughMessage message)
+    IEnumerable<Task> SendAttachments(DbTransaction transaction, DateTime expiry, CancellationToken cancellation, PassthroughMessage message)
     {
         var connection = transaction.Connection;
         foreach (var file in message.Attachments)
@@ -91,7 +90,7 @@ class Sender
         }
     }
 
-    async Task SendAttachment(SqlTransaction transaction, string messageId, DateTime expiry, CancellationToken cancellation, Attachment file, DbConnection connection)
+    async Task SendAttachment(DbTransaction transaction, string messageId, DateTime expiry, CancellationToken cancellation, Attachment file, DbConnection connection)
     {
         using (var stream = file.Stream())
         {

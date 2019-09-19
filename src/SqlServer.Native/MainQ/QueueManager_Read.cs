@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class QueueManager
     {
-        protected override SqlCommand BuildReadCommand(int batchSize, long startRowVersion)
+        protected override DbCommand BuildReadCommand(int batchSize, long startRowVersion)
         {
             var command = Connection.CreateCommand(Transaction, string.Format(ReadSql, Table, batchSize));
-            command.Parameters.Add("RowVersion", SqlDbType.BigInt).Value = startRowVersion;
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "RowVersion";
+            parameter.DbType = DbType.Int64;
+            parameter.Value = startRowVersion;
+            command.Parameters.Add(parameter);
             return command;
         }
 
@@ -27,7 +31,7 @@ where RowVersion >= @RowVersion
 order by RowVersion
 ");
 
-        protected override IncomingMessage ReadMessage(SqlDataReader dataReader, params IDisposable[] cleanups)
+        protected override IncomingMessage ReadMessage(DbDataReader dataReader, params IDisposable[] cleanups)
         {
             var id = dataReader.GetGuid(0);
             var rowVersion = dataReader.GetInt64(1);

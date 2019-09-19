@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +50,7 @@ public class MessageProcessingLoopTests : TestBase
 
         var count = 0;
 
-        Task Callback(SqlConnection connection, IncomingMessage incomingBytesMessage, CancellationToken arg3)
+        Task Callback(DbConnection connection, IncomingMessage incomingBytesMessage, CancellationToken arg3)
         {
             count++;
             if (count == 5)
@@ -87,7 +87,7 @@ public class MessageProcessingLoopTests : TestBase
 
         long rowVersion = 0;
 
-        Task PersistRowVersion(SqlConnection sqlConnection, long currentRowVersion, CancellationToken arg3)
+        Task PersistRowVersion(DbConnection sqlConnection, long currentRowVersion, CancellationToken arg3)
         {
             rowVersion = currentRowVersion;
             if (rowVersion == 6)
