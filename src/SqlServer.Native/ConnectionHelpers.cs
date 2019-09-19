@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data.Common;
+using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace NServiceBus.Transport.SqlServerNative
     /// </summary>
     public static class ConnectionHelpers
     {
-        public static async Task<SqlConnection> OpenConnection(string connectionString, CancellationToken cancellation = default)
+        public static async Task<DbConnection> OpenConnection(string connectionString, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connectionString, nameof(connectionString));
 
@@ -30,7 +31,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public static async Task<SqlTransaction> BeginTransaction(string connectionString, CancellationToken cancellation = default)
+        public static async Task<DbTransaction> BeginTransaction(string connectionString, CancellationToken cancellation = default)
         {
             Guard.AgainstNullOrEmpty(connectionString, nameof(connectionString));
 
@@ -51,7 +52,7 @@ if (@nocount = 'on') set nocount on;
 if (@nocount = 'off') set nocount off;";
         }
 
-        internal static Task DropTable(this SqlConnection connection, SqlTransaction transaction, Table table, CancellationToken cancellation = default)
+        internal static Task DropTable(this DbConnection connection, DbTransaction transaction, Table table, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(table, nameof(table));
             return connection.ExecuteCommand(transaction, $"drop table if exists {table}", cancellation);

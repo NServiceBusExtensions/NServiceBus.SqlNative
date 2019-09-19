@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,10 +10,10 @@ namespace NServiceBus.Transport.SqlServerNative
         where TIncoming : IIncomingMessage
     {
         protected Table Table;
-        protected SqlConnection Connection;
+        protected DbConnection Connection;
         protected SqlTransaction Transaction;
 
-        protected BaseQueueManager(Table table, SqlConnection connection)
+        protected BaseQueueManager(Table table, DbConnection connection)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(connection, nameof(connection));
@@ -29,7 +30,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Connection = transaction.Connection;
         }
 
-        async Task<IncomingResult> ReadMultiple(SqlCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
+        async Task<IncomingResult> ReadMultiple(DbCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
         {
             var count = 0;
             long? lastRowVersion = null;

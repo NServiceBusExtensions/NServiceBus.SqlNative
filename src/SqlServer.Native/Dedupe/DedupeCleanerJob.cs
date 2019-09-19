@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace NServiceBus.Transport.SqlServerNative
     public class DedupeCleanerJob
     {
         Table table;
-        Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+        Func<CancellationToken, Task<DbConnection>> connectionBuilder;
         Action<Exception> criticalError;
         TimeSpan expireWindow;
         TimeSpan frequencyToRunCleanup;
@@ -23,7 +24,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         /// <param name="criticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
         /// <param name="table">The sql <see cref="Table"/> to perform cleanup on.</param>
-        public DedupeCleanerJob(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<Exception> criticalError, TimeSpan? expireWindow = null, TimeSpan? frequencyToRunCleanup = null)
+        public DedupeCleanerJob(Table table, Func<CancellationToken, Task<DbConnection>> connectionBuilder, Action<Exception> criticalError, TimeSpan? expireWindow = null, TimeSpan? frequencyToRunCleanup = null)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(criticalError, nameof(criticalError));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,16 +9,16 @@ namespace NServiceBus.Transport.SqlServerNative
     public class MessageConsumingLoop : MessageLoop
     {
         string table;
-        Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
-        Func<CancellationToken, Task<SqlTransaction>> transactionBuilder;
-        Func<SqlTransaction, IncomingMessage, CancellationToken, Task> transactionCallback;
-        Func<SqlConnection, IncomingMessage, CancellationToken, Task> connectionCallback;
+        Func<CancellationToken, Task<DbConnection>> connectionBuilder;
+        Func<CancellationToken, Task<DbTransaction>> transactionBuilder;
+        Func<DbTransaction, IncomingMessage, CancellationToken, Task> transactionCallback;
+        Func<DbConnection, IncomingMessage, CancellationToken, Task> connectionCallback;
         int batchSize;
 
         public MessageConsumingLoop(
             string table,
-            Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
-            Func<SqlTransaction, IncomingMessage, CancellationToken, Task> callback,
+            Func<CancellationToken, Task<DbTransaction>> transactionBuilder,
+            Func<DbTransaction, IncomingMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             int batchSize = 10,
             TimeSpan? delay = null) :
@@ -35,8 +36,8 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public MessageConsumingLoop(
             string table,
-            Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
-            Func<SqlConnection, IncomingMessage, CancellationToken, Task> callback,
+            Func<CancellationToken, Task<DbConnection>> connectionBuilder,
+            Func<DbConnection, IncomingMessage, CancellationToken, Task> callback,
             Action<Exception> errorCallback,
             int batchSize = 10,
             TimeSpan? delay = null) :
@@ -54,7 +55,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         protected override async Task RunBatch(CancellationToken cancellation)
         {
-            SqlConnection connection = null;
+            DbConnection connection = null;
             if (connectionBuilder != null)
             {
                 using (connection = await connectionBuilder(cancellation))

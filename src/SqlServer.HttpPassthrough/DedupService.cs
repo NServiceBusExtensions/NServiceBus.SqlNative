@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -8,11 +8,11 @@ using NServiceBus.Transport.SqlServerNative;
 class DedupService : IHostedService
 {
     Table table;
-    Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+    Func<CancellationToken, Task<DbConnection>> connectionBuilder;
     Action<Exception> criticalError;
     DedupeCleanerJob job;
 
-    public DedupService(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<Exception> criticalError)
+    public DedupService(Table table, Func<CancellationToken, Task<DbConnection>> connectionBuilder, Action<Exception> criticalError)
     {
         this.table = table;
         this.connectionBuilder = connectionBuilder;

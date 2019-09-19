@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,11 +17,11 @@ namespace NServiceBus.Transport.SqlServerNative
         string writeSql;
         string readSql;
 
-        SqlConnection connection;
+        DbConnection connection;
         Table table;
-        SqlTransaction transaction;
+        DbTransaction transaction;
 
-        public DedupeManager(SqlConnection connection, Table table)
+        public DedupeManager(DbConnection connection, Table table)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(connection, nameof(connection));
@@ -29,7 +30,7 @@ namespace NServiceBus.Transport.SqlServerNative
             InitSql();
         }
 
-        public DedupeManager(SqlTransaction transaction, Table table)
+        public DedupeManager(DbTransaction transaction, Table table)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(transaction, nameof(transaction));

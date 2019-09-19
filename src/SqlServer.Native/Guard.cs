@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 static class Guard
 {
@@ -13,7 +13,7 @@ static class Guard
         }
     }
 
-    public static void AgainstNull(SqlConnection value, string argumentName)
+    public static void AgainstNull(DbConnection value, string argumentName)
     {
         if (value == null)
         {

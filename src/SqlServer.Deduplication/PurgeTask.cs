@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,9 +10,9 @@ using NServiceBus.Transport.SqlServerDeduplication;
 class PurgeTask : FeatureStartupTask
 {
     Table table;
-    Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+    Func<CancellationToken, Task<DbConnection>> connectionBuilder;
 
-    public PurgeTask(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+    public PurgeTask(Table table, Func<CancellationToken, Task<DbConnection>> connectionBuilder)
     {
         this.table = table;
         this.connectionBuilder = connectionBuilder;

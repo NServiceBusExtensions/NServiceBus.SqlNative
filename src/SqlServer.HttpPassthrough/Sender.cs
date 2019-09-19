@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -14,12 +15,12 @@ using Table = NServiceBus.Transport.SqlServerNative.Table;
 class Sender
 {
     Persister attachments;
-    Func<CancellationToken, Task<SqlConnection>> connectionFunc;
+    Func<CancellationToken, Task<DbConnection>> connectionFunc;
     HeadersBuilder headersBuilder;
     Table dedupeTable;
     ILogger logger;
 
-    public Sender(Func<CancellationToken, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
+    public Sender(Func<CancellationToken, Task<DbConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
     {
         this.connectionFunc = connectionFunc;
         attachments = new Persister(new  NServiceBus.Attachments.Sql.Raw.Table(attachmentsTable.TableName, attachmentsTable.Schema, false));
@@ -51,7 +52,7 @@ class Sender
         }
     }
 
-    async Task<long> SendInsideTransaction(PassthroughMessage message, Table destination, CancellationToken cancellation, SqlTransaction transaction)
+    async Task<long> SendInsideTransaction(PassthroughMessage message, Table destination, CancellationToken cancellation, DbTransaction transaction)
     {
         var headersString = headersBuilder.GetHeadersString(message);
         LogSend(message);
@@ -90,7 +91,7 @@ class Sender
         }
     }
 
-    async Task SendAttachment(SqlTransaction transaction, string messageId, DateTime expiry, CancellationToken cancellation, Attachment file, SqlConnection connection)
+    async Task SendAttachment(SqlTransaction transaction, string messageId, DateTime expiry, CancellationToken cancellation, Attachment file, DbConnection connection)
     {
         using (var stream = file.Stream())
         {

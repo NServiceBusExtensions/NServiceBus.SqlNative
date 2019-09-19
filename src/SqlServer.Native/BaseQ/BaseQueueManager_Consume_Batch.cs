@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace NServiceBus.Transport.SqlServerNative
     public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
         where TIncoming : IIncomingMessage
     {
-        protected abstract SqlCommand BuildConsumeCommand(int batchSize);
+        protected abstract DbCommand BuildConsumeCommand(int batchSize);
 
         protected abstract TIncoming ReadMessage(SqlDataReader dataReader, params IDisposable[] cleanups);
 

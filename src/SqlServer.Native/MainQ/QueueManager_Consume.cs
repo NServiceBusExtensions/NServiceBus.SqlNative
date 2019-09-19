@@ -1,10 +1,11 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class QueueManager
     {
-        protected override SqlCommand BuildConsumeCommand(int batchSize)
+        protected override DbCommand BuildConsumeCommand(int batchSize)
         {
             return Connection.CreateCommand(Transaction, string.Format(ConsumeSql, Table, batchSize));
         }

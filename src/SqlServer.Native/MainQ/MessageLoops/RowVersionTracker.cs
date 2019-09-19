@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace NServiceBus.Transport.SqlServerNative
             this.table = table;
         }
 
-        public Task CreateTable(SqlConnection connection, CancellationToken cancellation = default)
+        public Task CreateTable(DbConnection connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             return CreateTable(connection, null, cancellation);
@@ -27,12 +28,12 @@ namespace NServiceBus.Transport.SqlServerNative
             return CreateTable(transaction.Connection, transaction, cancellation);
         }
 
-        Task CreateTable(SqlConnection sqlConnection, SqlTransaction transaction, CancellationToken cancellation)
+        Task CreateTable(DbConnection sqlConnection, SqlTransaction transaction, CancellationToken cancellation)
         {
             return sqlConnection.ExecuteCommand(transaction, string.Format(Sql, table), cancellation);
         }
 
-        public Task Save(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
+        public Task Save(DbConnection connection, long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
@@ -46,7 +47,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return Save(transaction.Connection, transaction, rowVersion, cancellation);
         }
 
-        async Task Save(SqlConnection connection, SqlTransaction transaction, long rowVersion, CancellationToken cancellation)
+        async Task Save(DbConnection connection, SqlTransaction transaction, long rowVersion, CancellationToken cancellation)
         {
             using (var command = connection.CreateCommand(
                 transaction: transaction,
@@ -63,7 +64,7 @@ if @@rowcount = 0
             }
         }
 
-        public async Task<long> Get(SqlConnection connection, CancellationToken cancellation = default)
+        public async Task<long> Get(DbConnection connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
             using (var command = connection.CreateCommand())
