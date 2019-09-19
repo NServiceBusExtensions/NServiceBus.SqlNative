@@ -17,7 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ConfigureAwait.Fody" Version="3.2.0" PrivateAssets="All" />
-    <PackageReference Include="Fody" Version="6.0.0" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="6.0.0" PrivateAssets="All" />
     <PackageReference Include="NServiceBus" Version="7.1.10" />
     <PackageReference Include="NServiceBus.SqlServer" Version="4.3.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />

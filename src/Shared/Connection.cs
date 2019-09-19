@@ -25,10 +25,16 @@ public static class Connection
         return connection;
     }
 
-    public static async Task<SqlConnection> OpenAsyncConnection(CancellationToken cancellation)
+    public static async Task<SqlConnection> OpenAsyncConnection(CancellationToken cancellation = default)
     {
         var connection = new SqlConnection(ConnectionString);
         await connection.OpenAsync(cancellation);
+        return connection;
+    }
+    public static async Task<SqlConnection> OpenAsyncConnection()
+    {
+        var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync();
         return connection;
     }
 

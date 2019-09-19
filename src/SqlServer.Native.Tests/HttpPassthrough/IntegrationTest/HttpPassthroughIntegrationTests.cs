@@ -67,7 +67,7 @@ public class HttpPassthroughIntegrationTests : TestBase
     static async Task<IEndpointInstance> StartEndpoint()
     {
         var configuration = await EndpointCreator.Create(nameof(HttpPassthroughIntegrationTests));
-        var attachments = configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
+        var attachments = configuration.EnableAttachments(async () => { return await Connection.OpenAsyncConnection(); }, TimeToKeep.Default);
         attachments.UseTransportConnectivity();
         return await Endpoint.Start(configuration);
     }

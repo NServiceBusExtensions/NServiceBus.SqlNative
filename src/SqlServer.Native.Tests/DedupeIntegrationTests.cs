@@ -56,7 +56,7 @@ public class DedupeIntegrationTests : TestBase
         configuration.DisableFeature<TimeoutManager>();
         configuration.DisableFeature<MessageDrivenSubscriptions>();
 
-        var attachments = configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
+        var attachments = configuration.EnableAttachments(async () => await Connection.OpenAsyncConnection(), TimeToKeep.Default);
         attachments.UseTransportConnectivity();
 
         var transport = configuration.UseTransport<SqlServerTransport>();
