@@ -25,7 +25,7 @@ public class Startup
             dedupCriticalError: exception => { Environment.FailFast("", exception); });
         configuration.AppendClaimsToMessageHeaders();
         services.AddSqlHttpPassthrough(configuration);
-        services.AddMvcCore();
+        services.AddMvcCore(options => options.EnableEndpointRouting = false);
     }
 
     static Task<Table> AmendMessage(HttpContext context, PassthroughMessage message)

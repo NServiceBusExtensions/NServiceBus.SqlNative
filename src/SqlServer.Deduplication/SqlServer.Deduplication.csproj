@@ -14,8 +14,7 @@
     <Compile Include="..\SqlServer.Native\Guard.cs" />
     <Compile Include="..\SqlServer.Native\SqlExtensions.cs" />
     <Compile Include="..\SqlServer.Native\Table.cs" />
-  </ItemGroup>
-  <ItemGroup>
+
     <PackageReference Include="ConfigureAwait.Fody" Version="3.2.0" PrivateAssets="All" />
     <PackageReference Include="Fody" Version="6.0.0" PrivateAssets="All" />
     <PackageReference Include="NServiceBus" Version="7.1.10" />
