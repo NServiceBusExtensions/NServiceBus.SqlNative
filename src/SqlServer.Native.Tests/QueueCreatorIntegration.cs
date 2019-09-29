@@ -7,13 +7,12 @@ using Xunit.Abstractions;
 public class QueueCreatorIntegration:
     XunitApprovalBase
 {
-    static ManualResetEvent resetEvent;
-
     [Fact]
     public async Task Run()
     {
-        resetEvent = new ManualResetEvent(false);
+        var resetEvent = new ManualResetEvent(false);
         var configuration = await EndpointCreator.Create("IntegrationSend");
+        configuration.RegisterComponents(components => components.RegisterSingleton(resetEvent));
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
         resetEvent.WaitOne();
@@ -27,8 +26,16 @@ public class QueueCreatorIntegration:
         return endpoint.Send(new SendMessage(), sendOptions);
     }
 
-    class SendHandler : IHandleMessages<SendMessage>
+    class SendHandler :
+        IHandleMessages<SendMessage>
     {
+        ManualResetEvent resetEvent;
+
+        public SendHandler(ManualResetEvent resetEvent)
+        {
+            this.resetEvent = resetEvent;
+        }
+
         public Task Handle(SendMessage message, IMessageHandlerContext context)
         {
             resetEvent.Set();
@@ -36,7 +43,8 @@ public class QueueCreatorIntegration:
         }
     }
 
-    class SendMessage : IMessage
+    class SendMessage :
+        IMessage
     {
     }
 

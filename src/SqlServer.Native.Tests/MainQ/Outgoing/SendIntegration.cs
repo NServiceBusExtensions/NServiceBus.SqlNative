@@ -9,14 +9,15 @@ using Xunit;
 using Xunit.Abstractions;
 using Headers = NServiceBus.Transport.SqlServerNative.Headers;
 
-public class SendIntegration : TestBase
+public class SendIntegration :
+    TestBase
 {
-   static ManualResetEvent resetEvent;
     [Fact]
     public async Task Run()
     {
-        resetEvent = new ManualResetEvent(false);
+        var resetEvent = new ManualResetEvent(false);
         var configuration = await EndpointCreator.Create("IntegrationSend");
+        configuration.RegisterComponents(components => components.RegisterSingleton(resetEvent));
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage();
         resetEvent.WaitOne();
@@ -28,15 +29,23 @@ public class SendIntegration : TestBase
         var sender = new QueueManager("IntegrationSend", SqlConnection);
         var headers = new Dictionary<string, string>
         {
-            { "NServiceBus.EnclosedMessageTypes", typeof(SendMessage).FullName}
+            { "NServiceBus.EnclosedMessageTypes", typeof(SendMessage).FullName!}
         };
 
         var message = new OutgoingMessage(Guid.NewGuid(), DateTime.Now.AddDays(1), Headers.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
         return sender.Send(message);
     }
 
-    class SendHandler : IHandleMessages<SendMessage>
+    class SendHandler :
+        IHandleMessages<SendMessage>
     {
+        ManualResetEvent resetEvent;
+
+        public SendHandler(ManualResetEvent resetEvent)
+        {
+            this.resetEvent = resetEvent;
+        }
+
         public Task Handle(SendMessage message, IMessageHandlerContext context)
         {
             resetEvent.Set();
@@ -44,11 +53,13 @@ public class SendIntegration : TestBase
         }
     }
 
-    class SendMessage : IMessage
+    class SendMessage : 
+        IMessage
     {
     }
 
-    public SendIntegration(ITestOutputHelper output) : base(output)
+    public SendIntegration(ITestOutputHelper output) :
+        base(output)
     {
     }
 }

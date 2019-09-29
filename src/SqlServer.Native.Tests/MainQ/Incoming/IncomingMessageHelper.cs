@@ -5,21 +5,19 @@ static class IncomingMessageHelper
 {
     public static IncomingVerifyTarget ToVerifyTarget(this IncomingMessage result)
     {
-        string readToEnd = null;
+        string? readToEnd = null;
         if (result.Body != null)
         {
-            using (var streamReader = new StreamReader(result.Body))
-            {
-                readToEnd = streamReader.ReadToEnd();
-            }
+            using var streamReader = new StreamReader(result.Body);
+            readToEnd = streamReader.ReadToEnd();
         }
 
         return new IncomingVerifyTarget
-        {
-            Expires= result.Expires,
-            Headers= result.Headers,
-            Id=result.Id,
-            Body = readToEnd
-        };
+        (
+            expires: result.Expires,
+            headers: result.Headers,
+            id: result.Id,
+            body: readToEnd
+        );
     }
 }

@@ -13,10 +13,9 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class HttpPassthroughIntegrationTests : TestBase
+public class HttpPassthroughIntegrationTests :
+    TestBase
 {
-    static ManualResetEvent resetEvent;
-
     [Fact]
     public async Task Integration()
     {
@@ -27,8 +26,8 @@ public class HttpPassthroughIntegrationTests : TestBase
             await Installer.CreateTable(connection, "MessageAttachments");
         }
 
-        resetEvent = new ManualResetEvent(false);
-        var endpoint = await StartEndpoint();
+        var resetEvent = new ManualResetEvent(false);
+        var endpoint = await StartEndpoint(resetEvent);
 
         await SubmitMultipartForm();
 
@@ -64,16 +63,25 @@ public class HttpPassthroughIntegrationTests : TestBase
         }
     }
 
-    static async Task<IEndpointInstance> StartEndpoint()
+    static async Task<IEndpointInstance> StartEndpoint(ManualResetEvent resetEvent)
     {
         var configuration = await EndpointCreator.Create(nameof(HttpPassthroughIntegrationTests));
-        var attachments = configuration.EnableAttachments(async () => { return await Connection.OpenAsyncConnection(); }, TimeToKeep.Default);
+        var attachments = configuration.EnableAttachments(async () => await Connection.OpenAsyncConnection(), TimeToKeep.Default);
+        configuration.RegisterComponents(components => components.RegisterSingleton(resetEvent));
         attachments.UseTransportConnectivity();
         return await Endpoint.Start(configuration);
     }
 
-    class Handler : IHandleMessages<MyMessage>
+    class Handler :
+        IHandleMessages<MyMessage>
     {
+        ManualResetEvent resetEvent;
+
+        public Handler(ManualResetEvent resetEvent)
+        {
+            this.resetEvent = resetEvent;
+        }
+
         public async Task Handle(MyMessage message, IMessageHandlerContext context)
         {
             var incomingAttachment = context.Attachments();
@@ -84,7 +92,8 @@ public class HttpPassthroughIntegrationTests : TestBase
         }
     }
 
-    public HttpPassthroughIntegrationTests(ITestOutputHelper output) : base(output)
+    public HttpPassthroughIntegrationTests(ITestOutputHelper output) :
+        base(output)
     {
     }
 }

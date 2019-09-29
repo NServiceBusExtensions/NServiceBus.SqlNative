@@ -10,7 +10,8 @@ using Xunit.Abstractions;
 using DedupeOutcome = NServiceBus.Transport.SqlServerDeduplication.DedupeOutcome;
 using DedupeResult = NServiceBus.Transport.SqlServerDeduplication.DedupeResult;
 
-public class DedupeIntegrationTests : TestBase
+public class DedupeIntegrationTests :
+    TestBase
 {
     static CountdownEvent countdown = new CountdownEvent(2);
 
@@ -64,7 +65,8 @@ public class DedupeIntegrationTests : TestBase
         return Endpoint.Start(configuration);
     }
 
-    class Handler : IHandleMessages<MyMessage>
+    class Handler :
+        IHandleMessages<MyMessage>
     {
         public Task Handle(MyMessage message, IMessageHandlerContext context)
         {
@@ -73,15 +75,17 @@ public class DedupeIntegrationTests : TestBase
         }
     }
 
-    public DedupeIntegrationTests(ITestOutputHelper output) : base(output)
+    public DedupeIntegrationTests(ITestOutputHelper output) :
+        base(output)
     {
         var dedupeManager = new DedupeManager(SqlConnection, "Deduplication");
         dedupeManager.Drop().Await();
         dedupeManager.Create().Await();
     }
 
-    class MyMessage : IMessage
+    class MyMessage :
+        IMessage
     {
-        public string Property { get; set; }
+        public string? Property { get; set; }
     }
 }

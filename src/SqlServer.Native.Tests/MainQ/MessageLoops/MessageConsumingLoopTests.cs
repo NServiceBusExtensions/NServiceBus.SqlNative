@@ -8,7 +8,8 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class MessageConsumingLoopTests : TestBase
+public class MessageConsumingLoopTests :
+    TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
@@ -22,7 +23,7 @@ public class MessageConsumingLoopTests : TestBase
         await manager.Create();
         await SendMessages();
 
-        Exception exception = null;
+        Exception? exception = null;
         using (var loop = new MessageConsumingLoop(
             table: table,
             connectionBuilder: Connection.OpenAsyncConnection,
@@ -34,8 +35,9 @@ public class MessageConsumingLoopTests : TestBase
             Thread.Sleep(1000);
         }
 
-        Assert.Null(exception);
+        Assert.Null(exception!);
     }
+
     [Fact]
     public async Task Should_get_correct_count()
     {
@@ -90,7 +92,8 @@ public class MessageConsumingLoopTests : TestBase
         return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
-    public MessageConsumingLoopTests(ITestOutputHelper output) : base(output)
+    public MessageConsumingLoopTests(ITestOutputHelper output) :
+        base(output)
     {
     }
 }

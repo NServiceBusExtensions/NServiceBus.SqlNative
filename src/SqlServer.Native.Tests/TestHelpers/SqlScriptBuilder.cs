@@ -69,9 +69,10 @@ public class SqlScriptBuilder
     {
         if (tables)
         {
-            foreach (Table table in database.Tables)
+            for (var index = 0; index < database.Tables.Count; index++)
             {
-                if (include(table.Name))
+                var table = database.Tables[index];
+                if (include(table!.Name))
                 {
                     yield return table;
                 }
@@ -80,9 +81,10 @@ public class SqlScriptBuilder
 
         if (views)
         {
-            foreach (View view in database.Views)
+            for (var index = 0; index < database.Views.Count; index++)
             {
-                if (include(view.Name))
+                var view = database.Views[index];
+                if (include(view!.Name))
                 {
                     yield return view;
                 }
@@ -91,8 +93,9 @@ public class SqlScriptBuilder
 
         if (storedProcedures)
         {
-            foreach (StoredProcedure procedure in database.StoredProcedures)
+            for (var index = 0; index < database.StoredProcedures.Count; index++)
             {
+                var procedure = database.StoredProcedures[index];
                 if (include(procedure.Name))
                 {
                     yield return procedure;

@@ -16,23 +16,23 @@ public class RequestParserTests : TestBase
     public void Optional()
     {
         var request = new FakeHttpRequest
-        {
-            HeadersDictionary = new Dictionary<string, StringValues>
+        (
+            headersDictionary: new Dictionary<string, StringValues>
             {
                 {"MessageType", "TheMessageType"},
                 {"MessageId", new Guid("00000000-0000-0000-0000-000000000001").ToString()},
             },
-            Body = Body(),
-            Form = Form()
-        };
+            body: Body(),
+            form: Form()
+        );
         Verify(request);
     }
     [Fact]
     public void Simple()
     {
         var request = new FakeHttpRequest
-        {
-            HeadersDictionary = new Dictionary<string, StringValues>
+        (
+            headersDictionary: new Dictionary<string, StringValues>
             {
                 {"Destination", "TheEndpoint"},
                 {"MessageNamespace", "TheMessageNamespace"},
@@ -40,9 +40,9 @@ public class RequestParserTests : TestBase
                 {"MessageId", new Guid("00000000-0000-0000-0000-000000000001").ToString()},
                 {HeaderNames.Referer, "TheReferer"}
             },
-            Body = Body(),
-            Form = Form()
-        };
+            body: Body(),
+            form: Form()
+        );
         Verify(request);
     }
 

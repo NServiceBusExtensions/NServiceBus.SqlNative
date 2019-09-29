@@ -22,7 +22,7 @@ public class MessageProcessingLoopTests : TestBase
         await manager.Create();
         await SendMessages();
 
-        Exception exception = null;
+        Exception? exception = null;
         using (var loop = new MessageProcessingLoop(
             table: table,
             startingRow: 1,
@@ -36,7 +36,7 @@ public class MessageProcessingLoopTests : TestBase
             Thread.Sleep(1000);
         }
 
-        Assert.Null(exception);
+        Assert.Null(exception!);
     }
 
     [Fact]

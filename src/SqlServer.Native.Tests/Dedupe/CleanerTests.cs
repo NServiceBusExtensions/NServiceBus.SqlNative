@@ -63,12 +63,12 @@ public class CleanerTests :
     {
         public Task Tick(DateTime utcTime, CancellationToken token)
         {
-            return callback(utcTime, token);
+            return callback!(utcTime, token);
         }
 
         public void OnError(Exception error)
         {
-            errorCallback(error);
+            errorCallback!(error);
         }
 
         public override void Start(Func<DateTime, CancellationToken, Task> callback, TimeSpan interval, Action<Exception> errorCallback, Func<TimeSpan, CancellationToken, Task> delayStrategy)
@@ -82,8 +82,8 @@ public class CleanerTests :
             return Task.FromResult(0);
         }
 
-        Func<DateTime, CancellationToken, Task> callback;
-        Action<Exception> errorCallback;
+        Func<DateTime, CancellationToken, Task>? callback;
+        Action<Exception>? errorCallback;
     }
 
     public CleanerTests(ITestOutputHelper output) :
