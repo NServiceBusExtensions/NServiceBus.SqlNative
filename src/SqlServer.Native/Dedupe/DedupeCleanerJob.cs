@@ -49,12 +49,10 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             cleaner = new DedupeCleaner(async cancellation =>
                 {
-                    using (var connection = await connectionBuilder(cancellation))
-                    {
-                        var dedupeCleaner = new DedupeManager(connection, table);
-                        var expiry = DateTime.UtcNow.Subtract(expireWindow);
-                        await dedupeCleaner.CleanupItemsOlderThan(expiry, cancellation);
-                    }
+                    using var connection = await connectionBuilder(cancellation);
+                    var dedupeCleaner = new DedupeManager(connection, table);
+                    var expiry = DateTime.UtcNow.Subtract(expireWindow);
+                    await dedupeCleaner.CleanupItemsOlderThan(expiry, cancellation);
                 },
                 criticalError: criticalError,
                 frequencyToRunCleanup: frequencyToRunCleanup,

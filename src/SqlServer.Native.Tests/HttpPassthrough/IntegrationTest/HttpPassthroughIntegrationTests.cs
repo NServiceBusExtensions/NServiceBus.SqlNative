@@ -43,24 +43,22 @@ public class HttpPassthroughIntegrationTests :
     {
         var hostBuilder = new WebHostBuilder();
         hostBuilder.UseStartup<Startup>();
-        using (var server = new TestServer(hostBuilder))
-        using (var client = server.CreateClient())
-        {
-            client.DefaultRequestHeaders.Referrer = new Uri("http://TheReferrer");
-            var message = "{\"Property\": \"Value\"}";
-            var clientFormSender = new ClientFormSender(client);
-            await clientFormSender.Send(
-                route: "/SendMessage",
-                message: message,
-                typeName: "MyMessage",
-                typeNamespace: "My.Namespace",
-                destination: nameof(HttpPassthroughIntegrationTests),
-                attachments: new Dictionary<string, byte[]>
-                {
-                    {"fooFile", Encoding.UTF8.GetBytes("foo")},
-                    {"default", Encoding.UTF8.GetBytes("bar")}
-                });
-        }
+        using var server = new TestServer(hostBuilder);
+        using var client = server.CreateClient();
+        client.DefaultRequestHeaders.Referrer = new Uri("http://TheReferrer");
+        var message = "{\"Property\": \"Value\"}";
+        var clientFormSender = new ClientFormSender(client);
+        await clientFormSender.Send(
+            route: "/SendMessage",
+            message: message,
+            typeName: "MyMessage",
+            typeNamespace: "My.Namespace",
+            destination: nameof(HttpPassthroughIntegrationTests),
+            attachments: new Dictionary<string, byte[]>
+            {
+                {"fooFile", Encoding.UTF8.GetBytes("foo")},
+                {"default", Encoding.UTF8.GetBytes("bar")}
+            });
     }
 
     static async Task<IEndpointInstance> StartEndpoint(ManualResetEvent resetEvent)

@@ -39,11 +39,9 @@ namespace NServiceBus.Transport.SqlServerNative
                 {
                     count++;
                     cancellation.ThrowIfCancellationRequested();
-                    using (var message = ReadMessage(reader))
-                    {
-                        lastRowVersion = message.RowVersion;
-                        await func(message);
-                    }
+                    using var message = ReadMessage(reader);
+                    lastRowVersion = message.RowVersion;
+                    await func(message);
                 }
             }
 

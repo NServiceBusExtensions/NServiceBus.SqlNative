@@ -34,7 +34,7 @@ order by RowVersion
         {
             var rowVersion = dataReader.GetInt64(0);
             var due = dataReader.DatetimeOrNull(1);
-            var headers = dataReader.StringOrNull(2);
+            var headers = dataReader.GetFieldValue<string>(2);
             var length = dataReader.LongOrNull(3);
             StreamWrapper? streamWrapper;
             if (length == null)

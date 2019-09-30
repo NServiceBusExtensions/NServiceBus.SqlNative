@@ -41,10 +41,8 @@ static class Extensions
     public static async Task ExecuteCommand(this DbConnection connection, DbTransaction? transaction, string sql, CancellationToken cancellation = default)
     {
         Guard.AgainstNull(connection, nameof(connection));
-        using (var command = connection.CreateCommand(transaction, sql))
-        {
-            await command.ExecuteNonQueryAsync(cancellation);
-        }
+        using var command = connection.CreateCommand(transaction, sql);
+        await command.ExecuteNonQueryAsync(cancellation);
     }
 
     public static DbCommand CreateCommand(this DbConnection connection, DbTransaction? transaction, string sql)
@@ -53,17 +51,6 @@ static class Extensions
         command.Transaction = transaction;
         command.CommandText = sql;
         return command;
-    }
-
-    public static string StringOrNull(this DbDataReader dataReader, int index)
-    {
-        //TODO:
-        //if (dataReader.IsDBNull(index))
-        //{
-        //    return default;
-        //}
-
-        return dataReader.GetFieldValue<string>(index);
     }
 
     public static long? LongOrNull(this DbDataReader dataReader, int index)

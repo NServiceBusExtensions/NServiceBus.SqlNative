@@ -11,10 +11,8 @@ public static class ModuleInitializer
             settings.TypeNameHandling = TypeNameHandling.Objects;
         };
         SqlHelper.EnsureDatabaseExists(Connection.ConnectionString);
-        using (var sqlConnection = Connection.OpenConnection())
-        {
-            var manager = new QueueManager("error", sqlConnection);
-            manager.Create().Await();
-        }
+        using var sqlConnection = Connection.OpenConnection();
+        var manager = new QueueManager("error", sqlConnection);
+        manager.Create().Await();
     }
 }

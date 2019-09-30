@@ -19,10 +19,8 @@ class MyHandler :
 
     static async Task WriteAttachment(string name, Stream stream)
     {
-        using (var reader = new StreamReader(stream))
-        {
-            var contents = await reader.ReadToEndAsync();
-            Console.WriteLine("Attachment: {0}. Contents:{1}", name, contents);
-        }
+        using var reader = new StreamReader(stream);
+        var contents = await reader.ReadToEndAsync();
+        Console.WriteLine("Attachment: {0}. Contents:{1}", name, contents);
     }
 }

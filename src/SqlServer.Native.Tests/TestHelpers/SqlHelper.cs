@@ -14,19 +14,15 @@ static class SqlHelper
 
         var masterConnection = connectionString.Replace(builder.InitialCatalog, "master");
 
-        using (var connection = new SqlConnection(masterConnection))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(masterConnection);
+        connection.Open();
 
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = $@"
+        using var command = connection.CreateCommand();
+        command.CommandText = $@"
 if(db_id('{database}') is null)
     create database [{database}]
 ";
-                command.ExecuteNonQuery();
-            }
-        }
+        command.ExecuteNonQuery();
     }
 
     public static async Task<IEnumerable<IncomingVerifyTarget>> ReadData(string table, SqlConnection connection)
@@ -51,22 +47,18 @@ if(db_id('{database}') is null)
 
     public static IEnumerable<IDictionary<string, object>> ReadDuplicateData(string table, SqlConnection conn)
     {
-        using (var command = conn.CreateCommand())
+        using var command = conn.CreateCommand();
+        command.CommandText = $"SELECT Id FROM {table}";
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
         {
-            command.CommandText = $"SELECT Id FROM {table}";
-            using (var reader = command.ExecuteReader())
+            IDictionary<string, object> record = new Dictionary<string, object>();
+            for (var i = 0; i < reader.FieldCount; i++)
             {
-                while (reader.Read())
-                {
-                    IDictionary<string, object> record = new Dictionary<string, object>();
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        record.Add(reader.GetName(i), reader[i]);
-                    }
-
-                    yield return record;
-                }
+                record.Add(reader.GetName(i), reader[i]);
             }
+
+            yield return record;
         }
     }
 }

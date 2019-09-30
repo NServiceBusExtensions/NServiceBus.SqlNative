@@ -9,42 +9,36 @@ static class DelayedTestDataBuilder
 
     public static async Task SendData(string table)
     {
-        using (var connection = Connection.OpenConnection())
-        {
-            var sender = new DelayedQueueManager(table, connection);
+        using var connection = Connection.OpenConnection();
+        var sender = new DelayedQueueManager(table, connection);
 
-            var message = BuildMessage();
-           await sender.Send(message);
-        }
+        var message = BuildMessage();
+        await sender.Send(message);
     }
 
     public static async Task SendNullData(string table)
     {
-        using (var connection = Connection.OpenConnection())
-        {
-            var sender = new DelayedQueueManager(table, connection);
+        using var connection = Connection.OpenConnection();
+        var sender = new DelayedQueueManager(table, connection);
 
-            var message = BuildNullMessage();
-            await sender.Send(message);
-        }
+        var message = BuildNullMessage();
+        await sender.Send(message);
     }
 
     public static async Task SendMultipleData(string table)
     {
-        using (var connection = Connection.OpenConnection())
-        {
-            var sender = new DelayedQueueManager(table, connection);
-            var time = dateTime;
-            await sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}")));
-            time = time.AddSeconds(1);
-            await sender.Send(new OutgoingDelayedMessage(time, "{}", bodyBytes: null));
-            time = time.AddSeconds(1);
-            await sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}")));
-            time = time.AddSeconds(1);
-            await sender.Send(new OutgoingDelayedMessage(time, "{}", bodyBytes: null));
-            time = time.AddSeconds(1);
-            await sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}")));
-        }
+        using var connection = Connection.OpenConnection();
+        var sender = new DelayedQueueManager(table, connection);
+        var time = dateTime;
+        await sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}")));
+        time = time.AddSeconds(1);
+        await sender.Send(new OutgoingDelayedMessage(time, "{}", bodyBytes: null));
+        time = time.AddSeconds(1);
+        await sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}")));
+        time = time.AddSeconds(1);
+        await sender.Send(new OutgoingDelayedMessage(time, "{}", bodyBytes: null));
+        time = time.AddSeconds(1);
+        await sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}")));
     }
 
     public static OutgoingDelayedMessage BuildMessage()

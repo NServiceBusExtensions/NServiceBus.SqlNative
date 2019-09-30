@@ -13,28 +13,22 @@ static class Serializer
     public static string SerializeDictionary(IDictionary<string, string> instance)
     {
         var serializer = BuildDictionarySerializer();
-        using (var stream = new MemoryStream())
-        {
-            serializer.WriteObject(stream, instance);
-            return Encoding.UTF8.GetString(stream.ToArray()).Replace(@"\/", "/");
-        }
+        using var stream = new MemoryStream();
+        serializer.WriteObject(stream, instance);
+        return Encoding.UTF8.GetString(stream.ToArray()).Replace(@"\/", "/");
     }
 
     public static Dictionary<string, string> DeSerializeDictionary(string json)
     {
         var serializer = BuildDictionarySerializer();
-        using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
-        {
-            return (Dictionary<string, string>) serializer.ReadObject(stream);
-        }
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+        return (Dictionary<string, string>) serializer.ReadObject(stream);
     }
     public static List<string> DeSerializeList(string json)
     {
         var serializer = BuildListSerializer();
-        using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
-        {
-            return (List<string>) serializer.ReadObject(stream);
-        }
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+        return (List<string>) serializer.ReadObject(stream);
     }
 
     // Items needs to be a list since the DataContractJsonSerializer
@@ -42,11 +36,9 @@ static class Serializer
     public static string SerializeList(List<string> items)
     {
         var serializer = BuildListSerializer();
-        using (var stream = new MemoryStream())
-        {
-            serializer.WriteObject(stream, items);
-            return Encoding.UTF8.GetString(stream.ToArray()).Replace(@"\/","/");
-        }
+        using var stream = new MemoryStream();
+        serializer.WriteObject(stream, items);
+        return Encoding.UTF8.GetString(stream.ToArray()).Replace(@"\/","/");
     }
 
     static DataContractJsonSerializer BuildDictionarySerializer()

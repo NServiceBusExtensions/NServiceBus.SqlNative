@@ -26,8 +26,8 @@ public class HttpPassthroughDedupTests : TestBase
         var hostBuilder = new WebHostBuilder();
         hostBuilder.UseStartup<Startup>();
         using (var server = new TestServer(hostBuilder))
-        using (var client = server.CreateClient())
         {
+            using var client = server.CreateClient();
             client.DefaultRequestHeaders.Referrer = new Uri("http://TheReferrer");
             var clientFormSender = new ClientFormSender(client);
             var guid = Guid.NewGuid();

@@ -48,7 +48,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         async Task Save(DbConnection connection, DbTransaction? transaction, long rowVersion, CancellationToken cancellation)
         {
-            using (var command = connection.CreateCommand(
+            using var command = connection.CreateCommand(
                 transaction: transaction,
                 sql: $@"
 update {table}
@@ -56,33 +56,29 @@ set RowVersion = @RowVersion
 if @@rowcount = 0
     insert into {table} (RowVersion)
     values (@RowVersion)
-"))
-            {
-                var parameter = command.CreateParameter();
-                parameter.ParameterName = "RowVersion";
-                parameter.DbType = DbType.Int64;
-                parameter.Value = rowVersion;
-                command.Parameters.Add(parameter);
-                await command.ExecuteNonQueryAsync(cancellation);
-            }
+");
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "RowVersion";
+            parameter.DbType = DbType.Int64;
+            parameter.Value = rowVersion;
+            command.Parameters.Add(parameter);
+            await command.ExecuteNonQueryAsync(cancellation);
         }
 
         public async Task<long> Get(DbConnection connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = $@"
+            using var command = connection.CreateCommand();
+            command.CommandText = $@"
 select top (1) RowVersion
 from {table}";
-                var result = await command.ExecuteScalarAsync(cancellation);
-                if (result == null)
-                {
-                    return 1;
-                }
-
-                return (long) result;
+            var result = await command.ExecuteScalarAsync(cancellation);
+            if (result == null)
+            {
+                return 1;
             }
+
+            return (long) result;
         }
 
         static string Sql = @"

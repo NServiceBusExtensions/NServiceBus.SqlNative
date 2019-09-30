@@ -85,15 +85,13 @@ namespace NServiceBus.Transport.SqlServerNative
         public async Task<string?> ReadContext(Guid messageId, CancellationToken cancellation = default)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
-            using (var command = BuildReadCommand(messageId))
+            using var command = BuildReadCommand(messageId);
+            var o = await command.ExecuteScalarAsync(cancellation);
+            if (o == DBNull.Value)
             {
-                var o = await command.ExecuteScalarAsync(cancellation);
-                if (o == DBNull.Value)
-                {
-                    return null;
-                }
-                return (string) o;
+                return null;
             }
+            return (string) o;
         }
 
         public async Task<DedupeResult> WriteDedupRecord(Guid messageId, string? context, CancellationToken cancellation = default)
@@ -101,10 +99,8 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstEmpty(messageId, nameof(messageId));
             try
             {
-                using (var command = BuildWriteCommand(messageId, context))
-                {
-                    await command.ExecuteNonQueryAsync(cancellation);
-                }
+                using var command = BuildWriteCommand(messageId, context);
+                await command.ExecuteNonQueryAsync(cancellation);
             }
             catch (SqlException sqlException)
             {
@@ -162,27 +158,23 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)
         {
-            using (var command = connection.CreateCommand())
-            {
-                command.Transaction = transaction;
-                command.CommandText = $"delete from {table} where Created < @date";
-                var parameter = command.CreateParameter();
-                parameter.ParameterName = "date";
-                parameter.DbType = DbType.DateTime2;
-                parameter.Value = dateTime;
-                command.Parameters.Add(parameter);
-                await command.ExecuteNonQueryAsync(cancellation);
-            }
+            using var command = connection.CreateCommand();
+            command.Transaction = transaction;
+            command.CommandText = $"delete from {table} where Created < @date";
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "date";
+            parameter.DbType = DbType.DateTime2;
+            parameter.Value = dateTime;
+            command.Parameters.Add(parameter);
+            await command.ExecuteNonQueryAsync(cancellation);
         }
 
         public virtual async Task PurgeItems(CancellationToken cancellation = default)
         {
-            using (var command = connection.CreateCommand())
-            {
-                command.Transaction = transaction;
-                command.CommandText = $"delete from {table}";
-                await command.ExecuteNonQueryAsync(cancellation);
-            }
+            using var command = connection.CreateCommand();
+            command.Transaction = transaction;
+            command.CommandText = $"delete from {table}";
+            await command.ExecuteNonQueryAsync(cancellation);
         }
 
         /// <summary>

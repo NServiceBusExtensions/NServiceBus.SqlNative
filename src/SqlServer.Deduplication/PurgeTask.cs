@@ -19,11 +19,9 @@ class PurgeTask : FeatureStartupTask
 
     protected override async Task OnStart(IMessageSession session)
     {
-        using (var connection = await connectionBuilder(CancellationToken.None))
-        {
-            var dedupeManager = new DedupeManager(connection, table);
-            await dedupeManager.PurgeItems();
-        }
+        using var connection = await connectionBuilder(CancellationToken.None);
+        var dedupeManager = new DedupeManager(connection, table);
+        await dedupeManager.PurgeItems();
     }
 
     protected override Task OnStop(IMessageSession session)

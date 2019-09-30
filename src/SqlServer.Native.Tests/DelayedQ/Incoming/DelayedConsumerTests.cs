@@ -13,12 +13,10 @@ public class DelayedConsumerTests :
     [Fact]
     public async Task Single()
     {
-       await DelayedTestDataBuilder.SendData(table);
+        await DelayedTestDataBuilder.SendData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        using (var result = await consumer.Consume())
-        {
-            ObjectApprover.Verify(result!.ToVerifyTarget());
-        }
+        using var result = await consumer.Consume();
+        ObjectApprover.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -26,10 +24,8 @@ public class DelayedConsumerTests :
     {
         await DelayedTestDataBuilder.SendNullData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        using (var result = await consumer.Consume())
-        {
-            ObjectApprover.Verify(result!.ToVerifyTarget());
-        }
+        using var result = await consumer.Consume();
+        ObjectApprover.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]

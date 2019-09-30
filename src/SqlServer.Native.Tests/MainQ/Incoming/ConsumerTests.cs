@@ -14,10 +14,8 @@ public class ConsumerTests : TestBase
     {
         await TestDataBuilder.SendData(table);
         var consumer = new QueueManager(table, SqlConnection);
-        using (var result = await consumer.Consume())
-        {
-            ObjectApprover.Verify(result!.ToVerifyTarget());
-        }
+        using var result = await consumer.Consume();
+        ObjectApprover.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -25,10 +23,8 @@ public class ConsumerTests : TestBase
     {
         await TestDataBuilder.SendNullData(table);
         var consumer = new QueueManager(table, SqlConnection);
-        using (var result = await consumer.Consume())
-        {
-            ObjectApprover.Verify(result!.ToVerifyTarget());
-        }
+        using var result = await consumer.Consume();
+        ObjectApprover.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]

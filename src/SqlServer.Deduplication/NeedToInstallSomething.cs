@@ -21,10 +21,8 @@ class NeedToInstallSomething : INeedToInstallSomething
             return;
         }
 
-        using (var connection = await settings.ConnectionBuilder(CancellationToken.None))
-        {
-            var manager = new DedupeManager(connection, settings.Table);
-            await manager.Create();
-        }
+        using var connection = await settings.ConnectionBuilder(CancellationToken.None);
+        var manager = new DedupeManager(connection, settings.Table);
+        await manager.Create();
     }
 }

@@ -38,30 +38,28 @@ class SendBehavior :
 
         transportTransaction = new TransportTransaction();
         context.Extensions.Set(transportTransaction);
-        using (var connection = await connectionTask)
-        using (var transaction = connection.BeginTransaction())
+        using var connection = await connectionTask;
+        using var transaction = connection.BeginTransaction();
+        transportTransaction.Set(connection);
+        transportTransaction.Set(transaction);
+
+        var dedupeManager = new DedupeManager(transaction, table);
+        var writeResult = await dedupeManager.WriteDedupRecord(messageId, dedupePipelineState.Context);
+        dedupePipelineState.DedupeOutcome = writeResult.DedupeOutcome;
+        dedupePipelineState.Context = writeResult.Context;
+        if (dedupePipelineState.DedupeOutcome == DedupeOutcome.Deduplicated)
         {
-            transportTransaction.Set(connection);
-            transportTransaction.Set(transaction);
+            logger.Info($"Message deduplicated. MessageId: {messageId}");
+            return;
+        }
 
-            var dedupeManager = new DedupeManager(transaction, table);
-            var writeResult = await dedupeManager.WriteDedupRecord(messageId, dedupePipelineState.Context);
-            dedupePipelineState.DedupeOutcome = writeResult.DedupeOutcome;
-            dedupePipelineState.Context = writeResult.Context;
-            if (dedupePipelineState.DedupeOutcome == DedupeOutcome.Deduplicated)
-            {
-                logger.Info($"Message deduplicated. MessageId: {messageId}");
-                return;
-            }
-
-            await next();
-            var commitResult = await dedupeManager.CommitWithDedupCheck(messageId, dedupePipelineState.Context);
-            dedupePipelineState.DedupeOutcome = commitResult.DedupeOutcome;
-            dedupePipelineState.Context = commitResult.Context;
-            if (commitResult.DedupeOutcome == DedupeOutcome.Deduplicated)
-            {
-                logger.Info($"Message deduplicated. MessageId: {messageId}");
-            }
+        await next();
+        var commitResult = await dedupeManager.CommitWithDedupCheck(messageId, dedupePipelineState.Context);
+        dedupePipelineState.DedupeOutcome = commitResult.DedupeOutcome;
+        dedupePipelineState.Context = commitResult.Context;
+        if (commitResult.DedupeOutcome == DedupeOutcome.Deduplicated)
+        {
+            logger.Info($"Message deduplicated. MessageId: {messageId}");
         }
     }
 

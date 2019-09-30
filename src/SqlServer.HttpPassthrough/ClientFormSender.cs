@@ -48,42 +48,40 @@ namespace NServiceBus.SqlServer.HttpPassthrough
                 messageId = Guid.NewGuid();
             }
 
-            using (var content = new MultipartFormDataContent())
+            using var content = new MultipartFormDataContent
             {
-                content.Add(new StringContent(message), "message");
-                var headers = content.Headers;
+                {new StringContent(message), "message"}
+            };
+            var headers = content.Headers;
 
-                headers.Add("MessageType", typeName);
-                if (typeNamespace != null)
-                {
-                    headers.Add("MessageNamespace", typeNamespace);
-                }
+            headers.Add("MessageType", typeName);
+            if (typeNamespace != null)
+            {
+                headers.Add("MessageNamespace", typeNamespace);
+            }
 
-                if (messageId != default)
-                {
-                    headers.Add("MessageId", messageId.ToString());
-                }
+            if (messageId != default)
+            {
+                headers.Add("MessageId", messageId.ToString());
+            }
 
-                if (destination != null)
-                {
-                    headers.Add("Destination", destination);
-                }
+            if (destination != null)
+            {
+                headers.Add("Destination", destination);
+            }
 
-                if (attachments != null)
+            if (attachments != null)
+            {
+                foreach (var attachment in attachments)
                 {
-                    foreach (var attachment in attachments)
-                    {
-                        var file = new ByteArrayContent(attachment.Value);
-                        content.Add(file, attachment.Key, attachment.Key);
-                    }
-                }
-
-                using (var response = await client.PostAsync(route, content, cancellation))
-                {
-                    response.EnsureSuccessStatusCode();
-                    return (messageId, (int)response.StatusCode);
+                    var file = new ByteArrayContent(attachment.Value);
+                    content.Add(file, attachment.Key, attachment.Key);
                 }
             }
+
+            using var response = await client.PostAsync(route, content, cancellation);
+            response.EnsureSuccessStatusCode();
+            return (messageId, (int)response.StatusCode);
         }
     }
 }

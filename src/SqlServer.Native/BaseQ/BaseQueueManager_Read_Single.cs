@@ -16,17 +16,15 @@ namespace NServiceBus.Transport.SqlServerNative
             DbDataReader? reader = null;
             try
             {
-                using (var command = BuildReadCommand(1, rowVersion))
+                using var command = BuildReadCommand(1, rowVersion);
+                reader = await command.ExecuteSingleRowReader(cancellation);
+                if (!await reader.ReadAsync(cancellation))
                 {
-                    reader = await command.ExecuteSingleRowReader(cancellation);
-                    if (!await reader.ReadAsync(cancellation))
-                    {
-                        shouldCleanup = true;
-                        return default;
-                    }
-
-                    return ReadMessage(reader, reader);
+                    shouldCleanup = true;
+                    return default;
                 }
+
+                return ReadMessage(reader, reader);
             }
             catch
             {
