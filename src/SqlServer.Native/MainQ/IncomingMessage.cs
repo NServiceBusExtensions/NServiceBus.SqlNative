@@ -18,9 +18,9 @@ namespace NServiceBus.Transport.SqlServerNative
         long rowVersion;
         DateTime? expires;
         string headers;
-        Stream body;
+        Stream? body;
 
-        public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream body, IDisposable[] cleanups)
+        public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, IDisposable[] cleanups)
         {
             Guard.AgainstNull(cleanups, nameof(cleanups));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
@@ -68,7 +68,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public Stream Body
+        public Stream? Body
         {
             get
             {

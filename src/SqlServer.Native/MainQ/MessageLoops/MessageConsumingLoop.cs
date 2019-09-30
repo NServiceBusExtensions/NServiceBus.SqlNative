@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public class MessageConsumingLoop : MessageLoop
+    public class MessageConsumingLoop :
+        MessageLoop
     {
         string table;
-        Func<CancellationToken, Task<DbConnection>> connectionBuilder;
-        Func<CancellationToken, Task<DbTransaction>> transactionBuilder;
-        Func<DbTransaction, IncomingMessage, CancellationToken, Task> transactionCallback;
-        Func<DbConnection, IncomingMessage, CancellationToken, Task> connectionCallback;
+        Func<CancellationToken, Task<DbConnection>>? connectionBuilder;
+        Func<CancellationToken, Task<DbTransaction>>? transactionBuilder;
+        Func<DbTransaction, IncomingMessage, CancellationToken, Task>? transactionCallback;
+        Func<DbConnection, IncomingMessage, CancellationToken, Task>? connectionCallback;
         int batchSize;
 
         public MessageConsumingLoop(
@@ -54,26 +55,26 @@ namespace NServiceBus.Transport.SqlServerNative
 
         protected override async Task RunBatch(CancellationToken cancellation)
         {
-            DbConnection connection = null;
+            DbConnection? connection = null;
             if (connectionBuilder != null)
             {
                 using (connection = await connectionBuilder(cancellation))
                 {
                     var consumer = new QueueManager(table, connection);
-                    await RunBatch(consumer, message => connectionCallback(connection, message, cancellation), cancellation);
+                    await RunBatch(consumer, message => connectionCallback!(connection, message, cancellation), cancellation);
                 }
 
                 return;
             }
-            DbTransaction transaction = null;
+            DbTransaction? transaction = null;
             try
             {
-                transaction = await transactionBuilder(cancellation);
+                transaction = await transactionBuilder!(cancellation);
                 connection = transaction.Connection;
                 var consumer = new QueueManager(table, transaction);
                 try
                 {
-                    await RunBatch(consumer, message => transactionCallback(transaction, message, cancellation), cancellation);
+                    await RunBatch(consumer, message => transactionCallback!(transaction, message, cancellation), cancellation);
 
                     transaction.Commit();
                 }

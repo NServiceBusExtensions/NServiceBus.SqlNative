@@ -10,7 +10,7 @@ namespace NServiceBus.Transport.SqlServerNative
     [DebuggerDisplay("Due = {Due}")]
     public class OutgoingDelayedMessage
     {
-        public OutgoingDelayedMessage(DateTime due, string headers)
+        public OutgoingDelayedMessage(DateTime due, string? headers)
         {
             Guard.AgainstEmpty(headers, nameof(headers));
             Due = due;
@@ -24,13 +24,13 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public OutgoingDelayedMessage(DateTime due, string headers, byte[] bodyBytes)
+        public OutgoingDelayedMessage(DateTime due, string? headers, byte[]? bodyBytes)
             : this(due, headers)
         {
             Body = bodyBytes;
         }
 
-        public OutgoingDelayedMessage(DateTime due, string headers, Stream bodyStream)
+        public OutgoingDelayedMessage(DateTime due, string? headers, Stream? bodyStream)
             : this(due, headers)
         {
             Body = bodyStream;
@@ -38,6 +38,6 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public DateTime Due { get; }
         public string Headers { get; }
-        public object Body { get; }
+        public object? Body { get; }
     }
 }

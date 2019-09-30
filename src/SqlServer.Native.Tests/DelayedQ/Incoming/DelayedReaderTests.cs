@@ -16,7 +16,7 @@ public class DelayedReaderTests : TestBase
         var reader = new DelayedQueueManager(table, SqlConnection);
         using (var result = await reader.Read(1))
         {
-            ObjectApprover.Verify(result.ToVerifyTarget());
+            ObjectApprover.Verify(result!.ToVerifyTarget());
         }
     }
 
@@ -27,7 +27,7 @@ public class DelayedReaderTests : TestBase
         var reader = new DelayedQueueManager(table, SqlConnection);
         using (var result = await reader.Read(1))
         {
-            ObjectApprover.Verify(result.ToVerifyTarget());
+            ObjectApprover.Verify(result!.ToVerifyTarget());
         }
     }
 

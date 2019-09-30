@@ -16,7 +16,7 @@ public class ConsumerTests : TestBase
         var consumer = new QueueManager(table, SqlConnection);
         using (var result = await consumer.Consume())
         {
-            ObjectApprover.Verify(result.ToVerifyTarget());
+            ObjectApprover.Verify(result!.ToVerifyTarget());
         }
     }
 
@@ -27,7 +27,7 @@ public class ConsumerTests : TestBase
         var consumer = new QueueManager(table, SqlConnection);
         using (var result = await consumer.Consume())
         {
-            ObjectApprover.Verify(result.ToVerifyTarget());
+            ObjectApprover.Verify(result!.ToVerifyTarget());
         }
     }
 

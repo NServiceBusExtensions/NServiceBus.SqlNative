@@ -17,16 +17,16 @@ static class HeaderReader
         }
 
         return new IncomingHeaders
-        {
-            MessageId = GetMessageId(headers),
-            MessageType = messageType,
-            MessageNamespace = messageNamespace,
-            Destination = headers.TryGetHeader("Destination"),
-            Referrer = headers.TryGetHeader(HeaderNames.Referer)
-        };
+        (
+            messageId: GetMessageId(headers),
+            messageType: messageType,
+            messageNamespace: messageNamespace,
+            destination: headers.TryGetHeader("Destination"),
+            referrer: headers.TryGetHeader(HeaderNames.Referer)
+        );
     }
 
-    static string GetMessageNamespace(IHeaderDictionary headers)
+    static string? GetMessageNamespace(IHeaderDictionary headers)
     {
         if (!headers.TryGetValue("MessageNamespace", out var value))
         {
@@ -64,13 +64,12 @@ static class HeaderReader
         return value.ToString();
     }
 
-    static string TryGetHeader(this IHeaderDictionary headers, string key)
+    static string? TryGetHeader(this IHeaderDictionary headers, string key)
     {
         if (headers.TryGetValue(key, out var value))
         {
             return value.ToString();
         }
         return null;
-
     }
 }

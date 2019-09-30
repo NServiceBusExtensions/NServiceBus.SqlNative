@@ -9,12 +9,12 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         string table;
         long startingRow;
-        Func<CancellationToken, Task<DbConnection>> connectionBuilder;
-        Func<CancellationToken, Task<DbTransaction>> transactionBuilder;
-        Func<DbTransaction, IncomingMessage, CancellationToken, Task> transactionCallback;
-        Func<DbConnection, IncomingMessage, CancellationToken, Task> connectionCallback;
-        Func<DbTransaction, long, CancellationToken, Task> transactionPersistRowVersion;
-        Func<DbConnection, long, CancellationToken, Task> connectionPersistRowVersion;
+        Func<CancellationToken, Task<DbConnection>>? connectionBuilder;
+        Func<CancellationToken, Task<DbTransaction>>? transactionBuilder;
+        Func<DbTransaction, IncomingMessage, CancellationToken, Task>? transactionCallback;
+        Func<DbConnection, IncomingMessage, CancellationToken, Task>? connectionCallback;
+        Func<DbTransaction, long, CancellationToken, Task>? transactionPersistRowVersion;
+        Func<DbConnection, long, CancellationToken, Task>? connectionPersistRowVersion;
         int batchSize;
 
         public MessageProcessingLoop(
@@ -69,7 +69,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         protected override async Task RunBatch(CancellationToken cancellation)
         {
-            DbConnection connection = null;
+            DbConnection? connection = null;
             if (connectionBuilder != null)
             {
                 using (connection = await connectionBuilder(cancellation))
@@ -77,26 +77,26 @@ namespace NServiceBus.Transport.SqlServerNative
                     var reader = new QueueManager(table, connection);
                     await RunBatch(
                             reader,
-                            messageFunc: message => connectionCallback(connection, message, cancellation),
-                            persistFunc: () => connectionPersistRowVersion(connection, startingRow, cancellation),
+                            messageFunc: message => connectionCallback!(connection, message, cancellation),
+                            persistFunc: () => connectionPersistRowVersion!(connection, startingRow, cancellation),
                             cancellation);
                 }
 
                 return;
             }
 
-            DbTransaction transaction = null;
+            DbTransaction? transaction = null;
             try
             {
-                transaction = await transactionBuilder(cancellation);
+                transaction = await transactionBuilder!(cancellation);
                 connection = transaction.Connection;
                 var reader = new QueueManager(table, transaction);
                 try
                 {
                     await RunBatch(
                             reader,
-                            messageFunc: message => transactionCallback(transaction, message, cancellation),
-                            persistFunc: () => transactionPersistRowVersion(transaction, startingRow, cancellation),
+                            messageFunc: message => transactionCallback!(transaction, message, cancellation),
+                            persistFunc: () => transactionPersistRowVersion!(transaction, startingRow, cancellation),
                             cancellation);
                     transaction.Commit();
                 }
@@ -123,7 +123,7 @@ namespace NServiceBus.Transport.SqlServerNative
                     break;
                 }
 
-                startingRow = result.LastRowVersion.Value + 1;
+                startingRow = result.LastRowVersion.GetValueOrDefault(0) + 1;
                 await persistFunc();
                 if (result.Count < batchSize)
                 {

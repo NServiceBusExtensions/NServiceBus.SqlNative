@@ -18,11 +18,15 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// Append a list of <see cref="Claim"/> to a to a headers <see cref="IDictionary{TKey,TValue}"/>.
         /// Note that only the <see cref="Claim.Type"/>s and <see cref="Claim.Value"/>s are persisted.
         /// </summary>
-        public static void Append(IEnumerable<Claim> claims, IDictionary<string, string> headers, string prefix)
+        public static void Append(IEnumerable<Claim> claims, IDictionary<string, string> headers, string? prefix)
         {
             Guard.AgainstNull(claims, nameof(claims));
             Guard.AgainstNull(headers, nameof(headers));
-            Guard.AgainstNullOrEmpty(prefix, nameof(prefix));
+            Guard.AgainstEmpty(prefix, nameof(prefix));
+            if (prefix == null)
+            {
+                prefix = "";
+            }
             foreach (var claim in claims.GroupBy(x => x.Type))
             {
                 var items = claim.Select(x => x.Value).ToList();

@@ -16,14 +16,19 @@ namespace NServiceBus.Transport.SqlServerNative
         Action<Exception> criticalError;
         TimeSpan expireWindow;
         TimeSpan frequencyToRunCleanup;
-        DedupeCleaner cleaner;
+        DedupeCleaner? cleaner;
 
         /// <summary>
         /// Initializes a new instance of <see cref="DedupeCleanerJob"/>.
         /// </summary>
         /// <param name="criticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
         /// <param name="table">The sql <see cref="Table"/> to perform cleanup on.</param>
-        public DedupeCleanerJob(Table table, Func<CancellationToken, Task<DbConnection>> connectionBuilder, Action<Exception> criticalError, TimeSpan? expireWindow = null, TimeSpan? frequencyToRunCleanup = null)
+        public DedupeCleanerJob(
+            Table table,
+            Func<CancellationToken, Task<DbConnection>> connectionBuilder,
+            Action<Exception> criticalError,
+            TimeSpan? expireWindow = null,
+            TimeSpan? frequencyToRunCleanup = null)
         {
             Guard.AgainstNull(table, nameof(table));
             Guard.AgainstNull(criticalError, nameof(criticalError));
@@ -59,6 +64,11 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public virtual Task Stop()
         {
+            if (cleaner == null)
+            {
+                return Task.CompletedTask;
+            }
+
             return cleaner.Stop();
         }
     }

@@ -1,6 +1,6 @@
 ﻿static class BodyComputedColumnBuilder
 {
-    public static string Computed(string computedColumnSql)
+    public static string Computed(string? computedColumnSql)
     {
         if (computedColumnSql == null)
         {

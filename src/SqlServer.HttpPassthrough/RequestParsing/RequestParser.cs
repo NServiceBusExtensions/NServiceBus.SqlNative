@@ -13,16 +13,16 @@ static class RequestParser
         var incomingHeaders = HeaderReader.GetIncomingHeaders(request.Headers);
         var form = await request.ReadFormAsync(cancellation);
         return new PassthroughMessage
-        {
-            Destination = incomingHeaders.Destination,
-            Id = incomingHeaders.MessageId,
-            CorrelationId = incomingHeaders.MessageId,
-            Type = incomingHeaders.MessageType,
-            Namespace = incomingHeaders.MessageNamespace,
-            ClientUrl = incomingHeaders.Referrer,
-            Body = GetMessageBody(form),
-            Attachments = GetAttachments(form).ToList()
-        };
+        (
+            destination: incomingHeaders.Destination,
+            id: incomingHeaders.MessageId,
+            correlationId: incomingHeaders.MessageId,
+            type: incomingHeaders.MessageType,
+            @namespace: incomingHeaders.MessageNamespace,
+            clientUrl: incomingHeaders.Referrer,
+            body: GetMessageBody(form),
+            attachments: GetAttachments(form).ToList()
+        );
     }
 
     static IEnumerable<Attachment> GetAttachments(IFormCollection form)
@@ -31,10 +31,10 @@ static class RequestParser
         foreach (var file in form.Files)
         {
             var attachment = new Attachment
-            {
-                Stream = file.OpenReadStream,
-                FileName = file.FileName
-            };
+            (
+                stream: file.OpenReadStream,
+                fileName: file.FileName
+            );
 
             if (attachments.ContainsKey(attachment.FileName))
             {

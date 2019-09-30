@@ -6,6 +6,7 @@
     <Description>Message deduplication for the SQL Server transport.</Description>
     <PackageProjectUrl>https://docs.particular.net/nuget/$(PackageId)</PackageProjectUrl>
     <DefineConstants>$(DefineConstants);SqlServerDedupe</DefineConstants>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\SqlServer.Native\Dedupe\*.cs" />

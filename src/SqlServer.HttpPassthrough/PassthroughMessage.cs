@@ -18,11 +18,23 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         Guid id;
         Guid correlationId;
         string type;
-        string ns;
+        string? ns;
         List<Attachment> attachments = new List<Attachment>();
         Dictionary<string, string> extraHeaders = new Dictionary<string, string>();
         string body;
-        string clientUrl;
+        string? clientUrl;
+
+        public PassthroughMessage(string? destination, Guid id, Guid correlationId, string type, string? @namespace, string? clientUrl, string body, List<Attachment> attachments)
+        {
+            Destination = destination;
+            this.id = id;
+            this.correlationId = correlationId;
+            this.type = type;
+            ns = @namespace;
+            this.clientUrl = clientUrl;
+            this.body = body;
+            this.attachments = attachments;
+        }
 
         /// <summary>
         /// The message id. Contains the 'MessageId' value from <see cref="HttpRequest.Headers"/>.
@@ -68,7 +80,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// The message namespace. Contains the 'MessageNamespace' value from <see cref="HttpRequest.Headers"/>.
         /// Will be combined with <see cref="Type"/> and used for the 'NServiceBus.EnclosedMessageTypes' header.
         /// </summary>
-        public string Namespace
+        public string? Namespace
         {
             get => ns;
             set
@@ -95,13 +107,13 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// The message destination. Contains the 'Destination' value from <see cref="HttpRequest.Headers"/>.
         /// Primarily used to convert to a <see cref="Table"/> as a return value for the passthrough callback.
         /// </summary>
-        public string Destination { get; internal set; }
+        public string? Destination { get; }
 
         /// <summary>
         /// The URL of the submitting page. Contains the <see cref="HeaderNames.Referer"/> value from <see cref="HttpRequest.Headers"/>.
         /// Will be written to a header 'MessagePassthrough.ClientUrl' in the outgoing NServiceBus message.
         /// </summary>
-        public string ClientUrl
+        public string? ClientUrl
         {
             get => clientUrl;
             set
@@ -147,13 +159,21 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             {
                 {"Id", Id},
                 {"CorrelationId", CorrelationId},
-                {"Destination", Destination},
                 {"Type", Type},
-                {"Namespace", Namespace},
                 {"Body", Body},
                 {"Attachments", Attachments.Select(x => x.FileName).ToList()},
                 {"ExtraHeaders", ExtraHeaders}
             };
+            if (Destination != null)
+            {
+                objects.Add("Destination", Destination);
+            }
+
+            if (Namespace != null)
+            {
+                objects.Add("Namespace", Namespace);
+            }
+
             if (ClientUrl != null)
             {
                 objects.Add("ClientUrl", ClientUrl);

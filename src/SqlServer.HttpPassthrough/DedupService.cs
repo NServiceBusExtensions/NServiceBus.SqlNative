@@ -10,7 +10,7 @@ class DedupService : IHostedService
     Table table;
     Func<CancellationToken, Task<DbConnection>> connectionBuilder;
     Action<Exception> criticalError;
-    DedupeCleanerJob job;
+    DedupeCleanerJob? job;
 
     public DedupService(Table table, Func<CancellationToken, Task<DbConnection>> connectionBuilder, Action<Exception> criticalError)
     {

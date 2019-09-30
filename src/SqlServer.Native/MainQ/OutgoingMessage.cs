@@ -10,7 +10,7 @@ namespace NServiceBus.Transport.SqlServerNative
     [DebuggerDisplay("Id = {Id}, Expires = {Expires}")]
     public class OutgoingMessage
     {
-        public OutgoingMessage(Guid id, DateTime? expires = null, string headers = null)
+        public OutgoingMessage(Guid id, DateTime? expires = null, string? headers = null)
         {
             Guard.AgainstEmpty(id, nameof(id));
             Guard.AgainstEmpty(headers, nameof(headers));
@@ -26,13 +26,13 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public OutgoingMessage(Guid id, DateTime? expires = null, string headers = null, byte[] bodyBytes = null)
+        public OutgoingMessage(Guid id, DateTime? expires = null, string? headers = null, byte[]? bodyBytes = null)
             : this(id, expires, headers)
         {
             Body = bodyBytes;
         }
 
-        public OutgoingMessage(Guid id, DateTime? expires = null, string headers = null, Stream bodyStream = null)
+        public OutgoingMessage(Guid id, DateTime? expires = null, string? headers = null, Stream? bodyStream = null)
             : this(id, expires, headers)
         {
             Body = bodyStream;
@@ -41,6 +41,6 @@ namespace NServiceBus.Transport.SqlServerNative
         public Guid Id { get; }
         public DateTime? Expires { get; }
         public string Headers { get; }
-        public object Body { get; }
+        public object? Body { get; }
     }
 }

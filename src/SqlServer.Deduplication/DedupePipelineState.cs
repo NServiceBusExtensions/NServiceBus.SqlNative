@@ -6,7 +6,7 @@ using NServiceBus.Transport.SqlServerDeduplication;
 class DedupePipelineState
 {
     public DedupeOutcome DedupeOutcome;
-    public string Context;
+    public string? Context;
 
     public static bool TryGet(IOutgoingPhysicalMessageContext context, out DedupePipelineState state)
     {

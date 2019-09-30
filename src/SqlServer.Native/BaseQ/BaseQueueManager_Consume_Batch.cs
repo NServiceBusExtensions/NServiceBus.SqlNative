@@ -10,7 +10,7 @@ namespace NServiceBus.Transport.SqlServerNative
     /// Not to be used as an extension point.
     /// </summary>
     public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
-        where TIncoming : IIncomingMessage
+        where TIncoming : class, IIncomingMessage
     {
         protected abstract DbCommand BuildConsumeCommand(int batchSize);
 

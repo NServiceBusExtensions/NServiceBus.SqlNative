@@ -42,14 +42,14 @@ namespace NServiceBus
             return dedupeSettings;
         }
 
-        public static Task<DedupeResult> SendLocalWithDedupe(this IMessageSession session, Guid messageId, object message, string context = null)
+        public static Task<DedupeResult> SendLocalWithDedupe(this IMessageSession session, Guid messageId, object message, string? context = null)
         {
             var options = new SendOptions();
             options.RouteToThisEndpoint();
             return SendWithDedupe(session, messageId, message, options, context);
         }
 
-        public static Task<DedupeResult> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions options = null, string context = null)
+        public static Task<DedupeResult> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions? options = null, string? context = null)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
             Guard.AgainstNull(message, nameof(message));
@@ -74,7 +74,7 @@ namespace NServiceBus
             }
         }
 
-        static async Task<DedupeResult> InnerSendWithDedupe(IMessageSession session, object message, Guid messageId, SendOptions options, string context)
+        static async Task<DedupeResult> InnerSendWithDedupe(IMessageSession session, object message, Guid messageId, SendOptions options, string? context)
         {
             var pipelineState = new DedupePipelineState
             {
@@ -86,10 +86,10 @@ namespace NServiceBus
             await session.Send(message, options);
 
             return new DedupeResult
-            {
-                DedupeOutcome = pipelineState.DedupeOutcome,
-                Context = pipelineState.Context
-            };
+            (
+                dedupeOutcome: pipelineState.DedupeOutcome,
+                context: pipelineState.Context
+            );
         }
 
         static async Task<DbConnection> OpenConnection(string connectionString, CancellationToken cancellation)

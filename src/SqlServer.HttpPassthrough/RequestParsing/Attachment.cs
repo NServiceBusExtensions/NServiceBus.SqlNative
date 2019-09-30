@@ -9,35 +9,24 @@ namespace NServiceBus.SqlServer.HttpPassthrough
     /// </summary>
     public class Attachment
     {
-        Func<Stream> stream;
-        string fileName;
+        public Attachment(Func<Stream> stream, string fileName)
+        {
+            Guard.AgainstNullOrEmpty(fileName, nameof(fileName));
+            Guard.AgainstNull(stream, nameof(stream));
+            Stream = stream;
+            FileName = fileName;
+        }
 
         /// <summary>
         /// A delegate that returns the instance of the <see cref="Stream"/> to send.
         /// The resulting <see cref="Stream"/> will be passed to 'stream' parameter of <see cref="Persister.SaveStream"/>.
         /// </summary>
-        public Func<Stream> Stream
-        {
-            get => stream;
-            set
-            {
-                Guard.AgainstNull(value, nameof(value));
-                stream = value;
-            }
-        }
+        public Func<Stream> Stream { get; }
 
         /// <summary>
         /// The file name of the <see cref="Attachment"/>.
         /// Will be passed to 'name' parameter of <see cref="Persister.SaveStream"/>.
         /// </summary>
-        public string FileName
-        {
-            get => fileName;
-            set
-            {
-                Guard.AgainstNullOrEmpty(value, nameof(value));
-                fileName = value;
-            }
-        }
+        public string FileName { get; }
     }
 }

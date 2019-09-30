@@ -7,8 +7,14 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public struct DedupeResult
     {
-        public DedupeOutcome DedupeOutcome { get; set; }
-        public string Context { get; set; }
+        public DedupeResult(DedupeOutcome dedupeOutcome, string? context)
+        {
+            DedupeOutcome = dedupeOutcome;
+            Context = context;
+        }
+
+        public DedupeOutcome DedupeOutcome { get; }
+        public string? Context { get; }
     }
 
     public enum DedupeOutcome

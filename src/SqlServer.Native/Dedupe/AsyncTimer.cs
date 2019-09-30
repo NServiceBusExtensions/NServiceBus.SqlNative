@@ -7,28 +7,29 @@ class AsyncTimer
     public virtual void Start(Func<DateTime, CancellationToken, Task> callback, TimeSpan interval, Action<Exception> errorCallback, Func<TimeSpan, CancellationToken, Task> delayStrategy)
     {
         tokenSource = new CancellationTokenSource();
-        var token = tokenSource.Token;
+        var cancellation = tokenSource.Token;
 
         task = Task.Run(async () =>
-        {
-            while (!token.IsCancellationRequested)
             {
-                try
+                while (!cancellation.IsCancellationRequested)
                 {
-                    var utcNow = DateTime.UtcNow;
-                    await delayStrategy(interval, token);
-                    await callback(utcNow, token);
+                    try
+                    {
+                        var utcNow = DateTime.UtcNow;
+                        await delayStrategy(interval, cancellation);
+                        await callback(utcNow, cancellation);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        // noop
+                    }
+                    catch (Exception ex)
+                    {
+                        errorCallback(ex);
+                    }
                 }
-                catch (OperationCanceledException)
-                {
-                    // noop
-                }
-                catch (Exception ex)
-                {
-                    errorCallback(ex);
-                }
-            }
-        }, CancellationToken.None);
+            },
+            cancellation);
     }
 
     public virtual Task Stop()
@@ -44,6 +45,6 @@ class AsyncTimer
         return task ?? Task.FromResult(0);
     }
 
-    Task task;
-    CancellationTokenSource tokenSource;
+    Task? task;
+    CancellationTokenSource? tokenSource;
 }

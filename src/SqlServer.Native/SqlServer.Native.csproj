@@ -5,6 +5,7 @@
     <PackageName>NServiceBus.SqlServer.Native</PackageName>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageProjectUrl>https://docs.particular.net/nuget/$(PackageId)</PackageProjectUrl>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ConfigureAwait.Fody" Version="3.2.0" PrivateAssets="All" />

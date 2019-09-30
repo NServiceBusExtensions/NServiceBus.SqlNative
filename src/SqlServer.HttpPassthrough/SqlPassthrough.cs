@@ -11,11 +11,11 @@ class SqlPassthrough : ISqlPassthrough
 {
     Sender sender;
     bool appendClaims;
-    string claimsHeaderPrefix;
+    string? claimsHeaderPrefix;
     ILogger logger;
     Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback;
 
-    public SqlPassthrough(Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback, Sender sender, bool appendClaims, string claimsHeaderPrefix, ILogger logger)
+    public SqlPassthrough(Func<HttpContext, PassthroughMessage, Task<Table>> sendCallback, Sender sender, bool appendClaims, string? claimsHeaderPrefix, ILogger logger)
     {
         this.sendCallback = sendCallback;
         this.sender = sender;

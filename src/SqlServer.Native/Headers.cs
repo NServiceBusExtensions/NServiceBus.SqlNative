@@ -22,11 +22,6 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public static string Serialize(IDictionary<string, string> instance)
         {
-            if (instance == null)
-            {
-                return null;
-            }
-
             return Serializer.SerializeDictionary(instance);
         }
 

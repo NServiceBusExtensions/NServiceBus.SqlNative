@@ -33,10 +33,10 @@ order by RowVersion
         protected override IncomingDelayedMessage ReadMessage(DbDataReader dataReader, params IDisposable[] cleanups)
         {
             var rowVersion = dataReader.GetInt64(0);
-            var due = dataReader.ValueOrNull<DateTime>(1);
-            var headers = dataReader.ValueOrNull<string>(2);
-            var length = dataReader.ValueOrNull<long?>(3);
-            StreamWrapper streamWrapper;
+            var due = dataReader.DatetimeOrNull(1);
+            var headers = dataReader.StringOrNull(2);
+            var length = dataReader.LongOrNull(3);
+            StreamWrapper? streamWrapper;
             if (length == null)
             {
                 streamWrapper = null;

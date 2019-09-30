@@ -35,7 +35,7 @@ public class Startup
             {"MessagePassthrough.Version", AssemblyVersion.Version},
             {"{}\":", "{}\":"}
         };
-        return Task.FromResult((Table) message.Destination);
+        return Task.FromResult((Table) message.Destination!);
     }
 
     static Task<DbConnection> OpenConnection(CancellationToken cancellation)

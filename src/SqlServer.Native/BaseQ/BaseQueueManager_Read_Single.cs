@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 namespace NServiceBus.Transport.SqlServerNative
 {
     public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
-        where TIncoming : IIncomingMessage
+        where TIncoming : class, IIncomingMessage
     {
         protected abstract DbCommand BuildReadCommand(int batchSize, long startRowVersion);
 
-        public virtual async Task<TIncoming> Read(long rowVersion, CancellationToken cancellation = default)
+        public virtual async Task<TIncoming?> Read(long rowVersion, CancellationToken cancellation = default)
         {
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             var shouldCleanup = false;
-            DbDataReader reader = null;
+            DbDataReader? reader = null;
             try
             {
                 using (var command = BuildReadCommand(1, rowVersion))

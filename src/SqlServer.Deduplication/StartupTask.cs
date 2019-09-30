@@ -11,7 +11,7 @@ class CleanupTask : FeatureStartupTask
     Table table;
     CriticalError criticalError;
     Func<CancellationToken, Task<DbConnection>> connectionBuilder;
-    DedupeCleanerJob job;
+    DedupeCleanerJob? job;
 
     public CleanupTask(Table table, CriticalError criticalError,
         Func<CancellationToken, Task<DbConnection>> connectionBuilder)
@@ -35,6 +35,6 @@ class CleanupTask : FeatureStartupTask
 
     protected override Task OnStop(IMessageSession session)
     {
-        return job.Stop();
+        return job == null ? Task.CompletedTask : job.Stop();
     }
 }

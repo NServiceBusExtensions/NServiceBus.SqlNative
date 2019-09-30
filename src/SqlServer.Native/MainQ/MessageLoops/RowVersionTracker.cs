@@ -27,7 +27,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return CreateTable(transaction.Connection, transaction, cancellation);
         }
 
-        Task CreateTable(DbConnection sqlConnection, DbTransaction transaction, CancellationToken cancellation)
+        Task CreateTable(DbConnection sqlConnection, DbTransaction? transaction, CancellationToken cancellation)
         {
             return sqlConnection.ExecuteCommand(transaction, string.Format(Sql, table), cancellation);
         }
@@ -46,7 +46,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return Save(transaction.Connection, transaction, rowVersion, cancellation);
         }
 
-        async Task Save(DbConnection connection, DbTransaction transaction, long rowVersion, CancellationToken cancellation)
+        async Task Save(DbConnection connection, DbTransaction? transaction, long rowVersion, CancellationToken cancellation)
         {
             using (var command = connection.CreateCommand(
                 transaction: transaction,
@@ -97,6 +97,5 @@ create table {0} (
     RowVersion bigint not null
 );
 ";
-
     }
 }

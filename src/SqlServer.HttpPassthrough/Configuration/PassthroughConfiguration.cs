@@ -21,7 +21,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         internal Func<HttpContext, PassthroughMessage, Task<Table>> SendCallback;
         internal Table DedupeTable = "Deduplication";
         internal Table AttachmentsTable = "MessageAttachments";
-        internal string ClaimsHeaderPrefix;
+        internal string? ClaimsHeaderPrefix;
         internal bool AppendClaims;
 
         /// <summary>

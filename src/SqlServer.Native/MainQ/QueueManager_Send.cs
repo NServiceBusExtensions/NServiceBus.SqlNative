@@ -2,7 +2,7 @@
 {
     public partial class QueueManager
     {
-        string sendSql;
+        private string sendSql = null!;
 
         const string dedupSql = @"
 if exists (

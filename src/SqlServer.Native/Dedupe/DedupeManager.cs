@@ -14,12 +14,12 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         const string writeSqlFormat = "insert into {0} (Id, Context) values (@Id, @Context);";
         const string readSqlFormat = "select Context from {0} where Id = @Id";
-        string writeSql;
-        string readSql;
+        string writeSql = null!;
+        string readSql = null!;
 
         DbConnection connection;
         Table table;
-        DbTransaction transaction;
+        DbTransaction? transaction;
 
         public DedupeManager(DbConnection connection, Table table)
         {
@@ -57,7 +57,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return command;
         }
 
-        DbCommand BuildWriteCommand(Guid messageId, string context)
+        DbCommand BuildWriteCommand(Guid messageId, string? context)
         {
             var command = connection.CreateCommand(transaction, writeSql);
             var parameters = command.Parameters;
@@ -82,7 +82,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return command;
         }
 
-        public async Task<string> ReadContext(Guid messageId, CancellationToken cancellation = default)
+        public async Task<string?> ReadContext(Guid messageId, CancellationToken cancellation = default)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
             using (var command = BuildReadCommand(messageId))
@@ -96,7 +96,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public async Task<DedupeResult> WriteDedupRecord(Guid messageId, string context, CancellationToken cancellation = default)
+        public async Task<DedupeResult> WriteDedupRecord(Guid messageId, string? context, CancellationToken cancellation = default)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
             try
@@ -117,24 +117,28 @@ namespace NServiceBus.Transport.SqlServerNative
             }
 
             return new DedupeResult
-            {
-                DedupeOutcome = DedupeOutcome.Sent,
-                Context = context
-            };
+            (
+                dedupeOutcome: DedupeOutcome.Sent,
+                context: context
+            );
         }
 
         async Task<DedupeResult> BuildDedupeResult(Guid messageId, CancellationToken cancellation = default)
         {
             return new DedupeResult
-            {
-                DedupeOutcome = DedupeOutcome.Deduplicated,
-                Context = await ReadContext(messageId, cancellation).ConfigureAwait(false)
-            };
+            (
+                dedupeOutcome: DedupeOutcome.Deduplicated,
+                context: await ReadContext(messageId, cancellation).ConfigureAwait(false)
+            );
         }
 
-        public async Task<DedupeResult> CommitWithDedupCheck(Guid messageId, string context)
+        public async Task<DedupeResult> CommitWithDedupCheck(Guid messageId, string? context)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
+            if (transaction == null)
+            {
+                throw new Exception($"Can only be used if the {nameof(DbTransaction)} constructor is used.");
+            }
             try
             {
                 transaction.Commit();
@@ -150,10 +154,10 @@ namespace NServiceBus.Transport.SqlServerNative
             }
 
             return new DedupeResult
-            {
-                DedupeOutcome = DedupeOutcome.Sent,
-                Context = context
-            };
+            (
+                dedupeOutcome: DedupeOutcome.Sent,
+                context: context
+            );
         }
 
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)

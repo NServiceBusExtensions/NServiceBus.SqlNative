@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace NServiceBus.Transport.SqlServerNative
 {
     public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
-        where TIncoming : IIncomingMessage
+        where TIncoming : class, IIncomingMessage
     {
         /// <summary>
         /// Creates a queue.
@@ -31,7 +31,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return Connection.DropTable(Transaction, Table, cancellation);
         }
 
-        Task InnerCreate(bool createDecodedBodyComputedColumn, string computedColumnSql, CancellationToken cancellation)
+        Task InnerCreate(bool createDecodedBodyComputedColumn, string? computedColumnSql, CancellationToken cancellation)
         {
             if (createDecodedBodyComputedColumn)
             {

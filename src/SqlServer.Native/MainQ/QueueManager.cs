@@ -6,7 +6,7 @@ namespace NServiceBus.Transport.SqlServerNative
         BaseQueueManager<IncomingMessage, OutgoingMessage>
     {
         bool dedupe;
-        Table dedupeTable;
+        Table? dedupeTable;
 
         public QueueManager(Table table, DbConnection connection) :
             base(table, connection)

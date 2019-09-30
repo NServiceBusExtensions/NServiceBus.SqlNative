@@ -7,8 +7,8 @@ namespace NServiceBus.Transport.SqlServerNative
     public abstract class MessageLoop : IDisposable
     {
         Action<Exception> errorCallback;
-        Task task;
-        CancellationTokenSource tokenSource;
+        Task? task;
+        CancellationTokenSource? tokenSource;
         TimeSpan delay;
 
         public MessageLoop(
@@ -27,25 +27,26 @@ namespace NServiceBus.Transport.SqlServerNative
             var cancellation = tokenSource.Token;
 
             task = Task.Run(async () =>
-            {
-                while (!cancellation.IsCancellationRequested)
                 {
-                    try
+                    while (!cancellation.IsCancellationRequested)
                     {
-                        await RunBatch(cancellation);
+                        try
+                        {
+                            await RunBatch(cancellation);
 
-                        await Task.Delay(delay, cancellation);
+                            await Task.Delay(delay, cancellation);
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            // noop
+                        }
+                        catch (Exception ex)
+                        {
+                            errorCallback(ex);
+                        }
                     }
-                    catch (OperationCanceledException)
-                    {
-                        // noop
-                    }
-                    catch (Exception ex)
-                    {
-                        errorCallback(ex);
-                    }
-                }
-            }, CancellationToken.None);
+                },
+                cancellation);
         }
 
         protected abstract Task RunBatch(CancellationToken cancellation);

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 namespace NServiceBus.Transport.SqlServerNative
 {
     public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
-        where TIncoming : IIncomingMessage
+        where TIncoming : class, IIncomingMessage
     {
         protected Table Table;
         protected DbConnection Connection;
-        protected DbTransaction Transaction;
+        protected DbTransaction? Transaction;
 
         protected BaseQueueManager(Table table, DbConnection connection)
         {

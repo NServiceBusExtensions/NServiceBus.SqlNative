@@ -15,11 +15,11 @@ namespace NServiceBus.Transport.SqlServerNative
         bool disposed;
         volatile int disposeSignaled;
         long rowVersion;
-        DateTime due;
+        DateTime? due;
         string headers;
-        Stream body;
+        Stream? body;
 
-        public IncomingDelayedMessage(long rowVersion, DateTime due, string headers, Stream body, IDisposable[] cleanups)
+        public IncomingDelayedMessage(long rowVersion, DateTime? due, string headers, Stream? body, IDisposable[] cleanups)
         {
             Guard.AgainstNull(cleanups, nameof(cleanups));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
@@ -39,7 +39,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public DateTime Due
+        public DateTime? Due
         {
             get
             {
@@ -57,7 +57,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public Stream Body
+        public Stream? Body
         {
             get
             {

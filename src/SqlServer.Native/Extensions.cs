@@ -27,7 +27,7 @@ static class Extensions
         corrParam.Value = value;
     }
 
-    public static void SetBinaryOrDbNull(this DbParameter corrParam, object value)
+    public static void SetBinaryOrDbNull(this DbParameter corrParam, object? value)
     {
         if (value == null)
         {
@@ -38,7 +38,7 @@ static class Extensions
         corrParam.Value = value;
     }
 
-    public static async Task ExecuteCommand(this DbConnection connection, DbTransaction transaction, string sql, CancellationToken cancellation = default)
+    public static async Task ExecuteCommand(this DbConnection connection, DbTransaction? transaction, string sql, CancellationToken cancellation = default)
     {
         Guard.AgainstNull(connection, nameof(connection));
         using (var command = connection.CreateCommand(transaction, sql))
@@ -47,7 +47,7 @@ static class Extensions
         }
     }
 
-    public static DbCommand CreateCommand(this DbConnection connection, DbTransaction transaction, string sql)
+    public static DbCommand CreateCommand(this DbConnection connection, DbTransaction? transaction, string sql)
     {
         var command = connection.CreateCommand();
         command.Transaction = transaction;
@@ -55,14 +55,35 @@ static class Extensions
         return command;
     }
 
-    public static T ValueOrNull<T>(this DbDataReader dataReader, int index)
+    public static string StringOrNull(this DbDataReader dataReader, int index)
+    {
+        //TODO:
+        //if (dataReader.IsDBNull(index))
+        //{
+        //    return default;
+        //}
+
+        return dataReader.GetFieldValue<string>(index);
+    }
+
+    public static long? LongOrNull(this DbDataReader dataReader, int index)
     {
         if (dataReader.IsDBNull(index))
         {
             return default;
         }
 
-        return dataReader.GetFieldValue<T>(index);
+        return dataReader.GetFieldValue<long>(index);
+    }
+
+    public static DateTime? DatetimeOrNull(this DbDataReader dataReader, int index)
+    {
+        if (dataReader.IsDBNull(index))
+        {
+            return default;
+        }
+
+        return dataReader.GetFieldValue<DateTime>(index);
     }
 
     public static Task<DbDataReader> ExecuteSequentialReader(this DbCommand command, CancellationToken cancellation)

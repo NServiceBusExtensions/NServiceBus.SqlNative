@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace NServiceBus.Transport.SqlServerNative
 {
     public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
-        where TIncoming : IIncomingMessage
+        where TIncoming : class, IIncomingMessage
     {
         public virtual Task<long> Send(TOutgoing message, CancellationToken cancellation = default)
         {
