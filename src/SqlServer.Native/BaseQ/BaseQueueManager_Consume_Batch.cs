@@ -14,7 +14,7 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         protected abstract DbCommand BuildConsumeCommand(int batchSize);
 
-        protected abstract TIncoming ReadMessage(DbDataReader dataReader, params IDisposable[] cleanups);
+        protected abstract TIncoming ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups);
 
         public virtual Task<IncomingResult> Consume(int size, Action<TIncoming> action, CancellationToken cancellation = default)
         {

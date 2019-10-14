@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public abstract class MessageLoop : IAsyncDisposable
+    public abstract class MessageLoop :
+        IAsyncDisposable
     {
         Action<Exception> errorCallback;
         Task? task;
