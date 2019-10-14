@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>NServiceBus.SqlServer.Deduplication</AssemblyName>
     <PackageName>NServiceBus.SqlServer.Deduplication</PackageName>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Description>Message deduplication for the SQL Server transport.</Description>
     <PackageProjectUrl>https://docs.particular.net/nuget/$(PackageId)</PackageProjectUrl>
     <DefineConstants>$(DefineConstants);SqlServerDedupe</DefineConstants>

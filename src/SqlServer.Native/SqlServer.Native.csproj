@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>NServiceBus.SqlServer.Native</AssemblyName>
     <PackageName>NServiceBus.SqlServer.Native</PackageName>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <PackageProjectUrl>https://docs.particular.net/nuget/$(PackageId)</PackageProjectUrl>
   </PropertyGroup>
   <ItemGroup>
