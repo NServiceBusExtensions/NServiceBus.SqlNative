@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
@@ -9,7 +10,7 @@ namespace NServiceBus.Transport.SqlServerNative
     /// Represents a message.
     /// </summary>
     [DebuggerDisplay("Id = {Id}, RowVersion = {RowVersion}, Expires = {Expires}")]
-    public class IncomingMessage : IIncomingMessage
+    public class IncomingMessage : IIncomingMessage, IDisposable
     {
         IDisposable[] cleanups;
         bool disposed;
@@ -85,14 +86,18 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
             if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
             {
                 return;
             }
 
-            Body?.Dispose();
+            if (Body != null)
+            {
+                await Body.DisposeAsync();
+            }
+
             disposed = true;
             if (cleanups != null)
             {
@@ -101,6 +106,11 @@ namespace NServiceBus.Transport.SqlServerNative
                     cleanup?.Dispose();
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

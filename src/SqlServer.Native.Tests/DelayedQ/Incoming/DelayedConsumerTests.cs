@@ -15,7 +15,7 @@ public class DelayedConsumerTests :
     {
         await DelayedTestDataBuilder.SendData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        using var result = await consumer.Consume();
+        await using var result = await consumer.Consume();
         ObjectApprover.Verify(result!.ToVerifyTarget());
     }
 
@@ -24,7 +24,7 @@ public class DelayedConsumerTests :
     {
         await DelayedTestDataBuilder.SendNullData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
-        using var result = await consumer.Consume();
+        await using var result = await consumer.Consume();
         ObjectApprover.Verify(result!.ToVerifyTarget());
     }
 

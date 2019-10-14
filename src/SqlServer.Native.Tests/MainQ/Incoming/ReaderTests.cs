@@ -14,7 +14,7 @@ public class ReaderTests : TestBase
     {
         await TestDataBuilder.SendData(table);
         var reader = new QueueManager(table, SqlConnection);
-        using var result = await reader.Read(1);
+        await using var result = await reader.Read(1);
         ObjectApprover.Verify(result!.ToVerifyTarget());
     }
 
@@ -23,7 +23,7 @@ public class ReaderTests : TestBase
     {
         await TestDataBuilder.SendNullData(table);
         var reader = new QueueManager(table, SqlConnection);
-        using var result = await reader.Read(1);
+        await using var result = await reader.Read(1);
         ObjectApprover.Verify(result!.ToVerifyTarget());
     }
 

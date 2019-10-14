@@ -23,7 +23,7 @@ public class MessageProcessingLoopTests : TestBase
         await SendMessages();
 
         Exception? exception = null;
-        using (var loop = new MessageProcessingLoop(
+        await using (var loop = new MessageProcessingLoop(
             table: table,
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
@@ -61,7 +61,7 @@ public class MessageProcessingLoopTests : TestBase
             return Task.CompletedTask;
         }
 
-        using (var loop = new MessageProcessingLoop(
+        await using (var loop = new MessageProcessingLoop(
             table: table,
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
@@ -98,7 +98,7 @@ public class MessageProcessingLoopTests : TestBase
             return Task.CompletedTask;
         }
 
-        using (var loop = new MessageProcessingLoop(
+        await using (var loop = new MessageProcessingLoop(
             table: table,
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,

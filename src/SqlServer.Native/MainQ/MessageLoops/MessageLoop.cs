@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public abstract class MessageLoop : IDisposable
+    public abstract class MessageLoop : IAsyncDisposable
     {
         Action<Exception> errorCallback;
         Task? task;
@@ -51,6 +51,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         protected abstract Task RunBatch(CancellationToken cancellation);
 
+        //TODO: do we need stop with async dispose
         public Task Stop()
         {
             tokenSource?.Cancel();
@@ -62,9 +63,9 @@ namespace NServiceBus.Transport.SqlServerNative
             return task;
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            Stop().GetAwaiter().GetResult();
+            await Stop();
         }
     }
 }

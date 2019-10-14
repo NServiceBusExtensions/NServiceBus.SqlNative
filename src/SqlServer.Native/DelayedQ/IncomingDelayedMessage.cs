@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
@@ -74,14 +75,18 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
             if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
             {
                 return;
             }
 
-            Body?.Dispose();
+            if (Body != null)
+            {
+                await Body.DisposeAsync();
+            }
+
             disposed = true;
             if (cleanups != null)
             {
