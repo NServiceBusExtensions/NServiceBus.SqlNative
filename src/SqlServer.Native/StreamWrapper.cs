@@ -3,7 +3,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-class StreamWrapper : Stream
+class StreamWrapper :
+    Stream
 {
     Stream inner;
 
@@ -68,6 +69,16 @@ class StreamWrapper : Stream
         return inner.BeginRead(buffer, offset, count, callback, state);
     }
 
+    public override int Read(Span<byte> buffer)
+    {
+        return inner.Read(buffer);
+    }
+
+    public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+    {
+        return inner.ReadAsync(buffer, cancellationToken);
+    }
+
     public override void Close()
     {
         inner.Close();
@@ -77,6 +88,11 @@ class StreamWrapper : Stream
     public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellation)
     {
         return inner.CopyToAsync(destination, bufferSize, cancellation);
+    }
+
+    public override void CopyTo(Stream destination, int bufferSize)
+    {
+        inner.CopyTo(destination, bufferSize);
     }
 
     public override int EndRead(IAsyncResult asyncResult)
@@ -120,6 +136,16 @@ class StreamWrapper : Stream
     }
 
     public override void WriteByte(byte value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Write(ReadOnlySpan<byte> buffer)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
