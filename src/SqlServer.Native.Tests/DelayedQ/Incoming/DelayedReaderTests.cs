@@ -14,7 +14,7 @@ public class DelayedReaderTests : TestBase
     {
         await DelayedTestDataBuilder.SendData(table);
         var reader = new DelayedQueueManager(table, SqlConnection);
-        using var result = await reader.Read(1);
+        await using var result = await reader.Read(1);
         ObjectApprover.Verify(result!.ToVerifyTarget());
     }
 
@@ -23,7 +23,7 @@ public class DelayedReaderTests : TestBase
     {
         await DelayedTestDataBuilder.SendNullData(table);
         var reader = new DelayedQueueManager(table, SqlConnection);
-        using var result = await reader.Read(1);
+        await using var result = await reader.Read(1);
         ObjectApprover.Verify(result!.ToVerifyTarget());
     }
 

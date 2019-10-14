@@ -33,9 +33,9 @@ namespace NServiceBus.Transport.SqlServerNative
             }
             finally
             {
-                if (shouldCleanup)
+                if (shouldCleanup && reader != null)
                 {
-                    reader?.Dispose();
+                    await reader.DisposeAsync();
                 }
             }
         }

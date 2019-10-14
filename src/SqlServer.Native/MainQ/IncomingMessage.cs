@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
@@ -11,7 +13,7 @@ namespace NServiceBus.Transport.SqlServerNative
     [DebuggerDisplay("Id = {Id}, RowVersion = {RowVersion}, Expires = {Expires}")]
     public class IncomingMessage : IIncomingMessage
     {
-        IDisposable[] cleanups;
+        IAsyncDisposable[] cleanups;
         bool disposed;
         volatile int disposeSignaled;
         Guid id;
@@ -20,7 +22,7 @@ namespace NServiceBus.Transport.SqlServerNative
         string headers;
         Stream? body;
 
-        public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, IDisposable[] cleanups)
+        public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, IAsyncDisposable[] cleanups)
         {
             Guard.AgainstNull(cleanups, nameof(cleanups));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
@@ -85,21 +87,22 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
             if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
             {
                 return;
             }
 
-            Body?.Dispose();
+            if (Body != null)
+            {
+                await Body.DisposeAsync();
+            }
+
             disposed = true;
             if (cleanups != null)
             {
-                foreach (var cleanup in cleanups)
-                {
-                    cleanup?.Dispose();
-                }
+                await Task.WhenAll(cleanups.Select(async x => await x.DisposeAsync()));
             }
         }
     }

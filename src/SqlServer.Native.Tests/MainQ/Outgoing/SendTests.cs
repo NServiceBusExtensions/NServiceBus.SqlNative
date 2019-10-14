@@ -29,7 +29,7 @@ public class SendTests : TestBase
         {
             var sender = new QueueManager(table, transaction);
             await sender.Send(message);
-            transaction.Commit();
+            await transaction.CommitAsync();
         }
 
         ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));

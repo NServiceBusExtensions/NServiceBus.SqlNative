@@ -24,7 +24,7 @@ public class MessageConsumingLoopTests :
         await SendMessages();
 
         Exception? exception = null;
-        using (var loop = new MessageConsumingLoop(
+        await using (var loop = new MessageConsumingLoop(
             table: table,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: (connection, message, cancellation) => Task.CompletedTask,
@@ -60,7 +60,7 @@ public class MessageConsumingLoopTests :
             return Task.CompletedTask;
         }
 
-        using (var loop = new MessageConsumingLoop(
+        await using (var loop = new MessageConsumingLoop(
             table: table,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: Callback,

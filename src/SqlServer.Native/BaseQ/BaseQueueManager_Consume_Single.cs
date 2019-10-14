@@ -17,7 +17,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 reader = await command.ExecuteSingleRowReader(cancellation);
                 if (!await reader.ReadAsync(cancellation))
                 {
-                    reader.Dispose();
+                    await reader.DisposeAsync();
                     return default;
                 }
 
@@ -30,9 +30,9 @@ namespace NServiceBus.Transport.SqlServerNative
             }
             finally
             {
-                if (shouldCleanup)
+                if (shouldCleanup && reader != null)
                 {
-                    reader?.Dispose();
+                    await reader.DisposeAsync();
                 }
             }
         }

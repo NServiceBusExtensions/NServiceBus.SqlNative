@@ -31,7 +31,7 @@ where RowVersion >= @RowVersion
 order by RowVersion
 ");
 
-        protected override IncomingMessage ReadMessage(DbDataReader dataReader, params IDisposable[] cleanups)
+        protected override IncomingMessage ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups)
         {
             var id = dataReader.GetGuid(0);
             var rowVersion = dataReader.GetInt64(1);

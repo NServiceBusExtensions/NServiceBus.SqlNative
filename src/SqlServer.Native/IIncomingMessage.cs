@@ -2,7 +2,7 @@
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public interface IIncomingMessage : IDisposable
+    public interface IIncomingMessage : IAsyncDisposable
     {
         long RowVersion { get; }
     }

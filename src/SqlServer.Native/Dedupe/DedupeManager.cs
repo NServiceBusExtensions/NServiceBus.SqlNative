@@ -137,7 +137,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
             try
             {
-                transaction.Commit();
+                await transaction.CommitAsync();
             }
             catch (SqlException sqlException)
             {

@@ -30,7 +30,7 @@ where RowVersion >= @RowVersion
 order by RowVersion
 ");
 
-        protected override IncomingDelayedMessage ReadMessage(DbDataReader dataReader, params IDisposable[] cleanups)
+        protected override IncomingDelayedMessage ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups)
         {
             var rowVersion = dataReader.GetInt64(0);
             var due = dataReader.DatetimeOrNull(1);

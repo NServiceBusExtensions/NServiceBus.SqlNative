@@ -76,18 +76,25 @@ namespace NServiceBus.Transport.SqlServerNative
                 {
                     await RunBatch(consumer, message => transactionCallback!(transaction, message, cancellation), cancellation);
 
-                    transaction.Commit();
+                    await transaction.CommitAsync(cancellation);
                 }
                 catch
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync(cancellation);
                     throw;
                 }
             }
             finally
             {
-                transaction?.Dispose();
-                connection?.Dispose();
+                if (transaction != null)
+                {
+                    await transaction.DisposeAsync();
+                }
+
+                if (connection != null)
+                {
+                    await connection.DisposeAsync();
+                }
             }
         }
 

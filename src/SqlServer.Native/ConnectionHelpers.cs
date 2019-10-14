@@ -26,7 +26,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
             catch
             {
-                connection.Dispose();
+                await connection.DisposeAsync();
                 throw;
             }
         }
