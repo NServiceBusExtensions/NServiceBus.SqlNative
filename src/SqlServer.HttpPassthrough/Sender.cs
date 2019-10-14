@@ -45,7 +45,7 @@ class Sender
         await using var connection = await connectionFunc(cancellation);
         await using var transaction = connection.BeginTransaction();
         var rowVersion = await SendInsideTransaction(message, destination, cancellation, transaction);
-        transaction.Commit();
+        await transaction.CommitAsync(cancellation);
         return rowVersion;
     }
 
