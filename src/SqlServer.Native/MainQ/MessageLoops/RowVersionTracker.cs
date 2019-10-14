@@ -48,7 +48,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         async Task Save(DbConnection connection, DbTransaction? transaction, long rowVersion, CancellationToken cancellation)
         {
-            using var command = connection.CreateCommand(
+            await using var command = connection.CreateCommand(
                 transaction: transaction,
                 sql: $@"
 update {table}
@@ -68,7 +68,7 @@ if @@rowcount = 0
         public async Task<long> Get(DbConnection connection, CancellationToken cancellation = default)
         {
             Guard.AgainstNull(connection, nameof(connection));
-            using var command = connection.CreateCommand();
+            await using var command = connection.CreateCommand();
             command.CommandText = $@"
 select top (1) RowVersion
 from {table}";

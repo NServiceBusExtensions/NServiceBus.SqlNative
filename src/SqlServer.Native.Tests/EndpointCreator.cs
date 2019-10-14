@@ -7,7 +7,7 @@ static class EndpointCreator
 {
     public static async Task<EndpointConfiguration> Create(string endpointName)
     {
-        using (var connection = Connection.OpenConnection())
+        await using (var connection = Connection.OpenConnection())
         {
             var manager = new QueueManager(endpointName, connection);
             await manager.Create();

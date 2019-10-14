@@ -19,7 +19,7 @@ public class HttpPassthroughIntegrationTests :
     [Fact]
     public async Task Integration()
     {
-        using (var connection = Connection.OpenConnection())
+        await using (var connection = Connection.OpenConnection())
         {
             var manager = new DedupeManager(connection, "Deduplication");
             await manager.Create();

@@ -41,7 +41,7 @@ static class Extensions
     public static async Task ExecuteCommand(this DbConnection connection, DbTransaction? transaction, string sql, CancellationToken cancellation = default)
     {
         Guard.AgainstNull(connection, nameof(connection));
-        using var command = connection.CreateCommand(transaction, sql);
+        await using var command = connection.CreateCommand(transaction, sql);
         await command.ExecuteNonQueryAsync(cancellation);
     }
 

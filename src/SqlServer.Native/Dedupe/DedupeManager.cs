@@ -77,7 +77,7 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 contextParam.Value = context;
             }
-            
+
             parameters.Add(contextParam);
             return command;
         }
@@ -85,7 +85,7 @@ namespace NServiceBus.Transport.SqlServerNative
         public async Task<string?> ReadContext(Guid messageId, CancellationToken cancellation = default)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
-            using var command = BuildReadCommand(messageId);
+            await using var command = BuildReadCommand(messageId);
             var o = await command.ExecuteScalarAsync(cancellation);
             if (o == DBNull.Value)
             {
@@ -99,7 +99,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstEmpty(messageId, nameof(messageId));
             try
             {
-                using var command = BuildWriteCommand(messageId, context);
+                await using var command = BuildWriteCommand(messageId, context);
                 await command.ExecuteNonQueryAsync(cancellation);
             }
             catch (SqlException sqlException)
@@ -158,7 +158,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)
         {
-            using var command = connection.CreateCommand();
+            await using var command = connection.CreateCommand();
             command.Transaction = transaction;
             command.CommandText = $"delete from {table} where Created < @date";
             var parameter = command.CreateParameter();
@@ -171,7 +171,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public virtual async Task PurgeItems(CancellationToken cancellation = default)
         {
-            using var command = connection.CreateCommand();
+            await using var command = connection.CreateCommand();
             command.Transaction = transaction;
             command.CommandText = $"delete from {table}";
             await command.ExecuteNonQueryAsync(cancellation);

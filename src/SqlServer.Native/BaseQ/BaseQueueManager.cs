@@ -33,7 +33,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             var count = 0;
             long? lastRowVersion = null;
-            using (var reader = await command.ExecuteSequentialReader(cancellation))
+            await using (var reader = await command.ExecuteSequentialReader(cancellation))
             {
                 while (await reader.ReadAsync(cancellation))
                 {

@@ -38,8 +38,8 @@ class SendBehavior :
 
         transportTransaction = new TransportTransaction();
         context.Extensions.Set(transportTransaction);
-        using var connection = await connectionTask;
-        using var transaction = connection.BeginTransaction();
+        await using var connection = await connectionTask;
+        await using var transaction = connection.BeginTransaction();
         transportTransaction.Set(connection);
         transportTransaction.Set(transaction);
 

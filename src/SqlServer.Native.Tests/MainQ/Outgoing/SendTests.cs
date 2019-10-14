@@ -25,7 +25,7 @@ public class SendTests : TestBase
     public async Task Single_with_transaction()
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
-        using (var transaction = SqlConnection.BeginTransaction())
+        await using (var transaction = SqlConnection.BeginTransaction())
         {
             var sender = new QueueManager(table, transaction);
             await sender.Send(message);

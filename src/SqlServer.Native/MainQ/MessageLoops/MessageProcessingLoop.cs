@@ -72,7 +72,7 @@ namespace NServiceBus.Transport.SqlServerNative
             DbConnection? connection = null;
             if (connectionBuilder != null)
             {
-                using (connection = await connectionBuilder(cancellation))
+                await using (connection = await connectionBuilder(cancellation))
                 {
                     var reader = new QueueManager(table, connection);
                     await RunBatch(

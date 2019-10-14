@@ -26,7 +26,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNull(func, nameof(func));
-            using var command = BuildConsumeCommand(size);
+            await using var command = BuildConsumeCommand(size);
             return await ReadMultiple(command, func, cancellation);
         }
     }

@@ -9,7 +9,7 @@ static class DelayedTestDataBuilder
 
     public static async Task SendData(string table)
     {
-        using var connection = Connection.OpenConnection();
+        await using var connection = Connection.OpenConnection();
         var sender = new DelayedQueueManager(table, connection);
 
         var message = BuildMessage();
@@ -18,7 +18,7 @@ static class DelayedTestDataBuilder
 
     public static async Task SendNullData(string table)
     {
-        using var connection = Connection.OpenConnection();
+        await using var connection = Connection.OpenConnection();
         var sender = new DelayedQueueManager(table, connection);
 
         var message = BuildNullMessage();
@@ -27,7 +27,7 @@ static class DelayedTestDataBuilder
 
     public static async Task SendMultipleData(string table)
     {
-        using var connection = Connection.OpenConnection();
+        await using var connection = Connection.OpenConnection();
         var sender = new DelayedQueueManager(table, connection);
         var time = dateTime;
         await sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}")));

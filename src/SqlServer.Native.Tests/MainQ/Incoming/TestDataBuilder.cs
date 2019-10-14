@@ -10,7 +10,7 @@ static class TestDataBuilder
 
     public static async Task SendData(string table)
     {
-        using var connection = Connection.OpenConnection();
+        await using var connection = Connection.OpenConnection();
         var sender = new QueueManager(table, connection);
 
         var message = BuildMessage("00000000-0000-0000-0000-000000000001");
@@ -18,7 +18,7 @@ static class TestDataBuilder
     }
     public static async Task SendNullData(string table)
     {
-        using var connection = Connection.OpenConnection();
+        await using var connection = Connection.OpenConnection();
         var sender = new QueueManager(table, connection);
 
         var message = BuildNullMessage("00000000-0000-0000-0000-000000000001");
@@ -26,7 +26,7 @@ static class TestDataBuilder
     }
     public static async Task SendMultipleDataAsync(string table)
     {
-        using var connection = Connection.OpenConnection();
+        await using var connection = Connection.OpenConnection();
         var sender = new QueueManager(table, connection);
         await sender.Send(new List<OutgoingMessage>
         {
