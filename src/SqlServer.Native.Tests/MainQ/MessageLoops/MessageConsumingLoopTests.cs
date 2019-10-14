@@ -24,17 +24,14 @@ public class MessageConsumingLoopTests :
         await SendMessages();
 
         Exception? exception = null;
-        await using (var loop = new MessageConsumingLoop(
+        await using var loop = new MessageConsumingLoop(
             table: table,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: (connection, message, cancellation) => Task.CompletedTask,
-            errorCallback: innerException => { exception = innerException;}
-            ))
-        {
-            loop.Start();
-            Thread.Sleep(1000);
-        }
-
+            errorCallback: innerException => { exception = innerException; }
+        );
+        loop.Start();
+        Thread.Sleep(1000);
         Assert.Null(exception!);
     }
 
@@ -60,16 +57,13 @@ public class MessageConsumingLoopTests :
             return Task.CompletedTask;
         }
 
-        await using (var loop = new MessageConsumingLoop(
+        await using var loop = new MessageConsumingLoop(
             table: table,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: Callback,
-            errorCallback: exception => { }))
-        {
-            loop.Start();
-            resetEvent.WaitOne(TimeSpan.FromSeconds(30));
-        }
-
+            errorCallback: exception => { });
+        loop.Start();
+        resetEvent.WaitOne(TimeSpan.FromSeconds(30));
         Assert.Equal(5, count);
     }
 

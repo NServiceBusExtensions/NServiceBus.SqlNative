@@ -23,19 +23,16 @@ public class MessageProcessingLoopTests : TestBase
         await SendMessages();
 
         Exception? exception = null;
-        await using (var loop = new MessageProcessingLoop(
+        await using var loop = new MessageProcessingLoop(
             table: table,
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: (connection, message, cancellation) => Task.CompletedTask,
             errorCallback: innerException => { exception = innerException; },
             persistRowVersion: (connection, currentRowVersion, token) => Task.CompletedTask
-        ))
-        {
-            loop.Start();
-            Thread.Sleep(1000);
-        }
-
+        );
+        loop.Start();
+        Thread.Sleep(1000);
         Assert.Null(exception!);
     }
 
@@ -61,18 +58,15 @@ public class MessageProcessingLoopTests : TestBase
             return Task.CompletedTask;
         }
 
-        await using (var loop = new MessageProcessingLoop(
+        await using var loop = new MessageProcessingLoop(
             table: table,
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: Callback,
             errorCallback: exception => { },
-            persistRowVersion: (connection, currentRowVersion, token) => Task.CompletedTask))
-        {
-            loop.Start();
-            resetEvent.WaitOne(TimeSpan.FromSeconds(30));
-        }
-
+            persistRowVersion: (connection, currentRowVersion, token) => Task.CompletedTask);
+        loop.Start();
+        resetEvent.WaitOne(TimeSpan.FromSeconds(30));
         Assert.Equal(5, count);
     }
 
@@ -98,18 +92,15 @@ public class MessageProcessingLoopTests : TestBase
             return Task.CompletedTask;
         }
 
-        await using (var loop = new MessageProcessingLoop(
+        await using var loop = new MessageProcessingLoop(
             table: table,
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: (collection, message, cancellation) => Task.CompletedTask,
             errorCallback: exception => { },
-            persistRowVersion: PersistRowVersion))
-        {
-            loop.Start();
-            resetEvent.WaitOne(TimeSpan.FromSeconds(30));
-        }
-
+            persistRowVersion: PersistRowVersion);
+        loop.Start();
+        resetEvent.WaitOne(TimeSpan.FromSeconds(30));
         Assert.Equal(6, rowVersion);
     }
 
