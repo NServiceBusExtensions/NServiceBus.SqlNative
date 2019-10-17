@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Features;
@@ -17,7 +20,7 @@ class Program
         var configuration = new EndpointConfiguration("SampleEndpoint");
         configuration.EnableInstallers();
         configuration.UsePersistence<LearningPersistence>();
-        configuration.EnableDedupe(connection);
+        configuration.EnableDedupe(ConnectionBuilder);
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<MessageDrivenSubscriptions>();
         configuration.DisableFeature<TimeoutManager>();
@@ -31,6 +34,21 @@ class Program
         await SendMessages(endpoint);
         Console.ReadKey(true);
         await endpoint.Stop();
+    }
+
+    static async Task<DbConnection> ConnectionBuilder(CancellationToken cancellation)
+    {
+        var sqlConnection = new SqlConnection(connection);
+        try
+        {
+            await sqlConnection.OpenAsync(cancellation);
+            return sqlConnection;
+        }
+        catch
+        {
+            await sqlConnection.DisposeAsync();
+            throw;
+        }
     }
 
     static async Task SendMessages(IEndpointInstance endpoint)
@@ -48,5 +66,19 @@ class Program
         var options = new SendOptions();
         options.RouteToThisEndpoint();
         return endpoint.SendWithDedupe(guid, message, options);
+    }
+    static async Task<DbConnection> OpenConnection(string connectionString, CancellationToken cancellation)
+    {
+        var connection = new SqlConnection(connectionString);
+        try
+        {
+            await connection.OpenAsync(cancellation);
+            return connection;
+        }
+        catch
+        {
+            await connection.DisposeAsync();
+            throw;
+        }
     }
 }
