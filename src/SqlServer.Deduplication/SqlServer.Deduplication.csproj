@@ -18,6 +18,7 @@
     <PackageReference Include="ConfigureAwait.Fody" Version="3.2.0" PrivateAssets="All" />
     <PackageReference Include="Fody" Version="6.0.0" PrivateAssets="All" />
     <PackageReference Include="NServiceBus" Version="7.1.10" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
     <PackageReference Include="NServiceBus.SqlServer" Version="4.3.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
     <PackageReference Include="ProjectDefaults" Version="1.0.26" PrivateAssets="All" />
