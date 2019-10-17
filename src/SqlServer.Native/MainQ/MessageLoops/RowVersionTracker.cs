@@ -27,9 +27,9 @@ namespace NServiceBus.Transport.SqlServerNative
             return CreateTable(transaction.Connection, transaction, cancellation);
         }
 
-        Task CreateTable(DbConnection sqlConnection, DbTransaction? transaction, CancellationToken cancellation)
+        Task CreateTable(DbConnection connection, DbTransaction? transaction, CancellationToken cancellation)
         {
-            return sqlConnection.ExecuteCommand(transaction, string.Format(Sql, table), cancellation);
+            return connection.ExecuteCommand(transaction, string.Format(Sql, table), cancellation);
         }
 
         public Task Save(DbConnection connection, long rowVersion, CancellationToken cancellation = default)
