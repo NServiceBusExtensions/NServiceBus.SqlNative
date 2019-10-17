@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 #if (SqlServerDedupe)
@@ -102,7 +101,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 await using var command = BuildWriteCommand(messageId, context);
                 await command.ExecuteNonQueryAsync(cancellation);
             }
-            catch (SqlException sqlException)
+            catch (DbException sqlException)
             {
                 if (sqlException.IsKeyViolation())
                 {
@@ -139,7 +138,7 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 await transaction.CommitAsync();
             }
-            catch (SqlException sqlException)
+            catch (DbException sqlException)
             {
                 if (sqlException.IsKeyViolation())
                 {
