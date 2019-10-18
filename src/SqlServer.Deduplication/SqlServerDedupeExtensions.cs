@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Configuration.AdvancedExtensibility;
@@ -13,17 +12,6 @@ namespace NServiceBus
     /// </summary>
     public static class SqlServerDedupeExtensions
     {
-        /// <summary>
-        /// Enable SQL attachments for this endpoint.
-        /// </summary>
-        public static DedupeSettings EnableDedupe(
-            this EndpointConfiguration configuration,
-            string connection)
-        {
-            Guard.AgainstNullOrEmpty(connection, nameof(connection));
-            return EnableDedupe(configuration, cancellation => OpenConnection(connection, cancellation));
-        }
-
         /// <summary>
         /// Enable SQL attachments for this endpoint.
         /// </summary>
@@ -90,21 +78,6 @@ namespace NServiceBus
                 dedupeOutcome: pipelineState.DedupeOutcome,
                 context: pipelineState.Context
             );
-        }
-
-        static async Task<DbConnection> OpenConnection(string connectionString, CancellationToken cancellation)
-        {
-            var connection = new SqlConnection(connectionString);
-            try
-            {
-                await connection.OpenAsync(cancellation);
-                return connection;
-            }
-            catch
-            {
-                await connection.DisposeAsync();
-                throw;
-            }
         }
     }
 }

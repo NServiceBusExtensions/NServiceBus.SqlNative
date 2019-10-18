@@ -51,7 +51,7 @@ public class DedupeIntegrationTests :
         var configuration = new EndpointConfiguration(nameof(DedupeIntegrationTests));
         configuration.UsePersistence<LearningPersistence>();
         configuration.EnableInstallers();
-        configuration.EnableDedupe(Connection.ConnectionString);
+        configuration.EnableDedupe(Connection.OpenAsyncConnection);
         configuration.PurgeOnStartup(true);
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<TimeoutManager>();

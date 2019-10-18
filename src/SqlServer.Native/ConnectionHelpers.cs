@@ -1,5 +1,4 @@
 ﻿using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,36 +8,8 @@ namespace NServiceBus.Transport.SqlServerDeduplication
 namespace NServiceBus.Transport.SqlServerNative
 #endif
 {
-    /// <summary>
-    /// ConnectionHelpers.
-    /// </summary>
-    public static class ConnectionHelpers
+    static class ConnectionHelpers
     {
-        public static async Task<DbConnection> OpenConnection(string connectionString, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNullOrEmpty(connectionString, nameof(connectionString));
-
-            var connection = new SqlConnection(connectionString);
-            try
-            {
-                await connection.OpenAsync(cancellation);
-                return connection;
-            }
-            catch
-            {
-                await connection.DisposeAsync();
-                throw;
-            }
-        }
-
-        public static async Task<DbTransaction> BeginTransaction(string connectionString, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNullOrEmpty(connectionString, nameof(connectionString));
-
-            var connection = await OpenConnection(connectionString, cancellation);
-            return connection.BeginTransaction();
-        }
-
         internal static string WrapInNoCount(string sql)
         {
             return $@"
