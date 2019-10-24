@@ -16,11 +16,11 @@ static class EndpointCreator
         var configuration = new EndpointConfiguration(endpointName);
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
+        transport.DisablePublishing();
         configuration.DisableFeature<TimeoutManager>();
         configuration.PurgeOnStartup(true);
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftSerializer>();
-        configuration.DisableFeature<MessageDrivenSubscriptions>();
         return configuration;
     }
 }

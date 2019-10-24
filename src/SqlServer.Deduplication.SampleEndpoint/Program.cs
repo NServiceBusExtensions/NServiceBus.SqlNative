@@ -22,7 +22,6 @@ class Program
         configuration.UsePersistence<LearningPersistence>();
         configuration.EnableDedupe(ConnectionBuilder);
         configuration.UseSerialization<NewtonsoftSerializer>();
-        configuration.DisableFeature<MessageDrivenSubscriptions>();
         configuration.DisableFeature<TimeoutManager>();
         configuration.PurgeOnStartup(true);
         var transport = configuration.UseTransport<SqlServerTransport>();

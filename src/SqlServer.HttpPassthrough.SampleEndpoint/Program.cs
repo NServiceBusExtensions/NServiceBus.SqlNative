@@ -13,7 +13,6 @@ class Program
         var attachments = configuration.EnableAttachments(async () => await Connection.OpenAsyncConnection(), TimeToKeep.Default);
         attachments.UseTransportConnectivity();
         configuration.UseSerialization<NewtonsoftSerializer>();
-        configuration.DisableFeature<MessageDrivenSubscriptions>();
         configuration.DisableFeature<TimeoutManager>();
         configuration.PurgeOnStartup(true);
         var transport = configuration.UseTransport<SqlServerTransport>();

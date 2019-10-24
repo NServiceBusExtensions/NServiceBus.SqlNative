@@ -55,13 +55,13 @@ public class DedupeIntegrationTests :
         configuration.PurgeOnStartup(true);
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.DisableFeature<TimeoutManager>();
-        configuration.DisableFeature<MessageDrivenSubscriptions>();
 
         var attachments = configuration.EnableAttachments(async () => await Connection.OpenAsyncConnection(), TimeToKeep.Default);
         attachments.UseTransportConnectivity();
 
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
+        transport.DisablePublishing();
         return Endpoint.Start(configuration);
     }
 
