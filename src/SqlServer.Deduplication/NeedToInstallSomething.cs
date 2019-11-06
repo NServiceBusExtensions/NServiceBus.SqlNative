@@ -5,7 +5,8 @@ using NServiceBus.Installation;
 using NServiceBus.Settings;
 using NServiceBus.Transport.SqlServerDeduplication;
 
-class NeedToInstallSomething : INeedToInstallSomething
+class NeedToInstallSomething :
+    INeedToInstallSomething
 {
     DedupeSettings settings;
 

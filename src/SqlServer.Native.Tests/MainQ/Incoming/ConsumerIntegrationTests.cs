@@ -4,7 +4,8 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class ConsumerIntegrationTests : TestBase
+public class ConsumerIntegrationTests :
+    TestBase
 {
     static string table = "IntegrationConsumer_Consumer";
 
@@ -30,11 +31,13 @@ public class ConsumerIntegrationTests : TestBase
         return endpoint.Send(new SendMessage(), sendOptions);
     }
 
-    class SendMessage : IMessage
+    class SendMessage :
+        IMessage
     {
     }
 
-    public ConsumerIntegrationTests(ITestOutputHelper output) : base(output)
+    public ConsumerIntegrationTests(ITestOutputHelper output) :
+        base(output)
     {
     }
 }

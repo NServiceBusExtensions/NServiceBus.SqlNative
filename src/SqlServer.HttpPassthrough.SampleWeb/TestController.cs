@@ -1,7 +1,8 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Mvc;
 
-public class TestController : ControllerBase
+public class TestController :
+    ControllerBase
 {
     [HttpGet]
     [Route("test")]

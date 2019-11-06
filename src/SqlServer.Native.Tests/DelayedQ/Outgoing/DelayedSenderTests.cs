@@ -7,7 +7,8 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class DelayedSenderTests : TestBase
+public class DelayedSenderTests :
+    TestBase
 {
     string table = "DelayedSenderTests";
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
@@ -105,7 +106,8 @@ public class DelayedSenderTests : TestBase
         return new OutgoingDelayedMessage(dateTime, null, bodyStream: null);
     }
 
-    public DelayedSenderTests(ITestOutputHelper output) : base(output)
+    public DelayedSenderTests(ITestOutputHelper output) :
+        base(output)
     {
         var manager = new DelayedQueueManager(table, SqlConnection);
         manager.Drop().Await();

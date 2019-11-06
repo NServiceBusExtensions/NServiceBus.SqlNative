@@ -6,7 +6,8 @@ using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Transport.SqlServerDeduplication;
 
-class PurgeTask : FeatureStartupTask
+class PurgeTask :
+    FeatureStartupTask
 {
     Table table;
     Func<CancellationToken, Task<DbConnection>> connectionBuilder;

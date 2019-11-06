@@ -59,7 +59,8 @@ public class CleanerTests :
         Assert.False(criticalActionTriggered);
     }
 
-    class FakeTimer : AsyncTimer
+    class FakeTimer :
+        AsyncTimer
     {
         public Task Tick(DateTime utcTime, CancellationToken token)
         {

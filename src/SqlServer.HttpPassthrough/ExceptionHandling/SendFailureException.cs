@@ -5,7 +5,8 @@ namespace NServiceBus.SqlServer.HttpPassthrough
     /// <summary>
     /// Thrown when <see cref="ISqlPassthrough.Send"/> fails to send.
     /// </summary>
-    public class SendFailureException : Exception
+    public class SendFailureException :
+        Exception
     {
         /// <summary>
         /// The <see cref="HttpPassthrough.PassthroughMessage "/> that was attempted to send.

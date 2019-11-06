@@ -8,12 +8,14 @@ namespace NServiceBus.SqlServer.HttpPassthrough
     /// Can optionally be caught, but using <see cref="ConfigurationExtensions.AddSqlHttpPassthroughBadRequestMiddleware"/>,
     /// and converted to a <see cref="HttpStatusCode.BadRequest"/> to be returned to the client.
     /// </summary>
-    public class BadRequestException : Exception
+    public class BadRequestException :
+        Exception
     {
         /// <summary>
         /// Initializes a new instance of <see cref="BadRequestException"/>.
         /// </summary>
-        public BadRequestException(string message) : base(message)
+        public BadRequestException(string message) :
+            base(message)
         {
         }
     }

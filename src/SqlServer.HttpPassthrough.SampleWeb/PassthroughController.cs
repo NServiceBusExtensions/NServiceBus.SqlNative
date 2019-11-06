@@ -6,7 +6,8 @@ using NServiceBus.SqlServer.HttpPassthrough;
 
 [Authorize]
 [Route("SendMessage")]
-public class PassthroughController : ControllerBase
+public class PassthroughController :
+    ControllerBase
 {
     ISqlPassthrough sender;
 

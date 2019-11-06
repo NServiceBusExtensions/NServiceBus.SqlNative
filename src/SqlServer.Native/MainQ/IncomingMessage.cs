@@ -11,7 +11,8 @@ namespace NServiceBus.Transport.SqlServerNative
     /// Represents a message.
     /// </summary>
     [DebuggerDisplay("Id = {Id}, RowVersion = {RowVersion}, Expires = {Expires}")]
-    public class IncomingMessage : IIncomingMessage
+    public class IncomingMessage :
+        IIncomingMessage
     {
         IAsyncDisposable[] cleanups;
         bool disposed;

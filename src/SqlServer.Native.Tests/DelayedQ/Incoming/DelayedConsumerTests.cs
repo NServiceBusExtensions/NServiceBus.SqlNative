@@ -42,7 +42,8 @@ public class DelayedConsumerTests :
         ObjectApprover.Verify(messages.OrderBy(x => x.Due));
     }
 
-    public DelayedConsumerTests(ITestOutputHelper output) : base(output)
+    public DelayedConsumerTests(ITestOutputHelper output) :
+        base(output)
     {
         var manager = new DelayedQueueManager(table, SqlConnection);
         manager.Drop().Await();

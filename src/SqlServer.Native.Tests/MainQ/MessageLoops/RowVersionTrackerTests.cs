@@ -3,9 +3,11 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class RowVersionTrackerTests : TestBase
+public class RowVersionTrackerTests :
+    TestBase
 {
-    public RowVersionTrackerTests(ITestOutputHelper output) : base(output)
+    public RowVersionTrackerTests(ITestOutputHelper output) :
+        base(output)
     {
     }
 

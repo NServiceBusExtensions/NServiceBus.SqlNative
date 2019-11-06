@@ -5,7 +5,8 @@ using NServiceBus.SqlServer.HttpPassthrough;
 using Xunit;
 using Xunit.Abstractions;
 
-public class ClaimsAppenderTests : TestBase
+public class ClaimsAppenderTests :
+    TestBase
 {
     [Fact]
     public void Append()
@@ -38,7 +39,8 @@ public class ClaimsAppenderTests : TestBase
         yield return new Claim(ClaimTypes.NameIdentifier, "User2");
     }
 
-    public ClaimsAppenderTests(ITestOutputHelper output) : base(output)
+    public ClaimsAppenderTests(ITestOutputHelper output) :
+        base(output)
     {
     }
 }

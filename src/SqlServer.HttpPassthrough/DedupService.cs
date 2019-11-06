@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using NServiceBus.Transport.SqlServerNative;
 
-class DedupService : IHostedService
+class DedupService :
+    IHostedService
 {
     Table table;
     Func<CancellationToken, Task<DbConnection>> connectionBuilder;

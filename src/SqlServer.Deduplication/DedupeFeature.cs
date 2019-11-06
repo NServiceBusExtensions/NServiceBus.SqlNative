@@ -1,7 +1,8 @@
 ﻿using NServiceBus;
 using NServiceBus.Features;
 
-class DeduplicationFeature : Feature
+class DeduplicationFeature :
+    Feature
 {
     protected override void Setup(FeatureConfigurationContext context)
     {

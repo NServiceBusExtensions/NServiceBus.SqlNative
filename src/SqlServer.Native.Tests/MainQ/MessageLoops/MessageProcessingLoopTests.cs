@@ -8,7 +8,8 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class MessageProcessingLoopTests : TestBase
+public class MessageProcessingLoopTests :
+    TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
@@ -123,7 +124,8 @@ public class MessageProcessingLoopTests : TestBase
         return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
-    public MessageProcessingLoopTests(ITestOutputHelper output) : base(output)
+    public MessageProcessingLoopTests(ITestOutputHelper output) :
+        base(output)
     {
     }
 }

@@ -7,7 +7,8 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class SendTests : TestBase
+public class SendTests :
+    TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
@@ -116,7 +117,8 @@ public class SendTests : TestBase
         return new OutgoingMessage(new Guid(guid), bodyBytes: null);
     }
 
-    public SendTests(ITestOutputHelper output) : base(output)
+    public SendTests(ITestOutputHelper output) :
+        base(output)
     {
         var manager = new QueueManager(table, SqlConnection);
         manager.Drop().Await();

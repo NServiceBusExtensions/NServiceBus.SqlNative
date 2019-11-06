@@ -6,7 +6,8 @@ using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Transport.SqlServerDeduplication;
 
-class CleanupTask : FeatureStartupTask
+class CleanupTask :
+    FeatureStartupTask
 {
     Table table;
     CriticalError criticalError;

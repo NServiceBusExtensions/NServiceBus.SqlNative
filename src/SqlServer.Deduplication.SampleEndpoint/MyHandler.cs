@@ -2,7 +2,8 @@
 using NServiceBus;
 using SampleNamespace;
 
-class MyHandler : IHandleMessages<SampleMessage>
+class MyHandler :
+    IHandleMessages<SampleMessage>
 {
     public Task Handle(SampleMessage message, IMessageHandlerContext context)
     {

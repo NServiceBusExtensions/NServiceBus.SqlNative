@@ -9,7 +9,8 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class HttpPassthroughDedupTests : TestBase
+public class HttpPassthroughDedupTests :
+    TestBase
 {
     static int count;
     [Fact]
@@ -61,7 +62,8 @@ public class HttpPassthroughDedupTests : TestBase
         return await Endpoint.Start(configuration);
     }
 
-    class Handler : IHandleMessages<DedupMessage>
+    class Handler :
+        IHandleMessages<DedupMessage>
     {
         public Task Handle(DedupMessage message, IMessageHandlerContext context)
         {
@@ -70,10 +72,12 @@ public class HttpPassthroughDedupTests : TestBase
         }
     }
 
-    public HttpPassthroughDedupTests(ITestOutputHelper output) : base(output)
+    public HttpPassthroughDedupTests(ITestOutputHelper output) :
+        base(output)
     {
     }
 }
-class DedupMessage : IMessage
+class DedupMessage :
+    IMessage
 {
 }

@@ -5,7 +5,8 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class DelayedReaderTests : TestBase
+public class DelayedReaderTests :
+    TestBase
 {
     string table = "DelayedReaderTests";
 
@@ -43,7 +44,8 @@ public class DelayedReaderTests : TestBase
         ObjectApprover.Verify(messages.OrderBy(x => x.Due));
     }
 
-    public DelayedReaderTests(ITestOutputHelper output) : base(output)
+    public DelayedReaderTests(ITestOutputHelper output) :
+        base(output)
     {
         var manager = new DelayedQueueManager(table, SqlConnection);
         manager.Drop().Await();

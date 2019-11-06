@@ -5,7 +5,8 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class ReaderTests : TestBase
+public class ReaderTests :
+    TestBase
 {
     string table = "ReaderTests";
 
@@ -56,7 +57,8 @@ public class ReaderTests : TestBase
         ObjectApprover.Verify(messages.OrderBy(x => x.Id));
     }
 
-    public ReaderTests(ITestOutputHelper output) : base(output)
+    public ReaderTests(ITestOutputHelper output) :
+        base(output)
     {
         var manager = new QueueManager(table, SqlConnection);
         manager.Drop().Await();

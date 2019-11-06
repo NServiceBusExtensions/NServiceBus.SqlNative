@@ -24,14 +24,14 @@ namespace NServiceBus.Transport.SqlServerNative
             }
         }
 
-        public OutgoingDelayedMessage(DateTime due, string? headers, byte[]? bodyBytes)
-            : this(due, headers)
+        public OutgoingDelayedMessage(DateTime due, string? headers, byte[]? bodyBytes) :
+            this(due, headers)
         {
             Body = bodyBytes;
         }
 
-        public OutgoingDelayedMessage(DateTime due, string? headers, Stream? bodyStream)
-            : this(due, headers)
+        public OutgoingDelayedMessage(DateTime due, string? headers, Stream? bodyStream) :
+            this(due, headers)
         {
             Body = bodyStream;
         }

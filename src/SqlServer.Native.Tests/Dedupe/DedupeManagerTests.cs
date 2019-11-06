@@ -6,7 +6,8 @@ using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
 
-public class DedupeManagerTests : TestBase
+public class DedupeManagerTests :
+    TestBase
 {
     static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
@@ -38,7 +39,8 @@ public class DedupeManagerTests : TestBase
         return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
-    public DedupeManagerTests(ITestOutputHelper output) : base(output)
+    public DedupeManagerTests(ITestOutputHelper output) :
+        base(output)
     {
         var manager = new QueueManager(table, SqlConnection, "Deduplication");
         manager.Drop().Await();

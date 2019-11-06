@@ -53,7 +53,7 @@ public class SendIntegration :
         }
     }
 
-    class SendMessage : 
+    class SendMessage :
         IMessage
     {
     }

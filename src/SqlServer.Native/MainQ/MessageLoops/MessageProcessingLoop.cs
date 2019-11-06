@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace NServiceBus.Transport.SqlServerNative
 {
-    public class MessageProcessingLoop : MessageLoop
+    public class MessageProcessingLoop :
+        MessageLoop
     {
         string table;
         long startingRow;
@@ -25,8 +26,8 @@ namespace NServiceBus.Transport.SqlServerNative
             Action<Exception> errorCallback,
             Func<DbTransaction, long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
-            TimeSpan? delay = null)
-            : base(errorCallback, delay)
+            TimeSpan? delay = null) :
+            base(errorCallback, delay)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNegativeAndZero(startingRow, nameof(startingRow));
@@ -50,8 +51,8 @@ namespace NServiceBus.Transport.SqlServerNative
             Action<Exception> errorCallback,
             Func<DbConnection, long, CancellationToken, Task> persistRowVersion,
             int batchSize = 10,
-            TimeSpan? delay = null)
-            : base(errorCallback, delay)
+            TimeSpan? delay = null) :
+            base(errorCallback, delay)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNegativeAndZero(startingRow, nameof(startingRow));

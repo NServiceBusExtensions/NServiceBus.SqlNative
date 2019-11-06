@@ -7,7 +7,8 @@ using Microsoft.Extensions.Logging;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 
-class SqlPassthrough : ISqlPassthrough
+class SqlPassthrough :
+    ISqlPassthrough
 {
     Sender sender;
     bool appendClaims;
