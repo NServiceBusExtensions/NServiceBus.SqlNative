@@ -29,14 +29,14 @@ class SendBehavior :
         }
 
         var connectionTask = connectionBuilder(CancellationToken.None);
-        if (context.Extensions.TryGet(out TransportTransaction transportTransaction))
+        if (context.Extensions.TryGet(out TransportTransaction _))
         {
             throw new NotSupportedException("Deduplication is currently designed to be used from outside the NServiceBus pipeline. For example to dedup messages being sent from inside a web service endpoint.");
         }
 
         var messageId = GetMessageId(context);
 
-        transportTransaction = new TransportTransaction();
+        var transportTransaction = new TransportTransaction();
         context.Extensions.Set(transportTransaction);
         await using var connection = await connectionTask;
         await using var transaction = connection.BeginTransaction();
