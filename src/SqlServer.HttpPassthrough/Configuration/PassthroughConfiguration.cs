@@ -50,7 +50,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
                     }
                     catch
                     {
-                        connection.Dispose();
+                        await connection.DisposeAsync();
                         throw;
                     }
                 },
