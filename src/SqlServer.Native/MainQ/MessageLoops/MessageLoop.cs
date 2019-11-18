@@ -52,7 +52,6 @@ namespace NServiceBus.Transport.SqlServerNative
 
         protected abstract Task RunBatch(CancellationToken cancellation);
 
-        //TODO: do we need stop with async dispose
         public Task Stop()
         {
             tokenSource?.Cancel();

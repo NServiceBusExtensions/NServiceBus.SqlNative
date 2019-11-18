@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using NServiceBus;
+using NServiceBus.Attachments.Sql;
 using SampleNamespace;
 
 class MyHandler :
@@ -17,10 +18,10 @@ class MyHandler :
         return context.Attachments().ProcessStreams(WriteAttachment);
     }
 
-    static async Task WriteAttachment(string name, Stream stream)
+    static async Task WriteAttachment(AttachmentStream stream)
     {
         using var reader = new StreamReader(stream);
         var contents = await reader.ReadToEndAsync();
-        Console.WriteLine("Attachment: {0}. Contents:{1}", name, contents);
+        Console.WriteLine("Attachment: {0}. Contents:{1}", stream.Name, contents);
     }
 }
