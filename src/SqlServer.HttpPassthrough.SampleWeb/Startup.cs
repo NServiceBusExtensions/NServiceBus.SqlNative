@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.SqlClient;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +20,9 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var configuration = new PassthroughConfiguration(OpenConnection, AmendMessage,
+        var configuration = new PassthroughConfiguration(
+            connectionFunc: () => new SqlConnection(Connection.ConnectionString),
+            callback: AmendMessage,
             dedupCriticalError: exception => { Environment.FailFast("", exception); });
         configuration.AppendClaimsToMessageHeaders();
         services.AddSqlHttpPassthrough(configuration);
@@ -37,21 +37,6 @@ public class Startup
             {"{}\":", "{}\":"}
         };
         return Task.FromResult((Table) message.Destination!);
-    }
-
-    static async Task<DbConnection> OpenConnection(CancellationToken cancellation)
-    {
-        var connection = new SqlConnection(Connection.ConnectionString);
-        try
-        {
-            await connection.OpenAsync(cancellation);
-            return connection;
-        }
-        catch
-        {
-            await connection.DisposeAsync();
-            throw;
-        }
     }
 
     public void Configure(IApplicationBuilder builder)

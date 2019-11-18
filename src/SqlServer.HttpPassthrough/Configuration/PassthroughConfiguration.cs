@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Common;
 using System.Security.Claims;
 using System.Threading;
@@ -23,6 +24,40 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         internal Table AttachmentsTable = "MessageAttachments";
         internal string? ClaimsHeaderPrefix;
         internal bool AppendClaims;
+
+        /// <summary>
+        /// Initialize a new instance of <see cref="PassthroughConfiguration"/>.
+        /// </summary>
+        /// <param name="connectionFunc">Creates a instance of a new and un-open <see cref="DbConnection"/>.</param>
+        /// <param name="callback">Manipulate or verify a <see cref="PassthroughMessage"/> prior to it being sent. Returns the destination <see cref="Table"/>.</param>
+        /// <param name="dedupCriticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
+        public PassthroughConfiguration(
+            Func<DbConnection> connectionFunc,
+            Func<HttpContext, PassthroughMessage, Task<Table>> callback,
+            Action<Exception> dedupCriticalError) :
+            this(
+                connectionFunc: async token =>
+                {
+                    var connection = connectionFunc();
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        throw new Exception("This overload of PassthroughConfiguration expects `Func<DbConnection> connectionFunc` to return a un-opened DbConnection.");
+                    }
+                    try
+                    {
+                        await connection.OpenAsync(token).ConfigureAwait(false);
+                        return connection;
+                    }
+                    catch
+                    {
+                        connection.Dispose();
+                        throw;
+                    }
+                },
+                callback,
+                dedupCriticalError)
+        {
+        }
 
         /// <summary>
         /// Initialize a new instance of <see cref="PassthroughConfiguration"/>.
