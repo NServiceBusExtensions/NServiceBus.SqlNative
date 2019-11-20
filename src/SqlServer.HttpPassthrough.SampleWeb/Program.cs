@@ -8,7 +8,7 @@ public class Program
     {
         var builder = WebHost.CreateDefaultBuilder();
         builder.UseContentRoot(Directory.GetCurrentDirectory());
-        builder.UseStartup<Startup>();
+        builder.UseStartup<SampleStartup>();
         var webHost = builder.Build();
         webHost.Run();
     }

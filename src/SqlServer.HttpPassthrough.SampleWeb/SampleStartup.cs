@@ -9,9 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 
-public class Startup
+public class SampleStartup
 {
-    public Startup(IConfiguration configuration)
+    public SampleStartup(IConfiguration configuration)
     {
         Configuration = configuration;
     }

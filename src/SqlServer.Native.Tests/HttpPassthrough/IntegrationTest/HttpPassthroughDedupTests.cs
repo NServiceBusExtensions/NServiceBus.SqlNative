@@ -25,7 +25,7 @@ public class HttpPassthroughDedupTests :
         var endpoint = await StartEndpoint();
 
         var hostBuilder = new WebHostBuilder();
-        hostBuilder.UseStartup<Startup>();
+        hostBuilder.UseStartup<SampleStartup>();
         using (var server = new TestServer(hostBuilder))
         {
             using var client = server.CreateClient();

@@ -42,7 +42,7 @@ public class HttpPassthroughIntegrationTests :
     static async Task SubmitMultipartForm()
     {
         var hostBuilder = new WebHostBuilder();
-        hostBuilder.UseStartup<Startup>();
+        hostBuilder.UseStartup<SampleStartup>();
         using var server = new TestServer(hostBuilder);
         using var client = server.CreateClient();
         client.DefaultRequestHeaders.Referrer = new Uri("http://TheReferrer");
