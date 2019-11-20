@@ -9,6 +9,37 @@ To change this file edit the source file and then run MarkdownSnippets.
 
 SQL Server Transport Native is a shim providing low-level access to the [NServiceBus SQL Server Transport](https://docs.particular.net/transports/sql/) with no NServiceBus or SQL Server Transport reference required.
 
+<!-- toc -->
+## Contents
+
+  * [Community backed](#community-backed)
+    * [Sponsors](#sponsors)
+    * [Patrons](#patrons)
+  * [Usage scenarios](#usage-scenarios)
+  * [Main Queue](#main-queue)
+    * [Queue management](#queue-management)
+    * [Sending messages](#sending-messages)
+    * [Reading messages](#reading-messages)
+    * [Consuming messages](#consuming-messages)
+  * [Delayed Queue](#delayed-queue)
+    * [Queue management](#queue-management-1)
+    * [Sending messages](#sending-messages-1)
+    * [Reading messages](#reading-messages-1)
+    * [Consuming messages](#consuming-messages-1)
+  * [Headers](#headers)
+  * [Deduplication](#deduplication)
+    * [Table management](#table-management)
+    * [Sending messages](#sending-messages-2)
+    * [Deduplication cleanup](#deduplication-cleanup)
+    * [JSON headers](#json-headers)
+    * [Copied header constants](#copied-header-constants)
+    * [Duplicated timestamp functionality](#duplicated-timestamp-functionality)
+  * [ConnectionHelpers](#connectionhelpers)
+  * [MARS](#mars)
+  * [SqlServer.HttpPassthrough](#sqlserverhttppassthrough)
+<!-- endtoc -->
+
+
 <!--- StartOpenCollectiveBackers -->
 
 [Already a Patron? skip past this section](#endofbacking)
