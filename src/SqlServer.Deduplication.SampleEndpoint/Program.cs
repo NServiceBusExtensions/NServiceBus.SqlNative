@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
+using NServiceBus.Features;
 using NServiceBus.Logging;
 using NServiceBus.Transport.SqlServerDeduplication;
 using SampleNamespace;
@@ -22,8 +23,10 @@ class Program
         configuration.EnableDedupe(ConnectionBuilder);
         configuration.UseSerialization<NewtonsoftSerializer>();
         configuration.PurgeOnStartup(true);
+        configuration.DisableFeature<TimeoutManager>();
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(connection);
+        transport.Transactions(TransportTransactionMode.SendsAtomicWithReceive);
         configuration.EnableInstallers();
         Console.Title = "SampleEndpoint Press Ctrl-C to Exit.";
         Console.TreatControlCAsInput = true;
