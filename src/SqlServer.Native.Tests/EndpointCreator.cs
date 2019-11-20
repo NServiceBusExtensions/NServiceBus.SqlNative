@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
-using NServiceBus.Features;
+using NServiceBus.Transport.SQLServer;
 using NServiceBus.Transport.SqlServerNative;
 
 static class EndpointCreator
@@ -16,8 +16,8 @@ static class EndpointCreator
         var configuration = new EndpointConfiguration(endpointName);
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
-        transport.DisablePublishing();
-        configuration.DisableFeature<TimeoutManager>();
+        var delayedDelivery = transport.NativeDelayedDelivery();
+        delayedDelivery.DisableTimeoutManagerCompatibility();
         configuration.PurgeOnStartup(true);
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftSerializer>();

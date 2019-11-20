@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Attachments.Sql;
-using NServiceBus.Features;
 
 class Program
 {
@@ -13,7 +12,6 @@ class Program
         var attachments = configuration.EnableAttachments(async () => await Connection.OpenAsyncConnection(), TimeToKeep.Default);
         attachments.UseTransportConnectivity();
         configuration.UseSerialization<NewtonsoftSerializer>();
-        configuration.DisableFeature<TimeoutManager>();
         configuration.PurgeOnStartup(true);
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);

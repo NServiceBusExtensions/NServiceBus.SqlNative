@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
-using NServiceBus.Features;
 using NServiceBus.Logging;
 using NServiceBus.Transport.SqlServerDeduplication;
 using SampleNamespace;
@@ -22,7 +21,6 @@ class Program
         configuration.UsePersistence<LearningPersistence>();
         configuration.EnableDedupe(ConnectionBuilder);
         configuration.UseSerialization<NewtonsoftSerializer>();
-        configuration.DisableFeature<TimeoutManager>();
         configuration.PurgeOnStartup(true);
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(connection);

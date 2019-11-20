@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Attachments.Sql;
-using NServiceBus.Features;
+using NServiceBus.Transport.SQLServer;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
@@ -54,14 +54,14 @@ public class DedupeIntegrationTests :
         configuration.EnableDedupe(Connection.OpenAsyncConnection);
         configuration.PurgeOnStartup(true);
         configuration.UseSerialization<NewtonsoftSerializer>();
-        configuration.DisableFeature<TimeoutManager>();
 
         var attachments = configuration.EnableAttachments(async () => await Connection.OpenAsyncConnection(), TimeToKeep.Default);
         attachments.UseTransportConnectivity();
 
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
-        transport.DisablePublishing();
+        var delayedDelivery = transport.NativeDelayedDelivery();
+        delayedDelivery.DisableTimeoutManagerCompatibility();
         return Endpoint.Start(configuration);
     }
 
