@@ -82,9 +82,9 @@ Thanks to all the backing developers! Support this project by [becoming a patron
 
 ### Queue management
 
-Queue management for the [native delayed delivery](/transports/sql/native-delayed-delivery.md) functionality.
+Queue management for the [native delayed delivery](https://docs.particular.net/transports/sql/native-delayed-delivery) functionality.
 
-See also [SQL Server Transport - SQL statements](/transports/sql/sql-statements.md#installation).
+See also [SQL Server Transport - SQL statements](https://docs.particular.net/transports/sql/sql-statements#installation).
 
 
 #### Create
@@ -252,7 +252,7 @@ Note that this is only one possible implementation of storing the current `RowVe
 
 For scenarios where continual processing (reading and executing some code with the result) of incoming messages is required, `MessageProcessingLoop` can be used. 
 
-An example use case is monitoring an [error queue](/nservicebus/recoverability/configure-error-handling.md). Some action should be taken when a message appears in the error queue, but it should remain in that queue in case it needs to be retried. 
+An example use case is monitoring an [error queue](https://docs.particular.net/nservicebus/recoverability/configure-error-handling). Some action should be taken when a message appears in the error queue, but it should remain in that queue in case it needs to be retried. 
 
 Note that in the below snippet, the above `RowVersionTracker` is used for tracking the current `RowVersion`.
 
@@ -372,7 +372,7 @@ Console.WriteLine(result.LastRowVersion);
 
 For scenarios where continual consumption (consuming and executing some code with the result) of incoming messages is required, `MessageConsumingLoop` can be used.
 
-An example use case is monitoring an [audit queue](/nservicebus/operations/auditing.md). Some action should be taken when a message appears in the audit queue, and it should be purged from the queue to free up the storage space. 
+An example use case is monitoring an [audit queue](https://docs.particular.net/nservicebus/operations/auditing). Some action should be taken when a message appears in the audit queue, and it should be purged from the queue to free up the storage space. 
 
 <!-- snippet: ConsumeLoop -->
 <a id='snippet-consumeloop'/></a>
@@ -418,9 +418,9 @@ await consumingLoop.Stop();
 
 ### Queue management
 
-Queue management for the [native delayed delivery](/transports/sql/native-delayed-delivery.md) functionality.
+Queue management for the [native delayed delivery](https://docs.particular.net/transports/sql/native-delayed-delivery) functionality.
 
-See also [SQL Server Transport - SQL statements](/transports/sql/sql-statements.md#create-delayed-queue-table).
+See also [SQL Server Transport - SQL statements](https://docs.particular.net/transports/sql/sql-statements#create-delayed-queue-table).
 
 
 #### Create
@@ -622,7 +622,7 @@ Console.WriteLine(result.LastRowVersion);
 
 There is a headers helpers class `NServiceBus.Transport.SqlServerNative.Headers`.
 
-It contains several [header](/nservicebus/messaging/headers.md) related utilities:
+It contains several [header](https://docs.particular.net/nservicebus/messaging/headers) related utilities.
 
 
 ## Deduplication
@@ -783,7 +783,7 @@ Contains all the string constants copied from `NServiceBus.Headers`.
  
 ### Duplicated timestamp functionality
 
-A copy of the [timestamp format methods](/nservicebus/messaging/headers.md#timestamp-format) `ToWireFormattedString` and `ToUtcDateTime`. 
+A copy of the [timestamp format methods](https://docs.particular.net/nservicebus/messaging/headers#timestamp-format) `ToWireFormattedString` and `ToUtcDateTime`. 
 
 
 ## ConnectionHelpers
