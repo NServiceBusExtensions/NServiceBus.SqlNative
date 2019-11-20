@@ -28,4 +28,7 @@
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.30" PrivateAssets="All" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="HttpPassthrough\Snippets\" />
+  </ItemGroup>
 </Project>

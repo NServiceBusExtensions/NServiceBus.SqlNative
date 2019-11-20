@@ -123,7 +123,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return new DedupeResult
             (
                 dedupeOutcome: DedupeOutcome.Deduplicated,
-                context: await ReadContext(messageId, cancellation).ConfigureAwait(false)
+                context: await ReadContext(messageId, cancellation)
             );
         }
 

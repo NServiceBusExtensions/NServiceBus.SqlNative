@@ -45,7 +45,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
                     }
                     try
                     {
-                        await connection.OpenAsync(token).ConfigureAwait(false);
+                        await connection.OpenAsync(token);
                         return connection;
                     }
                     catch
