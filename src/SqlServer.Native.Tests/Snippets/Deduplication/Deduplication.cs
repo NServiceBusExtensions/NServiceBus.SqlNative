@@ -13,8 +13,8 @@ public class Deduplication
     {
         #region CreateDeduplicationTable
 
-        var queueManager = new DedupeManager(sqlConnection, "DeduplicationTable");
-        await queueManager.Create();
+        var manager = new DedupeManager(sqlConnection, "DeduplicationTable");
+        await manager.Create();
 
         #endregion
     }
@@ -23,8 +23,8 @@ public class Deduplication
     {
         #region DeleteDeduplicationTable
 
-        var queueManager = new DedupeManager(sqlConnection, "DeduplicationTable");
-        await queueManager.Drop();
+        var manager = new DedupeManager(sqlConnection, "DeduplicationTable");
+        await manager.Drop();
 
         #endregion
     }
@@ -36,12 +36,12 @@ public class Deduplication
 
         #region SendWithDeduplication
 
-        var queueManager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
+        var manager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
         var message = new OutgoingMessage(
             id: Guid.NewGuid(),
             headers: headers,
             bodyBytes: body);
-        await queueManager.Send(message);
+        await manager.Send(message);
 
         #endregion
 
@@ -80,7 +80,7 @@ public class Deduplication
 
         #region SendBatchWithDeduplication
 
-        var queueManager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
+        var manager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
         var messages = new List<OutgoingMessage>
         {
             new OutgoingMessage(
@@ -92,7 +92,7 @@ public class Deduplication
                 headers: headers2,
                 bodyBytes: body2),
         };
-        await queueManager.Send(messages);
+        await manager.Send(messages);
 
         #endregion
     }

@@ -13,8 +13,8 @@ public class MainQueue
     {
         #region CreateQueue
 
-        var queueManager = new QueueManager("endpointTable", sqlConnection);
-        await queueManager.Create();
+        var manager = new QueueManager("endpointTable", sqlConnection);
+        await manager.Create();
 
         #endregion
     }
@@ -23,8 +23,8 @@ public class MainQueue
     {
         #region DeleteQueue
 
-        var queueManager = new QueueManager("endpointTable", sqlConnection);
-        await queueManager.Drop();
+        var manager = new QueueManager("endpointTable", sqlConnection);
+        await manager.Drop();
 
         #endregion
     }
@@ -36,12 +36,12 @@ public class MainQueue
 
         #region Send
 
-        var queueManager = new QueueManager("endpointTable", sqlConnection);
+        var manager = new QueueManager("endpointTable", sqlConnection);
         var message = new OutgoingMessage(
             id: Guid.NewGuid(),
             headers: headers,
             bodyBytes: body);
-        await queueManager.Send(message);
+        await manager.Send(message);
 
         #endregion
 
@@ -56,7 +56,7 @@ public class MainQueue
 
         #region SendBatch
 
-        var queueManager = new QueueManager("endpointTable", sqlConnection);
+        var manager = new QueueManager("endpointTable", sqlConnection);
         var messages = new List<OutgoingMessage>
         {
             new OutgoingMessage(
@@ -68,7 +68,7 @@ public class MainQueue
                 headers: headers2,
                 bodyBytes: body2),
         };
-        await queueManager.Send(messages);
+        await manager.Send(messages);
 
         #endregion
     }
@@ -77,8 +77,8 @@ public class MainQueue
     {
         #region Read
 
-        var queueManager = new QueueManager("endpointTable", sqlConnection);
-        var message = await queueManager.Read(rowVersion: 10);
+        var manager = new QueueManager("endpointTable", sqlConnection);
+        var message = await manager.Read(rowVersion: 10);
 
         if (message != null)
         {
@@ -98,8 +98,8 @@ public class MainQueue
     {
         #region ReadBatch
 
-        var queueManager = new QueueManager("endpointTable", sqlConnection);
-        var result = await queueManager.Read(
+        var manager = new QueueManager("endpointTable", sqlConnection);
+        var result = await manager.Read(
             size: 5,
             startRowVersion: 10,
             action: async message =>
@@ -125,8 +125,8 @@ public class MainQueue
     {
         #region Consume
 
-        var queueManager = new QueueManager("endpointTable", sqlConnection);
-        var message = await queueManager.Consume();
+        var manager = new QueueManager("endpointTable", sqlConnection);
+        var message = await manager.Consume();
 
         if (message != null)
         {
@@ -146,8 +146,8 @@ public class MainQueue
     {
         #region ConsumeBatch
 
-        var queueManager = new QueueManager("endpointTable", sqlConnection);
-        var result = await queueManager.Consume(
+        var manager = new QueueManager("endpointTable", sqlConnection);
+        var result = await manager.Consume(
             size: 5,
             action: async message =>
             {

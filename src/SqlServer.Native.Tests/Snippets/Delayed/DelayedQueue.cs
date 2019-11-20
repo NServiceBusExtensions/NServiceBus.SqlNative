@@ -13,8 +13,8 @@ public class DelayedQueue
     {
         #region CreateDelayedQueue
 
-        var queueManager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
-        await queueManager.Create();
+        var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
+        await manager.Create();
 
         #endregion
     }
@@ -23,8 +23,8 @@ public class DelayedQueue
     {
         #region DeleteDelayedQueue
 
-        var queueManager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
-        await queueManager.Drop();
+        var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
+        await manager.Drop();
 
         #endregion
     }
@@ -36,12 +36,12 @@ public class DelayedQueue
 
         #region SendDelayed
 
-        var queueManager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
+        var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
         var message = new OutgoingDelayedMessage(
             due: DateTime.UtcNow.AddDays(1),
             headers: headers,
             bodyBytes: body);
-        await queueManager.Send(message);
+        await manager.Send(message);
 
         #endregion
     }
@@ -55,7 +55,7 @@ public class DelayedQueue
 
         #region SendDelayedBatch
 
-        var queueManager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
+        var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
         var messages = new List<OutgoingDelayedMessage>
         {
             new OutgoingDelayedMessage(
@@ -67,7 +67,7 @@ public class DelayedQueue
                 headers: headers2,
                 bodyBytes: body2),
         };
-        await queueManager.Send(messages);
+        await manager.Send(messages);
 
         #endregion
     }
@@ -76,8 +76,8 @@ public class DelayedQueue
     {
         #region ReadDelayed
 
-        var queueManager = new DelayedQueueManager("endpointTable", sqlConnection);
-        var message = await queueManager.Read(rowVersion: 10);
+        var manager = new DelayedQueueManager("endpointTable", sqlConnection);
+        var message = await manager.Read(rowVersion: 10);
 
         if (message != null)
         {
@@ -97,8 +97,8 @@ public class DelayedQueue
     {
         #region ReadDelayedBatch
 
-        var queueManager = new DelayedQueueManager("endpointTable", sqlConnection);
-        var result = await queueManager.Read(
+        var manager = new DelayedQueueManager("endpointTable", sqlConnection);
+        var result = await manager.Read(
             size: 5,
             startRowVersion: 10,
             action: async message =>
@@ -124,8 +124,8 @@ public class DelayedQueue
     {
         #region ConsumeDelayed
 
-        var queueManager = new DelayedQueueManager("endpointTable", sqlConnection);
-        var message = await queueManager.Consume();
+        var manager = new DelayedQueueManager("endpointTable", sqlConnection);
+        var message = await manager.Consume();
 
         if (message != null)
         {
@@ -145,8 +145,8 @@ public class DelayedQueue
     {
         #region ConsumeDelayedBatch
 
-        var queueManager = new DelayedQueueManager("endpointTable", sqlConnection);
-        var result = await queueManager.Consume(
+        var manager = new DelayedQueueManager("endpointTable", sqlConnection);
+        var result = await manager.Consume(
             size: 5,
             action: async message =>
             {

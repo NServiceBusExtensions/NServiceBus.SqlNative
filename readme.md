@@ -27,8 +27,10 @@ SQL Server Transport Native is a shim providing low-level access to the [NServic
     * [Reading messages](#reading-messages-1)
     * [Consuming messages](#consuming-messages-1)
   * [Headers](#headers)
-  * [Deduplication](#deduplication)
+  * [Subscriptions](#subscriptions)
     * [Table management](#table-management)
+  * [Deduplication](#deduplication)
+    * [Table management](#table-management-1)
     * [Sending messages](#sending-messages-2)
     * [Deduplication cleanup](#deduplication-cleanup)
     * [JSON headers](#json-headers)
@@ -94,8 +96,8 @@ The queue can be created using the following:
 <!-- snippet: CreateQueue -->
 <a id='snippet-createqueue'/></a>
 ```cs
-var queueManager = new QueueManager("endpointTable", sqlConnection);
-await queueManager.Create();
+var manager = new QueueManager("endpointTable", sqlConnection);
+await manager.Create();
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L14-L19) / [anchor](#snippet-createqueue)</sup>
 <!-- endsnippet -->
@@ -108,8 +110,8 @@ The queue can be deleted using the following:
 <!-- snippet: DeleteQueue -->
 <a id='snippet-deletequeue'/></a>
 ```cs
-var queueManager = new QueueManager("endpointTable", sqlConnection);
-await queueManager.Drop();
+var manager = new QueueManager("endpointTable", sqlConnection);
+await manager.Drop();
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L24-L29) / [anchor](#snippet-deletequeue)</sup>
 <!-- endsnippet -->
@@ -127,12 +129,12 @@ Sending a single message.
 <!-- snippet: Send -->
 <a id='snippet-send'/></a>
 ```cs
-var queueManager = new QueueManager("endpointTable", sqlConnection);
+var manager = new QueueManager("endpointTable", sqlConnection);
 var message = new OutgoingMessage(
     id: Guid.NewGuid(),
     headers: headers,
     bodyBytes: body);
-await queueManager.Send(message);
+await manager.Send(message);
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L37-L46) / [anchor](#snippet-send)</sup>
 <!-- endsnippet -->
@@ -145,7 +147,7 @@ Sending a batch of messages.
 <!-- snippet: SendBatch -->
 <a id='snippet-sendbatch'/></a>
 ```cs
-var queueManager = new QueueManager("endpointTable", sqlConnection);
+var manager = new QueueManager("endpointTable", sqlConnection);
 var messages = new List<OutgoingMessage>
 {
     new OutgoingMessage(
@@ -157,7 +159,7 @@ var messages = new List<OutgoingMessage>
         headers: headers2,
         bodyBytes: body2),
 };
-await queueManager.Send(messages);
+await manager.Send(messages);
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L57-L73) / [anchor](#snippet-sendbatch)</sup>
 <!-- endsnippet -->
@@ -175,8 +177,8 @@ Reading a single message.
 <!-- snippet: Read -->
 <a id='snippet-read'/></a>
 ```cs
-var queueManager = new QueueManager("endpointTable", sqlConnection);
-var message = await queueManager.Read(rowVersion: 10);
+var manager = new QueueManager("endpointTable", sqlConnection);
+var message = await manager.Read(rowVersion: 10);
 
 if (message != null)
 {
@@ -200,8 +202,8 @@ Reading a batch of messages.
 <!-- snippet: ReadBatch -->
 <a id='snippet-readbatch'/></a>
 ```cs
-var queueManager = new QueueManager("endpointTable", sqlConnection);
-var result = await queueManager.Read(
+var manager = new QueueManager("endpointTable", sqlConnection);
+var result = await manager.Read(
     size: 5,
     startRowVersion: 10,
     action: async message =>
@@ -320,8 +322,8 @@ Consume a single message.
 <!-- snippet: Consume -->
 <a id='snippet-consume'/></a>
 ```cs
-var queueManager = new QueueManager("endpointTable", sqlConnection);
-var message = await queueManager.Consume();
+var manager = new QueueManager("endpointTable", sqlConnection);
+var message = await manager.Consume();
 
 if (message != null)
 {
@@ -345,8 +347,8 @@ Consuming a batch of messages.
 <!-- snippet: ConsumeBatch -->
 <a id='snippet-consumebatch'/></a>
 ```cs
-var queueManager = new QueueManager("endpointTable", sqlConnection);
-var result = await queueManager.Consume(
+var manager = new QueueManager("endpointTable", sqlConnection);
+var result = await manager.Consume(
     size: 5,
     action: async message =>
     {
@@ -430,8 +432,8 @@ The queue can be created using the following:
 <!-- snippet: CreateDelayedQueue -->
 <a id='snippet-createdelayedqueue'/></a>
 ```cs
-var queueManager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
-await queueManager.Create();
+var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
+await manager.Create();
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L14-L19) / [anchor](#snippet-createdelayedqueue)</sup>
 <!-- endsnippet -->
@@ -444,8 +446,8 @@ The queue can be deleted using the following:
 <!-- snippet: DeleteDelayedQueue -->
 <a id='snippet-deletedelayedqueue'/></a>
 ```cs
-var queueManager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
-await queueManager.Drop();
+var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
+await manager.Drop();
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L24-L29) / [anchor](#snippet-deletedelayedqueue)</sup>
 <!-- endsnippet -->
@@ -461,12 +463,12 @@ Sending a single message.
 <!-- snippet: SendDelayed -->
 <a id='snippet-senddelayed'/></a>
 ```cs
-var queueManager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
+var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 var message = new OutgoingDelayedMessage(
     due: DateTime.UtcNow.AddDays(1),
     headers: headers,
     bodyBytes: body);
-await queueManager.Send(message);
+await manager.Send(message);
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L37-L46) / [anchor](#snippet-senddelayed)</sup>
 <!-- endsnippet -->
@@ -479,7 +481,7 @@ Sending a batch of messages.
 <!-- snippet: SendDelayedBatch -->
 <a id='snippet-senddelayedbatch'/></a>
 ```cs
-var queueManager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
+var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 var messages = new List<OutgoingDelayedMessage>
 {
     new OutgoingDelayedMessage(
@@ -491,7 +493,7 @@ var messages = new List<OutgoingDelayedMessage>
         headers: headers2,
         bodyBytes: body2),
 };
-await queueManager.Send(messages);
+await manager.Send(messages);
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L56-L72) / [anchor](#snippet-senddelayedbatch)</sup>
 <!-- endsnippet -->
@@ -509,8 +511,8 @@ Reading a single message.
 <!-- snippet: ReadDelayed -->
 <a id='snippet-readdelayed'/></a>
 ```cs
-var queueManager = new DelayedQueueManager("endpointTable", sqlConnection);
-var message = await queueManager.Read(rowVersion: 10);
+var manager = new DelayedQueueManager("endpointTable", sqlConnection);
+var message = await manager.Read(rowVersion: 10);
 
 if (message != null)
 {
@@ -534,8 +536,8 @@ Reading a batch of messages.
 <!-- snippet: ReadDelayedBatch -->
 <a id='snippet-readdelayedbatch'/></a>
 ```cs
-var queueManager = new DelayedQueueManager("endpointTable", sqlConnection);
-var result = await queueManager.Read(
+var manager = new DelayedQueueManager("endpointTable", sqlConnection);
+var result = await manager.Read(
     size: 5,
     startRowVersion: 10,
     action: async message =>
@@ -570,8 +572,8 @@ Consume a single message.
 <!-- snippet: ConsumeDelayed -->
 <a id='snippet-consumedelayed'/></a>
 ```cs
-var queueManager = new DelayedQueueManager("endpointTable", sqlConnection);
-var message = await queueManager.Consume();
+var manager = new DelayedQueueManager("endpointTable", sqlConnection);
+var message = await manager.Consume();
 
 if (message != null)
 {
@@ -595,8 +597,8 @@ Consuming a batch of messages.
 <!-- snippet: ConsumeDelayedBatch -->
 <a id='snippet-consumedelayedbatch'/></a>
 ```cs
-var queueManager = new DelayedQueueManager("endpointTable", sqlConnection);
-var result = await queueManager.Consume(
+var manager = new DelayedQueueManager("endpointTable", sqlConnection);
+var result = await manager.Consume(
     size: 5,
     action: async message =>
     {
@@ -625,6 +627,42 @@ There is a headers helpers class `NServiceBus.Transport.SqlServerNative.Headers`
 It contains several [header](https://docs.particular.net/nservicebus/messaging/headers) related utilities.
 
 
+## Subscriptions
+
+Queue management for the [native publish subscribe](https://docs.particular.net/transports/sql/native-publish-subscribe) functionality.
+
+
+### Table management
+
+
+#### Create
+
+The table can be created using the following:
+
+<!-- snippet: CreateSubscriptionTable -->
+<a id='snippet-createsubscriptiontable'/></a>
+```cs
+var manager = new SubscriptionManager("SubscriptionRouting", sqlConnection);
+await manager.Create();
+```
+<sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Subscription/Subscription.cs#L11-L16) / [anchor](#snippet-createsubscriptiontable)</sup>
+<!-- endsnippet -->
+
+
+#### Delete
+
+The table can be deleted using the following:
+
+<!-- snippet: DeleteSubscriptionTable -->
+<a id='snippet-deletesubscriptiontable'/></a>
+```cs
+var manager = new SubscriptionManager("SubscriptionRouting", sqlConnection);
+await manager.Drop();
+```
+<sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Subscription/Subscription.cs#L21-L26) / [anchor](#snippet-deletesubscriptiontable)</sup>
+<!-- endsnippet -->
+
+
 ## Deduplication
 
 Some scenarios, such as HTTP message pass through, require message deduplication.
@@ -640,8 +678,8 @@ The table can be created using the following:
 <!-- snippet: CreateDeduplicationTable -->
 <a id='snippet-creatededuplicationtable'/></a>
 ```cs
-var queueManager = new DedupeManager(sqlConnection, "DeduplicationTable");
-await queueManager.Create();
+var manager = new DedupeManager(sqlConnection, "DeduplicationTable");
+await manager.Create();
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L14-L19) / [anchor](#snippet-creatededuplicationtable)</sup>
 <!-- endsnippet -->
@@ -654,8 +692,8 @@ The table can be deleted using the following:
 <!-- snippet: DeleteDeduplicationTable -->
 <a id='snippet-deletededuplicationtable'/></a>
 ```cs
-var queueManager = new DedupeManager(sqlConnection, "DeduplicationTable");
-await queueManager.Drop();
+var manager = new DedupeManager(sqlConnection, "DeduplicationTable");
+await manager.Drop();
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L24-L29) / [anchor](#snippet-deletededuplicationtable)</sup>
 <!-- endsnippet -->
@@ -673,12 +711,12 @@ Sending a single message with deduplication.
 <!-- snippet: SendWithDeduplication -->
 <a id='snippet-sendwithdeduplication'/></a>
 ```cs
-var queueManager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
+var manager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
 var message = new OutgoingMessage(
     id: Guid.NewGuid(),
     headers: headers,
     bodyBytes: body);
-await queueManager.Send(message);
+await manager.Send(message);
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L37-L46) / [anchor](#snippet-sendwithdeduplication)</sup>
 <!-- endsnippet -->
@@ -691,7 +729,7 @@ Sending a batch of messages with deduplication.
 <!-- snippet: SendBatchWithDeduplication -->
 <a id='snippet-sendbatchwithdeduplication'/></a>
 ```cs
-var queueManager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
+var manager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
 var messages = new List<OutgoingMessage>
 {
     new OutgoingMessage(
@@ -703,7 +741,7 @@ var messages = new List<OutgoingMessage>
         headers: headers2,
         bodyBytes: body2),
 };
-await queueManager.Send(messages);
+await manager.Send(messages);
 ```
 <sup>[snippet source](/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L81-L97) / [anchor](#snippet-sendbatchwithdeduplication)</sup>
 <!-- endsnippet -->

@@ -237,6 +237,28 @@ There is a headers helpers class `NServiceBus.Transport.SqlServerNative.Headers`
 It contains several [header](https://docs.particular.net/nservicebus/messaging/headers) related utilities.
 
 
+## Subscriptions
+
+Queue management for the [native publish subscribe](https://docs.particular.net/transports/sql/native-publish-subscribe) functionality.
+
+
+### Table management
+
+
+#### Create
+
+The table can be created using the following:
+
+snippet: CreateSubscriptionTable
+
+
+#### Delete
+
+The table can be deleted using the following:
+
+snippet: DeleteSubscriptionTable
+
+
 ## Deduplication
 
 Some scenarios, such as HTTP message pass through, require message deduplication.
