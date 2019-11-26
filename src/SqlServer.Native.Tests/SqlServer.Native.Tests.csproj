@@ -6,9 +6,9 @@
   <ItemGroup>
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="NServiceBus.SqlServer" Version="5.0.1" />
+    <PackageReference Include="NServiceBus.SqlServer" Version="5.0.2" />
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="17.0.0" PrivateAssets="all" />
-    <PackageReference Include="NServiceBus.SqlServer" Version="5.0.1" />
+    <PackageReference Include="NServiceBus.SqlServer" Version="5.0.2" />
     <PackageReference Include="NServiceBus" Version="7.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.0.0" />
     <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="150.18208.0" />
@@ -24,6 +24,11 @@
     <ProjectReference Include="..\SqlServer.HttpPassthrough\SqlServer.HttpPassthrough.csproj" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.33" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Subscription\SubscriptionManagerTests.Should_only_clean_up_old_item.approved.txt">
+      <DependentUpon>SubscriptionManagerTests.cs</DependentUpon>
+    </None>
   </ItemGroup>
 
 </Project>
