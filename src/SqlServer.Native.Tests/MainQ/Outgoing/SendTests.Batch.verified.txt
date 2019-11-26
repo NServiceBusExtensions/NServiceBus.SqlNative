@@ -1,0 +1,16 @@
+[
+  {
+    $type: 'IncomingVerifyTarget',
+    Expires: DateTime_1,
+    Headers: 'headers',
+    Id: Guid_1,
+    Body: '{}'
+  },
+  {
+    $type: 'IncomingVerifyTarget',
+    Expires: DateTime_1,
+    Headers: 'headers',
+    Id: Guid_2,
+    Body: '{}'
+  }
+]

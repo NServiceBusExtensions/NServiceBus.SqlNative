@@ -1,0 +1,7 @@
+{
+  $type: 'dynamic',
+  FileName: 'attachment.txt',
+  Body: '{}',
+  Id: Guid_1,
+  Type: 'TheMessageType'
+}

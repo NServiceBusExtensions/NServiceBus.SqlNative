@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using NServiceBus.SqlServer.HttpPassthrough;
 using Xunit;
 using Xunit.Abstractions;
@@ -9,16 +10,16 @@ public class ClaimsAppenderTests :
     TestBase
 {
     [Fact]
-    public void Append()
+    public Task Append()
     {
         var headers = new Dictionary<string, string>();
         var claims = BuildClaims();
         ClaimsAppender.Append(claims, headers, "prefix.");
-        ObjectApprover.Verify(headers);
+        return Verify(headers);
     }
 
     [Fact]
-    public void Extract()
+    public Task Extract()
     {
         var headers = new Dictionary<string, string>();
         var claims = BuildClaims();
@@ -29,7 +30,7 @@ public class ClaimsAppenderTests :
                 x.Type,
                 x.Value
             });
-        ObjectApprover.Verify(result);
+        return Verify(result);
     }
 
     static IEnumerable<Claim> BuildClaims()

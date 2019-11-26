@@ -16,7 +16,7 @@ public class DelayedConsumerTests :
         await DelayedTestDataBuilder.SendData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
         await using var result = await consumer.Consume();
-        ObjectApprover.Verify(result!.ToVerifyTarget());
+        await Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public class DelayedConsumerTests :
         await DelayedTestDataBuilder.SendNullData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
         await using var result = await consumer.Consume();
-        ObjectApprover.Verify(result!.ToVerifyTarget());
+        await Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class DelayedConsumerTests :
             action: message => { messages.Add(message.ToVerifyTarget()); });
         Assert.Equal(3, result.Count);
         Assert.Equal(3, result.LastRowVersion);
-        ObjectApprover.Verify(messages.OrderBy(x => x.Due));
+        await Verify(messages.OrderBy(x => x.Due));
     }
 
     public DelayedConsumerTests(ITestOutputHelper output) :

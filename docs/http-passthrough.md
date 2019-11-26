@@ -391,7 +391,7 @@ await clientFormSender.Send(
 
 <!--
 include: mars
-path: C:\Code\NServiceBus.Native\docs\mdsource\mars.include.md
+path: C:\Code\NServiceBus\NServiceBus.Native\docs\mdsource\mars.include.md
 -->
 ## MARS
 

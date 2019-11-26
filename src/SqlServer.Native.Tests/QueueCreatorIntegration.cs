@@ -1,11 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class QueueCreatorIntegration:
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public async Task Run()

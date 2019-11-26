@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
@@ -14,7 +15,7 @@ public class RequestParserTests :
     TestBase
 {
     [Fact]
-    public void Optional()
+    public Task Optional()
     {
         var request = new FakeHttpRequest
         (
@@ -26,10 +27,10 @@ public class RequestParserTests :
             body: Body(),
             form: Form()
         );
-        Verify(request);
+        return Verify(request);
     }
     [Fact]
-    public void Simple()
+    public Task Simple()
     {
         var request = new FakeHttpRequest
         (
@@ -44,7 +45,7 @@ public class RequestParserTests :
             body: Body(),
             form: Form()
         );
-        Verify(request);
+       return Verify(request);
     }
 
     static MemoryStream Body()
@@ -52,10 +53,10 @@ public class RequestParserTests :
         return new MemoryStream(Encoding.UTF8.GetBytes("{}"));
     }
 
-    static void Verify(FakeHttpRequest request)
+    Task Verify(FakeHttpRequest request)
     {
         var extract = RequestParser.Extract(request, CancellationToken.None).GetAwaiter().GetResult();
-        ObjectApprover.Verify(new
+        return Verify(new
         {
             extract.Attachments.Single().FileName,
             extract.Body,

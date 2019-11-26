@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class AsyncTimerTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public async Task It_calls_error_callback()

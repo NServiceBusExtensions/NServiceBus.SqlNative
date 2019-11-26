@@ -1,0 +1,10 @@
+{
+  $type: 'Dictionary<string, string>',
+  key: 'value',
+  a\b: 'a\b',
+  a\\b: 'a\\b',
+  a"b: 'a"b',
+  a/b: 'a/b',
+  a//b: 'a//b',
+  a\/b: 'a\/b'
+}

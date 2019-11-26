@@ -1,8 +1,9 @@
-﻿using Xunit;
+﻿using VerifyXunit;
+using Xunit;
 using Xunit.Abstractions;
 
 public class SqlExtensionsTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public void Table_name_and_schema_should_be_quoted()

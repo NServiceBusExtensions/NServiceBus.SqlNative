@@ -1,9 +1,10 @@
 ﻿using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
+using VerifyXunit;
 using Xunit.Abstractions;
 
 public class TestBase:
-    XunitApprovalBase
+    VerifyBase
 {
     public TestBase(ITestOutputHelper output,
         [CallerFilePath] string sourceFilePath = "") :

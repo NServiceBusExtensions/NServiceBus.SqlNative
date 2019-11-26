@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class SerializerTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
-    public void Dictionary()
+    public Task Dictionary()
     {
         var serialized = Serializer.SerializeDictionary(
             new Dictionary<string, string>
@@ -19,11 +21,11 @@ public class SerializerTests :
                 {"a//b", "a//b"},
                 {@"a\/b", @"a\/b"}
             });
-        ObjectApprover.Verify(Serializer.DeSerializeDictionary(serialized));
+        return Verify(Serializer.DeSerializeDictionary(serialized));
     }
 
     [Fact]
-    public void List()
+    public Task List()
     {
         var serialized = Serializer.SerializeList(
             new List<string>
@@ -36,7 +38,7 @@ public class SerializerTests :
                 "a//b",
                 @"a\/b"
             });
-        ObjectApprover.Verify(Serializer.DeSerializeList(serialized));
+        return Verify(Serializer.DeSerializeList(serialized));
     }
 
     public SerializerTests(ITestOutputHelper output) :

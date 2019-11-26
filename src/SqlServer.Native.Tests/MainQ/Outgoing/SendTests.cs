@@ -19,7 +19,7 @@ public class SendTests :
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class SendTests :
         var sender = new QueueManager(table, transaction);
         await sender.Send(message);
         await transaction.CommitAsync();
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class SendTests :
 
         var message = BuildBytesNullMessage("00000000-0000-0000-0000-000000000001");
         await sender.Send(message);
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class SendTests :
     {
         var message = BuildStreamMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public class SendTests :
     {
         var message = BuildStreamMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -68,7 +68,7 @@ public class SendTests :
             BuildStreamMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public class SendTests :
         };
         await Send(messages);
 
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     Task Send(List<OutgoingMessage> messages)

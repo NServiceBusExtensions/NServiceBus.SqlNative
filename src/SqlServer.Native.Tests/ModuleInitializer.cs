@@ -1,15 +1,18 @@
 ﻿using Newtonsoft.Json;
 using NServiceBus.Transport.SqlServerNative;
-using ObjectApproval;
+using VerifyXunit;
+using Xunit;
 
-public static class ModuleInitializer
+[GlobalSetUp]
+public static class GlobalSetup
 {
-    public static void Initialize()
+    public static void Setup()
     {
-        SerializerBuilder.ExtraSettings = settings =>
+        Global.ModifySerialization(settings =>
         {
-            settings.TypeNameHandling = TypeNameHandling.Objects;
-        };
+            settings.AddExtraSettings(serializerSettings =>
+                serializerSettings.TypeNameHandling = TypeNameHandling.Objects);
+        });
         SqlHelper.EnsureDatabaseExists(Connection.ConnectionString);
         using var sqlConnection = Connection.OpenConnection();
         var manager = new QueueManager("error", sqlConnection);

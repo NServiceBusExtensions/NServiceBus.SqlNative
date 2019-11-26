@@ -1,20 +1,21 @@
-﻿using ApprovalTests;
+﻿using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class DelayedQueueCreationTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
-    public void Run()
+    public async Task Run()
     {
-        using var connection = Connection.OpenConnection();
+        await using var connection = Connection.OpenConnection();
         var manager = new DelayedQueueManager("DelayedQueueCreationTests", connection);
-        manager.Drop().Await();
-        manager.Create().Await();
+        await manager.Drop();
+        await manager.Create();
         var sqlScriptBuilder = new SqlScriptBuilder(tables:true, namesToInclude: "DelayedQueueCreationTests");
-        Approvals.Verify(sqlScriptBuilder.BuildScript(connection));
+        await Verify(sqlScriptBuilder.BuildScript(connection));
     }
 
     public DelayedQueueCreationTests(ITestOutputHelper output) :

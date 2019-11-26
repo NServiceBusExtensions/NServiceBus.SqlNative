@@ -16,7 +16,7 @@ public class DelayedReaderTests :
         await DelayedTestDataBuilder.SendData(table);
         var reader = new DelayedQueueManager(table, SqlConnection);
         await using var result = await reader.Read(1);
-        ObjectApprover.Verify(result!.ToVerifyTarget());
+        await Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public class DelayedReaderTests :
         await DelayedTestDataBuilder.SendNullData(table);
         var reader = new DelayedQueueManager(table, SqlConnection);
         await using var result = await reader.Read(1);
-        ObjectApprover.Verify(result!.ToVerifyTarget());
+        await Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public class DelayedReaderTests :
             action: message => { messages.Add(message.ToVerifyTarget()); });
         Assert.Equal(4, result.LastRowVersion);
         Assert.Equal(3, result.Count);
-        ObjectApprover.Verify(messages.OrderBy(x => x.Due));
+        await Verify(messages.OrderBy(x => x.Due));
     }
 
     public DelayedReaderTests(ITestOutputHelper output) :

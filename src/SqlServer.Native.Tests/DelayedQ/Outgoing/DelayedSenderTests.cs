@@ -18,7 +18,7 @@ public class DelayedSenderTests :
     {
         var message = BuildBytesMessage();
         await Send(message);
-        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public class DelayedSenderTests :
     {
         var message = BuildBytesNullMessage();
         await Send(message);
-        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class DelayedSenderTests :
     {
         var message = BuildStreamMessage();
         await  Send(message);
-        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class DelayedSenderTests :
 
         var message = BuildBytesNullMessage();
         await sender.Send(message);
-        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public class DelayedSenderTests :
             BuildStreamMessage()
         };
         await Send(messages);
-        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -68,7 +68,7 @@ public class DelayedSenderTests :
             BuildStreamNullMessage()
         };
         await Send(messages);
-        ObjectApprover.Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     Task<long> Send(OutgoingDelayedMessage message)

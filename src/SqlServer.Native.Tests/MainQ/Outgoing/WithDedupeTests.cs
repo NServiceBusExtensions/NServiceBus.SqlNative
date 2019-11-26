@@ -18,7 +18,7 @@ public class WithDedupeTests :
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class WithDedupeTests :
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
         await Send(message);
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     //[Fact]
@@ -36,7 +36,7 @@ public class WithDedupeTests :
     //    var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
     //    Send(message);
     //    Send(message);
-    //    ObjectApprover.Verify(SqlHelper.ReadData(table));
+    //    await Verify(SqlHelper.ReadData(table));
     //}
 
     [Fact]
@@ -48,7 +48,7 @@ public class WithDedupeTests :
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -62,7 +62,7 @@ public class WithDedupeTests :
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public class WithDedupeTests :
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        ObjectApprover.Verify(await SqlHelper.ReadData(table, SqlConnection));
+        await Verify(await SqlHelper.ReadData(table, SqlConnection));
     }
 
     Task Send(List<OutgoingMessage> messages)
