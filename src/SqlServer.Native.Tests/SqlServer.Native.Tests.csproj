@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
@@ -10,7 +10,7 @@
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="17.0.1" PrivateAssets="all" />
     <PackageReference Include="NServiceBus.SqlServer" Version="5.0.2" />
     <PackageReference Include="NServiceBus" Version="7.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.0" />
     <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="150.18208.0" />
     <PackageReference Include="XunitContext" Version="1.5.1" />
     <PackageReference Include="Verify.Xunit" Version="1.0.0-beta.31" />
