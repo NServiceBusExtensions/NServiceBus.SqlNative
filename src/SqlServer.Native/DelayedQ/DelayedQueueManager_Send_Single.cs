@@ -8,7 +8,7 @@ namespace NServiceBus.Transport.SqlServerNative
         protected override DbCommand CreateSendCommand(OutgoingDelayedMessage message)
         {
             var command = Connection.CreateCommand(Transaction, string.Format(SendSql, Table));
-            
+
             var dueParameter = command.CreateParameter();
             dueParameter.ParameterName = "Due";
             dueParameter.DbType = DbType.DateTime;

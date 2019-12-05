@@ -19,12 +19,12 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public static readonly string ReadSql = ConnectionHelpers.WrapInNoCount(@"
 select top({1})
-    Id,
-    RowVersion,
-    Expires,
-    Headers,
-    datalength(Body),
-    Body
+  Id,
+  RowVersion,
+  Expires,
+  Headers,
+  datalength(Body),
+  Body
 from {0}
 with (readpast)
 where RowVersion >= @RowVersion

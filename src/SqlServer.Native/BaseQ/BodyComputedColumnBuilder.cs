@@ -5,10 +5,10 @@
         if (computedColumnSql == null)
         {
             return @"
-    BodyString as cast(Body as varchar(max)),";
+  BodyString as cast(Body as varchar(max)),";
         }
 
         return $@"
-    BodyString as {computedColumnSql},";
+  BodyString as {computedColumnSql},";
     }
 }

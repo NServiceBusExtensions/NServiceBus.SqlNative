@@ -11,16 +11,16 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public static readonly string ConsumeSql = ConnectionHelpers.WrapInNoCount(@"
 with message as (
-    select top({1}) *
-    from {0} with (updlock, readpast, rowlock)
-    order by RowVersion)
+  select top({1}) *
+  from {0} with (updlock, readpast, rowlock)
+  order by RowVersion)
 delete from message
 output
-    deleted.RowVersion,
-    deleted.Due,
-    deleted.Headers,
-    datalength(deleted.Body),
-    deleted.Body;
+  deleted.RowVersion,
+  deleted.Due,
+  deleted.Headers,
+  datalength(deleted.Body),
+  deleted.Body;
 ");
     }
 }

@@ -48,21 +48,21 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public static readonly string SubscriptionTableSql = @"
 if exists (
-    select *
-    from sys.objects
-    where object_id = object_id('{0}')
-        and type in ('U'))
+  select *
+  from sys.objects
+  where object_id = object_id('{0}')
+    and type in ('U'))
 return
 
 create table {0} (
-    QueueAddress nvarchar(200) not null,
-    Endpoint nvarchar(200),
-    Topic nvarchar(200) not null,
-    primary key clustered
-    (
-        Endpoint,
-        Topic
-    )
+  QueueAddress nvarchar(200) not null,
+  Endpoint nvarchar(200),
+  Topic nvarchar(200) not null,
+  primary key clustered
+  (
+    Endpoint,
+    Topic
+  )
 )
 ";
     }

@@ -54,8 +54,8 @@ namespace NServiceBus.Transport.SqlServerNative
 update {table}
 set RowVersion = @RowVersion
 if @@rowcount = 0
-    insert into {table} (RowVersion)
-    values (@RowVersion)
+  insert into {table} (RowVersion)
+  values (@RowVersion)
 ");
             var parameter = command.CreateParameter();
             parameter.ParameterName = "RowVersion";
@@ -83,14 +83,14 @@ from {table}";
 
         static string Sql = @"
 if exists (
-    select *
-    from sys.objects
-    where object_id = object_id('{0}')
-        and type in ('U'))
+  select *
+  from sys.objects
+  where object_id = object_id('{0}')
+    and type in ('U'))
 return
 
 create table {0} (
-    RowVersion bigint not null
+  RowVersion bigint not null
 );
 ";
     }

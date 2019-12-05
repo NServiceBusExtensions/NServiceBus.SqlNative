@@ -6,27 +6,27 @@
 
         const string dedupSql = @"
 if exists (
-    select *
-    from {0}
-    where Id = @Id)
+  select *
+  from {0}
+  where Id = @Id)
 return
 
 insert into {0} (Id)
 values (@Id);";
         const string sql = @"
 insert into {0} (
-    Id,
-    Recoverable,
-    Expires,
-    Headers,
-    Body)
+  Id,
+  Recoverable,
+  Expires,
+  Headers,
+  Body)
 output inserted.RowVersion
 values (
-    @Id,
-    1,
-    @Expires,
-    @Headers,
-    @Body);";
+  @Id,
+  1,
+  @Expires,
+  @Headers,
+  @Body);";
 
         void InitSendSql()
         {

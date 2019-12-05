@@ -198,25 +198,25 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public static readonly string DedupeTableSql = @"
 if exists (
-    select *
-    from sys.objects
-    where object_id = object_id('{0}')
-        and type in ('U'))
+  select *
+  from sys.objects
+  where object_id = object_id('{0}')
+    and type in ('U'))
 begin
-    if col_length('{0}', 'Context') is null
-    begin
-        alter table {0}
-        add Context nvarchar(max)
-    end
-    return
+  if col_length('{0}', 'Context') is null
+  begin
+    alter table {0}
+    add Context nvarchar(max)
+  end
+  return
 end
 else
 begin
-    create table {0} (
-        Id uniqueidentifier primary key,
-        Created datetime2(0) not null default sysutcdatetime(),
-        Context nvarchar(max),
-    );
+  create table {0} (
+    Id uniqueidentifier primary key,
+    Created datetime2(0) not null default sysutcdatetime(),
+    Context nvarchar(max),
+  );
 end
 ";
     }
