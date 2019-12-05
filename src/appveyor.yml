@@ -2,7 +2,7 @@ image: Visual Studio 2019 Preview
 skip_commits:
   message: /doco|Merge pull request.*/
 services:
-- mssql2017
+- mssql2019
 build_script:
 - ps: >-
     dotnet build src --configuration Release
