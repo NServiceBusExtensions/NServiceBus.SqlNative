@@ -40,7 +40,7 @@ namespace NServiceBus.Transport.SqlServerNative
         public virtual Task Create(CancellationToken cancellation = default)
         {
             var command = string.Format(SubscriptionTableSql, table);
-            return connection.ExecuteCommand(transaction, command, cancellation);
+            return connection.RunCommand(transaction, command, cancellation);
         }
 
         /// <summary>

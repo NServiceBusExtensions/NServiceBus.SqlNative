@@ -85,7 +85,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
             await using var command = BuildReadCommand(messageId);
-            var o = await command.ExecuteScalarAsync(cancellation);
+            var o = await command.RunScalar(cancellation);
             if (o == DBNull.Value)
             {
                 return null;
@@ -99,7 +99,7 @@ namespace NServiceBus.Transport.SqlServerNative
             try
             {
                 await using var command = BuildWriteCommand(messageId, context);
-                await command.ExecuteNonQueryAsync(cancellation);
+                await command.RunNonQuery(cancellation);
             }
             catch (DbException sqlException)
             {
@@ -165,7 +165,7 @@ namespace NServiceBus.Transport.SqlServerNative
             parameter.DbType = DbType.DateTime2;
             parameter.Value = dateTime;
             command.Parameters.Add(parameter);
-            await command.ExecuteNonQueryAsync(cancellation);
+            await command.RunNonQuery(cancellation);
         }
 
         public virtual async Task PurgeItems(CancellationToken cancellation = default)
@@ -173,7 +173,7 @@ namespace NServiceBus.Transport.SqlServerNative
             await using var command = connection.CreateCommand();
             command.Transaction = transaction;
             command.CommandText = $"delete from {table}";
-            await command.ExecuteNonQueryAsync(cancellation);
+            await command.RunNonQuery(cancellation);
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace NServiceBus.Transport.SqlServerNative
         public virtual Task Create(CancellationToken cancellation = default)
         {
             var command = string.Format(DedupeTableSql, table);
-            return connection.ExecuteCommand(transaction, command, cancellation);
+            return connection.RunCommand(transaction, command, cancellation);
         }
 
         /// <summary>

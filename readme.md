@@ -38,9 +38,7 @@ SQL Server Transport Native is a shim providing low-level access to the [NServic
     * [Duplicated timestamp functionality](#duplicated-timestamp-functionality)
   * [ConnectionHelpers](#connectionhelpers)
   * [MARS](#mars)
-  * [SqlServer.HttpPassthrough](#sqlserverhttppassthrough)
-<!-- endtoc -->
-
+  * [SqlServer.HttpPassthrough](#sqlserverhttppassthrough)<!-- endtoc -->
 
 <!--- StartOpenCollectiveBackers -->
 
@@ -858,7 +856,7 @@ public static async Task<DbTransaction> BeginTransaction(string connectionString
 
 <!--
 include: mars
-path: C:\Code\NServiceBus\NServiceBus.Native\docs\mdsource\mars.include.md
+path: /docs/mdsource/mars.include.md
 -->
 ## MARS
 

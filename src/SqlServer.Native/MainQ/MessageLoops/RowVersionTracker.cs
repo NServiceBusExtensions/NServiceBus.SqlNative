@@ -29,7 +29,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         Task CreateTable(DbConnection connection, DbTransaction? transaction, CancellationToken cancellation)
         {
-            return connection.ExecuteCommand(transaction, string.Format(Sql, table), cancellation);
+            return connection.RunCommand(transaction, string.Format(Sql, table), cancellation);
         }
 
         public Task Save(DbConnection connection, long rowVersion, CancellationToken cancellation = default)
@@ -62,7 +62,7 @@ if @@rowcount = 0
             parameter.DbType = DbType.Int64;
             parameter.Value = rowVersion;
             command.Parameters.Add(parameter);
-            await command.ExecuteNonQueryAsync(cancellation);
+            await command.RunNonQuery(cancellation);
         }
 
         public async Task<long> Get(DbConnection connection, CancellationToken cancellation = default)
@@ -72,7 +72,7 @@ if @@rowcount = 0
             command.CommandText = $@"
 select top (1) RowVersion
 from {table}";
-            var result = await command.ExecuteScalarAsync(cancellation);
+            var result = await command.RunScalar(cancellation);
             if (result == null)
             {
                 return 1;

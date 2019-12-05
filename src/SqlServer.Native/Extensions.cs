@@ -38,11 +38,11 @@ static class Extensions
         corrParam.Value = value;
     }
 
-    public static async Task ExecuteCommand(this DbConnection connection, DbTransaction? transaction, string sql, CancellationToken cancellation = default)
+    public static async Task RunCommand(this DbConnection connection, DbTransaction? transaction, string sql, CancellationToken cancellation = default)
     {
         Guard.AgainstNull(connection, nameof(connection));
         await using var command = connection.CreateCommand(transaction, sql);
-        await command.ExecuteNonQueryAsync(cancellation);
+        await command.RunNonQuery(cancellation);
     }
 
     public static DbCommand CreateCommand(this DbConnection connection, DbTransaction? transaction, string sql)
@@ -73,13 +73,73 @@ static class Extensions
         return dataReader.GetFieldValue<DateTime>(index);
     }
 
-    public static Task<DbDataReader> ExecuteSequentialReader(this DbCommand command, CancellationToken cancellation)
+    public static async Task<DbDataReader> RunSequentialReader(this DbCommand command, CancellationToken cancellation)
     {
-        return command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellation);
+        try
+        {
+            return await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellation);
+        }
+        catch (DbException exception)
+        {
+            SetCommandData(command, exception);
+            throw;
+        }
     }
 
-    public static Task<DbDataReader> ExecuteSingleRowReader(this DbCommand command, CancellationToken cancellation)
+    public static DbDataReader RunReader(this DbCommand command)
     {
-        return command.ExecuteReaderAsync(CommandBehavior.SingleRow | CommandBehavior.SequentialAccess, cancellation);
+        try
+        {
+            return command.ExecuteReader();
+        }
+        catch (DbException exception)
+        {
+            SetCommandData(command, exception);
+            throw;
+        }
+    }
+
+    public static async Task<object> RunScalar(this DbCommand command, CancellationToken cancellation)
+    {
+        try
+        {
+            return await command.ExecuteScalarAsync(cancellation);
+        }
+        catch (DbException exception)
+        {
+            SetCommandData(command, exception);
+            throw;
+        }
+    }
+
+    public static async Task<DbDataReader> RunSingleRowReader(this DbCommand command, CancellationToken cancellation)
+    {
+        try
+        {
+            return await command.ExecuteReaderAsync(CommandBehavior.SingleRow | CommandBehavior.SequentialAccess, cancellation);
+        }
+        catch (DbException exception)
+        {
+            SetCommandData(command, exception);
+            throw;
+        }
+    }
+
+    public static async Task RunNonQuery(this DbCommand command, CancellationToken cancellation)
+    {
+        try
+        {
+            await command.ExecuteNonQueryAsync(cancellation);
+        }
+        catch (DbException exception)
+        {
+            SetCommandData(command, exception);
+            throw;
+        }
+    }
+
+    static void SetCommandData(DbCommand command, DbException exception)
+    {
+        exception.Data["Sql"] = command.CommandText;
     }
 }

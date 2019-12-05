@@ -43,7 +43,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
 
             var commandText = string.Format(CreateTableSql, Table, computedColumnSql);
-            return Connection.ExecuteCommand(Transaction, commandText, cancellation);
+            return Connection.RunCommand(Transaction, commandText, cancellation);
         }
 
         /// <summary>

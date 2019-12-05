@@ -49,7 +49,7 @@ if(db_id('{database}') is null)
     {
         using var command = conn.CreateCommand();
         command.CommandText = $"SELECT Id FROM {table}";
-        using var reader = command.ExecuteReader();
+        using var reader = command.RunReader();
         while (reader.Read())
         {
             IDictionary<string, object> record = new Dictionary<string, object>();

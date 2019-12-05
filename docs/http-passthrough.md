@@ -20,9 +20,7 @@ SQL HTTP Passthrough provides a bridge between an HTTP stream (via JavaScript on
     * [Server-side](#server-side)
     * [Client - JavaScript](#client---javascript)
     * [Client .NET](#client-net)
-  * [MARS](#mars)
-<!-- endtoc -->
-
+  * [MARS](#mars)<!-- endtoc -->
 
 
 ## Design
@@ -391,7 +389,7 @@ await clientFormSender.Send(
 
 <!--
 include: mars
-path: C:\Code\NServiceBus\NServiceBus.Native\docs\mdsource\mars.include.md
+path: /docs/mdsource/mars.include.md
 -->
 ## MARS
 

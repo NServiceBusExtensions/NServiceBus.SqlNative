@@ -14,7 +14,7 @@ namespace NServiceBus.Transport.SqlServerNative
             try
             {
                 await using var command = BuildConsumeCommand(1);
-                reader = await command.ExecuteSingleRowReader(cancellation);
+                reader = await command.RunSingleRowReader(cancellation);
                 if (!await reader.ReadAsync(cancellation))
                 {
                     await reader.DisposeAsync();
