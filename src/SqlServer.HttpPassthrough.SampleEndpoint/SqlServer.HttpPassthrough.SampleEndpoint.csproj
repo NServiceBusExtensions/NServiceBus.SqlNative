@@ -10,6 +10,6 @@
     <PackageReference Include="NServiceBus.SqlServer" Version="5.0.2" />
     <PackageReference Include="NServiceBus.Attachments.Sql" Version="4.1.1" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.34" PrivateAssets="All" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.37" PrivateAssets="All" />
   </ItemGroup>
 </Project>
