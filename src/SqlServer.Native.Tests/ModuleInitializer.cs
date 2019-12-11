@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NServiceBus.Transport.SqlServerNative;
-using VerifyXunit;
+using Verify;
 using Xunit;
 
 [GlobalSetUp]
