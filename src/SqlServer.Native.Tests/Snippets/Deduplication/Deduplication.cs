@@ -36,7 +36,10 @@ public class Deduplication
 
         #region SendWithDeduplication
 
-        var manager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
+        var manager = new QueueManager(
+            "endpointTable",
+            sqlConnection,
+            "DeduplicationTable");
         var message = new OutgoingMessage(
             id: Guid.NewGuid(),
             headers: headers,
@@ -55,7 +58,7 @@ public class Deduplication
             table: "Deduplication",
             connectionBuilder: cancellation =>
             {
-                return SnippetConnectionHelpers.OpenConnection(connectionString, cancellation);
+                return ConnectionHelpers.OpenConnection(connectionString, cancellation);
             },
             criticalError: exception => { },
             expireWindow: TimeSpan.FromHours(1),
@@ -80,7 +83,10 @@ public class Deduplication
 
         #region SendBatchWithDeduplication
 
-        var manager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
+        var manager = new QueueManager(
+            "endpointTable",
+            sqlConnection,
+            "DeduplicationTable");
         var messages = new List<OutgoingMessage>
         {
             new OutgoingMessage(

@@ -263,7 +263,10 @@ var rowVersionTracker = new RowVersionTracker();
 
 var startingRow = await rowVersionTracker.Get(sqlConnection);
 
-async Task Callback(DbTransaction transaction, IncomingMessage message, CancellationToken cancellation)
+async Task Callback(
+    DbTransaction transaction,
+    IncomingMessage message,
+    CancellationToken cancellation)
 {
     if (message.Body == null)
     {
@@ -282,10 +285,13 @@ void ErrorCallback(Exception exception)
 
 Task<DbTransaction> TransactionBuilder(CancellationToken cancellation)
 {
-    return SnippetConnectionHelpers.BeginTransaction(connectionString, cancellation);
+    return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
 }
 
-Task PersistRowVersion(DbTransaction transaction, long rowVersion, CancellationToken token)
+Task PersistRowVersion(
+    DbTransaction transaction,
+    long rowVersion,
+    CancellationToken token)
 {
     return rowVersionTracker.Save(sqlConnection, rowVersion, token);
 }
@@ -304,7 +310,7 @@ Console.ReadKey();
 
 await processingLoop.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L38-L85' title='File snippet `processingloop` was extracted from'>snippet source</a> | <a href='#snippet-processingloop' title='Navigate to start of snippet `processingloop`'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L38-L91' title='File snippet `processingloop` was extracted from'>snippet source</a> | <a href='#snippet-processingloop' title='Navigate to start of snippet `processingloop`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -377,7 +383,10 @@ An example use case is monitoring an [audit queue](https://docs.particular.net/n
 <!-- snippet: ConsumeLoop -->
 <a id='snippet-consumeloop'/></a>
 ```cs
-async Task Callback(DbTransaction transaction, IncomingMessage message, CancellationToken cancellation)
+async Task Callback(
+    DbTransaction transaction,
+    IncomingMessage message,
+    CancellationToken cancellation)
 {
     if (message.Body != null)
     {
@@ -389,7 +398,7 @@ async Task Callback(DbTransaction transaction, IncomingMessage message, Cancella
 
 Task<DbTransaction> TransactionBuilder(CancellationToken cancellation)
 {
-    return SnippetConnectionHelpers.BeginTransaction(connectionString, cancellation);
+    return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
 }
 
 void ErrorCallback(Exception exception)
@@ -409,7 +418,7 @@ consumingLoop.Start();
 // stop consuming
 await consumingLoop.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ConsumingLoop.cs#L14-L48' title='File snippet `consumeloop` was extracted from'>snippet source</a> | <a href='#snippet-consumeloop' title='Navigate to start of snippet `consumeloop`'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ConsumingLoop.cs#L14-L51' title='File snippet `consumeloop` was extracted from'>snippet source</a> | <a href='#snippet-consumeloop' title='Navigate to start of snippet `consumeloop`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -709,14 +718,17 @@ Sending a single message with deduplication.
 <!-- snippet: SendWithDeduplication -->
 <a id='snippet-sendwithdeduplication'/></a>
 ```cs
-var manager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
+var manager = new QueueManager(
+    "endpointTable",
+    sqlConnection,
+    "DeduplicationTable");
 var message = new OutgoingMessage(
     id: Guid.NewGuid(),
     headers: headers,
     bodyBytes: body);
 await manager.Send(message);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L37-L46' title='File snippet `sendwithdeduplication` was extracted from'>snippet source</a> | <a href='#snippet-sendwithdeduplication' title='Navigate to start of snippet `sendwithdeduplication`'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L37-L49' title='File snippet `sendwithdeduplication` was extracted from'>snippet source</a> | <a href='#snippet-sendwithdeduplication' title='Navigate to start of snippet `sendwithdeduplication`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -727,7 +739,10 @@ Sending a batch of messages with deduplication.
 <!-- snippet: SendBatchWithDeduplication -->
 <a id='snippet-sendbatchwithdeduplication'/></a>
 ```cs
-var manager = new QueueManager("endpointTable", sqlConnection, "DeduplicationTable");
+var manager = new QueueManager(
+    "endpointTable",
+    sqlConnection,
+    "DeduplicationTable");
 var messages = new List<OutgoingMessage>
 {
     new OutgoingMessage(
@@ -741,7 +756,7 @@ var messages = new List<OutgoingMessage>
 };
 await manager.Send(messages);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L81-L97' title='File snippet `sendbatchwithdeduplication` was extracted from'>snippet source</a> | <a href='#snippet-sendbatchwithdeduplication' title='Navigate to start of snippet `sendbatchwithdeduplication`'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L84-L103' title='File snippet `sendbatchwithdeduplication` was extracted from'>snippet source</a> | <a href='#snippet-sendbatchwithdeduplication' title='Navigate to start of snippet `sendbatchwithdeduplication`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -758,14 +773,14 @@ var cleaner = new DedupeCleanerJob(
     table: "Deduplication",
     connectionBuilder: cancellation =>
     {
-        return SnippetConnectionHelpers.OpenConnection(connectionString, cancellation);
+        return ConnectionHelpers.OpenConnection(connectionString, cancellation);
     },
     criticalError: exception => { },
     expireWindow: TimeSpan.FromHours(1),
     frequencyToRunCleanup: TimeSpan.FromMinutes(10));
 cleaner.Start();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L52-L65' title='File snippet `deduplicationcleanerjobstart` was extracted from'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstart' title='Navigate to start of snippet `deduplicationcleanerjobstart`'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L55-L68' title='File snippet `deduplicationcleanerjobstart` was extracted from'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstart' title='Navigate to start of snippet `deduplicationcleanerjobstart`'>anchor</a></sup>
 <!-- endsnippet -->
 
 Then at application shutdown stop the instance.
@@ -775,7 +790,7 @@ Then at application shutdown stop the instance.
 ```cs
 await cleaner.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L67-L71' title='File snippet `deduplicationcleanerjobstop` was extracted from'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstop' title='Navigate to start of snippet `deduplicationcleanerjobstop`'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L70-L74' title='File snippet `deduplicationcleanerjobstop` was extracted from'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstop' title='Navigate to start of snippet `deduplicationcleanerjobstop`'>anchor</a></sup>
 <!-- endsnippet -->
 
 
@@ -829,7 +844,9 @@ The APIs of this extension target either a `SQLConnection` and `SQLTransaction`.
 <!-- snippet: ConnectionHelpers -->
 <a id='snippet-connectionhelpers'/></a>
 ```cs
-public static async Task<DbConnection> OpenConnection(string connectionString, CancellationToken cancellation)
+public static async Task<DbConnection> OpenConnection(
+    string connectionString,
+    CancellationToken cancellation)
 {
     var connection = new SqlConnection(connectionString);
     try
@@ -844,13 +861,15 @@ public static async Task<DbConnection> OpenConnection(string connectionString, C
     }
 }
 
-public static async Task<DbTransaction> BeginTransaction(string connectionString, CancellationToken cancellation)
+public static async Task<DbTransaction> BeginTransaction(
+    string connectionString,
+    CancellationToken cancellation)
 {
     var connection = await OpenConnection(connectionString, cancellation);
     return connection.BeginTransaction();
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/SnippetConnectionHelpers.cs#L8-L31' title='File snippet `connectionhelpers` was extracted from'>snippet source</a> | <a href='#snippet-connectionhelpers' title='Navigate to start of snippet `connectionhelpers`'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/ConnectionHelpers.cs#L8-L35' title='File snippet `connectionhelpers` was extracted from'>snippet source</a> | <a href='#snippet-connectionhelpers' title='Navigate to start of snippet `connectionhelpers`'>anchor</a></sup>
 <!-- endsnippet -->
 
 

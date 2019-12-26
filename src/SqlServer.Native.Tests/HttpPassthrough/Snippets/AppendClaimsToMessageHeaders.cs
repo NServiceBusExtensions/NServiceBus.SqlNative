@@ -75,7 +75,9 @@ public class AppendClaimsToMessageHeaders
 
     #region ClaimsRaw
 
-    public static void Append(IEnumerable<Claim> claims, IDictionary<string, string> headers, string prefix)
+    public static void Append(
+        IEnumerable<Claim> claims,
+        IDictionary<string, string> headers, string prefix)
     {
         foreach (var claim in claims.GroupBy(x => x.Type))
         {
@@ -84,7 +86,9 @@ public class AppendClaimsToMessageHeaders
         }
     }
 
-    public static IEnumerable<Claim> Extract(IDictionary<string, string> headers, string prefix)
+    public static IEnumerable<Claim> Extract(
+        IDictionary<string, string> headers,
+        string prefix)
     {
         foreach (var header in headers)
         {

@@ -41,7 +41,10 @@ public class ProcessingLoop
 
         var startingRow = await rowVersionTracker.Get(sqlConnection);
 
-        async Task Callback(DbTransaction transaction, IncomingMessage message, CancellationToken cancellation)
+        async Task Callback(
+            DbTransaction transaction,
+            IncomingMessage message,
+            CancellationToken cancellation)
         {
             if (message.Body == null)
             {
@@ -60,10 +63,13 @@ public class ProcessingLoop
 
         Task<DbTransaction> TransactionBuilder(CancellationToken cancellation)
         {
-            return SnippetConnectionHelpers.BeginTransaction(connectionString, cancellation);
+            return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
         }
 
-        Task PersistRowVersion(DbTransaction transaction, long rowVersion, CancellationToken token)
+        Task PersistRowVersion(
+            DbTransaction transaction,
+            long rowVersion,
+            CancellationToken token)
         {
             return rowVersionTracker.Save(sqlConnection, rowVersion, token);
         }

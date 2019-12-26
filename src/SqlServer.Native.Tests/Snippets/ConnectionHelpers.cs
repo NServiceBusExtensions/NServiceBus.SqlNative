@@ -3,11 +3,13 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
-public static class SnippetConnectionHelpers
+public static class ConnectionHelpers
 {
     #region ConnectionHelpers
 
-    public static async Task<DbConnection> OpenConnection(string connectionString, CancellationToken cancellation)
+    public static async Task<DbConnection> OpenConnection(
+        string connectionString,
+        CancellationToken cancellation)
     {
         var connection = new SqlConnection(connectionString);
         try
@@ -22,7 +24,9 @@ public static class SnippetConnectionHelpers
         }
     }
 
-    public static async Task<DbTransaction> BeginTransaction(string connectionString, CancellationToken cancellation)
+    public static async Task<DbTransaction> BeginTransaction(
+        string connectionString,
+        CancellationToken cancellation)
     {
         var connection = await OpenConnection(connectionString, cancellation);
         return connection.BeginTransaction();

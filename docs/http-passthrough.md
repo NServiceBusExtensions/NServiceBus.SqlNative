@@ -73,17 +73,17 @@ public class Startup
         // other ASP.MVC config
     }
 
-    Task<Table> Callback(HttpContext httpContext, PassthroughMessage passthroughMessage)
+    Task<Table> Callback(HttpContext httpContext, PassthroughMessage message)
     {
         //TODO: validate that the message type is allowed
         //TODO: validate that the destination is allowed
-        if (passthroughMessage.Destination == null)
+        if (message.Destination == null)
         {
             var customDestination = new Table("Custom");
             return Task.FromResult(customDestination);
         }
 
-        var destination = new Table(passthroughMessage.Destination);
+        var destination = new Table(message.Destination);
         return Task.FromResult(destination);
     }
 
@@ -178,7 +178,9 @@ It may also be necessary to process claims with no reference to `NServiceBus.Sql
 <!-- snippet: ClaimsRaw -->
 <a id='snippet-claimsraw'/></a>
 ```cs
-public static void Append(IEnumerable<Claim> claims, IDictionary<string, string> headers, string prefix)
+public static void Append(
+    IEnumerable<Claim> claims,
+    IDictionary<string, string> headers, string prefix)
 {
     foreach (var claim in claims.GroupBy(x => x.Type))
     {
@@ -187,7 +189,9 @@ public static void Append(IEnumerable<Claim> claims, IDictionary<string, string>
     }
 }
 
-public static IEnumerable<Claim> Extract(IDictionary<string, string> headers, string prefix)
+public static IEnumerable<Claim> Extract(
+    IDictionary<string, string> headers,
+    string prefix)
 {
     foreach (var header in headers)
     {
@@ -206,7 +210,7 @@ public static IEnumerable<Claim> Extract(IDictionary<string, string> headers, st
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L76-L106' title='File snippet `claimsraw` was extracted from'>snippet source</a> | <a href='#snippet-claimsraw' title='Navigate to start of snippet `claimsraw`'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L76-L110' title='File snippet `claimsraw` was extracted from'>snippet source</a> | <a href='#snippet-claimsraw' title='Navigate to start of snippet `claimsraw`'>anchor</a></sup>
 <!-- endsnippet -->
 
 

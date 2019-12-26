@@ -13,7 +13,10 @@ public class ConsumingLoop
     {
         #region ConsumeLoop
 
-        async Task Callback(DbTransaction transaction, IncomingMessage message, CancellationToken cancellation)
+        async Task Callback(
+            DbTransaction transaction,
+            IncomingMessage message,
+            CancellationToken cancellation)
         {
             if (message.Body != null)
             {
@@ -25,7 +28,7 @@ public class ConsumingLoop
 
         Task<DbTransaction> TransactionBuilder(CancellationToken cancellation)
         {
-            return SnippetConnectionHelpers.BeginTransaction(connectionString, cancellation);
+            return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
         }
 
         void ErrorCallback(Exception exception)
