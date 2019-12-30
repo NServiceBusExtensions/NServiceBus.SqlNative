@@ -30,6 +30,11 @@ Thanks to all the backing developers! Support this project by [becoming a patron
 <a href="#" id="endofbacking"></a>
 
 
+## NuGet Package
+
+https://nuget.org/packages/NServiceBus.SqlServer.Native/
+
+
 ## Usage scenarios
 
  * **Error or Audit queue handling**: Allows to consume messages from error and audit queues, for example to move them to a long-term archive. NServiceBus expects to have a queue per message type, so NServiceBus endpoints are not suitable for processing error or audit queues. SQL Native allows manipulation or consumption of queues containing multiple types of messages.
