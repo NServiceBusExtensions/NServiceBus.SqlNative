@@ -9,7 +9,7 @@
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
     <PackageReference Include="NServiceBus.SqlServer" Version="5.0.2" />
     <PackageReference Include="NServiceBus.SqlServer" Version="5.0.2" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.37" PrivateAssets="All" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.38" PrivateAssets="All" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
   </ItemGroup>
 </Project>

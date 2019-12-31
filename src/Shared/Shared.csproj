@@ -4,6 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.0" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.37" PrivateAssets="All" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.38" PrivateAssets="All" />
   </ItemGroup>
 </Project>
