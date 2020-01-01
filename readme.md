@@ -37,7 +37,6 @@ SQL Server Transport Native is a shim providing low-level access to the [NServic
     * [Copied header constants](#copied-header-constants)
     * [Duplicated timestamp functionality](#duplicated-timestamp-functionality)
   * [ConnectionHelpers](#connectionhelpers)
-  * [MARS](#mars)
   * [SqlServer.HttpPassthrough](#sqlserverhttppassthrough)<!-- endtoc -->
 
 <!--- StartOpenCollectiveBackers -->
@@ -47,7 +46,7 @@ SQL Server Transport Native is a shim providing low-level access to the [NServic
 
 ## Community backed
 
-**It is expected that all developers [become a Patron](https://opencollective.com/nservicebusextensions/order/6976) to use any of these libraries. [Go to licensing FAQ](https://github.com/NServiceBusExtensions/Home/blob/master/readme.md#licensingpatron-faq)**
+**It is expected that all developers [become a Patron](https://opencollective.com/nservicebusextensions/order/6976) to use any of these libraries. [Go to licensing FAQ](https://github.com/NServiceBusExtensions/Home/#licensingpatron-faq)**
 
 
 ### Sponsors
@@ -66,7 +65,7 @@ Thanks to all the backing developers! Support this project by [becoming a patron
 <a href="#" id="endofbacking"></a>
 
 
-## NuGet Package
+## NuGet package
 
 https://nuget.org/packages/NServiceBus.SqlServer.Native/
 
@@ -878,14 +877,10 @@ public static async Task<DbTransaction> BeginTransaction(
 <!-- endsnippet -->
 
 
-<!--
-include: mars
-path: /docs/mdsource/mars.include.md
--->
-## MARS
+## MARS <!-- include: mars. path: /docs/mdsource/mars.include.md -->
 
 All [SqlConnection](https://msdn.microsoft.com/en-us/library/system.data.sqlclient.sqlconnection.aspx)s must have [Multiple Active Result Sets (MARS)
-](https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql/multiple-active-result-sets-mars) as multiple concurrent async request can be performed.
+](https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql/multiple-active-result-sets-mars) as multiple concurrent async request can be performed. <!-- end include: mars. path: /docs/mdsource/mars.include.md -->
 
 
 ## SqlServer.HttpPassthrough

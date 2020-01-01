@@ -19,8 +19,7 @@ SQL HTTP Passthrough provides a bridge between an HTTP stream (via JavaScript on
   * [Usage](#usage)
     * [Server-side](#server-side)
     * [Client - JavaScript](#client---javascript)
-    * [Client .NET](#client-net)
-  * [MARS](#mars)<!-- endtoc -->
+    * [Client .NET](#client-net)<!-- endtoc -->
 
 
 ## Design
@@ -391,11 +390,7 @@ await clientFormSender.Send(
 <!-- endsnippet -->
 
 
-<!--
-include: mars
-path: /docs/mdsource/mars.include.md
--->
-## MARS
+## MARS <!-- include: mars. path: /docs/mdsource/mars.include.md -->
 
 All [SqlConnection](https://msdn.microsoft.com/en-us/library/system.data.sqlclient.sqlconnection.aspx)s must have [Multiple Active Result Sets (MARS)
-](https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql/multiple-active-result-sets-mars) as multiple concurrent async request can be performed.
+](https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql/multiple-active-result-sets-mars) as multiple concurrent async request can be performed. <!-- end include: mars. path: /docs/mdsource/mars.include.md -->
