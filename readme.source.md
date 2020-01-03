@@ -2,8 +2,6 @@
 
 SQL Server Transport Native is a shim providing low-level access to the [NServiceBus SQL Server Transport](https://docs.particular.net/transports/sql/) with no NServiceBus or SQL Server Transport reference required.
 
-toc
-
 <!--- StartOpenCollectiveBackers -->
 
 [Already a Patron? skip past this section](#endofbacking)
@@ -20,6 +18,8 @@ Thanks to the current backers.
 <a href="#" id="endofbacking"></a>
 
 <!--- EndOpenCollectiveBackers -->
+
+toc
 
 
 ## NuGet package

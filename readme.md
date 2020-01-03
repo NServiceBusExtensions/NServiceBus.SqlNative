@@ -9,12 +9,26 @@ To change this file edit the source file and then run MarkdownSnippets.
 
 SQL Server Transport Native is a shim providing low-level access to the [NServiceBus SQL Server Transport](https://docs.particular.net/transports/sql/) with no NServiceBus or SQL Server Transport reference required.
 
+<!--- StartOpenCollectiveBackers -->
+
+[Already a Patron? skip past this section](#endofbacking)
+
+
+## Community backed
+
+**It is expected that all developers [become a Patron](https://opencollective.com/nservicebusextensions/contribute/patron-6976) to use this tool. [Go to licensing FAQ](https://github.com/NServiceBusExtensions/Home/#licensingpatron-faq)**
+
+Thanks to the current backers.
+
+<img src="https://opencollective.com/nservicebusextensions/tiers/patron.svg?width=890&avatarHeight=60&button=false">
+
+<a href="#" id="endofbacking"></a>
+
+<!--- EndOpenCollectiveBackers -->
+
 <!-- toc -->
 ## Contents
 
-  * [Community backed](#community-backed)
-    * [Sponsors](#sponsors)
-    * [Patrons](#patrons)
   * [Usage scenarios](#usage-scenarios)
   * [Main Queue](#main-queue)
     * [Queue management](#queue-management)
@@ -38,23 +52,6 @@ SQL Server Transport Native is a shim providing low-level access to the [NServic
     * [Duplicated timestamp functionality](#duplicated-timestamp-functionality)
   * [ConnectionHelpers](#connectionhelpers)
   * [SqlServer.HttpPassthrough](#sqlserverhttppassthrough)<!-- endtoc -->
-
-<!--- StartOpenCollectiveBackers -->
-
-[Already a Patron? skip past this section](#endofbacking)
-
-
-## Community backed
-
-**It is expected that all developers [become a Patron](https://opencollective.com/nservicebusextensions/contribute/patron-6976) to use this tool. [Go to licensing FAQ](https://github.com/NServiceBusExtensions/Home/#licensingpatron-faq)**
-
-Thanks to the current backers.
-
-<img src="https://opencollective.com/nservicebusextensions/tiers/patron.svg?width=890&avatarHeight=60&button=false">
-
-<a href="#" id="endofbacking"></a>
-
-<!--- EndOpenCollectiveBackers -->
 
 
 ## NuGet package
