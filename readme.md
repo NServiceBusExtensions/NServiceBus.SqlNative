@@ -7,6 +7,11 @@ To change this file edit the source file and then run MarkdownSnippets.
 
 # <img src="/src/icon.png" height="30px"> NServiceBus.SqlServer.Native
 
+[![Build status](https://ci.appveyor.com/api/projects/status/vlhu32bab9gk2olc/branch/master?svg=true)](https://ci.appveyor.com/project/SimonCropp/nservicebus-native)
+[![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.Native.svg?label=SqlServer.Native)](https://www.nuget.org/packages/NServiceBus.SqlServer.Native/)
+[![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.HttpPassthrough.svg?label=SqlServer.HttpPassthrough)](https://www.nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough/)
+[![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.Deduplication.svg?label=SqlServer.Deduplication)](https://www.nuget.org/packages/NServiceBus.SqlServer.Deduplication/)
+
 SQL Server Transport Native is a shim providing low-level access to the [NServiceBus SQL Server Transport](https://docs.particular.net/transports/sql/) with no NServiceBus or SQL Server Transport reference required.
 
 <!--- StartOpenCollectiveBackers -->
@@ -54,9 +59,11 @@ Thanks to the current backers.
   * [SqlServer.HttpPassthrough](#sqlserverhttppassthrough)<!-- endtoc -->
 
 
-## NuGet package
+## NuGet packages
 
-https://nuget.org/packages/NServiceBus.SqlServer.Native/
+ * https://nuget.org/packages/NServiceBus.SqlServer.Native/
+ * https://nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough/
+ * https://nuget.org/packages/NServiceBus.SqlServer.Deduplication/
 
 
 ## Usage scenarios
