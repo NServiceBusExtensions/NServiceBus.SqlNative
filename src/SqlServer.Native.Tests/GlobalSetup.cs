@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using NServiceBus.Transport.SqlServerNative;
 using Verify;
+using Verify.SqlServer;
 using Xunit;
 
 [GlobalSetUp]
@@ -8,6 +9,7 @@ public static class GlobalSetup
 {
     public static void Setup()
     {
+        VerifySqlServer.Enable();
         SharedVerifySettings.ModifySerialization(settings =>
         {
             settings.AddExtraSettings(serializerSettings =>

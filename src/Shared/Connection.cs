@@ -26,12 +26,20 @@ public static class Connection
         return connection;
     }
 
+    public static Microsoft.Data.SqlClient.SqlConnection OpenConnectionFromNewClient()
+    {
+        var connection = new Microsoft.Data.SqlClient.SqlConnection(ConnectionString);
+        connection.Open();
+        return connection;
+    }
+
     public static async Task<DbConnection> OpenAsyncConnection(CancellationToken cancellation = default)
     {
         var connection = new SqlConnection(ConnectionString);
         await connection.OpenAsync(cancellation);
         return connection;
     }
+
     public static async Task<SqlConnection> OpenAsyncConnection()
     {
         var connection = new SqlConnection(ConnectionString);
