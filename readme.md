@@ -56,7 +56,8 @@ Thanks to the current backers.
     * [Copied header constants](#copied-header-constants)
     * [Duplicated timestamp functionality](#duplicated-timestamp-functionality)
   * [ConnectionHelpers](#connectionhelpers)
-  * [SqlServer.HttpPassthrough](#sqlserverhttppassthrough)<!-- endtoc -->
+  * [SqlServer.HttpPassthrough](#sqlserverhttppassthrough)
+  * [Security contact information](#security-contact-information)<!-- endtoc -->
 
 
 ## NuGet packages
@@ -886,9 +887,9 @@ SQL HTTP Passthrough provides a bridge between an HTTP stream (via JavaScript on
 See [docs/http-passthrough.md](docs/http-passthrough.md).
 
 
-## Release Notes
+## Security contact information
 
-See [closed milestones](../../milestones?state=closed).
+To report a security vulnerability, use the [Tidelift security contact](https://tidelift.com/security). Tidelift will coordinate the fix and disclosure.
 
 
 ## Icon
