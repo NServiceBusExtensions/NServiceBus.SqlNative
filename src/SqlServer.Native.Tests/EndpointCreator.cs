@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
-using NServiceBus.Transport.SQLServer;
 using NServiceBus.Transport.SqlServerNative;
 
 static class EndpointCreator
@@ -11,13 +10,14 @@ static class EndpointCreator
         {
             var manager = new QueueManager(endpointName, connection);
             await manager.Create();
+            var delayedQueueManager = new DelayedQueueManager($"{endpointName}.Delayed", connection);
+            await delayedQueueManager.Create();
         }
 
         var configuration = new EndpointConfiguration(endpointName);
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
-        var delayedDelivery = transport.NativeDelayedDelivery();
-        delayedDelivery.DisableTimeoutManagerCompatibility();
+        transport.Transactions(TransportTransactionMode.SendsAtomicWithReceive);
         configuration.PurgeOnStartup(true);
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftSerializer>();

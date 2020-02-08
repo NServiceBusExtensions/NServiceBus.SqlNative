@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Logging;

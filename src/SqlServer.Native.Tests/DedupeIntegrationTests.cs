@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Attachments.Sql;
-using NServiceBus.Transport.SQLServer;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 using Xunit.Abstractions;
@@ -60,8 +59,6 @@ public class DedupeIntegrationTests :
 
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
-        var delayedDelivery = transport.NativeDelayedDelivery();
-        delayedDelivery.DisableTimeoutManagerCompatibility();
         return Endpoint.Start(configuration);
     }
 
