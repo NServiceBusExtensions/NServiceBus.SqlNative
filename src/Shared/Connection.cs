@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data.Common;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,9 +26,9 @@ public static class Connection
         return connection;
     }
 
-    public static Microsoft.Data.SqlClient.SqlConnection OpenConnectionFromNewClient()
+    public static SqlConnection OpenConnectionFromNewClient()
     {
-        var connection = new Microsoft.Data.SqlClient.SqlConnection(ConnectionString);
+        var connection = new SqlConnection(ConnectionString);
         connection.Open();
         return connection;
     }

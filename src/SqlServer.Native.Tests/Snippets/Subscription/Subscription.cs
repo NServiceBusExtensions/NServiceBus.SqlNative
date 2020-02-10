@@ -1,4 +1,4 @@
-﻿using System.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 
