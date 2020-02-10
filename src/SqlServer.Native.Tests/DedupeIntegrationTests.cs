@@ -59,6 +59,7 @@ public class DedupeIntegrationTests :
 
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
+        transport.NativeDelayedDelivery();
         return Endpoint.Start(configuration);
     }
 
