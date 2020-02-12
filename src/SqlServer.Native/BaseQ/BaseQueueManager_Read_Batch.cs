@@ -17,7 +17,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstNegativeAndZero(size, nameof(size));
             Guard.AgainstNegativeAndZero(startRowVersion, nameof(startRowVersion));
             Guard.AgainstNull(func, nameof(func));
-            await using var command = BuildReadCommand(size, startRowVersion);
+            using var command = BuildReadCommand(size, startRowVersion);
             return await ReadMultiple(command, func, cancellation);
         }
     }

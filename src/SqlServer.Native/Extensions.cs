@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 static class Extensions
 {
+    //#if netstandard2_0
+    public static Task DisposeAsync(this IDisposable disposable)
+    {
+        disposable.Dispose();
+        return Task.CompletedTask;
+    }
+    //#endif
+
     public static Func<T, Task> ToTaskFunc<T>(this Action<T> action)
     {
         Guard.AgainstNull(action, nameof(action));
@@ -41,7 +49,7 @@ static class Extensions
     public static async Task RunCommand(this DbConnection connection, DbTransaction? transaction, string sql, CancellationToken cancellation = default)
     {
         Guard.AgainstNull(connection, nameof(connection));
-        await using var command = connection.CreateCommand(transaction, sql);
+        using var command = connection.CreateCommand(transaction, sql);
         await command.RunNonQuery(cancellation);
     }
 

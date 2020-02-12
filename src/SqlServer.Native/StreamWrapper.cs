@@ -69,6 +69,7 @@ class StreamWrapper :
         return inner.BeginRead(buffer, offset, count, callback, state);
     }
 
+#if NETSTANDARD2_1
     public override int Read(Span<byte> buffer)
     {
         return inner.Read(buffer);
@@ -79,6 +80,22 @@ class StreamWrapper :
         return inner.ReadAsync(buffer, cancellationToken);
     }
 
+    public override void CopyTo(Stream destination, int bufferSize)
+    {
+        inner.CopyTo(destination, bufferSize);
+    }
+
+    public override void Write(ReadOnlySpan<byte> buffer)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+#endif
+
     public override void Close()
     {
         inner.Close();
@@ -88,11 +105,6 @@ class StreamWrapper :
     public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellation)
     {
         return inner.CopyToAsync(destination, bufferSize, cancellation);
-    }
-
-    public override void CopyTo(Stream destination, int bufferSize)
-    {
-        inner.CopyTo(destination, bufferSize);
     }
 
     public override int EndRead(IAsyncResult asyncResult)
@@ -136,16 +148,6 @@ class StreamWrapper :
     }
 
     public override void WriteByte(byte value)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Write(ReadOnlySpan<byte> buffer)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

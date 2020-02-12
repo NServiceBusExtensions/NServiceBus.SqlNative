@@ -58,7 +58,7 @@ namespace NServiceBus.Transport.SqlServerNative
             DbConnection? connection = null;
             if (connectionBuilder != null)
             {
-                await using (connection = await connectionBuilder(cancellation))
+                using (connection = await connectionBuilder(cancellation))
                 {
                     var consumer = new QueueManager(table, connection);
                     await RunBatch(consumer, message => connectionCallback!(connection, message, cancellation), cancellation);
@@ -76,11 +76,19 @@ namespace NServiceBus.Transport.SqlServerNative
                 {
                     await RunBatch(consumer, message => transactionCallback!(transaction, message, cancellation), cancellation);
 
+#if NETSTANDARD2_1
                     await transaction.CommitAsync(cancellation);
+#else
+                    transaction.Commit();
+#endif
                 }
                 catch
                 {
+#if NETSTANDARD2_1
                     await transaction.RollbackAsync(cancellation);
+#else
+                    transaction.Rollback();
+#endif
                     throw;
                 }
             }

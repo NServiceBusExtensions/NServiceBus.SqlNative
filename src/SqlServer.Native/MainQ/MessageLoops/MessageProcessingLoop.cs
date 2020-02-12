@@ -73,7 +73,7 @@ namespace NServiceBus.Transport.SqlServerNative
             DbConnection? connection = null;
             if (connectionBuilder != null)
             {
-                await using (connection = await connectionBuilder(cancellation))
+                using (connection = await connectionBuilder(cancellation))
                 {
                     var reader = new QueueManager(table, connection);
                     await RunBatch(
@@ -99,11 +99,19 @@ namespace NServiceBus.Transport.SqlServerNative
                             messageFunc: message => transactionCallback!(transaction, message, cancellation),
                             persistFunc: () => transactionPersistRowVersion!(transaction, startingRow, cancellation),
                             cancellation);
+#if NETSTANDARD2_1
                     await transaction.CommitAsync(cancellation);
+#else
+                    transaction.Commit();
+#endif
                 }
                 catch
                 {
+#if NETSTANDARD2_1
                     await transaction.RollbackAsync(cancellation);
+#else
+                    transaction.Rollback();
+#endif
                     throw;
                 }
             }
