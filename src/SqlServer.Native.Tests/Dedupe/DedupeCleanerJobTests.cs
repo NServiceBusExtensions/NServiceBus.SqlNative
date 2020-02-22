@@ -33,7 +33,7 @@ public class DedupeCleanerJobTests :
             frequencyToRunCleanup: TimeSpan.FromMilliseconds(10));
         cleaner.Start();
         Thread.Sleep(100);
-        cleaner.Stop().Await();
+        await cleaner.Stop();
         await Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
