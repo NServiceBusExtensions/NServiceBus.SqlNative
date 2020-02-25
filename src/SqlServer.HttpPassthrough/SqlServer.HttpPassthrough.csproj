@@ -17,7 +17,7 @@
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.41" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0" Condition="$(TargetFramework) == 'netstandard2.0'" />
-    <PackageReference Include="Nullable" Version="1.2.0" Condition="$(TargetFramework) == 'netstandard2.0'" PrivateAssets="All" />
+    <PackageReference Include="Nullable" Version="1.2.1" Condition="$(TargetFramework) == 'netstandard2.0'" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
   </ItemGroup>
 </Project>
