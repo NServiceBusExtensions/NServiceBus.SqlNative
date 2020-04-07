@@ -5,12 +5,5 @@
     <Description>Low level .net wrapper for the SQL Server transport.</Description>
     <PackageTags>NServiceBus, Native, Raw</PackageTags>
     <NoWarn>CS1591;CS1573</NoWarn>
-    <PackageLicenseFile>license.txt</PackageLicenseFile>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileFullPath)\..\..\license.txt"
-          Pack="true"
-          PackagePath="license.txt"/>
-  </ItemGroup>
 </Project>
