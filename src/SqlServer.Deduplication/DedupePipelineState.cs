@@ -14,7 +14,14 @@ class DedupePipelineState
         [NotNullWhen(true)]
         out DedupePipelineState? state)
     {
-        return context.Extensions.TryGet(out state);
+        if (context.Extensions.TryGet(out DedupePipelineState found))
+        {
+            state = found;
+            return false;
+        }
+
+        state = null;
+        return false;
     }
 
     public static void Set(SendOptions options, DedupePipelineState state)
