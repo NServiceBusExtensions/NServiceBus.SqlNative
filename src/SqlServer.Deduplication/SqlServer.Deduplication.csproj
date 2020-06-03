@@ -18,7 +18,7 @@
     <PackageReference Include="Fody" Version="6.2.0" PrivateAssets="all" />
     <PackageReference Include="NServiceBus" Version="7.3.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="NServiceBus.Transport.SqlServer" Version="6.0.0" />
+    <PackageReference Include="NServiceBus.Transport.SqlServer" Version="6.0.1" />
     <PackageReference Include="ProjectDefaults" Version="1.0.43" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" Condition="$(TargetFramework) == 'netstandard2.0'" />
     <PackageReference Include="Nullable" Version="1.2.1" Condition="$(TargetFramework) == 'netstandard2.0'" PrivateAssets="All" />
