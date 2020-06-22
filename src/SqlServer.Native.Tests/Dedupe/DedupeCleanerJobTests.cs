@@ -3,9 +3,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class DedupeCleanerJobTests :
     TestBase
 {
@@ -34,7 +35,7 @@ public class DedupeCleanerJobTests :
         cleaner.Start();
         Thread.Sleep(100);
         await cleaner.Stop();
-        await Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
     Task<long> Send(OutgoingMessage message)
@@ -48,8 +49,7 @@ public class DedupeCleanerJobTests :
         return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
-    public DedupeCleanerJobTests(ITestOutputHelper output) :
-        base(output)
+    public DedupeCleanerJobTests()
     {
         var queueManager = new QueueManager(table, SqlConnection, "Deduplication");
         queueManager.Drop().Await();

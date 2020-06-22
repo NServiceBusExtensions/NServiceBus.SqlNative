@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
-using Xunit.Abstractions;
 using Headers = NServiceBus.Transport.SqlServerNative.Headers;
 
 public class SendIntegration :
@@ -55,11 +54,6 @@ public class SendIntegration :
 
     class SendMessage :
         IMessage
-    {
-    }
-
-    public SendIntegration(ITestOutputHelper output) :
-        base(output)
     {
     }
 }

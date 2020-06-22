@@ -3,10 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class CleanerTests :
-    VerifyBase
+[UsesVerify]
+public class CleanerTests
 {
     [Fact]
     public void If_triggers_critical_action_after_10_failures()
@@ -86,10 +85,5 @@ public class CleanerTests :
 
         Func<DateTime, CancellationToken, Task>? callback;
         Action<Exception>? errorCallback;
-    }
-
-    public CleanerTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

@@ -2,10 +2,9 @@
 using System.Threading.Tasks;
 using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class SerializerTests :
-    VerifyBase
+[UsesVerify]
+public class SerializerTests
 {
     [Fact]
     public Task Dictionary()
@@ -21,7 +20,7 @@ public class SerializerTests :
                 {"a//b", "a//b"},
                 {@"a\/b", @"a\/b"}
             });
-        return Verify(Serializer.DeSerializeDictionary(serialized));
+        return Verifier.Verify(Serializer.DeSerializeDictionary(serialized));
     }
 
     [Fact]
@@ -38,11 +37,6 @@ public class SerializerTests :
                 "a//b",
                 @"a\/b"
             });
-        return Verify(Serializer.DeSerializeList(serialized));
-    }
-
-    public SerializerTests(ITestOutputHelper output) :
-        base(output)
-    {
+        return Verifier.Verify(Serializer.DeSerializeList(serialized));
     }
 }

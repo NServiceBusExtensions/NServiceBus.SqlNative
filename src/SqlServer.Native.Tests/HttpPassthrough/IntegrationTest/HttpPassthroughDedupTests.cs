@@ -7,7 +7,6 @@ using NServiceBus;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
-using Xunit.Abstractions;
 
 public class HttpPassthroughDedupTests :
     TestBase
@@ -70,11 +69,6 @@ public class HttpPassthroughDedupTests :
             Interlocked.Increment(ref count);
             return Task.CompletedTask;
         }
-    }
-
-    public HttpPassthroughDedupTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }
 class DedupMessage :

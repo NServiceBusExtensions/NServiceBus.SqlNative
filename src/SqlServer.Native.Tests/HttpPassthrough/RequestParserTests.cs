@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class RequestParserTests :
     TestBase
 {
@@ -29,6 +30,7 @@ public class RequestParserTests :
         );
         return Verify(request);
     }
+
     [Fact]
     public Task Simple()
     {
@@ -56,7 +58,7 @@ public class RequestParserTests :
     Task Verify(FakeHttpRequest request)
     {
         var extract = RequestParser.Extract(request, CancellationToken.None).GetAwaiter().GetResult();
-        return Verify(new
+        return Verifier.Verify(new
         {
             extract.Attachments.Single().FileName,
             extract.Body,
@@ -79,10 +81,5 @@ public class RequestParserTests :
             {
                 new FormFile(new MemoryStream(attachmentBytes), 0, attachmentBytes.Length, "attachment", "attachment.txt")
             });
-    }
-
-    public RequestParserTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

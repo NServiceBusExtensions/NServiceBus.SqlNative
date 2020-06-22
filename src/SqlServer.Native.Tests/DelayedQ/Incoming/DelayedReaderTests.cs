@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class DelayedReaderTests :
     TestBase
 {
@@ -16,7 +17,7 @@ public class DelayedReaderTests :
         await DelayedTestDataBuilder.SendData(table);
         var reader = new DelayedQueueManager(table, SqlConnection);
         await using var result = await reader.Read(1);
-        await Verify(result!.ToVerifyTarget());
+        await Verifier.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -25,7 +26,7 @@ public class DelayedReaderTests :
         await DelayedTestDataBuilder.SendNullData(table);
         var reader = new DelayedQueueManager(table, SqlConnection);
         await using var result = await reader.Read(1);
-        await Verify(result!.ToVerifyTarget());
+        await Verifier.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -41,11 +42,10 @@ public class DelayedReaderTests :
             action: message => { messages.Add(message.ToVerifyTarget()); });
         Assert.Equal(4, result.LastRowVersion);
         Assert.Equal(3, result.Count);
-        await Verify(messages.OrderBy(x => x.Due));
+        await Verifier.Verify(messages.OrderBy(x => x.Due));
     }
 
-    public DelayedReaderTests(ITestOutputHelper output) :
-        base(output)
+    public DelayedReaderTests()
     {
         var manager = new DelayedQueueManager(table, SqlConnection);
         manager.Drop().Await();

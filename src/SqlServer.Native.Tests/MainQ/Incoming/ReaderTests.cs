@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class ReaderTests :
     TestBase
 {
@@ -16,7 +17,7 @@ public class ReaderTests :
         await TestDataBuilder.SendData(table);
         var reader = new QueueManager(table, SqlConnection);
         await using var result = await reader.Read(1);
-        await Verify(result!.ToVerifyTarget());
+        await Verifier.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -25,7 +26,7 @@ public class ReaderTests :
         await TestDataBuilder.SendNullData(table);
         var reader = new QueueManager(table, SqlConnection);
         await using var result = await reader.Read(1);
-        await Verify(result!.ToVerifyTarget());
+        await Verifier.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -54,11 +55,10 @@ public class ReaderTests :
                 size: 10,
                 startRowVersion: 1,
                 action: message => { messages.Add(message.ToVerifyTarget()); });
-        await Verify(messages.OrderBy(x => x.Id));
+        await Verifier.Verify(messages.OrderBy(x => x.Id));
     }
 
-    public ReaderTests(ITestOutputHelper output) :
-        base(output)
+    public ReaderTests()
     {
         var manager = new QueueManager(table, SqlConnection);
         manager.Drop().Await();

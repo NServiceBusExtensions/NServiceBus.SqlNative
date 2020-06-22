@@ -4,9 +4,10 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class DelayedSenderTests :
     TestBase
 {
@@ -18,7 +19,7 @@ public class DelayedSenderTests :
     {
         var message = BuildBytesMessage();
         await Send(message);
-        await Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -26,7 +27,7 @@ public class DelayedSenderTests :
     {
         var message = BuildBytesNullMessage();
         await Send(message);
-        await Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -34,7 +35,7 @@ public class DelayedSenderTests :
     {
         var message = BuildStreamMessage();
         await  Send(message);
-        await Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -44,7 +45,7 @@ public class DelayedSenderTests :
 
         var message = BuildBytesNullMessage();
         await sender.Send(message);
-        await Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -56,7 +57,7 @@ public class DelayedSenderTests :
             BuildStreamMessage()
         };
         await Send(messages);
-        await Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     [Fact]
@@ -68,7 +69,7 @@ public class DelayedSenderTests :
             BuildStreamNullMessage()
         };
         await Send(messages);
-        await Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadDelayedData(table, SqlConnection));
     }
 
     Task<long> Send(OutgoingDelayedMessage message)
@@ -106,8 +107,7 @@ public class DelayedSenderTests :
         return new OutgoingDelayedMessage(dateTime, null, bodyStream: null);
     }
 
-    public DelayedSenderTests(ITestOutputHelper output) :
-        base(output)
+    public DelayedSenderTests()
     {
         var manager = new DelayedQueueManager(table, SqlConnection);
         manager.Drop().Await();

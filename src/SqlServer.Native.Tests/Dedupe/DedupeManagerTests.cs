@@ -3,9 +3,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class DedupeManagerTests :
     TestBase
 {
@@ -25,7 +26,7 @@ public class DedupeManagerTests :
         await Send(message2);
         var cleaner = new DedupeManager(SqlConnection, "Deduplication");
         await cleaner.CleanupItemsOlderThan(now);
-        await Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
     Task Send(OutgoingMessage message)
@@ -39,8 +40,7 @@ public class DedupeManagerTests :
         return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
-    public DedupeManagerTests(ITestOutputHelper output) :
-        base(output)
+    public DedupeManagerTests()
     {
         var manager = new QueueManager(table, SqlConnection, "Deduplication");
         manager.Drop().Await();

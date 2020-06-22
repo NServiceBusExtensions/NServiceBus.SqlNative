@@ -2,7 +2,6 @@
 using NServiceBus;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
-using Xunit.Abstractions;
 
 public class ConsumerIntegrationTests :
     TestBase
@@ -33,11 +32,6 @@ public class ConsumerIntegrationTests :
 
     class SendMessage :
         IMessage
-    {
-    }
-
-    public ConsumerIntegrationTests(ITestOutputHelper output) :
-        base(output)
     {
     }
 }

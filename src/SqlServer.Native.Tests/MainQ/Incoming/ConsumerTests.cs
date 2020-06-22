@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class ConsumerTests :
     TestBase
 {
@@ -16,7 +17,7 @@ public class ConsumerTests :
         await TestDataBuilder.SendData(table);
         var consumer = new QueueManager(table, SqlConnection);
         await using var result = await consumer.Consume();
-        await Verify(result!.ToVerifyTarget());
+        await Verifier.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -25,7 +26,7 @@ public class ConsumerTests :
         await TestDataBuilder.SendNullData(table);
         var consumer = new QueueManager(table, SqlConnection);
         await using var result = await consumer.Consume();
-        await Verify(result!.ToVerifyTarget());
+        await Verifier.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -52,11 +53,10 @@ public class ConsumerTests :
             size: 10,
             action: message => { messages.Add(message.ToVerifyTarget()); });
         Assert.Equal(5, result.Count);
-        await Verify(messages.OrderBy(x => x.Id));
+        await Verifier.Verify(messages.OrderBy(x => x.Id));
     }
 
-    public ConsumerTests(ITestOutputHelper output) :
-        base(output)
+    public ConsumerTests()
     {
         var manager = new QueueManager(table, SqlConnection);
         manager.Drop().Await();

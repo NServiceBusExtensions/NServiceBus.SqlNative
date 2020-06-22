@@ -1,16 +1,13 @@
 ﻿using Newtonsoft.Json;
 using NServiceBus.Transport.SqlServerNative;
-using Verify;
-using Verify.SqlServer;
-using Xunit;
+using VerifyTests;
 
-[GlobalSetUp]
-public static class GlobalSetup
+public static class ModuleInitializer
 {
-    public static void Setup()
+    public static void Initialize()
     {
         VerifySqlServer.Enable();
-        SharedVerifySettings.ModifySerialization(settings =>
+        VerifierSettings.ModifySerialization(settings =>
         {
             settings.AddExtraSettings(serializerSettings =>
                 serializerSettings.TypeNameHandling = TypeNameHandling.Objects);

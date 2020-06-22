@@ -3,9 +3,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using NServiceBus.SqlServer.HttpPassthrough;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class ClaimsAppenderTests :
     TestBase
 {
@@ -15,7 +16,7 @@ public class ClaimsAppenderTests :
         var headers = new Dictionary<string, string>();
         var claims = BuildClaims();
         ClaimsAppender.Append(claims, headers, "prefix.");
-        return Verify(headers);
+        return Verifier.Verify(headers);
     }
 
     [Fact]
@@ -30,7 +31,7 @@ public class ClaimsAppenderTests :
                 x.Type,
                 x.Value
             });
-        return Verify(result);
+        return Verifier.Verify(result);
     }
 
     static IEnumerable<Claim> BuildClaims()
@@ -38,10 +39,5 @@ public class ClaimsAppenderTests :
         yield return new Claim(ClaimTypes.Email, "User@foo.bar");
         yield return new Claim(ClaimTypes.NameIdentifier, "User1");
         yield return new Claim(ClaimTypes.NameIdentifier, "User2");
-    }
-
-    public ClaimsAppenderTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

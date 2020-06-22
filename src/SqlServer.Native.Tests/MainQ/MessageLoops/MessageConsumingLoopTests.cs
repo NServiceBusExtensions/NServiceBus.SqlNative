@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
-using Xunit.Abstractions;
 
 public class MessageConsumingLoopTests :
     TestBase
@@ -84,10 +83,5 @@ public class MessageConsumingLoopTests :
     static OutgoingMessage BuildMessage(string guid)
     {
         return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
-    }
-
-    public MessageConsumingLoopTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

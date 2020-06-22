@@ -1,23 +1,18 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Runtime.CompilerServices;
-using VerifyXunit;
-using Xunit.Abstractions;
+﻿using System;
+using Microsoft.Data.SqlClient;
 
-public class TestBase:
-    VerifyBase
+public class TestBase :
+    IDisposable
 {
-    public TestBase(ITestOutputHelper output,
-        [CallerFilePath] string sourceFilePath = "") :
-        base(output, sourceFilePath)
+    public TestBase()
     {
         SqlConnection = Connection.OpenConnection();
     }
 
     public SqlConnection SqlConnection;
 
-    public override void Dispose()
+    public virtual void Dispose()
     {
         SqlConnection?.Dispose();
-        base.Dispose();
     }
 }

@@ -4,9 +4,10 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class SendTests :
     TestBase
 {
@@ -19,7 +20,7 @@ public class SendTests :
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -30,7 +31,7 @@ public class SendTests :
         var sender = new QueueManager(table, transaction);
         await sender.Send(message);
         await transaction.CommitAsync();
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -40,7 +41,7 @@ public class SendTests :
 
         var message = BuildBytesNullMessage("00000000-0000-0000-0000-000000000001");
         await sender.Send(message);
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -48,7 +49,7 @@ public class SendTests :
     {
         var message = BuildStreamMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -56,7 +57,7 @@ public class SendTests :
     {
         var message = BuildStreamMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -68,7 +69,7 @@ public class SendTests :
             BuildStreamMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -81,7 +82,7 @@ public class SendTests :
         };
         await Send(messages);
 
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     Task Send(List<OutgoingMessage> messages)
@@ -117,8 +118,7 @@ public class SendTests :
         return new OutgoingMessage(new Guid(guid), bodyBytes: null);
     }
 
-    public SendTests(ITestOutputHelper output) :
-        base(output)
+    public SendTests()
     {
         var manager = new QueueManager(table, SqlConnection);
         manager.Drop().Await();

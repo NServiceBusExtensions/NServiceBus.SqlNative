@@ -11,7 +11,6 @@ using NServiceBus.Attachments.Sql;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
-using Xunit.Abstractions;
 
 public class HttpPassthroughIntegrationTests :
     TestBase
@@ -88,10 +87,5 @@ public class HttpPassthroughIntegrationTests :
             Assert.Equal("Value", message.Property);
             resetEvent.Set();
         }
-    }
-
-    public HttpPassthroughIntegrationTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

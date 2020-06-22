@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class WithDedupeTests :
     TestBase
 {
@@ -18,7 +19,7 @@ public class WithDedupeTests :
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        await Verify( SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify( SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -27,7 +28,7 @@ public class WithDedupeTests :
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
         await Send(message);
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     //[Fact]
@@ -36,7 +37,7 @@ public class WithDedupeTests :
     //    var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
     //    Send(message);
     //    Send(message);
-    //    await Verify(SqlHelper.ReadData(table));
+    //    await Verifier.Verify(SqlHelper.ReadData(table));
     //}
 
     [Fact]
@@ -48,7 +49,7 @@ public class WithDedupeTests :
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -62,7 +63,7 @@ public class WithDedupeTests :
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -76,7 +77,7 @@ public class WithDedupeTests :
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        await Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     Task Send(List<OutgoingMessage> messages)
@@ -96,8 +97,7 @@ public class WithDedupeTests :
         return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
-    public WithDedupeTests(ITestOutputHelper output) :
-        base(output)
+    public WithDedupeTests()
     {
         var manager = new QueueManager(table, SqlConnection, "Deduplication");
         manager.Drop().Await();

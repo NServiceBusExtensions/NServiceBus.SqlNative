@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
+[UsesVerify]
 public class DelayedConsumerTests :
     TestBase
 {
@@ -16,7 +17,7 @@ public class DelayedConsumerTests :
         await DelayedTestDataBuilder.SendData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
         await using var result = await consumer.Consume();
-        await Verify(result!.ToVerifyTarget());
+        await Verifier.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -25,7 +26,7 @@ public class DelayedConsumerTests :
         await DelayedTestDataBuilder.SendNullData(table);
         var consumer = new DelayedQueueManager(table, SqlConnection);
         await using var result = await consumer.Consume();
-        await Verify(result!.ToVerifyTarget());
+        await Verifier.Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -39,11 +40,10 @@ public class DelayedConsumerTests :
             action: message => { messages.Add(message.ToVerifyTarget()); });
         Assert.Equal(3, result.Count);
         Assert.Equal(3, result.LastRowVersion);
-        await Verify(messages.OrderBy(x => x.Due));
+        await Verifier.Verify(messages.OrderBy(x => x.Due));
     }
 
-    public DelayedConsumerTests(ITestOutputHelper output) :
-        base(output)
+    public DelayedConsumerTests()
     {
         var manager = new DelayedQueueManager(table, SqlConnection);
         manager.Drop().Await();

@@ -1,16 +1,10 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
-using Xunit.Abstractions;
 
 public class RowVersionTrackerTests :
     TestBase
 {
-    public RowVersionTrackerTests(ITestOutputHelper output) :
-        base(output)
-    {
-    }
-
     [Fact]
     public async Task Run()
     {

@@ -5,7 +5,6 @@ using NServiceBus;
 using NServiceBus.Attachments.Sql;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
-using Xunit.Abstractions;
 using DedupeOutcome = NServiceBus.Transport.SqlServerDeduplication.DedupeOutcome;
 using DedupeResult = NServiceBus.Transport.SqlServerDeduplication.DedupeResult;
 
@@ -73,8 +72,7 @@ public class DedupeIntegrationTests :
         }
     }
 
-    public DedupeIntegrationTests(ITestOutputHelper output) :
-        base(output)
+    public DedupeIntegrationTests()
     {
         var dedupeManager = new DedupeManager(SqlConnection, "Deduplication");
         dedupeManager.Drop().Await();

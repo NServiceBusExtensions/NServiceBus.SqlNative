@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
-using Verify;
+using VerifyTests;
 using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
-public class MainQueueCreationTests :
-    VerifyBase
+[UsesVerify]
+public class MainQueueCreationTests
 {
     [Fact]
     public async Task Run()
@@ -17,11 +16,6 @@ public class MainQueueCreationTests :
         await manager.Create();
         var settings = new VerifySettings();
         settings.SchemaSettings(includeItem: s => s == "MainQueueCreationTests");
-        await Verify(connection, settings);
-    }
-
-    public MainQueueCreationTests(ITestOutputHelper output) :
-        base(output)
-    {
+        await Verifier.Verify(connection, settings);
     }
 }
