@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
@@ -63,7 +62,7 @@ class Sender
             bodyBytes: Encoding.UTF8.GetBytes(message.Body));
         var queueManager = new QueueManager(destination, transaction, dedupeTable);
         var attachmentExpiry = DateTime.UtcNow.AddDays(10);
-        await Task.WhenAll(SendAttachments(transaction, attachmentExpiry, cancellation, message));
+        await SendAttachments(transaction, attachmentExpiry, cancellation, message);
         return await queueManager.Send(outgoingMessage, cancellation);
     }
 
@@ -83,12 +82,12 @@ class Sender
             message.Attachments.Select(x => x.FileName));
     }
 
-    IEnumerable<Task> SendAttachments(DbTransaction transaction, DateTime expiry, CancellationToken cancellation, PassthroughMessage message)
+    async Task SendAttachments(DbTransaction transaction, DateTime expiry, CancellationToken cancellation, PassthroughMessage message)
     {
         var connection = transaction.Connection;
         foreach (var file in message.Attachments)
         {
-            yield return SendAttachment(transaction, message.Id.ToString(), expiry, cancellation, file, connection);
+            await SendAttachment(transaction, message.Id.ToString(), expiry, cancellation, file, connection);
         }
     }
 

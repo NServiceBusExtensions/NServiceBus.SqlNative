@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -111,7 +110,10 @@ namespace NServiceBus.Transport.SqlServerNative
             disposed = true;
             if (cleanups != null)
             {
-                await Task.WhenAll(cleanups.Select(async x => await x.DisposeAsync()));
+                foreach (var cleanup in cleanups)
+                {
+                    await cleanup.DisposeAsync();
+                }
             }
         }
     }
