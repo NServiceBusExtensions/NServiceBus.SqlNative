@@ -54,7 +54,7 @@ At [ASP.NET Core startup](https://docs.microsoft.com/en-us/aspnet/core/fundament
  * `AddSqlHttpPassthroughBadRequestMiddleware` is called on [IApplicationBuilder](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.iapplicationbuilder), which adds [Middleware](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/) to the pipeline. This means that if the request parsing code of the SQL HTTP Passthrough throws a `BadRequestException`, that exception can be gracefully handled and an [HTTP BadRequest (400)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400) can be sent as a response. This is optional, and a Controller can choose to explicitly catch and handle `BadRequestException` in a different way.
 
 <!-- snippet: Startup -->
-<a id='snippet-startup'/></a>
+<a id='snippet-startup'></a>
 ```cs
 public class Startup
 {
@@ -111,7 +111,7 @@ Append the [Claims](https://msdn.microsoft.com/en-us/library/system.security.cla
 By default each header will get a prefix of `SqlHttpPassthrough.Claim.`
 
 <!-- snippet: AppendClaimsToMessageHeaders -->
-<a id='snippet-appendclaimstomessageheaders'/></a>
+<a id='snippet-appendclaimstomessageheaders'></a>
 ```cs
 var configuration = new PassthroughConfiguration(
     connectionFunc: OpenConnection,
@@ -129,7 +129,7 @@ services.AddSqlHttpPassthrough(configuration);
 A custom prefix can also be defined.
 
 <!-- snippet: AppendClaimsToMessageHeaders_WithPrefix -->
-<a id='snippet-appendclaimstomessageheaders_withprefix'/></a>
+<a id='snippet-appendclaimstomessageheaders_withprefix'></a>
 ```cs
 var configuration = new PassthroughConfiguration(
     connectionFunc: OpenConnection,
@@ -149,7 +149,7 @@ For unit testing and integration purposes it may be useful to manipulate a raw `
 To append claims:
 
 <!-- snippet: AppendClaimsToDictionary -->
-<a id='snippet-appendclaimstodictionary'/></a>
+<a id='snippet-appendclaimstodictionary'></a>
 ```cs
 var claims = new List<Claim>
 {
@@ -165,7 +165,7 @@ ClaimsAppender.Append(claims, headerDictionary, "prefix.");
 To extract claims:
 
 <!-- snippet: ExtractClaimsFromDictionary -->
-<a id='snippet-extractclaimsfromdictionary'/></a>
+<a id='snippet-extractclaimsfromdictionary'></a>
 ```cs
 var claimsList = ClaimsAppender.Extract(headerDictionary, "prefix.");
 ```
@@ -175,7 +175,7 @@ var claimsList = ClaimsAppender.Extract(headerDictionary, "prefix.");
 It may also be necessary to process claims with no reference to `NServiceBus.SqlServer.HttpPassthrough`. This can be done using the following utility methods. Note that these methods use `JsonConvert` from [Json.NET](https://www.newtonsoft.com/json).
 
 <!-- snippet: ClaimsRaw -->
-<a id='snippet-claimsraw'/></a>
+<a id='snippet-claimsraw'></a>
 ```cs
 public static void Append(
     IEnumerable<Claim> claims,
@@ -249,7 +249,7 @@ Usage in a [controller](https://docs.microsoft.com/en-us/aspnet/core/mvc/control
  * The Controller handling the HTTP Post and passing that information to `ISqlPassthrough.Send`.
 
 <!-- snippet: Controller -->
-<a id='snippet-controller'/></a>
+<a id='snippet-controller'></a>
 ```cs
 [Route("SendMessage")]
 public class PassthroughController : ControllerBase
@@ -289,7 +289,7 @@ If the incoming HTTP request fails to be parsed, a `BadRequestException` will be
 The JavaScript that submits the data does so through by building up a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) object and [POSTing](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Sending_and_retrieving_form_data#The_POST_method) that via the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 
 <!-- snippet: PostToBus -->
-<a id='snippet-posttobus'/></a>
+<a id='snippet-posttobus'></a>
 ```html
 function PostToBus() {
     var message = new Object();
@@ -329,7 +329,7 @@ function PostToBus() {
 For deduplication to operate, the client must generate a [MessageId](/nservicebus/messaging/message-identity.md), so that any retries can be ignored. JavaScript does not contain native functionality to generate a GUID, so a helper method is used. 
 
 <!-- snippet: Guid -->
-<a id='snippet-guid'/></a>
+<a id='snippet-guid'></a>
 ```html
 function newGuid() {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
@@ -348,7 +348,7 @@ function newGuid() {
 Creating and posting a multipart form can be done using a combination of [MultipartFormDataContent](https://msdn.microsoft.com/en-us/library/system.net.http.multipartformdatacontent.aspx) and [HttpClient.PostAsync](https://msdn.microsoft.com/en-us/library/system.net.http.httpclient.postasync.aspx). To simplify this action the `ClientFormSender` class can be used:
 
 <!-- snippet: ClientFormSender -->
-<a id='snippet-clientformsender'/></a>
+<a id='snippet-clientformsender'></a>
 ```cs
 var clientFormSender = new ClientFormSender(httpClient);
 await clientFormSender.Send(
@@ -368,7 +368,7 @@ await clientFormSender.Send(
 This can be useful when performing [Integration testing in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/testing/integration-testing).
 
 <!-- snippet: asptesthost -->
-<a id='snippet-asptesthost'/></a>
+<a id='snippet-asptesthost'></a>
 ```cs
 var hostBuilder = new WebHostBuilder();
 hostBuilder.UseStartup<Startup>();
