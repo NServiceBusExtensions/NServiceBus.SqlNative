@@ -107,7 +107,7 @@ See also [SQL Server Transport - SQL statements](https://docs.particular.net/tra
 The queue can be created using the following:
 
 <!-- snippet: CreateQueue -->
-<a id='snippet-createqueue'/></a>
+<a id='snippet-createqueue'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 await manager.Create();
@@ -121,7 +121,7 @@ await manager.Create();
 The queue can be deleted using the following:
 
 <!-- snippet: DeleteQueue -->
-<a id='snippet-deletequeue'/></a>
+<a id='snippet-deletequeue'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 await manager.Drop();
@@ -140,7 +140,7 @@ Sending to the main transport queue.
 Sending a single message.
 
 <!-- snippet: Send -->
-<a id='snippet-send'/></a>
+<a id='snippet-send'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var message = new OutgoingMessage(
@@ -158,7 +158,7 @@ await manager.Send(message);
 Sending a batch of messages.
 
 <!-- snippet: SendBatch -->
-<a id='snippet-sendbatch'/></a>
+<a id='snippet-sendbatch'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var messages = new List<OutgoingMessage>
@@ -188,7 +188,7 @@ await manager.Send(messages);
 Reading a single message.
 
 <!-- snippet: Read -->
-<a id='snippet-read'/></a>
+<a id='snippet-read'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var message = await manager.Read(rowVersion: 10);
@@ -213,7 +213,7 @@ if (message != null)
 Reading a batch of messages.
 
 <!-- snippet: ReadBatch -->
-<a id='snippet-readbatch'/></a>
+<a id='snippet-readbatch'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var result = await manager.Read(
@@ -244,7 +244,7 @@ Console.WriteLine(result.LastRowVersion);
 For many scenarios, it is likely to be necessary to keep track of the last message `RowVersion` that was read. A lightweight implementation of the functionality is provided by `RowVersionTracker`. `RowVersionTracker` stores the current `RowVersion` in a table containing a single column and row.
 
 <!-- snippet: RowVersionTracker -->
-<a id='snippet-rowversiontracker'/></a>
+<a id='snippet-rowversiontracker'></a>
 ```cs
 var versionTracker = new RowVersionTracker();
 
@@ -272,7 +272,7 @@ An example use case is monitoring an [error queue](https://docs.particular.net/n
 Note that in the below snippet, the above `RowVersionTracker` is used for tracking the current `RowVersion`.
 
 <!-- snippet: ProcessingLoop -->
-<a id='snippet-processingloop'/></a>
+<a id='snippet-processingloop'></a>
 ```cs
 var rowVersionTracker = new RowVersionTracker();
 
@@ -339,7 +339,7 @@ await processingLoop.Stop();
 Consume a single message.
 
 <!-- snippet: Consume -->
-<a id='snippet-consume'/></a>
+<a id='snippet-consume'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var message = await manager.Consume();
@@ -364,7 +364,7 @@ if (message != null)
 Consuming a batch of messages.
 
 <!-- snippet: ConsumeBatch -->
-<a id='snippet-consumebatch'/></a>
+<a id='snippet-consumebatch'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var result = await manager.Consume(
@@ -396,7 +396,7 @@ For scenarios where continual consumption (consuming and executing some code wit
 An example use case is monitoring an [audit queue](https://docs.particular.net/nservicebus/operations/auditing). Some action should be taken when a message appears in the audit queue, and it should be purged from the queue to free up the storage space. 
 
 <!-- snippet: ConsumeLoop -->
-<a id='snippet-consumeloop'/></a>
+<a id='snippet-consumeloop'></a>
 ```cs
 async Task Callback(
     DbTransaction transaction,
@@ -452,7 +452,7 @@ See also [SQL Server Transport - SQL statements](https://docs.particular.net/tra
 The queue can be created using the following:
 
 <!-- snippet: CreateDelayedQueue -->
-<a id='snippet-createdelayedqueue'/></a>
+<a id='snippet-createdelayedqueue'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 await manager.Create();
@@ -466,7 +466,7 @@ await manager.Create();
 The queue can be deleted using the following:
 
 <!-- snippet: DeleteDelayedQueue -->
-<a id='snippet-deletedelayedqueue'/></a>
+<a id='snippet-deletedelayedqueue'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 await manager.Drop();
@@ -483,7 +483,7 @@ await manager.Drop();
 Sending a single message.
 
 <!-- snippet: SendDelayed -->
-<a id='snippet-senddelayed'/></a>
+<a id='snippet-senddelayed'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 var message = new OutgoingDelayedMessage(
@@ -501,7 +501,7 @@ await manager.Send(message);
 Sending a batch of messages.
 
 <!-- snippet: SendDelayedBatch -->
-<a id='snippet-senddelayedbatch'/></a>
+<a id='snippet-senddelayedbatch'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 var messages = new List<OutgoingDelayedMessage>
@@ -531,7 +531,7 @@ await manager.Send(messages);
 Reading a single message.
 
 <!-- snippet: ReadDelayed -->
-<a id='snippet-readdelayed'/></a>
+<a id='snippet-readdelayed'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var message = await manager.Read(rowVersion: 10);
@@ -556,7 +556,7 @@ if (message != null)
 Reading a batch of messages.
 
 <!-- snippet: ReadDelayedBatch -->
-<a id='snippet-readdelayedbatch'/></a>
+<a id='snippet-readdelayedbatch'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var result = await manager.Read(
@@ -592,7 +592,7 @@ Console.WriteLine(result.LastRowVersion);
 Consume a single message.
 
 <!-- snippet: ConsumeDelayed -->
-<a id='snippet-consumedelayed'/></a>
+<a id='snippet-consumedelayed'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var message = await manager.Consume();
@@ -617,7 +617,7 @@ if (message != null)
 Consuming a batch of messages.
 
 <!-- snippet: ConsumeDelayedBatch -->
-<a id='snippet-consumedelayedbatch'/></a>
+<a id='snippet-consumedelayedbatch'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var result = await manager.Consume(
@@ -662,7 +662,7 @@ Queue management for the [native publish subscribe](https://docs.particular.net/
 The table can be created using the following:
 
 <!-- snippet: CreateSubscriptionTable -->
-<a id='snippet-createsubscriptiontable'/></a>
+<a id='snippet-createsubscriptiontable'></a>
 ```cs
 var manager = new SubscriptionManager("SubscriptionRouting", sqlConnection);
 await manager.Create();
@@ -676,7 +676,7 @@ await manager.Create();
 The table can be deleted using the following:
 
 <!-- snippet: DeleteSubscriptionTable -->
-<a id='snippet-deletesubscriptiontable'/></a>
+<a id='snippet-deletesubscriptiontable'></a>
 ```cs
 var manager = new SubscriptionManager("SubscriptionRouting", sqlConnection);
 await manager.Drop();
@@ -698,7 +698,7 @@ Some scenarios, such as HTTP message pass through, require message deduplication
 The table can be created using the following:
 
 <!-- snippet: CreateDeduplicationTable -->
-<a id='snippet-creatededuplicationtable'/></a>
+<a id='snippet-creatededuplicationtable'></a>
 ```cs
 var manager = new DedupeManager(sqlConnection, "DeduplicationTable");
 await manager.Create();
@@ -712,7 +712,7 @@ await manager.Create();
 The table can be deleted using the following:
 
 <!-- snippet: DeleteDeduplicationTable -->
-<a id='snippet-deletededuplicationtable'/></a>
+<a id='snippet-deletededuplicationtable'></a>
 ```cs
 var manager = new DedupeManager(sqlConnection, "DeduplicationTable");
 await manager.Drop();
@@ -731,7 +731,7 @@ Sending to the main transport queue with deduplication.
 Sending a single message with deduplication.
 
 <!-- snippet: SendWithDeduplication -->
-<a id='snippet-sendwithdeduplication'/></a>
+<a id='snippet-sendwithdeduplication'></a>
 ```cs
 var manager = new QueueManager(
     "endpointTable",
@@ -752,7 +752,7 @@ await manager.Send(message);
 Sending a batch of messages with deduplication.
 
 <!-- snippet: SendBatchWithDeduplication -->
-<a id='snippet-sendbatchwithdeduplication'/></a>
+<a id='snippet-sendbatchwithdeduplication'></a>
 ```cs
 var manager = new QueueManager(
     "endpointTable",
@@ -782,7 +782,7 @@ Deduplication records need to live for a period of time after the initial corres
 At application startup, start an instance of `DeduplicationCleanerJob`.
 
 <!-- snippet: DeduplicationCleanerJobStart -->
-<a id='snippet-deduplicationcleanerjobstart'/></a>
+<a id='snippet-deduplicationcleanerjobstart'></a>
 ```cs
 var cleaner = new DedupeCleanerJob(
     table: "Deduplication",
@@ -801,7 +801,7 @@ cleaner.Start();
 Then at application shutdown stop the instance.
 
 <!-- snippet: DeduplicationCleanerJobStop -->
-<a id='snippet-deduplicationcleanerjobstop'/></a>
+<a id='snippet-deduplicationcleanerjobstop'></a>
 ```cs
 await cleaner.Stop();
 ```
@@ -817,7 +817,7 @@ await cleaner.Stop();
 Serialize a `Dictionary<string, string>` to a JSON string.
 
 <!-- snippet: Serialize -->
-<a id='snippet-serialize'/></a>
+<a id='snippet-serialize'></a>
 ```cs
 var headers = new Dictionary<string, string>
 {
@@ -834,7 +834,7 @@ var serialized = Headers.Serialize(headers);
 Deserialize a JSON string to a `Dictionary<string, string>`.
 
 <!-- snippet: Deserialize -->
-<a id='snippet-deserialize'/></a>
+<a id='snippet-deserialize'></a>
 ```cs
 var headers = Headers.DeSerialize(headersString);
 ```
@@ -857,7 +857,7 @@ A copy of the [timestamp format methods](https://docs.particular.net/nservicebus
 The APIs of this extension target either a `SQLConnection` and `SQLTransaction`. Given that in configuration those values are often expressed as a connection string, `ConnectionHelpers` supports converting that string to a `SQLConnection` or `SQLTransaction`. It provides two methods `OpenConnection` and `BeginTransaction` with the effective implementation of those methods being:
 
 <!-- snippet: ConnectionHelpers -->
-<a id='snippet-connectionhelpers'/></a>
+<a id='snippet-connectionhelpers'></a>
 ```cs
 public static async Task<DbConnection> OpenConnection(
     string connectionString,
