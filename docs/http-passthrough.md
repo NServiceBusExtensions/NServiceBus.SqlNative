@@ -19,7 +19,7 @@ SQL HTTP Passthrough provides a bridge between an HTTP stream (via JavaScript on
   * [Usage](#usage)
     * [Server-side](#server-side)
     * [Client - JavaScript](#client---javascript)
-    * [Client .NET](#client-net)<!-- endtoc -->
+    * [Client .NET](#client-net)<!-- endToc -->
 
 
 ## Design
@@ -101,7 +101,7 @@ public class Startup
 }
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Startup.cs#L11-L57' title='File snippet `startup` was extracted from'>snippet source</a> | <a href='#snippet-startup' title='Navigate to start of snippet `startup`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
 
 
 ##### Append Claims
@@ -124,7 +124,7 @@ configuration.AppendClaimsToMessageHeaders();
 services.AddSqlHttpPassthrough(configuration);
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L36-L48' title='File snippet `appendclaimstomessageheaders` was extracted from'>snippet source</a> | <a href='#snippet-appendclaimstomessageheaders' title='Navigate to start of snippet `appendclaimstomessageheaders`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
 
 A custom prefix can also be defined.
 
@@ -142,7 +142,7 @@ configuration.AppendClaimsToMessageHeaders(headerPrefix: "Claim.");
 services.AddSqlHttpPassthrough(configuration);
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L19-L31' title='File snippet `appendclaimstomessageheaders_withprefix` was extracted from'>snippet source</a> | <a href='#snippet-appendclaimstomessageheaders_withprefix' title='Navigate to start of snippet `appendclaimstomessageheaders_withprefix`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
 
 For unit testing and integration purposes it may be useful to manipulate a raw `Dictionary<string, string>`. This can be done using `ClaimsAppender`.
 
@@ -160,7 +160,7 @@ var claims = new List<Claim>
 ClaimsAppender.Append(claims, headerDictionary, "prefix.");
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L53-L63' title='File snippet `appendclaimstodictionary` was extracted from'>snippet source</a> | <a href='#snippet-appendclaimstodictionary' title='Navigate to start of snippet `appendclaimstodictionary`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
 
 To extract claims:
 
@@ -170,7 +170,7 @@ To extract claims:
 var claimsList = ClaimsAppender.Extract(headerDictionary, "prefix.");
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L68-L72' title='File snippet `extractclaimsfromdictionary` was extracted from'>snippet source</a> | <a href='#snippet-extractclaimsfromdictionary' title='Navigate to start of snippet `extractclaimsfromdictionary`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
 
 It may also be necessary to process claims with no reference to `NServiceBus.SqlServer.HttpPassthrough`. This can be done using the following utility methods. Note that these methods use `JsonConvert` from [Json.NET](https://www.newtonsoft.com/json).
 
@@ -210,7 +210,7 @@ public static IEnumerable<Claim> Extract(
 }
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L76-L110' title='File snippet `claimsraw` was extracted from'>snippet source</a> | <a href='#snippet-claimsraw' title='Navigate to start of snippet `claimsraw`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
 
 
 ##### Message callback
@@ -269,7 +269,7 @@ public class PassthroughController : ControllerBase
 }
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/PassThroughController.cs#L6-L25' title='File snippet `controller` was extracted from'>snippet source</a> | <a href='#snippet-controller' title='Navigate to start of snippet `controller`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
 
 WARNING: In a production application the controller would be performing any authorization and authentication on the incoming request. 
 
@@ -321,7 +321,7 @@ function PostToBus() {
 }
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.html#L11-L40' title='File snippet `posttobus` was extracted from'>snippet source</a> | <a href='#snippet-posttobus' title='Navigate to start of snippet `posttobus`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
 
 
 #### MessageId generation
@@ -340,7 +340,7 @@ function newGuid() {
 }
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.html#L1-L9' title='File snippet `guid` was extracted from'>snippet source</a> | <a href='#snippet-guid' title='Navigate to start of snippet `guid`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
 
 
 ### Client .NET
@@ -363,7 +363,7 @@ await clientFormSender.Send(
     });
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L13-L27' title='File snippet `clientformsender` was extracted from'>snippet source</a> | <a href='#snippet-clientformsender' title='Navigate to start of snippet `clientformsender`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
 
 This can be useful when performing [Integration testing in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/testing/integration-testing).
 
@@ -387,4 +387,4 @@ await clientFormSender.Send(
     });
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L32-L50' title='File snippet `asptesthost` was extracted from'>snippet source</a> | <a href='#snippet-asptesthost' title='Navigate to start of snippet `asptesthost`'>anchor</a></sup>
-<!-- endsnippet -->
+<!-- endSnippet -->
