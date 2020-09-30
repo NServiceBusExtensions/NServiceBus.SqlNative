@@ -5,8 +5,9 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class QueueManager
     {
-        protected override void PopulateSendCommand(DbCommand command, OutgoingMessage message)
+        protected override DbCommand CreateSendCommand(OutgoingMessage message)
         {
+            var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
             var parameters = command.Parameters;
 
             var idParameter = command.CreateParameter();
@@ -32,11 +33,8 @@ namespace NServiceBus.Transport.SqlServerNative
             bodyParameter.DbType = DbType.Binary;
             bodyParameter.SetBinaryOrDbNull(message.Body);
             parameters.Add(bodyParameter);
-        }
 
-        protected override DbCommand CreateSendCommand()
-        {
-            return Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
+            return command;
         }
     }
 }
