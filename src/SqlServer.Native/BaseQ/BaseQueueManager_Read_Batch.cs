@@ -21,4 +21,5 @@ namespace NServiceBus.Transport.SqlServerNative
             return await ReadMultiple(command, func, cancellation);
         }
     }
+
 }

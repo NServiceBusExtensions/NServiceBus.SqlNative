@@ -5,10 +5,8 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public partial class DelayedQueueManager
     {
-        protected override DbCommand CreateSendCommand(OutgoingDelayedMessage message)
+        protected override void PopulateSendCommand(DbCommand command, OutgoingDelayedMessage message)
         {
-            var command = Connection.CreateCommand(Transaction, string.Format(SendSql, Table));
-
             var dueParameter = command.CreateParameter();
             dueParameter.ParameterName = "Due";
             dueParameter.DbType = DbType.DateTime;
@@ -26,8 +24,11 @@ namespace NServiceBus.Transport.SqlServerNative
             bodyParameter.DbType = DbType.Binary;
             bodyParameter.SetBinaryOrDbNull(message.Body);
             command.Parameters.Add(bodyParameter);
+        }
 
-            return command;
+        protected override DbCommand CreateSendCommand()
+        {
+            return Connection.CreateCommand(Transaction, string.Format(SendSql, Table));
         }
     }
 }

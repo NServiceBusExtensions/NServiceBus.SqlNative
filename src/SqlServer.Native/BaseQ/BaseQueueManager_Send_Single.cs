@@ -15,7 +15,8 @@ namespace NServiceBus.Transport.SqlServerNative
 
         async Task<long> InnerSend(TOutgoing message, CancellationToken cancellation)
         {
-            using var command = CreateSendCommand(message);
+            using var command = CreateSendCommand();
+            PopulateSendCommand(command, message);
             var rowVersion = await command.RunScalar(cancellation);
             if (rowVersion == null)
             {
@@ -25,6 +26,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return (long) rowVersion;
         }
 
-        protected abstract DbCommand CreateSendCommand(TOutgoing message);
+        protected abstract DbCommand CreateSendCommand();
+        protected abstract void PopulateSendCommand(DbCommand command, TOutgoing message);
     }
 }
