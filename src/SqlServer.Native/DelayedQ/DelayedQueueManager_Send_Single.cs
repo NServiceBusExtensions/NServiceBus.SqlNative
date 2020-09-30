@@ -9,25 +9,43 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             var command = Connection.CreateCommand(Transaction, string.Format(SendSql, Table));
 
+            var dueParameter = CreateDueParameter(command);
+            dueParameter.Value = message.Due;
+
+            var headersParameter = CreateHeadersParameter(command);
+            headersParameter.Value = message.Headers;
+
+            var bodyParameter = CreateBodyParameter(command);
+            bodyParameter.SetBinaryOrDbNull(message.Body);
+
+            return command;
+        }
+
+        static DbParameter CreateDueParameter(DbCommand command)
+        {
             var dueParameter = command.CreateParameter();
             dueParameter.ParameterName = "Due";
             dueParameter.DbType = DbType.DateTime;
-            dueParameter.Value = message.Due;
             command.Parameters.Add(dueParameter);
+            return dueParameter;
+        }
 
+        static DbParameter CreateHeadersParameter(DbCommand command)
+        {
             var headersParameter = command.CreateParameter();
             headersParameter.ParameterName = "Headers";
             headersParameter.DbType = DbType.String;
-            headersParameter.Value = message.Headers;
             command.Parameters.Add(headersParameter);
+            return headersParameter;
+        }
 
+        static DbParameter CreateBodyParameter(DbCommand command)
+        {
             var bodyParameter = command.CreateParameter();
             bodyParameter.ParameterName = "Body";
             bodyParameter.DbType = DbType.Binary;
-            bodyParameter.SetBinaryOrDbNull(message.Body);
             command.Parameters.Add(bodyParameter);
-
-            return command;
+            return bodyParameter;
         }
     }
 }

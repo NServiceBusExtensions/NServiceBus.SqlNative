@@ -10,31 +10,53 @@ namespace NServiceBus.Transport.SqlServerNative
             var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
             var parameters = command.Parameters;
 
+            var idParameter = CreateIdParameter(command, parameters);
+            var expiresParameter = CreateExpiresParameter(command, parameters);
+            var headersParameter = CreateHeadersParameter(command, parameters);
+            var bodyParameter = CreateBodyParameter(command, parameters);
+
+            idParameter.Value = message.Id;
+            expiresParameter.SetValueOrDbNull(message.Expires);
+            headersParameter.Value = message.Headers;
+            bodyParameter.SetBinaryOrDbNull(message.Body);
+
+            return command;
+        }
+
+        static DbParameter CreateIdParameter(DbCommand command, DbParameterCollection parameters)
+        {
             var idParameter = command.CreateParameter();
             idParameter.ParameterName = "Id";
             idParameter.DbType = DbType.Guid;
-            idParameter.Value = message.Id;
             parameters.Add(idParameter);
+            return idParameter;
+        }
 
+        static DbParameter CreateExpiresParameter(DbCommand command, DbParameterCollection parameters)
+        {
             var expiresParameter = command.CreateParameter();
             expiresParameter.ParameterName = "Expires";
             expiresParameter.DbType = DbType.DateTime;
-            expiresParameter.SetValueOrDbNull(message.Expires);
             parameters.Add(expiresParameter);
+            return expiresParameter;
+        }
 
+        static DbParameter CreateHeadersParameter(DbCommand command, DbParameterCollection parameters)
+        {
             var headersParameter = command.CreateParameter();
             headersParameter.ParameterName = "Headers";
             headersParameter.DbType = DbType.String;
-            headersParameter.Value = message.Headers;
             parameters.Add(headersParameter);
+            return headersParameter;
+        }
 
+        static DbParameter CreateBodyParameter(DbCommand command, DbParameterCollection parameters)
+        {
             var bodyParameter = command.CreateParameter();
             bodyParameter.ParameterName = "Body";
             bodyParameter.DbType = DbType.Binary;
-            bodyParameter.SetBinaryOrDbNull(message.Body);
             parameters.Add(bodyParameter);
-
-            return command;
+            return bodyParameter;
         }
     }
 }

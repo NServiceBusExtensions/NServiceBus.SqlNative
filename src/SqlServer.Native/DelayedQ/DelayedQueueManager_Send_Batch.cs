@@ -14,5 +14,14 @@ namespace NServiceBus.Transport.SqlServerNative
                 await Send(message, cancellation);
             }
         }
+
+        public virtual async Task Send(IAsyncEnumerable<OutgoingDelayedMessage> messages, CancellationToken cancellation = default)
+        {
+            Guard.AgainstNull(messages, nameof(messages));
+            await foreach (var message in messages.WithCancellation(cancellation))
+            {
+                await Send(message, cancellation);
+            }
+        }
     }
 }
