@@ -23,10 +23,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             Guard.AgainstNull(claims, nameof(claims));
             Guard.AgainstNull(headers, nameof(headers));
             Guard.AgainstEmpty(prefix, nameof(prefix));
-            if (prefix == null)
-            {
-                prefix = "";
-            }
+            prefix ??= "";
             foreach (var claim in claims.GroupBy(x => x.Type))
             {
                 var items = claim.Select(x => x.Value).ToList();
@@ -49,6 +46,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
                 {
                     continue;
                 }
+
                 key = key.Substring(prefix.Length, key.Length - prefix.Length);
                 var list = Serializer.DeSerializeList(header.Value);
                 foreach (var value in list)
