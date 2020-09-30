@@ -10,12 +10,11 @@ namespace NServiceBus.Transport.SqlServerNative
             var command = Connection.CreateCommand(Transaction, string.Format(SendSql, Table));
 
             var dueParameter = CreateDueParameter(command);
-            dueParameter.Value = message.Due;
-
             var headersParameter = CreateHeadersParameter(command);
-            headersParameter.Value = message.Headers;
-
             var bodyParameter = CreateBodyParameter(command);
+
+            dueParameter.Value = message.Due;
+            headersParameter.Value = message.Headers;
             bodyParameter.SetBinaryOrDbNull(message.Body);
 
             return command;
