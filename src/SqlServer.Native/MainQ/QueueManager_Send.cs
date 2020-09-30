@@ -2,7 +2,7 @@
 {
     public partial class QueueManager
     {
-        private string sendSql = null!;
+        string sendSql = null!;
 
         const string dedupSql = @"
 if exists (
@@ -13,6 +13,7 @@ return
 
 insert into {0} (Id)
 values (@Id);";
+
         const string sql = @"
 insert into {0} (
   Id,
