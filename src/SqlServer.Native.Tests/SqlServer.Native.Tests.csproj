@@ -24,6 +24,6 @@
     <ProjectReference Include="..\SqlServer.HttpPassthrough.SampleWeb\SqlServer.HttpPassthrough.SampleWeb.csproj" />
     <ProjectReference Include="..\SqlServer.HttpPassthrough\SqlServer.HttpPassthrough.csproj" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.46" PrivateAssets="All" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.47" PrivateAssets="All" />
   </ItemGroup>
 </Project>
