@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
+using VerifyTests;
 using VerifyXunit;
 using Xunit;
 
@@ -25,8 +26,15 @@ public class DedupeManagerTests :
         var message2 = BuildBytesMessage("00000000-0000-0000-0000-000000000002");
         await Send(message2);
         var cleaner = new DedupeManager(SqlConnection, "Deduplication");
+        SqlRecording.StartRecording();
         await cleaner.CleanupItemsOlderThan(now);
-        await Verifier.Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
+        var sqlEntries = SqlRecording.FinishRecording();
+        await Verifier.Verify(
+            new
+            {
+                ReplicationData = SqlHelper.ReadDuplicateData("Deduplication", SqlConnection),
+                sqlEntries
+            });
     }
 
     Task Send(OutgoingMessage message)

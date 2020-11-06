@@ -16,7 +16,7 @@ public static class Connection
             return;
         }
 
-        ConnectionString = @"Server=.\SQLExpress;Database=NServiceBusNativeTests; Integrated Security=True;Max Pool Size=100";
+        ConnectionString = @"Server=.\;Database=NServiceBusNativeTests; Integrated Security=True;Max Pool Size=100";
     }
 
     public static SqlConnection OpenConnection()
