@@ -1,9 +1,9 @@
 [
-  'value',
-  'a\b',
-  'a\\b',
-  'a"b',
-  'a/b',
-  'a//b',
-  'a\/b'
+  value,
+  a\b,
+  a\\b,
+  a"b,
+  a/b,
+  a//b,
+  a\/b
 ]

@@ -1,7 +1,7 @@
 [
   {
-    $type: 'IncomingVerifyTarget',
-    Headers: '{}',
+    $type: IncomingVerifyTarget,
+    Headers: {},
     Id: Guid_1
   }
 ]

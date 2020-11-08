@@ -1,19 +1,19 @@
 [
   {
-    $type: 'IncomingDelayedVerifyTarget',
-    Headers: 'headers',
+    $type: IncomingDelayedVerifyTarget,
+    Headers: headers,
     Due: DateTime_1,
-    Body: '{}'
+    Body: {}
   },
   {
-    $type: 'IncomingDelayedVerifyTarget',
-    Headers: '{}',
+    $type: IncomingDelayedVerifyTarget,
+    Headers: {},
     Due: DateTime_2
   },
   {
-    $type: 'IncomingDelayedVerifyTarget',
-    Headers: 'headers',
+    $type: IncomingDelayedVerifyTarget,
+    Headers: headers,
     Due: DateTime_3,
-    Body: '{}'
+    Body: {}
   }
 ]

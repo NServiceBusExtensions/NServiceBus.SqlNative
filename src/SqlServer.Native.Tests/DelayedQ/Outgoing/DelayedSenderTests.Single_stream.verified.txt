@@ -1,8 +1,8 @@
 [
   {
-    $type: 'IncomingDelayedVerifyTarget',
-    Headers: 'headers',
+    $type: IncomingDelayedVerifyTarget,
+    Headers: headers,
     Due: DateTime_1,
-    Body: '{}'
+    Body: {}
   }
 ]

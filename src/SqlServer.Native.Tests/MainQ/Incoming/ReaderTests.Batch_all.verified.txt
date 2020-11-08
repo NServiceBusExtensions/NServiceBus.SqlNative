@@ -1,33 +1,33 @@
 [
   {
-    $type: 'IncomingVerifyTarget',
+    $type: IncomingVerifyTarget,
     Expires: DateTime_1,
-    Headers: 'headers',
+    Headers: headers,
     Id: Guid_1,
-    Body: '{}'
+    Body: {}
   },
   {
-    $type: 'IncomingVerifyTarget',
-    Headers: '{}',
+    $type: IncomingVerifyTarget,
+    Headers: {},
     Id: Guid_2
   },
   {
-    $type: 'IncomingVerifyTarget',
+    $type: IncomingVerifyTarget,
     Expires: DateTime_1,
-    Headers: 'headers',
+    Headers: headers,
     Id: Guid_3,
-    Body: '{}'
+    Body: {}
   },
   {
-    $type: 'IncomingVerifyTarget',
-    Headers: '{}',
+    $type: IncomingVerifyTarget,
+    Headers: {},
     Id: Guid_4
   },
   {
-    $type: 'IncomingVerifyTarget',
+    $type: IncomingVerifyTarget,
     Expires: DateTime_1,
-    Headers: 'headers',
+    Headers: headers,
     Id: Guid_5,
-    Body: '{}'
+    Body: {}
   }
 ]

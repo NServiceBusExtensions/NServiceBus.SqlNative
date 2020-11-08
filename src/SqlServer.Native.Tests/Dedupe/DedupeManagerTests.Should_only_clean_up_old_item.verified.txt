@@ -1,19 +1,19 @@
 {
-  $type: 'dynamic',
+  $type: dynamic,
   ReplicationData: [
     {
-      $type: 'Dictionary<string, object>',
+      $type: Dictionary<string, object>,
       Id: Guid_1
     }
   ],
   sqlEntries: [
     {
-      $type: 'LogEntry',
+      $type: LogEntry,
       Parameters: {
-        $type: 'Dictionary<string, object>',
+        $type: Dictionary<string, object>,
         date: DateTime_1
       },
-      Text: 'delete from [dbo].[Deduplication] where Created < @date'
+      Text: delete from [dbo].[Deduplication] where Created < @date
     }
   ]
 }
