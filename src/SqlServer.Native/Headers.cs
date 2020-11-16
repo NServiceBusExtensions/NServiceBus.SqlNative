@@ -6,7 +6,7 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public static partial class Headers
     {
-        static Dictionary<string, string> emptyHeaders = new Dictionary<string, string>();
+        static Dictionary<string, string> emptyHeaders = new();
         /// <summary>
         /// The string '{}', for when empty json headers are required.
         /// </summary>

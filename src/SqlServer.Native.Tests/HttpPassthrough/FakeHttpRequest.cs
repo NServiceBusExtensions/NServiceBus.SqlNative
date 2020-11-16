@@ -17,7 +17,7 @@ public class FakeHttpRequest :
         Form = form;
     }
 
-    public override Task<IFormCollection> ReadFormAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override Task<IFormCollection> ReadFormAsync(CancellationToken cancellationToken = default)
     {
         return Task.FromResult(Form);
     }

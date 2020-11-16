@@ -163,11 +163,11 @@ Sending a batch of messages.
 var manager = new QueueManager("endpointTable", sqlConnection);
 var messages = new List<OutgoingMessage>
 {
-    new OutgoingMessage(
+    new(
         id: Guid.NewGuid(),
         headers: headers1,
         bodyBytes: body1),
-    new OutgoingMessage(
+    new(
         id: Guid.NewGuid(),
         headers: headers2,
         bodyBytes: body2),
@@ -278,7 +278,7 @@ var rowVersionTracker = new RowVersionTracker();
 
 var startingRow = await rowVersionTracker.Get(sqlConnection);
 
-async Task Callback(
+static async Task Callback(
     DbTransaction transaction,
     IncomingMessage message,
     CancellationToken cancellation)
@@ -293,7 +293,7 @@ async Task Callback(
     Console.WriteLine($"Message received in error message:\r\n{bodyText}");
 }
 
-void ErrorCallback(Exception exception)
+static void ErrorCallback(Exception exception)
 {
     Environment.FailFast("Message processing loop failed", exception);
 }
@@ -398,7 +398,7 @@ An example use case is monitoring an [audit queue](https://docs.particular.net/n
 <!-- snippet: ConsumeLoop -->
 <a id='snippet-consumeloop'></a>
 ```cs
-async Task Callback(
+static async Task Callback(
     DbTransaction transaction,
     IncomingMessage message,
     CancellationToken cancellation)
@@ -416,7 +416,7 @@ Task<DbTransaction> TransactionBuilder(CancellationToken cancellation)
     return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
 }
 
-void ErrorCallback(Exception exception)
+static void ErrorCallback(Exception exception)
 {
     Environment.FailFast("Message consuming loop failed", exception);
 }
@@ -506,11 +506,11 @@ Sending a batch of messages.
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 var messages = new List<OutgoingDelayedMessage>
 {
-    new OutgoingDelayedMessage(
+    new(
         due: DateTime.UtcNow.AddDays(1),
         headers: headers1,
         bodyBytes: body1),
-    new OutgoingDelayedMessage(
+    new(
         due: DateTime.UtcNow.AddDays(1),
         headers: headers2,
         bodyBytes: body2),
@@ -760,11 +760,11 @@ var manager = new QueueManager(
     "DeduplicationTable");
 var messages = new List<OutgoingMessage>
 {
-    new OutgoingMessage(
+    new(
         id: Guid.NewGuid(),
         headers: headers1,
         bodyBytes: body1),
-    new OutgoingMessage(
+    new(
         id: Guid.NewGuid(),
         headers: headers2,
         bodyBytes: body2),
@@ -790,7 +790,7 @@ var cleaner = new DedupeCleanerJob(
     {
         return ConnectionHelpers.OpenConnection(connectionString, cancellation);
     },
-    criticalError: exception => { },
+    criticalError: _ => { },
     expireWindow: TimeSpan.FromHours(1),
     frequencyToRunCleanup: TimeSpan.FromMinutes(10));
 cleaner.Start();

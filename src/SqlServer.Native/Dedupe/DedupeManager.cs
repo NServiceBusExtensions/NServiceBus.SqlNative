@@ -120,8 +120,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         async Task<DedupeResult> BuildDedupeResult(Guid messageId, CancellationToken cancellation = default)
         {
-            return new DedupeResult
-            (
+            return new(
                 dedupeOutcome: DedupeOutcome.Deduplicated,
                 context: await ReadContext(messageId, cancellation)
             );

@@ -13,7 +13,7 @@ class SendRegistration :
             stepId: $"{AssemblyHelper.Name}Send",
             behavior: typeof(SendBehavior),
             description: "Saves the outgoing message id to a secondary store to allow message deduplication",
-            factoryMethod: builder => new SendBehavior(table, connectionBuilder))
+            factoryMethod: _ => new SendBehavior(table, connectionBuilder))
     {
     }
 }

@@ -11,9 +11,9 @@ public class AsyncTimerTests
 
         var timer = new AsyncTimer();
         timer.Start(
-            callback: (time, token) => throw new Exception("Simulated!"),
+            callback: (_, _) => throw new Exception("Simulated!"),
             interval: TimeSpan.Zero,
-            errorCallback: e => { errorCallbackInvoked.SetResult(true); },
+            errorCallback: _ => { errorCallbackInvoked.SetResult(true); },
             delayStrategy: Task.Delay);
 
         Assert.True(await errorCallbackInvoked.Task);
@@ -28,7 +28,7 @@ public class AsyncTimerTests
         var exceptionThrown = false;
         var timer = new AsyncTimer();
         timer.Start(
-            callback: (time, token) =>
+            callback: (_, _) =>
             {
                 if (fail)
                 {
@@ -41,7 +41,7 @@ public class AsyncTimerTests
                 return Task.FromResult(0);
             },
             interval: TimeSpan.Zero,
-            errorCallback: e => { exceptionThrown = true; },
+            errorCallback: _ => { exceptionThrown = true; },
             delayStrategy: Task.Delay);
 
         Assert.True(await callbackInvokedAfterError.Task);
@@ -55,9 +55,9 @@ public class AsyncTimerTests
         var delayStarted = new TaskCompletionSource<bool>();
 
         timer.Start(
-            callback: (time, token) => throw new Exception("Simulated!"),
+            callback: (_, _) => throw new Exception("Simulated!"),
             interval: TimeSpan.FromDays(7),
-            errorCallback: e =>
+            errorCallback: _ =>
             {
                 // noop
             },
@@ -88,7 +88,7 @@ public class AsyncTimerTests
         var stopInitiated = new TaskCompletionSource<bool>();
 
         timer.Start(
-            callback: async (time, token) =>
+            callback: async (_, token) =>
             {
                 callbackStarted.SetResult(true);
                 await stopInitiated.Task;
@@ -98,7 +98,7 @@ public class AsyncTimerTests
                 }
             },
             interval: TimeSpan.Zero,
-            errorCallback: e =>
+            errorCallback: _ =>
             {
                 //noop
             },
@@ -120,13 +120,13 @@ public class AsyncTimerTests
         var callbackTaskStarted = new TaskCompletionSource<bool>();
 
         timer.Start(
-            callback: (time, token) =>
+            callback: (_, _) =>
             {
                 callbackTaskStarted.SetResult(true);
                 return callbackCompleted.Task;
             },
             interval: TimeSpan.Zero,
-            errorCallback: e =>
+            errorCallback: _ =>
             {
                 //noop
             },

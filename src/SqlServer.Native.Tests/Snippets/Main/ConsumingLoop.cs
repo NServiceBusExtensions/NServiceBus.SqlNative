@@ -13,7 +13,7 @@ public class ConsumingLoop
     {
         #region ConsumeLoop
 
-        async Task Callback(
+        static async Task Callback(
             DbTransaction transaction,
             IncomingMessage message,
             CancellationToken cancellation)
@@ -31,7 +31,7 @@ public class ConsumingLoop
             return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
         }
 
-        void ErrorCallback(Exception exception)
+        static void ErrorCallback(Exception exception)
         {
             Environment.FailFast("Message consuming loop failed", exception);
         }

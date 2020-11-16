@@ -41,7 +41,7 @@ public class ProcessingLoop
 
         var startingRow = await rowVersionTracker.Get(sqlConnection);
 
-        async Task Callback(
+        static async Task Callback(
             DbTransaction transaction,
             IncomingMessage message,
             CancellationToken cancellation)
@@ -56,7 +56,7 @@ public class ProcessingLoop
             Console.WriteLine($"Message received in error message:\r\n{bodyText}");
         }
 
-        void ErrorCallback(Exception exception)
+        static void ErrorCallback(Exception exception)
         {
             Environment.FailFast("Message processing loop failed", exception);
         }

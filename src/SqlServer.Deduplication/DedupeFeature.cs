@@ -15,7 +15,7 @@ class DeduplicationFeature :
         pipeline.Register(new SendRegistration(table, connectionBuilder));
         if (context.Settings.PurgeOnStartup())
         {
-            context.RegisterStartupTask(builder => new PurgeTask(table, connectionBuilder));
+            context.RegisterStartupTask(_ => new PurgeTask(table, connectionBuilder));
         }
         if (settings.RunCleanTask)
         {

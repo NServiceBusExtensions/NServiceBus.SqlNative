@@ -6,7 +6,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 static class TestDataBuilder
 {
-    static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
+    static DateTime dateTime = new(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     public static async Task SendData(string table)
     {
@@ -40,11 +40,11 @@ static class TestDataBuilder
 
     public static OutgoingMessage BuildMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     public static OutgoingMessage BuildNullMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), bodyBytes: null);
+        return new(new Guid(guid), bodyBytes: null);
     }
 }

@@ -10,7 +10,7 @@ using Xunit;
 public class MessageConsumingLoopTests :
     TestBase
 {
-    static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
+    static DateTime dateTime = new(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     string table = "MessageConsumingLoopTests";
 
@@ -26,7 +26,7 @@ public class MessageConsumingLoopTests :
         await using var loop = new MessageConsumingLoop(
             table: table,
             connectionBuilder: Connection.OpenAsyncConnection,
-            callback: (connection, message, cancellation) => Task.CompletedTask,
+            callback: (_, _, _) => Task.CompletedTask,
             errorCallback: innerException => { exception = innerException; }
         );
         loop.Start();
@@ -60,7 +60,7 @@ public class MessageConsumingLoopTests :
             table: table,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: Callback,
-            errorCallback: exception => { });
+            errorCallback: _ => { });
         loop.Start();
         resetEvent.WaitOne(TimeSpan.FromSeconds(30));
         Assert.Equal(5, count);
@@ -82,6 +82,6 @@ public class MessageConsumingLoopTests :
 
     static OutgoingMessage BuildMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 }

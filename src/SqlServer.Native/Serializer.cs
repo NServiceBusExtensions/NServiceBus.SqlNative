@@ -5,7 +5,7 @@ using System.Text;
 
 static class Serializer
 {
-    static DataContractJsonSerializerSettings serializerSettings = new DataContractJsonSerializerSettings
+    static DataContractJsonSerializerSettings serializerSettings = new()
     {
         UseSimpleDictionaryFormat = true
     };
@@ -43,12 +43,11 @@ static class Serializer
 
     static DataContractJsonSerializer BuildDictionarySerializer()
     {
-        return new DataContractJsonSerializer(typeof(Dictionary<string, string>), serializerSettings);
+        return new(typeof(Dictionary<string, string>), serializerSettings);
     }
 
     static DataContractJsonSerializer BuildListSerializer()
     {
-        return new DataContractJsonSerializer(typeof(List<string>), serializerSettings);
+        return new(typeof(List<string>), serializerSettings);
     }
-
 }

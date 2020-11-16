@@ -58,11 +58,11 @@ public class DelayedQueue
         var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
         var messages = new List<OutgoingDelayedMessage>
         {
-            new OutgoingDelayedMessage(
+            new(
                 due: DateTime.UtcNow.AddDays(1),
                 headers: headers1,
                 bodyBytes: body1),
-            new OutgoingDelayedMessage(
+            new(
                 due: DateTime.UtcNow.AddDays(1),
                 headers: headers2,
                 bodyBytes: body2),

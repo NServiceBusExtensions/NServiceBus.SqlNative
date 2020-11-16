@@ -12,7 +12,7 @@ public class DelayedSenderTests :
     TestBase
 {
     string table = "DelayedSenderTests";
-    static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
+    static DateTime dateTime = new(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     [Fact]
     public async Task Single_bytes()
@@ -88,7 +88,7 @@ public class DelayedSenderTests :
 
     static OutgoingDelayedMessage BuildBytesMessage()
     {
-        return new OutgoingDelayedMessage(dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new(dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     static OutgoingDelayedMessage BuildStreamMessage()
@@ -99,12 +99,12 @@ public class DelayedSenderTests :
 
     static OutgoingDelayedMessage BuildBytesNullMessage()
     {
-        return new OutgoingDelayedMessage(dateTime, null, bodyBytes: null);
+        return new(dateTime, null, bodyBytes: null);
     }
 
     static OutgoingDelayedMessage BuildStreamNullMessage()
     {
-        return new OutgoingDelayedMessage(dateTime, null, bodyStream: null);
+        return new(dateTime, null, bodyStream: null);
     }
 
     public DelayedSenderTests()

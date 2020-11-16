@@ -5,7 +5,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 static class DelayedTestDataBuilder
 {
-    static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
+    static DateTime dateTime = new(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     public static async Task SendData(string table)
     {
@@ -43,11 +43,11 @@ static class DelayedTestDataBuilder
 
     public static OutgoingDelayedMessage BuildMessage()
     {
-        return new OutgoingDelayedMessage(dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new(dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     public static OutgoingDelayedMessage BuildNullMessage()
     {
-        return new OutgoingDelayedMessage(dateTime, "{}", bodyBytes: null);
+        return new(dateTime, "{}", bodyBytes: null);
     }
 }

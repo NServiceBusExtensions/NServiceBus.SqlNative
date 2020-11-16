@@ -10,7 +10,7 @@ using Xunit;
 public class DedupeCleanerJobTests :
     TestBase
 {
-    static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
+    static DateTime dateTime = new(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     string table = "DedupeCleanerJobTests";
 
@@ -29,7 +29,7 @@ public class DedupeCleanerJobTests :
         var cleaner = new DedupeCleanerJob(
             "Deduplication",
             Connection.OpenAsyncConnection,
-            exception => { },
+            _ => { },
             expireWindow,
             frequencyToRunCleanup: TimeSpan.FromMilliseconds(10));
         cleaner.Start();
@@ -46,7 +46,7 @@ public class DedupeCleanerJobTests :
 
     static OutgoingMessage BuildBytesMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     public DedupeCleanerJobTests()

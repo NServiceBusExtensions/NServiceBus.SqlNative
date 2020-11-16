@@ -52,10 +52,10 @@ public class RequestParserTests :
 
     static MemoryStream Body()
     {
-        return new MemoryStream(Encoding.UTF8.GetBytes("{}"));
+        return new(Encoding.UTF8.GetBytes("{}"));
     }
 
-    Task Verify(FakeHttpRequest request)
+    static Task Verify(FakeHttpRequest request)
     {
         var extract = RequestParser.Extract(request, CancellationToken.None).GetAwaiter().GetResult();
         return Verifier.Verify(new

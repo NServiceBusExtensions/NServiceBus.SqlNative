@@ -11,7 +11,7 @@ using DedupeResult = NServiceBus.Transport.SqlServerDeduplication.DedupeResult;
 public class DedupeIntegrationTests :
     TestBase
 {
-    static CountdownEvent countdown = new CountdownEvent(2);
+    static CountdownEvent countdown = new(2);
 
     [Fact]
     public async Task Integration()

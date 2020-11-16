@@ -11,7 +11,7 @@ using Xunit;
 public class SendTests :
     TestBase
 {
-    static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
+    static DateTime dateTime = new(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     string table = "SendTests";
 
@@ -99,7 +99,7 @@ public class SendTests :
 
     static OutgoingMessage BuildBytesMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     static OutgoingMessage BuildStreamMessage(string guid)
@@ -110,12 +110,12 @@ public class SendTests :
 
     static OutgoingMessage BuildStreamNullMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), bodyStream: null);
+        return new(new Guid(guid), bodyStream: null);
     }
 
     static OutgoingMessage BuildBytesNullMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), bodyBytes: null);
+        return new(new Guid(guid), bodyBytes: null);
     }
 
     public SendTests()

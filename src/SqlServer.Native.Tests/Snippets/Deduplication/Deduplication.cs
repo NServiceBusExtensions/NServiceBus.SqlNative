@@ -60,7 +60,7 @@ public class Deduplication
             {
                 return ConnectionHelpers.OpenConnection(connectionString, cancellation);
             },
-            criticalError: exception => { },
+            criticalError: _ => { },
             expireWindow: TimeSpan.FromHours(1),
             frequencyToRunCleanup: TimeSpan.FromMinutes(10));
         cleaner.Start();
@@ -89,11 +89,11 @@ public class Deduplication
             "DeduplicationTable");
         var messages = new List<OutgoingMessage>
         {
-            new OutgoingMessage(
+            new(
                 id: Guid.NewGuid(),
                 headers: headers1,
                 bodyBytes: body1),
-            new OutgoingMessage(
+            new(
                 id: Guid.NewGuid(),
                 headers: headers2,
                 bodyBytes: body2),

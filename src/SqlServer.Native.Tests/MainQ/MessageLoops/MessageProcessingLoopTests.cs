@@ -10,7 +10,7 @@ using Xunit;
 public class MessageProcessingLoopTests :
     TestBase
 {
-    static DateTime dateTime = new DateTime(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
+    static DateTime dateTime = new(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);
 
     string table = "MessageProcessingLoopTests";
 
@@ -27,9 +27,9 @@ public class MessageProcessingLoopTests :
             table: table,
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
-            callback: (connection, message, cancellation) => Task.CompletedTask,
+            callback: (_, _, _) => Task.CompletedTask,
             errorCallback: innerException => { exception = innerException; },
-            persistRowVersion: (connection, currentRowVersion, token) => Task.CompletedTask
+            persistRowVersion: (_, _, _) => Task.CompletedTask
         );
         loop.Start();
         Thread.Sleep(1000);
@@ -63,8 +63,8 @@ public class MessageProcessingLoopTests :
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: Callback,
-            errorCallback: exception => { },
-            persistRowVersion: (connection, currentRowVersion, token) => Task.CompletedTask);
+            errorCallback: _ => { },
+            persistRowVersion: (_, _, _) => Task.CompletedTask);
         loop.Start();
         resetEvent.WaitOne(TimeSpan.FromSeconds(30));
         Assert.Equal(5, count);
@@ -96,8 +96,8 @@ public class MessageProcessingLoopTests :
             table: table,
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
-            callback: (collection, message, cancellation) => Task.CompletedTask,
-            errorCallback: exception => { },
+            callback: (_, _, _) => Task.CompletedTask,
+            errorCallback: _ => { },
             persistRowVersion: PersistRowVersion);
         loop.Start();
         resetEvent.WaitOne(TimeSpan.FromSeconds(30));
@@ -120,6 +120,6 @@ public class MessageProcessingLoopTests :
 
     static OutgoingMessage BuildMessage(string guid)
     {
-        return new OutgoingMessage(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 }

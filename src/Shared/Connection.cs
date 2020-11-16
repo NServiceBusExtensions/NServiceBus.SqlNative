@@ -49,6 +49,6 @@ public static class Connection
 
     public static SqlConnection NewConnection()
     {
-        return new SqlConnection(ConnectionString);
+        return new(ConnectionString);
     }
 }

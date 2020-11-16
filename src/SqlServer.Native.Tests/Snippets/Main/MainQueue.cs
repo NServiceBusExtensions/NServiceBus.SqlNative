@@ -59,11 +59,11 @@ public class MainQueue
         var manager = new QueueManager("endpointTable", sqlConnection);
         var messages = new List<OutgoingMessage>
         {
-            new OutgoingMessage(
+            new(
                 id: Guid.NewGuid(),
                 headers: headers1,
                 bodyBytes: body1),
-            new OutgoingMessage(
+            new(
                 id: Guid.NewGuid(),
                 headers: headers2,
                 bodyBytes: body2),

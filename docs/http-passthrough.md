@@ -153,9 +153,9 @@ To append claims:
 ```cs
 var claims = new List<Claim>
 {
-    new Claim(ClaimTypes.Email, "User@foo.bar"),
-    new Claim(ClaimTypes.NameIdentifier, "User1"),
-    new Claim(ClaimTypes.NameIdentifier, "User2")
+    new(ClaimTypes.Email, "User@foo.bar"),
+    new(ClaimTypes.NameIdentifier, "User1"),
+    new(ClaimTypes.NameIdentifier, "User2")
 };
 ClaimsAppender.Append(claims, headerDictionary, "prefix.");
 ```
