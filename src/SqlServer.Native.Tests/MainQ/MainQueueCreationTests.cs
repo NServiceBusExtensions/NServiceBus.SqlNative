@@ -15,9 +15,8 @@ public class MainQueueCreationTests
         var manager = new QueueManager("MainQueueCreationTests", connection);
         await manager.Drop();
         await manager.Create();
-        var settings = new VerifySettings();
-        settings.SchemaSettings(includeItem: s => s == "MainQueueCreationTests");
-        await Verifier.Verify(connection, settings);
+        await Verifier.Verify(connection)
+            .SchemaSettings(includeItem: s => s == "MainQueueCreationTests");
     }
 
     [Fact]
@@ -30,26 +29,25 @@ public class MainQueueCreationTests
         await manager.Drop();
         await manager.Create();
 
-        //Simulate old version by dropping the Index_RowVersion and replace it with clustered index
+        // Simulate old version by dropping the Index_RowVersion and replace it with clustered index
         var makeOldIndexCommand = new SqlCommand($@"
 drop index Index_RowVersion on {tableName};
 create clustered index Index_RowVersion on {tableName}
 (
 	RowVersion
-)
-", connection);
+)",
+            connection);
         await makeOldIndexCommand.ExecuteNonQueryAsync();
 
-        //Rerun Create should drop the clustered index and create a nonclustered index
+        // Rerun Create should drop the clustered index and create a non-clustered index
         await manager.Create();
-        var settings = new VerifySettings();
 
-         var getIndexTypeDesCommand = new SqlCommand($@"select type_desc from sys.indexes
+        var getIndexTypeDesCommand = new SqlCommand($@"
+select type_desc from sys.indexes
 where object_id = object_id('{tableName}')
 and name = 'Index_RowVersion'",
-             connection);
+            connection);
 
-
-         await Verifier.Verify(await getIndexTypeDesCommand.ExecuteScalarAsync() as string, settings);
+        await Verifier.Verify(getIndexTypeDesCommand.ExecuteScalarAsync());
     }
 }
