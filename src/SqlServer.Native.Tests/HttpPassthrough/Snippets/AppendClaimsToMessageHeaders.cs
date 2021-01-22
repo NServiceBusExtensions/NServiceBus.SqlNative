@@ -109,12 +109,12 @@ public class AppendClaimsToMessageHeaders
 
     #endregion
 
-    Task<Table> Callback(HttpContext httpContext, PassthroughMessage passthroughMessage)
+    static Task<Table> Callback(HttpContext httpContext, PassthroughMessage passthroughMessage)
     {
         return null!;
     }
 
-    Task<DbConnection> OpenConnection(CancellationToken cancellation)
+    static Task<DbConnection> OpenConnection(CancellationToken cancellation)
     {
         return null!;
     }

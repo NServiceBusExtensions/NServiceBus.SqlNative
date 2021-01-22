@@ -26,7 +26,7 @@ public class Startup
         // other ASP.MVC config
     }
 
-    Task<Table> Callback(HttpContext httpContext, PassthroughMessage message)
+    static Task<Table> Callback(HttpContext http, PassthroughMessage message)
     {
         //TODO: validate that the message type is allowed
         //TODO: validate that the destination is allowed
@@ -47,7 +47,7 @@ public class Startup
         // other ASP.MVC config
     }
 
-    Task<DbConnection> OpenConnection(CancellationToken cancellation)
+    static Task<DbConnection> OpenConnection(CancellationToken cancellation)
     {
         //TODO open and return a SqlConnection
         return null!;
