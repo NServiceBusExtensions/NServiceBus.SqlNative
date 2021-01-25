@@ -40,13 +40,13 @@ public class SynonymTests :
         await synonym.Create("mySynonym1", "target");
     }
 
-    [Fact]
-    public async Task CreateDropNoTarget()
-    {
-        var synonym = new Synonym(SqlConnection, SqlConnection.Database);
-        await CreateTable();
+    //[Fact]
+    //public async Task CreateDropNoTarget()
+    //{
+    //    var synonym = new Synonym(SqlConnection, SqlConnection.Database);
+    //    await CreateTable();
 
-        await synonym.Drop("mySynonym2");
-        await synonym.Create("mySynonym2");
-    }
+    //    await synonym.Drop("mySynonym2");
+    //    await synonym.Create("mySynonym2");
+    //}
 }

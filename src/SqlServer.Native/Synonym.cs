@@ -37,6 +37,7 @@ namespace NServiceBus.Transport.SqlServerNative
         public async Task Create(string synonym, string? target = null)
         {
             target ??= synonym;
+            GuardAgainstCircularAlias(synonym, target);
             using var command = sourceDatabase.CreateCommand();
             command.Transaction = sourceTransaction;
             command.CommandText = $@"
@@ -75,6 +76,7 @@ exec sp_executesql @stmt
         public async Task Drop(string synonym, string? target = null)
         {
             target ??= synonym;
+            GuardAgainstCircularAlias(synonym, target);
             using var command = sourceDatabase.CreateCommand();
             command.Transaction = sourceTransaction;
             command.CommandText = $@"
@@ -88,6 +90,16 @@ begin
 end
 ";
             await command.ExecuteNonQueryAsync();
+        }
+
+        void GuardAgainstCircularAlias(string synonym, string target)
+        {
+            if (targetDatabase == sourceDatabase.Database &&
+                synonym == target &&
+                sourceSchema == targetSchema)
+            {
+                throw new("Invalid circular alias.");
+            }
         }
     }
 }
