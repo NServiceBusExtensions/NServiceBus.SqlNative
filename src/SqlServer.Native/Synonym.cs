@@ -5,44 +5,49 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     public class Synonym
     {
-        DbConnection connection;
+        DbConnection sourceDatabase;
         string targetDatabase;
-        DbTransaction? transaction;
+        string sourceSchema;
+        string targetSchema;
+        DbTransaction? sourceTransaction;
 
-        public Synonym(DbConnection connection, string targetDatabase)
+        public Synonym(DbConnection sourceDatabase, string targetDatabase, string sourceSchema = "dbo", string targetSchema = "dbo")
         {
-            Guard.AgainstNull(connection, nameof(connection));
+            Guard.AgainstNull(sourceDatabase, nameof(sourceDatabase));
             Guard.AgainstNullOrEmpty(targetDatabase, nameof(targetDatabase));
-            this.connection = connection;
+            Guard.AgainstNullOrEmpty(targetSchema, nameof(targetSchema));
+            this.sourceDatabase = sourceDatabase;
             this.targetDatabase = targetDatabase;
+            this.sourceSchema = sourceSchema;
+            this.targetSchema = targetSchema;
         }
 
-        public Synonym(DbTransaction transaction, string targetDatabase)
+        public Synonym(DbTransaction sourceTransaction, string targetDatabase, string sourceSchema = "dbo", string targetSchema = "dbo")
         {
-            Guard.AgainstNull(transaction, nameof(transaction));
+            Guard.AgainstNull(sourceTransaction, nameof(sourceTransaction));
             Guard.AgainstNullOrEmpty(targetDatabase, nameof(targetDatabase));
-            this.transaction = transaction;
+            Guard.AgainstNullOrEmpty(targetSchema, nameof(targetSchema));
+            this.sourceTransaction = sourceTransaction;
             this.targetDatabase = targetDatabase;
-            connection = transaction.Connection;
+            this.sourceSchema = sourceSchema;
+            this.targetSchema = targetSchema;
+            sourceDatabase = sourceTransaction.Connection;
         }
 
         public async Task Create(string synonym, string? target = null)
         {
-            if (target == null)
-            {
-                target = synonym;
-            }
-            using var command = connection.CreateCommand();
-            command.Transaction = transaction;
+            target ??= synonym;
+            using var command = sourceDatabase.CreateCommand();
+            command.Transaction = sourceTransaction;
             command.CommandText = $@"
 if not exists (
     select 0
     from sys.synonyms
-    where [name]=N'{synonym}'
+    where [base_object_name]=N'[{targetDatabase}].[{targetSchema}].[{target}]'
 )
 begin
-    create synonym [{synonym}]
-    for {targetDatabase}.[{target}];
+    create synonym [{sourceSchema}].[{synonym}]
+    for [{targetDatabase}].[{targetSchema}].[{target}];
 end
 ";
             await command.ExecuteNonQueryAsync();
@@ -50,8 +55,8 @@ end
 
         public async Task DropAll()
         {
-            using var command = connection.CreateCommand();
-            command.Transaction = transaction;
+            using var command = sourceDatabase.CreateCommand();
+            command.Transaction = sourceTransaction;
             command.CommandText = @"
 declare @n char(1)
 set @n = char(10)
@@ -67,18 +72,19 @@ exec sp_executesql @stmt
             await command.ExecuteNonQueryAsync();
         }
 
-        public async Task Drop(string synonym)
+        public async Task Drop(string synonym, string? target = null)
         {
-            using var command = connection.CreateCommand();
-            command.Transaction = transaction;
+            target ??= synonym;
+            using var command = sourceDatabase.CreateCommand();
+            command.Transaction = sourceTransaction;
             command.CommandText = $@"
 if exists (
     select 0
     from sys.synonyms
-    where [name]=N'{synonym}'
+    where [base_object_name]=N'[{targetDatabase}].[{targetSchema}].[{target}]'
 )
 begin
-    drop synonym [{synonym}];
+    drop synonym [{sourceSchema}].[{synonym}];
 end
 ";
             await command.ExecuteNonQueryAsync();
