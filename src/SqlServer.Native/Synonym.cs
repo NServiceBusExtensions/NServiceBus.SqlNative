@@ -26,8 +26,12 @@ namespace NServiceBus.Transport.SqlServerNative
             connection = transaction.Connection;
         }
 
-        public async Task Create(string synonym, string target)
+        public async Task Create(string synonym, string? target = null)
         {
+            if (target == null)
+            {
+                target = synonym;
+            }
             using var command = connection.CreateCommand();
             command.Transaction = transaction;
             command.CommandText = $@"
@@ -40,6 +44,25 @@ begin
     create synonym [{synonym}]
     for {targetDatabase}.[{target}];
 end
+";
+            await command.ExecuteNonQueryAsync();
+        }
+
+        public async Task DropAll()
+        {
+            using var command = connection.CreateCommand();
+            command.Transaction = transaction;
+            command.CommandText = @"
+declare @n char(1)
+set @n = char(10)
+
+declare @stmt nvarchar(max)
+
+select @stmt = isnull( @stmt + @n, '' ) +
+'drop synonym [' + SCHEMA_NAME(schema_id) + '].[' + name + ']'
+from sys.synonyms
+
+exec sp_executesql @stmt
 ";
             await command.ExecuteNonQueryAsync();
         }
