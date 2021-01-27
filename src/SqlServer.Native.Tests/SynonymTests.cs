@@ -36,17 +36,15 @@ public class SynonymTests :
     {
         var synonym = new Synonym(SqlConnection, SqlConnection.Database);
         await CreateTable();
-        await synonym.Drop("mySynonym1", "target");
+        await synonym.Drop("mySynonym1");
         await synonym.Create("mySynonym1", "target");
     }
 
-    //[Fact]
-    //public async Task CreateDropNoTarget()
-    //{
-    //    var synonym = new Synonym(SqlConnection, SqlConnection.Database);
-    //    await CreateTable();
-
-    //    await synonym.Drop("mySynonym2");
-    //    await synonym.Create("mySynonym2");
-    //}
+    [Fact]
+    public async Task CreateDropNoTarget()
+    {
+        var synonym = new Synonym(SqlConnection, "master", "dbo", "sys");
+        await synonym.Drop("mySynonym2");
+        await synonym.Create("mySynonym2", "all_columns");
+    }
 }

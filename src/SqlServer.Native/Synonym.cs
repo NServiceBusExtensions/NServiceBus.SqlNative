@@ -42,9 +42,12 @@ namespace NServiceBus.Transport.SqlServerNative
             command.Transaction = sourceTransaction;
             command.CommandText = $@"
 if not exists (
-    select 0
+   select 0
     from sys.synonyms
-    where [base_object_name]=N'[{targetDatabase}].[{targetSchema}].[{target}]'
+    inner join sys.schemas on
+               synonyms.schema_id = schemas.schema_id
+    where synonyms.name = '{target}' and
+          schemas.name ='{sourceSchema}'
 )
 begin
     create synonym [{sourceSchema}].[{synonym}]
@@ -73,17 +76,18 @@ exec sp_executesql @stmt
             await command.ExecuteNonQueryAsync();
         }
 
-        public async Task Drop(string synonym, string? target = null)
+        public async Task Drop(string synonym)
         {
-            target ??= synonym;
-            GuardAgainstCircularAlias(synonym, target);
             using var command = sourceDatabase.CreateCommand();
             command.Transaction = sourceTransaction;
             command.CommandText = $@"
 if exists (
-    select 0
+  select 0
     from sys.synonyms
-    where [base_object_name]=N'[{targetDatabase}].[{targetSchema}].[{target}]'
+    inner join sys.schemas on
+               synonyms.schema_id = schemas.schema_id
+    where synonyms.name = '{synonym}' and
+          schemas.name ='{sourceSchema}'
 )
 begin
     drop synonym [{sourceSchema}].[{synonym}];
