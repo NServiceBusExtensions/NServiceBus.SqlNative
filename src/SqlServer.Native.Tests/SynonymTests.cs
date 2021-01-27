@@ -14,7 +14,6 @@ public class SynonymTests :
     {
         var synonym = new Synonym(SqlConnection, SqlConnection.Database);
         await CreateTable();
-
         await synonym.Create("mySynonym3", "target");
         await synonym.DropAll();
         await Verifier.Verify(SqlConnection)
@@ -35,22 +34,24 @@ public class SynonymTests :
     }
 
     [Fact]
-    public async Task CreateDrop()
+    public async Task Create()
     {
         var synonym = new Synonym(SqlConnection, SqlConnection.Database);
         await CreateTable();
-        await synonym.Drop("mySynonym1");
+        await synonym.DropAll();
         await synonym.Create("mySynonym1", "target");
         await Verifier.Verify(SqlConnection)
             .SchemaSettings(tables: false);
     }
 
     [Fact]
-    public async Task CreateDropNoTarget()
+    public async Task Drop()
     {
-        var synonym = new Synonym(SqlConnection, "master", "dbo", "sys");
-        await synonym.Drop("mySynonym2");
-        await synonym.Create("mySynonym2", "all_columns");
+        var synonym = new Synonym(SqlConnection, SqlConnection.Database);
+        await CreateTable();
+        await synonym.DropAll();
+        await synonym.Create("mySynonym1", "target");
+        await synonym.Drop("mySynonym1");
         await Verifier.Verify(SqlConnection)
             .SchemaSettings(tables: false);
     }
