@@ -1,3 +1,5 @@
+-- Tables
+
 CREATE TABLE [dbo].[DelayedQueueCreationTests](
 	[Headers] [nvarchar](max) NOT NULL,
 	[BodyString]  AS (CONVERT([varchar](max),[Body])),

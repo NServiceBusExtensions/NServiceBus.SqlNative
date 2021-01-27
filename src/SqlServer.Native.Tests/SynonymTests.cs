@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using NServiceBus.Transport.SqlServerNative;
 using VerifyXunit;
+using VerifyTests;
 using Xunit;
 
 [UsesVerify]
@@ -16,6 +17,8 @@ public class SynonymTests :
 
         await synonym.Create("mySynonym3", "target");
         await synonym.DropAll();
+        await Verifier.Verify(SqlConnection)
+            .SchemaSettings(tables: false);
     }
 
     async Task CreateTable()
@@ -38,6 +41,8 @@ public class SynonymTests :
         await CreateTable();
         await synonym.Drop("mySynonym1");
         await synonym.Create("mySynonym1", "target");
+        await Verifier.Verify(SqlConnection)
+            .SchemaSettings(tables: false);
     }
 
     [Fact]
@@ -46,5 +51,7 @@ public class SynonymTests :
         var synonym = new Synonym(SqlConnection, "master", "dbo", "sys");
         await synonym.Drop("mySynonym2");
         await synonym.Create("mySynonym2", "all_columns");
+        await Verifier.Verify(SqlConnection)
+            .SchemaSettings(tables: false);
     }
 }
