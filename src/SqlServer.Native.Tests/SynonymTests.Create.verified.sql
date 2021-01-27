@@ -1,3 +1,3 @@
 -- Synonyms
 
-CREATE SYNONYM [dbo].[mySynonym1] FOR [NServiceBusNativeTests].[dbo].[target]
+CREATE SYNONYM [dbo].[mySynonym1] FOR [TargetDb].[dbo].[target]

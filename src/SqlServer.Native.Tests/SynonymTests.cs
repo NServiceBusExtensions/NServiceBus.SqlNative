@@ -41,7 +41,8 @@ public class SynonymTests :
         await synonym.DropAll();
         await synonym.Create("mySynonym1", "target");
         await Verifier.Verify(SqlConnection)
-            .SchemaSettings(tables: false);
+            .SchemaSettings(tables: false)
+            .AddScrubber(builder => builder.Replace(SqlConnection.Database, "TargetDb"));
     }
 
     [Fact]
