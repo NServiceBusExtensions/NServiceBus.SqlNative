@@ -1,3 +1,5 @@
+-- Tables
+
 CREATE TABLE [dbo].[MainQueueCreationTests](
 	[Id] [uniqueidentifier] NOT NULL,
 	[CorrelationId] [varchar](255) NULL,
