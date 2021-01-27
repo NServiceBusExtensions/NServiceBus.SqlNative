@@ -146,6 +146,16 @@ static class Extensions
         }
     }
 
+    public static DbParameter AddStringParam(this DbCommand command, string name, string value)
+    {
+        var bodyParameter = command.CreateParameter();
+        bodyParameter.ParameterName = name;
+        bodyParameter.DbType = DbType.String;
+        bodyParameter.Value = value;
+        command.Parameters.Add(bodyParameter);
+        return bodyParameter;
+    }
+
     static void SetCommandData(DbCommand command, DbException exception)
     {
         exception.Data["Sql"] = command.CommandText;
