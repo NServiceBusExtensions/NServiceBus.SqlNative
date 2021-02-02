@@ -7,3 +7,8 @@ CREATE TABLE [dbo].[DelayedQueueCreationTests](
 	[Due] [datetime] NOT NULL,
 	[RowVersion] [bigint] IDENTITY(1,1) NOT NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+CREATE NONCLUSTERED INDEX [Index_Due] ON [dbo].[DelayedQueueCreationTests]
+(
+	[Due] ASC
+) ON [PRIMARY]

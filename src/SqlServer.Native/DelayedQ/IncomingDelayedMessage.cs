@@ -97,12 +97,9 @@ namespace NServiceBus.Transport.SqlServerNative
             }
 
             disposed = true;
-            if (cleanups != null)
+            foreach (var cleanup in cleanups)
             {
-                foreach (var cleanup in cleanups)
-                {
-                    await cleanup.DisposeAsync();
-                }
+                await cleanup.DisposeAsync();
             }
         }
     }

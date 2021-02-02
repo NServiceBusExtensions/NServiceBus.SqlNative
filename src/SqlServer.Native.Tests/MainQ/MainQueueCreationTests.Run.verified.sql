@@ -11,3 +11,15 @@ CREATE TABLE [dbo].[MainQueueCreationTests](
 	[Body] [varbinary](max) NULL,
 	[RowVersion] [bigint] IDENTITY(1,1) NOT NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+CREATE NONCLUSTERED INDEX [Index_Expires] ON [dbo].[MainQueueCreationTests]
+(
+	[Expires] ASC
+)
+INCLUDE([Id],[RowVersion]) 
+WHERE ([Expires] IS NOT NULL)
+WITH () ON [PRIMARY]
+CREATE NONCLUSTERED INDEX [Index_RowVersion] ON [dbo].[MainQueueCreationTests]
+(
+	[RowVersion] ASC
+) ON [PRIMARY]

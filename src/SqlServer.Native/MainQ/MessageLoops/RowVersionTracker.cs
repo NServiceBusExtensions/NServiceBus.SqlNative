@@ -73,6 +73,7 @@ if @@rowcount = 0
 select top (1) RowVersion
 from {table}";
             var result = await command.RunScalar(cancellation);
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (result == null)
             {
                 return 1;

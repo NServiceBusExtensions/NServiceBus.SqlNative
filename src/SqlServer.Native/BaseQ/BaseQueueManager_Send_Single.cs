@@ -17,6 +17,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             using var command = CreateSendCommand(message);
             var rowVersion = await command.RunScalar(cancellation);
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (rowVersion == null)
             {
                 return 0;

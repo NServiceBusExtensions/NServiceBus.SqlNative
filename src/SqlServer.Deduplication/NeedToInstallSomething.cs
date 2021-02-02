@@ -8,7 +8,7 @@ using NServiceBus.Transport.SqlServerDeduplication;
 class NeedToInstallSomething :
     INeedToInstallSomething
 {
-    DedupeSettings settings;
+    DedupeSettings? settings;
 
     public NeedToInstallSomething(ReadOnlySettings settings)
     {
