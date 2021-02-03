@@ -67,18 +67,4 @@ class Program
         options.RouteToThisEndpoint();
         return endpoint.SendWithDedupe(guid, message, options);
     }
-    static async Task<DbConnection> OpenConnection(string connectionString, CancellationToken cancellation)
-    {
-        var connection = new SqlConnection(connectionString);
-        try
-        {
-            await connection.OpenAsync(cancellation);
-            return connection;
-        }
-        catch
-        {
-            await connection.DisposeAsync();
-            throw;
-        }
-    }
 }
