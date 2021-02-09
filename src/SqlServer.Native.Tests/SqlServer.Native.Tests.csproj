@@ -12,7 +12,7 @@
     <PackageReference Include="NServiceBus.Transport.SqlServer" Version="6.2.0" />
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="23.0.2" />
     <PackageReference Include="NServiceBus" Version="7.4.4" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.3" />
     <PackageReference Include="Verify.SqlServer" Version="2.13.1" />
     <PackageReference Include="Verify.Xunit" Version="10.7.0" />
     <PackageReference Include="Xunit" Version="2.4.1" />
