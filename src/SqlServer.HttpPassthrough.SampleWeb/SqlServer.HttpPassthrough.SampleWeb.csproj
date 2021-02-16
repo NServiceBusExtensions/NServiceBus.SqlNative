@@ -13,6 +13,6 @@
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\SqlServer.HttpPassthrough\SqlServer.HttpPassthrough.csproj" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.53" PrivateAssets="All" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.54" PrivateAssets="All" />
   </ItemGroup>
 </Project>
