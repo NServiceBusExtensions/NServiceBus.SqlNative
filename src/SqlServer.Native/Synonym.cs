@@ -41,18 +41,8 @@ namespace NServiceBus.Transport.SqlServerNative
             using var command = sourceDatabase.CreateCommand();
             command.Transaction = sourceTransaction;
             command.CommandText = $@"
-if not exists (
-   select 0
-    from sys.synonyms
-    inner join sys.schemas on
-               synonyms.schema_id = schemas.schema_id
-    where synonyms.name = '{target}' and
-          schemas.name ='{sourceSchema}'
-)
-begin
-    create synonym [{sourceSchema}].[{synonym}]
-    for [{targetDatabase}].[{targetSchema}].[{target}];
-end
+    drop synonym if exists [{sourceSchema}].[{synonym}];
+    create synonym [{sourceSchema}].[{synonym}] for [{targetDatabase}].[{targetSchema}].[{target}];
 ";
             await command.ExecuteNonQueryAsync();
         }
@@ -80,19 +70,7 @@ exec sp_executesql @stmt
         {
             using var command = sourceDatabase.CreateCommand();
             command.Transaction = sourceTransaction;
-            command.CommandText = $@"
-if exists (
-  select 0
-    from sys.synonyms
-    inner join sys.schemas on
-               synonyms.schema_id = schemas.schema_id
-    where synonyms.name = '{synonym}' and
-          schemas.name ='{sourceSchema}'
-)
-begin
-    drop synonym [{sourceSchema}].[{synonym}];
-end
-";
+            command.CommandText = $"drop synonym if exists [{sourceSchema}].[{synonym}];";
             await command.ExecuteNonQueryAsync();
         }
 
