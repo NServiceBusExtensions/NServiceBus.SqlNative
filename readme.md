@@ -257,7 +257,7 @@ await versionTracker.Save(sqlConnection, newRowVersion);
 // get row version
 var startingRow = await versionTracker.Get(sqlConnection);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L20-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-rowversiontracker' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L19-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-rowversiontracker' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Note that this is only one possible implementation of storing the current `RowVersion`.
@@ -325,7 +325,7 @@ Console.ReadKey();
 
 await processingLoop.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L38-L91' title='Snippet source file'>snippet source</a> | <a href='#snippet-processingloop' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L37-L90' title='Snippet source file'>snippet source</a> | <a href='#snippet-processingloop' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
