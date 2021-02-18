@@ -14,7 +14,6 @@ public class ProcessingLoop
 
     async Task RowTracking()
     {
-
         long newRowVersion = 0;
 
         #region RowVersionTracker
