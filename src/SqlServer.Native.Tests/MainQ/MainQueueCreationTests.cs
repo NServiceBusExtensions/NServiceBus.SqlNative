@@ -30,24 +30,21 @@ public class MainQueueCreationTests
         await manager.Create();
 
         // Simulate old version by dropping the Index_RowVersion and replace it with clustered index
-        var makeOldIndexCommand = new SqlCommand($@"
+        await using SqlCommand makeOldIndexCommand = new($@"
 drop index Index_RowVersion on {tableName};
 create clustered index Index_RowVersion on {tableName}
 (
 	RowVersion
-)",
-            connection);
+)", connection);
         await makeOldIndexCommand.ExecuteNonQueryAsync();
 
         // Rerun Create should drop the clustered index and create a non-clustered index
         await manager.Create();
 
-        var getIndexTypeDesCommand = new SqlCommand($@"
+        await using SqlCommand getIndexTypeDesCommand = new($@"
 select type_desc from sys.indexes
 where object_id = object_id('{tableName}')
-and name = 'Index_RowVersion'",
-            connection);
-
+and name = 'Index_RowVersion'", connection);
         await Verifier.Verify(getIndexTypeDesCommand.ExecuteScalarAsync());
     }
 }
