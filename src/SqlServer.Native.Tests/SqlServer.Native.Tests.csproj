@@ -4,7 +4,10 @@
     <TargetFramework>net5</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.3.0" />
+    <PackageReference Include="Fody" Version="6.4.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.2" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="All" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.2.0" />
