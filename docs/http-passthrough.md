@@ -201,7 +201,7 @@ public static IEnumerable<Claim> Extract(
         }
 
         key = key.Substring(prefix.Length, key.Length - prefix.Length);
-        var list = JsonConvert.DeserializeObject<List<string>>(header.Value);
+        var list = JsonConvert.DeserializeObject<List<string>>(header.Value)!;
         foreach (var value in list)
         {
             yield return new Claim(key, value);
