@@ -70,8 +70,7 @@ Support is available via a [Tidelift Subscription](https://tidelift.com/subscrip
     * [Copied header constants](#copied-header-constants)
     * [Duplicated timestamp functionality](#duplicated-timestamp-functionality)
   * [ConnectionHelpers](#connectionhelpers)
-  * [SqlServer.HttpPassthrough](#sqlserverhttppassthrough)
-  * [Security contact information](#security-contact-information)<!-- endToc -->
+  * [SqlServer.HttpPassthrough](#sqlserverhttppassthrough)<!-- endToc -->
 
 
 ## NuGet packages
@@ -89,7 +88,6 @@ Support is available via a [Tidelift Subscription](https://tidelift.com/subscrip
  * **Bulk operations**: SQL Native supports sending and receiving of multiple messages within a single `SQLConnection` and `SQLTransaction`.
  * **Explicit connection and transaction management**: NServiceBus abstracts the `SQLConnection` and `SQLTransaction` creation and management. SQL Native allows any consuming code to manage the scope and settings of both the `SQLConnection` and `SQLTransaction`.
  * **Message pass through**: SQL Native reduces the amount of boilerplate code and simplifies development.
-
 
 
 ## Main Queue
@@ -893,11 +891,6 @@ public static async Task<DbTransaction> BeginTransaction(
 SQL HTTP Passthrough provides a bridge between an HTTP stream (via JavaScript on a web page) and the [SQL Server transport](https://docs.particular.net/transports/sql/).
 
 See [docs/http-passthrough.md](docs/http-passthrough.md).
-
-
-## Security contact information
-
-To report a security vulnerability, use the [Tidelift security contact](https://tidelift.com/security). Tidelift will coordinate the fix and disclosure.
 
 
 ## Icon
