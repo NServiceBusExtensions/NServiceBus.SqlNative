@@ -58,7 +58,6 @@ toc
  * **Message pass through**: SQL Native reduces the amount of boilerplate code and simplifies development.
 
 
-
 ## Main Queue
 
 
@@ -370,11 +369,6 @@ snippet: ConnectionHelpers
 SQL HTTP Passthrough provides a bridge between an HTTP stream (via JavaScript on a web page) and the [SQL Server transport](https://docs.particular.net/transports/sql/).
 
 See [docs/http-passthrough.md](docs/http-passthrough.md).
-
-
-## Security contact information
-
-To report a security vulnerability, use the [Tidelift security contact](https://tidelift.com/security). Tidelift will coordinate the fix and disclosure.
 
 
 ## Icon
