@@ -8,8 +8,8 @@
     </Content>
 
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="6.6.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.0" />
+    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="6.5.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.3" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\SqlServer.HttpPassthrough\SqlServer.HttpPassthrough.csproj" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
