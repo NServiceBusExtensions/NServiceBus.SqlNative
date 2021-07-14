@@ -12,8 +12,7 @@ static class IncomingDelayedStreamMessageHelper
             readToEnd = streamReader.ReadToEnd();
         }
 
-        return new IncomingDelayedVerifyTarget
-        (
+        return new(
             due: result.Due,
             headers: result.Headers,
             body: readToEnd

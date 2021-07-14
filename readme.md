@@ -296,7 +296,7 @@ static void ErrorCallback(Exception exception)
     Environment.FailFast("Message processing loop failed", exception);
 }
 
-Task<DbTransaction> TransactionBuilder(CancellationToken cancellation)
+Task<DbTransaction> BuildTransaction(CancellationToken cancellation)
 {
     return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
 }
@@ -312,7 +312,7 @@ Task PersistRowVersion(
 var processingLoop = new MessageProcessingLoop(
     table: "error",
     delay: TimeSpan.FromSeconds(1),
-    transactionBuilder: TransactionBuilder,
+    transactionBuilder: BuildTransaction,
     callback: Callback,
     errorCallback: ErrorCallback,
     startingRow: startingRow,
@@ -409,7 +409,7 @@ static async Task Callback(
     }
 }
 
-Task<DbTransaction> TransactionBuilder(CancellationToken cancellation)
+Task<DbTransaction> BuildTransaction(CancellationToken cancellation)
 {
     return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
 }
@@ -423,7 +423,7 @@ static void ErrorCallback(Exception exception)
 var consumingLoop = new MessageConsumingLoop(
     table: "endpointTable",
     delay: TimeSpan.FromSeconds(1),
-    transactionBuilder: TransactionBuilder,
+    transactionBuilder: BuildTransaction,
     callback: Callback,
     errorCallback: ErrorCallback);
 consumingLoop.Start();

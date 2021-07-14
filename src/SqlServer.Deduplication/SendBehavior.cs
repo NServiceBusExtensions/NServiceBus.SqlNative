@@ -69,6 +69,7 @@ class SendBehavior :
         {
             return messageId;
         }
-        throw new Exception($"Only Guids are supported for message Ids. Invalid value: {context.MessageId}");
+
+        throw new($"Only Guids are supported for message Ids. Invalid value: {context.MessageId}");
     }
 }

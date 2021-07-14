@@ -99,23 +99,23 @@ public class SendTests :
 
     static OutgoingMessage BuildBytesMessage(string guid)
     {
-        return new(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     static OutgoingMessage BuildStreamMessage(string guid)
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes("{}"));
-        return new OutgoingMessage(new Guid(guid), dateTime, "headers", stream);
+        return new(new(guid), dateTime, "headers", stream);
     }
 
     static OutgoingMessage BuildStreamNullMessage(string guid)
     {
-        return new(new Guid(guid), bodyStream: null);
+        return new(new(guid), bodyStream: null);
     }
 
     static OutgoingMessage BuildBytesNullMessage(string guid)
     {
-        return new(new Guid(guid), bodyBytes: null);
+        return new(new(guid), bodyBytes: null);
     }
 
     public SendTests()

@@ -17,7 +17,7 @@ static class DelegateWrappers
             catch (Exception exception)
             {
                 var message = string.Format(threwAnException, name);
-                throw new Exception(message, exception);
+                throw new(message, exception);
             }
         };
     }
@@ -27,7 +27,7 @@ static class DelegateWrappers
         if (value == null)
         {
             var nullMessage = string.Format(returnedNull, name);
-            throw new Exception(nullMessage);
+            throw new(nullMessage);
         }
     }
 
@@ -43,7 +43,7 @@ static class DelegateWrappers
             catch (Exception exception)
             {
                 var message = string.Format(threwAnException, name);
-                throw new Exception(message, exception);
+                throw new(message, exception);
             }
 
             ThrowIfNull(name, task);
@@ -55,7 +55,7 @@ static class DelegateWrappers
             catch (Exception exception)
             {
                 var message = string.Format(threwAnException, name);
-                throw new Exception(message, exception);
+                throw new(message, exception);
             }
         };
     }
@@ -72,7 +72,7 @@ static class DelegateWrappers
             catch (Exception exception)
             {
                 var message = string.Format(threwAnException, name);
-                throw new Exception(message, exception);
+                throw new(message, exception);
             }
 
             ThrowIfNull(name, task);
@@ -84,7 +84,7 @@ static class DelegateWrappers
             catch (Exception exception)
             {
                 var message = string.Format(threwAnException, name);
-                throw new Exception(message, exception);
+                throw new(message, exception);
             }
         };
     }
@@ -101,7 +101,7 @@ static class DelegateWrappers
             catch (Exception exception)
             {
                 var message = string.Format(threwAnException, name);
-                throw new Exception(message, exception);
+                throw new(message, exception);
             }
 
             ThrowIfNull(name, task);
@@ -113,7 +113,7 @@ static class DelegateWrappers
             catch (Exception exception)
             {
                 var message = string.Format(threwAnException, name);
-                throw new Exception(message, exception);
+                throw new(message, exception);
             }
         };
     }

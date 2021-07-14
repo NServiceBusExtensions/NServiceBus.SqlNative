@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +18,7 @@ public class Usage
             typeName: "TheMessageType",
             typeNamespace: "TheMessageNamespace",
             destination: "TheDestination",
-            attachments: new Dictionary<string, byte[]>
+            attachments: new()
             {
                 {"fileName", Encoding.UTF8.GetBytes("fileContents")}
             });
@@ -42,7 +41,7 @@ public class Usage
             typeName: "TheMessageType",
             typeNamespace: "TheMessageNamespace",
             destination: "TheDestination",
-            attachments: new Dictionary<string, byte[]>
+            attachments: new()
             {
                 {"fileName", Encoding.UTF8.GetBytes("fileContents")}
             });

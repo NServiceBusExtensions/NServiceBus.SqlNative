@@ -28,7 +28,7 @@ public class HttpPassthroughDedupTests :
         using (var server = new TestServer(hostBuilder))
         {
             using var client = server.CreateClient();
-            client.DefaultRequestHeaders.Referrer = new Uri("http://TheReferrer");
+            client.DefaultRequestHeaders.Referrer = new("http://TheReferrer");
             var clientFormSender = new ClientFormSender(client);
             var guid = Guid.NewGuid();
             var first = await SendAsync(clientFormSender, guid);

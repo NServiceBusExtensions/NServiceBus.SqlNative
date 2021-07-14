@@ -94,7 +94,7 @@ public class DelayedSenderTests :
     static OutgoingDelayedMessage BuildStreamMessage()
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes("{}"));
-        return new OutgoingDelayedMessage(dateTime, "headers", stream);
+        return new(dateTime, "headers", stream);
     }
 
     static OutgoingDelayedMessage BuildBytesNullMessage()

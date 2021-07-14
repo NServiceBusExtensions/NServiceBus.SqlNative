@@ -49,10 +49,10 @@ order by RowVersion
             }
             else
             {
-                streamWrapper = new StreamWrapper(length.Value, dataReader.GetStream(5));
+                streamWrapper = new(length.Value, dataReader.GetStream(5));
             }
 
-            return new IncomingMessage(
+            return new(
                 id: id,
                 rowVersion: rowVersion,
                 expires: expires,

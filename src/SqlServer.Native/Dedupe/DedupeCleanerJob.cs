@@ -47,7 +47,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public virtual void Start()
         {
-            cleaner = new DedupeCleaner(async cancellation =>
+            cleaner = new(async cancellation =>
                 {
                     using var connection = await connectionBuilder(cancellation);
                     var dedupeCleaner = new DedupeManager(connection, table);
@@ -56,7 +56,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 },
                 criticalError: criticalError,
                 frequencyToRunCleanup: frequencyToRunCleanup,
-                timer: new AsyncTimer());
+                timer: new());
             cleaner.Start();
         }
 

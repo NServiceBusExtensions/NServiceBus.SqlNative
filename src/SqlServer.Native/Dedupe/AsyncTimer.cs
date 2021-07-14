@@ -6,7 +6,7 @@ class AsyncTimer
 {
     public virtual void Start(Func<DateTime, CancellationToken, Task> callback, TimeSpan interval, Action<Exception> errorCallback, Func<TimeSpan, CancellationToken, Task> delayStrategy)
     {
-        tokenSource = new CancellationTokenSource();
+        tokenSource = new();
         var cancellation = tokenSource.Token;
 
         task = Task.Run(async () =>

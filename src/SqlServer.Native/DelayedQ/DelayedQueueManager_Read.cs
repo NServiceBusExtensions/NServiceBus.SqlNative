@@ -47,10 +47,10 @@ order by RowVersion
             }
             else
             {
-                streamWrapper = new StreamWrapper(length.Value, dataReader.GetStream(4));
+                streamWrapper = new(length.Value, dataReader.GetStream(4));
             }
 
-            return new IncomingDelayedMessage(
+            return new(
                 rowVersion: rowVersion,
                 due: due,
                 headers: headers,

@@ -44,7 +44,7 @@ namespace NServiceBus
             Guard.AgainstNull(session, nameof(session));
             if (options == null)
             {
-                options = new SendOptions();
+                options = new();
             }
             else
             {
@@ -73,8 +73,7 @@ namespace NServiceBus
 
             await session.Send(message, options);
 
-            return new DedupeResult
-            (
+            return new(
                 dedupeOutcome: pipelineState.DedupeOutcome,
                 context: pipelineState.Context
             );

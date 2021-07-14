@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +31,7 @@ public class HttpPassthroughIntegrationTests :
 
         if (!resetEvent.WaitOne(TimeSpan.FromSeconds(2)))
         {
-            throw new Exception("OutgoingMessage not received");
+            throw new("OutgoingMessage not received");
         }
 
         await endpoint.Stop();
@@ -44,7 +43,7 @@ public class HttpPassthroughIntegrationTests :
         hostBuilder.UseStartup<SampleStartup>();
         using var server = new TestServer(hostBuilder);
         using var client = server.CreateClient();
-        client.DefaultRequestHeaders.Referrer = new Uri("http://TheReferrer");
+        client.DefaultRequestHeaders.Referrer = new("http://TheReferrer");
         var message = "{\"Property\": \"Value\"}";
         var clientFormSender = new ClientFormSender(client);
         await clientFormSender.Send(
@@ -53,7 +52,7 @@ public class HttpPassthroughIntegrationTests :
             typeName: "MyMessage",
             typeNamespace: "My.Namespace",
             destination: nameof(HttpPassthroughIntegrationTests),
-            attachments: new Dictionary<string, byte[]>
+            attachments: new()
             {
                 {"fooFile", Encoding.UTF8.GetBytes("foo")},
                 {"default", Encoding.UTF8.GetBytes("bar")}

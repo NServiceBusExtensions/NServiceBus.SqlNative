@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using VerifyXunit;
 using Xunit;
@@ -20,7 +18,7 @@ public class RequestParserTests :
     {
         var request = new FakeHttpRequest
         (
-            headersDictionary: new Dictionary<string, StringValues>
+            headersDictionary: new()
             {
                 {"MessageType", "TheMessageType"},
                 {"MessageId", new Guid("00000000-0000-0000-0000-000000000001").ToString()},
@@ -36,7 +34,7 @@ public class RequestParserTests :
     {
         var request = new FakeHttpRequest
         (
-            headersDictionary: new Dictionary<string, StringValues>
+            headersDictionary: new()
             {
                 {"Destination", "TheEndpoint"},
                 {"MessageNamespace", "TheMessageNamespace"},
@@ -72,8 +70,8 @@ public class RequestParserTests :
     static FormCollection Form()
     {
         var attachmentBytes = Encoding.UTF8.GetBytes("Attachment Text");
-        return new FormCollection(
-            new Dictionary<string, StringValues>
+        return new(
+            new()
             {
                 {"message", "{}"}
             },

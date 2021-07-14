@@ -58,7 +58,7 @@ namespace NServiceBus.Transport.SqlServerNative
         public static implicit operator Table(string table)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
-            return new Table(table);
+            return new(table);
         }
 
         /// <summary>

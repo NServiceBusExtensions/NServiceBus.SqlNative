@@ -111,8 +111,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 throw;
             }
 
-            return new DedupeResult
-            (
+            return new(
                 dedupeOutcome: DedupeOutcome.Sent,
                 context: context
             );
@@ -131,7 +130,7 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstEmpty(messageId, nameof(messageId));
             if (transaction == null)
             {
-                throw new Exception($"Can only be used if the {nameof(DbTransaction)} constructor is used.");
+                throw new($"Can only be used if the {nameof(DbTransaction)} constructor is used.");
             }
             try
             {
@@ -151,8 +150,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 throw;
             }
 
-            return new DedupeResult
-            (
+            return new(
                 dedupeOutcome: DedupeOutcome.Sent,
                 context: context
             );

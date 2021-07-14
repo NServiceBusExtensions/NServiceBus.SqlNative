@@ -22,7 +22,7 @@ class DedupService :
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        job = new DedupeCleanerJob(table, connectionBuilder, criticalError);
+        job = new(table, connectionBuilder, criticalError);
         job.Start();
         return Task.CompletedTask;
     }

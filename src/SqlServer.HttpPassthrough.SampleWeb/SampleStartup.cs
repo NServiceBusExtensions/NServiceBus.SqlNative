@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -31,7 +30,7 @@ public class SampleStartup
 
     static Task<Table> AmendMessage(HttpContext context, PassthroughMessage message)
     {
-        message.ExtraHeaders = new Dictionary<string, string>
+        message.ExtraHeaders = new()
         {
             {"MessagePassthrough.Version", AssemblyVersion.Version},
             {"{}\":", "{}\":"}

@@ -192,7 +192,7 @@ public static IEnumerable<Claim> Extract(
         var list = JsonConvert.DeserializeObject<List<string>>(header.Value)!;
         foreach (var value in list)
         {
-            yield return new Claim(key, value);
+            yield return new(key, value);
         }
     }
 }
@@ -345,12 +345,12 @@ await clientFormSender.Send(
     typeName: "TheMessageType",
     typeNamespace: "TheMessageNamespace",
     destination: "TheDestination",
-    attachments: new Dictionary<string, byte[]>
+    attachments: new()
     {
         {"fileName", Encoding.UTF8.GetBytes("fileContents")}
     });
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L13-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-clientformsender' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L12-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-clientformsender' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 This can be useful when performing [Integration testing in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/testing/integration-testing).
@@ -369,10 +369,10 @@ await clientFormSender.Send(
     typeName: "TheMessageType",
     typeNamespace: "TheMessageNamespace",
     destination: "TheDestination",
-    attachments: new Dictionary<string, byte[]>
+    attachments: new()
     {
         {"fileName", Encoding.UTF8.GetBytes("fileContents")}
     });
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L32-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-asptesthost' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L31-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-asptesthost' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

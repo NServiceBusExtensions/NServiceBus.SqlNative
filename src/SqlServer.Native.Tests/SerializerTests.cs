@@ -27,7 +27,7 @@ public class SerializerTests
     public Task List()
     {
         var serialized = Serializer.SerializeList(
-            new List<string>
+            new()
             {
                 "value",
                 @"a\b",

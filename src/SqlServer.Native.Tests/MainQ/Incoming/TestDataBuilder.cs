@@ -40,11 +40,11 @@ static class TestDataBuilder
 
     public static OutgoingMessage BuildMessage(string guid)
     {
-        return new(new Guid(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        return new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
     }
 
     public static OutgoingMessage BuildNullMessage(string guid)
     {
-        return new(new Guid(guid), bodyBytes: null);
+        return new(new(guid), bodyBytes: null);
     }
 }

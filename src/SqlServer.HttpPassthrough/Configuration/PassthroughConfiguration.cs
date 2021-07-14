@@ -41,7 +41,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
                     var connection = connectionFunc();
                     if (connection.State == ConnectionState.Open)
                     {
-                        throw new Exception("This overload of PassthroughConfiguration expects `Func<DbConnection> connectionFunc` to return a un-opened DbConnection.");
+                        throw new("This overload of PassthroughConfiguration expects `Func<DbConnection> connectionFunc` to return a un-opened DbConnection.");
                     }
                     try
                     {

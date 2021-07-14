@@ -26,7 +26,7 @@ public class DedupeIntegrationTests :
         Assert.Equal(DedupeOutcome.Deduplicated, result.DedupeOutcome);
         if (!countdown.Wait(TimeSpan.FromSeconds(20)))
         {
-            throw new Exception("Expected dedup");
+            throw new("Expected dedup");
         }
 
         await endpoint.Stop();

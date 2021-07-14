@@ -30,7 +30,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             Func<HttpContext, PassthroughMessage, Task<Table>> callback,
             Action<Exception> dedupCriticalError)
         {
-            AddSqlHttpPassthrough(services, new PassthroughConfiguration(connectionFunc, callback, dedupCriticalError));
+            AddSqlHttpPassthrough(services, new(connectionFunc, callback, dedupCriticalError));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             Func<HttpContext, PassthroughMessage, Task<Table>> callback,
             Action<Exception> dedupCriticalError)
         {
-            AddSqlHttpPassthrough(services, new PassthroughConfiguration(connectionFunc, callback, dedupCriticalError));
+            AddSqlHttpPassthrough(services, new(connectionFunc, callback, dedupCriticalError));
         }
 
         /// <summary>

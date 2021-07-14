@@ -24,7 +24,7 @@ class CleanupTask :
 
     protected override Task OnStart(IMessageSession session)
     {
-        job = new DedupeCleanerJob(table, connectionBuilder, RaiseError);
+        job = new(table, connectionBuilder, RaiseError);
         job.Start();
         return Task.CompletedTask;
     }

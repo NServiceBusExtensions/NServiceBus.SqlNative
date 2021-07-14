@@ -24,7 +24,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public void Start()
         {
-            tokenSource = new CancellationTokenSource();
+            tokenSource = new();
             var cancellation = tokenSource.Token;
 
             task = Task.Run(async () =>

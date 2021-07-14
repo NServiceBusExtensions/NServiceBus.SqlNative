@@ -102,7 +102,7 @@ public class AppendClaimsToMessageHeaders
             var list = JsonConvert.DeserializeObject<List<string>>(header.Value)!;
             foreach (var value in list)
             {
-                yield return new Claim(key, value);
+                yield return new(key, value);
             }
         }
     }

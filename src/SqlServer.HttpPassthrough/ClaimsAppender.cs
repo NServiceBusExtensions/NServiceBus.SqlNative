@@ -51,7 +51,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
                 var list = Serializer.DeSerializeList(header.Value);
                 foreach (var value in list)
                 {
-                    yield return new Claim(key, value);
+                    yield return new(key, value);
                 }
             }
         }

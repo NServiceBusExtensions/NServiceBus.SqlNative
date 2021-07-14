@@ -21,7 +21,7 @@ class Sender
     public Sender(Func<CancellationToken, Task<DbConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
     {
         this.connectionFunc = connectionFunc;
-        attachments = new Persister(new  NServiceBus.Attachments.Sql.Raw.Table(attachmentsTable.TableName, attachmentsTable.Schema, false));
+        attachments = new(new(attachmentsTable.TableName, attachmentsTable.Schema, false));
         this.headersBuilder = headersBuilder;
         this.dedupeTable = dedupeTable;
         this.logger = logger;

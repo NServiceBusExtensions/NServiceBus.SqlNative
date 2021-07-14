@@ -11,7 +11,7 @@ public class AsyncTimerTests
 
         var timer = new AsyncTimer();
         timer.Start(
-            callback: (_, _) => throw new Exception("Simulated!"),
+            callback: (_, _) => throw new("Simulated!"),
             interval: TimeSpan.Zero,
             errorCallback: _ => { errorCallbackInvoked.SetResult(true); },
             delayStrategy: Task.Delay);
@@ -33,7 +33,7 @@ public class AsyncTimerTests
                 if (fail)
                 {
                     fail = false;
-                    throw new Exception("Simulated!");
+                    throw new("Simulated!");
                 }
 
                 Assert.True(exceptionThrown);
@@ -55,7 +55,7 @@ public class AsyncTimerTests
         var delayStarted = new TaskCompletionSource<bool>();
 
         timer.Start(
-            callback: (_, _) => throw new Exception("Simulated!"),
+            callback: (_, _) => throw new("Simulated!"),
             interval: TimeSpan.FromDays(7),
             errorCallback: _ =>
             {

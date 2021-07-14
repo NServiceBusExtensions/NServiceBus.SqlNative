@@ -16,8 +16,7 @@ static class HeaderReader
             throw new BadRequestException($"Invalid 'MessageType' header. Contains '.'. MessageType: {messageType}");
         }
 
-        return new IncomingHeaders
-        (
+        return new(
             messageId: GetMessageId(headers),
             messageType: messageType,
             messageNamespace: messageNamespace,

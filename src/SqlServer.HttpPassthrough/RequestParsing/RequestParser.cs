@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,8 +11,7 @@ static class RequestParser
     {
         var incomingHeaders = HeaderReader.GetIncomingHeaders(request.Headers);
         var form = await request.ReadFormAsync(cancellation);
-        return new PassthroughMessage
-        (
+        return new(
             destination: incomingHeaders.Destination,
             id: incomingHeaders.MessageId,
             correlationId: incomingHeaders.MessageId,
@@ -38,7 +36,7 @@ static class RequestParser
 
             if (attachments.ContainsKey(attachment.FileName))
             {
-                throw new Exception($"Duplicate filename: {attachment.FileName}");
+                throw new($"Duplicate filename: {attachment.FileName}");
             }
 
             attachments.Add(attachment.FileName, attachment);

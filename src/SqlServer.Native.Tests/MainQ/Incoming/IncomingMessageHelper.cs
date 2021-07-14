@@ -12,8 +12,7 @@ static class IncomingMessageHelper
             readToEnd = streamReader.ReadToEnd();
         }
 
-        return new IncomingVerifyTarget
-        (
+        return new(
             expires: result.Expires,
             headers: result.Headers,
             id: result.Id,

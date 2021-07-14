@@ -42,7 +42,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 lastRowVersion = message.RowVersion;
                 await func(message);
             }
-            return new IncomingResult
+            return new()
             {
                 Count = count,
                 LastRowVersion = lastRowVersion
