@@ -59,6 +59,7 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 return Task.CompletedTask;
             }
+
             return task;
         }
 
