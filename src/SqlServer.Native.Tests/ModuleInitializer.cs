@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 using NServiceBus.Transport.SqlServerNative;
 using VerifyTests;
 
 public static class ModuleInitializer
 {
+    [ModuleInitializer]
     public static void Initialize()
     {
         VerifySqlServer.Enable();
