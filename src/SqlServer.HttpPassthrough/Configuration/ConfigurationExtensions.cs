@@ -57,9 +57,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             this IServiceCollection services,
             PassthroughConfiguration configuration)
         {
-            Guard.AgainstNull(services, nameof(services));
-            Guard.AgainstNull(configuration, nameof(configuration));
-
             var headersBuilder = new HeadersBuilder(configuration.OriginatingEndpoint, configuration.OriginatingMachine);
             services.AddSingleton<ISqlPassthrough>(serviceProvider =>
             {
@@ -79,7 +76,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         public static void AddSqlHttpPassthroughBadRequestMiddleware(
             this IApplicationBuilder builder)
         {
-            Guard.AgainstNull(builder, nameof(builder));
             builder.UseMiddleware<BadRequestMiddleware>();
         }
     }

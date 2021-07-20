@@ -16,7 +16,6 @@ static class Extensions
 
     public static Func<T, Task> ToTaskFunc<T>(this Action<T> action)
     {
-        Guard.AgainstNull(action, nameof(action));
         return x =>
         {
             action(x);
@@ -48,7 +47,6 @@ static class Extensions
 
     public static async Task RunCommand(this DbConnection connection, DbTransaction? transaction, string sql, CancellationToken cancellation = default)
     {
-        Guard.AgainstNull(connection, nameof(connection));
         using var command = connection.CreateCommand(transaction, sql);
         await command.RunNonQuery(cancellation);
     }

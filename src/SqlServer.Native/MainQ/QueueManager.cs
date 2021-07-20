@@ -25,7 +25,6 @@ namespace NServiceBus.Transport.SqlServerNative
         public QueueManager(Table table, DbConnection connection, Table dedupeTable) :
             base(table, connection)
         {
-            Guard.AgainstNull(dedupeTable, nameof(dedupeTable));
             dedupe = true;
             this.dedupeTable = dedupeTable;
 
@@ -35,7 +34,6 @@ namespace NServiceBus.Transport.SqlServerNative
         public QueueManager(Table table, DbTransaction transaction, Table dedupeTable) :
             base(table, transaction)
         {
-            Guard.AgainstNull(dedupeTable, nameof(dedupeTable));
             dedupe = true;
             this.dedupeTable = dedupeTable;
 

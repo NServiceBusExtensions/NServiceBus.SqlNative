@@ -71,8 +71,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             Action<Exception> dedupCriticalError)
         {
             DedupCriticalError = dedupCriticalError;
-            Guard.AgainstNull(connectionFunc, nameof(connectionFunc));
-            Guard.AgainstNull(callback, nameof(callback));
             SendCallback = callback.WrapFunc(nameof(callback));
             ConnectionFunc = connectionFunc.WrapFunc(nameof(connectionFunc));
         }
@@ -94,7 +92,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// </summary>
         public void Deduplication(Table table)
         {
-            Guard.AgainstNull(table, nameof(table));
             DedupeTable = table;
         }
 
@@ -104,7 +101,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// </summary>
         public void Attachments(Table table)
         {
-            Guard.AgainstNull(table, nameof(table));
             AttachmentsTable = table;
         }
 

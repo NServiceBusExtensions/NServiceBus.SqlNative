@@ -12,7 +12,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         public Attachment(Func<Stream> stream, string fileName)
         {
             Guard.AgainstNullOrEmpty(fileName, nameof(fileName));
-            Guard.AgainstNull(stream, nameof(stream));
             Stream = stream;
             FileName = fileName;
         }

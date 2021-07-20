@@ -16,7 +16,6 @@ namespace NServiceBus.Transport.SqlServerNative
             Action<Exception> errorCallback,
             TimeSpan? delay = null)
         {
-            Guard.AgainstNull(errorCallback, nameof(errorCallback));
             Guard.AgainstNegativeAndZero(delay, nameof(delay));
             this.errorCallback = errorCallback.WrapFunc(nameof(errorCallback));
             this.delay = delay.GetValueOrDefault(TimeSpan.FromMinutes(1));

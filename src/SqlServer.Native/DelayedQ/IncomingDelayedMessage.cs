@@ -31,7 +31,6 @@ namespace NServiceBus.Transport.SqlServerNative
         public IncomingDelayedMessage(long rowVersion, DateTime? due, string headers, Stream? body, IDisposable[] cleanups)
 #endif
         {
-            Guard.AgainstNull(cleanups, nameof(cleanups));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             this.cleanups = cleanups;
             this.rowVersion = rowVersion;

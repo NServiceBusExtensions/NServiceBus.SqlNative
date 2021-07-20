@@ -27,7 +27,6 @@ class SqlPassthrough :
 
     public async Task Send(HttpContext context, CancellationToken cancellation = default)
     {
-        Guard.AgainstNull(context, nameof(context));
         var passThroughMessage = await RequestParser.Extract(context.Request, cancellation);
         var destinationTable = await sendCallback(context, passThroughMessage).ConfigureAwait(true);
         ProcessClaims(context, passThroughMessage);

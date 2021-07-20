@@ -17,13 +17,11 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public Task CreateTable(DbConnection connection, CancellationToken cancellation = default)
         {
-            Guard.AgainstNull(connection, nameof(connection));
             return CreateTable(connection, null, cancellation);
         }
 
         public Task CreateTable(DbTransaction transaction, CancellationToken cancellation = default)
         {
-            Guard.AgainstNull(transaction, nameof(transaction));
             return CreateTable(transaction.Connection, transaction, cancellation);
         }
 
@@ -34,14 +32,12 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public Task Save(DbConnection connection, long rowVersion, CancellationToken cancellation = default)
         {
-            Guard.AgainstNull(connection, nameof(connection));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             return Save(connection, null, rowVersion, cancellation);
         }
 
         public Task Save(DbTransaction transaction, long rowVersion, CancellationToken cancellation = default)
         {
-            Guard.AgainstNull(transaction, nameof(transaction));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             return Save(transaction.Connection, transaction, rowVersion, cancellation);
         }
@@ -67,7 +63,6 @@ if @@rowcount = 0
 
         public async Task<long> Get(DbConnection connection, CancellationToken cancellation = default)
         {
-            Guard.AgainstNull(connection, nameof(connection));
             using var command = connection.CreateCommand();
             command.CommandText = $@"
 select top (1) RowVersion

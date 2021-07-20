@@ -19,18 +19,15 @@ namespace NServiceBus.Transport.SqlServerNative
         public SubscriptionManager(Table table, DbConnection connection):
             this(table, null,connection)
         {
-            Guard.AgainstNull(connection, nameof(connection));
         }
 
         public SubscriptionManager(Table table, DbTransaction transaction):
             this(table,transaction,transaction.Connection)
         {
-            Guard.AgainstNull(transaction, nameof(transaction));
         }
 
         SubscriptionManager(Table table, DbTransaction? transaction, DbConnection connection)
         {
-            Guard.AgainstNull(table, nameof(table));
             this.transaction = transaction;
             this.table = table;
             this.connection = connection;

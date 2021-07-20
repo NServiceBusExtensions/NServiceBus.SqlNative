@@ -25,8 +25,6 @@ namespace NServiceBus.Transport.SqlServerNative
             base(errorCallback, delay)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
-            Guard.AgainstNull(transactionBuilder, nameof(transactionBuilder));
-            Guard.AgainstNull(callback, nameof(callback));
             Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
             this.table = table;
             transactionCallback = callback.WrapFunc(nameof(transactionCallback));
@@ -44,9 +42,7 @@ namespace NServiceBus.Transport.SqlServerNative
             base(errorCallback, delay)
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
-            Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
             Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
-            Guard.AgainstNull(callback, nameof(callback));
             connectionCallback = callback.WrapFunc(nameof(connectionCallback));
             this.table = table;
             this.connectionBuilder = connectionBuilder.WrapFunc(nameof(this.connectionBuilder));

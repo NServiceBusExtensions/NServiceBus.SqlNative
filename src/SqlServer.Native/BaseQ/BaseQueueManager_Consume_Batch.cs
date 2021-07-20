@@ -21,14 +21,12 @@ namespace NServiceBus.Transport.SqlServerNative
         #endif
         public virtual Task<IncomingResult> Consume(int size, Action<TIncoming> action, CancellationToken cancellation = default)
         {
-            Guard.AgainstNull(action, nameof(action));
             return Consume(size, action.ToTaskFunc(), cancellation);
         }
 
         public virtual async Task<IncomingResult> Consume(int size, Func<TIncoming, Task> func, CancellationToken cancellation = default)
         {
             Guard.AgainstNegativeAndZero(size, nameof(size));
-            Guard.AgainstNull(func, nameof(func));
             using var command = BuildConsumeCommand(size);
             return await ReadMultiple(command, func, cancellation);
         }

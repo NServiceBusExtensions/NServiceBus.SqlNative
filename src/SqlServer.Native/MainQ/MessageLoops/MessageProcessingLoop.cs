@@ -31,9 +31,6 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNegativeAndZero(startingRow, nameof(startingRow));
-            Guard.AgainstNull(transactionBuilder, nameof(transactionBuilder));
-            Guard.AgainstNull(persistRowVersion, nameof(persistRowVersion));
-            Guard.AgainstNull(callback, nameof(callback));
             Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
             this.table = table;
             this.startingRow = startingRow;
@@ -56,9 +53,6 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             Guard.AgainstNullOrEmpty(table, nameof(table));
             Guard.AgainstNegativeAndZero(startingRow, nameof(startingRow));
-            Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
-            Guard.AgainstNull(persistRowVersion, nameof(persistRowVersion));
-            Guard.AgainstNull(callback, nameof(callback));
             Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
             connectionCallback = callback.WrapFunc(nameof(connectionCallback));
             this.table = table;

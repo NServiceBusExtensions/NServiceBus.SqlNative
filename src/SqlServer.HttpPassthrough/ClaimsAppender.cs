@@ -20,8 +20,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// </summary>
         public static void Append(IEnumerable<Claim> claims, IDictionary<string, string> headers, string? prefix)
         {
-            Guard.AgainstNull(claims, nameof(claims));
-            Guard.AgainstNull(headers, nameof(headers));
             Guard.AgainstEmpty(prefix, nameof(prefix));
             prefix ??= "";
             foreach (var claim in claims.GroupBy(x => x.Type))
@@ -37,7 +35,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// </summary>
         public static IEnumerable<Claim> Extract(IDictionary<string, string> headers, string prefix)
         {
-            Guard.AgainstNull(headers, nameof(headers));
             Guard.AgainstNullOrEmpty(prefix, nameof(prefix));
             foreach (var header in headers)
             {

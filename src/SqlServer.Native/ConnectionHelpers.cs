@@ -25,7 +25,6 @@ if (@nocount = 'off') set nocount off;";
 
         internal static Task DropTable(this DbConnection connection, DbTransaction? transaction, Table table, CancellationToken cancellation = default)
         {
-            Guard.AgainstNull(table, nameof(table));
             return connection.RunCommand(transaction, $"drop table if exists {table}", cancellation);
         }
     }

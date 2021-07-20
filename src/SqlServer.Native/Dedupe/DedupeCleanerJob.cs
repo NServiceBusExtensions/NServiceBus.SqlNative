@@ -30,9 +30,6 @@ namespace NServiceBus.Transport.SqlServerNative
             TimeSpan? expireWindow = null,
             TimeSpan? frequencyToRunCleanup = null)
         {
-            Guard.AgainstNull(table, nameof(table));
-            Guard.AgainstNull(criticalError, nameof(criticalError));
-            Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
             Guard.AgainstNegativeAndZero(expireWindow, nameof(expireWindow));
             Guard.AgainstNegativeAndZero(frequencyToRunCleanup, nameof(frequencyToRunCleanup));
             this.expireWindow = expireWindow.GetValueOrDefault(TimeSpan.FromDays(1));

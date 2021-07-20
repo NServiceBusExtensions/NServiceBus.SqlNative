@@ -10,7 +10,6 @@ class StreamWrapper :
 
     public StreamWrapper(long length, Stream inner)
     {
-        Guard.AgainstNull(inner, nameof(inner));
         this.inner = inner;
         Length = length;
     }

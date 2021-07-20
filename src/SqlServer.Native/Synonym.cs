@@ -13,7 +13,6 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public Synonym(DbConnection sourceDatabase, string targetDatabase, string sourceSchema = "dbo", string targetSchema = "dbo")
         {
-            Guard.AgainstNull(sourceDatabase, nameof(sourceDatabase));
             Guard.AgainstNullOrEmpty(targetDatabase, nameof(targetDatabase));
             Guard.AgainstNullOrEmpty(targetSchema, nameof(targetSchema));
             this.sourceDatabase = sourceDatabase;
@@ -24,7 +23,6 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public Synonym(DbTransaction sourceTransaction, string targetDatabase, string sourceSchema = "dbo", string targetSchema = "dbo")
         {
-            Guard.AgainstNull(sourceTransaction, nameof(sourceTransaction));
             Guard.AgainstNullOrEmpty(targetDatabase, nameof(targetDatabase));
             Guard.AgainstNullOrEmpty(targetSchema, nameof(targetSchema));
             this.sourceTransaction = sourceTransaction;

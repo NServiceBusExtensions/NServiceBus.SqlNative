@@ -9,7 +9,6 @@ namespace NServiceBus.Transport.SqlServerNative
     {
         public virtual Task<long> Send(TOutgoing message, CancellationToken cancellation = default)
         {
-            Guard.AgainstNull(message, nameof(message));
             return InnerSend(message, cancellation);
         }
 

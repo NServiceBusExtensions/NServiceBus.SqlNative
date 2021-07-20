@@ -19,8 +19,6 @@ namespace NServiceBus
             this EndpointConfiguration configuration,
             Func<CancellationToken, Task<DbConnection>> connectionBuilder)
         {
-            Guard.AgainstNull(configuration, nameof(configuration));
-            Guard.AgainstNull(connectionBuilder, nameof(connectionBuilder));
             var recoverability = configuration.Recoverability();
             recoverability.AddUnrecoverableException<NotSupportedException>();
             var settings = configuration.GetSettings();
@@ -40,8 +38,6 @@ namespace NServiceBus
         public static Task<DedupeResult> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions? options = null, string? context = null)
         {
             Guard.AgainstEmpty(messageId, nameof(messageId));
-            Guard.AgainstNull(message, nameof(message));
-            Guard.AgainstNull(session, nameof(session));
             if (options == null)
             {
                 options = new();

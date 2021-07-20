@@ -19,7 +19,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         public SendFailureException(PassthroughMessage passthroughMessage, Exception innerException) :
             base("OutgoingMessage failed to send.", innerException)
         {
-            Guard.AgainstNull(passthroughMessage, nameof(passthroughMessage));
             PassthroughMessage = passthroughMessage;
         }
     }

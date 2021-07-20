@@ -1,32 +1,8 @@
 ﻿using System;
-using System.Data;
-using System.Data.Common;
 
 static class Guard
 {
-    // ReSharper disable UnusedParameter.Global
-    public static void AgainstNull(object? value, string argumentName)
-    {
-        if (value == null)
-        {
-            throw new ArgumentNullException(argumentName);
-        }
-    }
-
-    public static void AgainstNull(DbConnection? value, string argumentName)
-    {
-        if (value == null)
-        {
-            throw new ArgumentNullException(argumentName);
-        }
-
-        if (value.State == ConnectionState.Closed)
-        {
-            throw new ArgumentException("Connection must be open.", argumentName);
-        }
-    }
-
-    public static void AgainstNullOrEmpty(string? value, string argumentName)
+    public static void AgainstNullOrEmpty(string value, string argumentName)
     {
         if (string.IsNullOrWhiteSpace(value))
         {

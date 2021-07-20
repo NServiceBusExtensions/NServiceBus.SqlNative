@@ -14,16 +14,12 @@ namespace NServiceBus.Transport.SqlServerNative
 
         protected BaseQueueManager(Table table, DbConnection connection)
         {
-            Guard.AgainstNull(table, nameof(table));
-            Guard.AgainstNull(connection, nameof(connection));
             Table = table;
             Connection = connection;
         }
 
         protected BaseQueueManager(Table table, DbTransaction transaction)
         {
-            Guard.AgainstNull(table, nameof(table));
-            Guard.AgainstNull(transaction, nameof(transaction));
             Table = table;
             Transaction = transaction;
             Connection = transaction.Connection;

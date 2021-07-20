@@ -32,7 +32,6 @@ namespace NServiceBus.Transport.SqlServerNative
         public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, IDisposable[] cleanups)
 #endif
         {
-            Guard.AgainstNull(cleanups, nameof(cleanups));
             Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
             this.cleanups = cleanups;
             this.id = id;

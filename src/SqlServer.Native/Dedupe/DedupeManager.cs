@@ -22,8 +22,6 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public DedupeManager(DbConnection connection, Table table)
         {
-            Guard.AgainstNull(table, nameof(table));
-            Guard.AgainstNull(connection, nameof(connection));
             this.connection = connection;
             this.table = table;
             InitSql();
@@ -31,8 +29,6 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public DedupeManager(DbTransaction transaction, Table table)
         {
-            Guard.AgainstNull(table, nameof(table));
-            Guard.AgainstNull(transaction, nameof(transaction));
             this.transaction = transaction;
             this.table = table;
             connection = transaction.Connection;

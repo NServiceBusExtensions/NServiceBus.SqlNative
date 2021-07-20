@@ -19,8 +19,6 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         Guid correlationId;
         string type;
         string? ns;
-        List<Attachment> attachments = new();
-        Dictionary<string, string> extraHeaders = new();
         string body;
         string? clientUrl;
 
@@ -33,7 +31,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough
             ns = @namespace;
             this.clientUrl = clientUrl;
             this.body = body;
-            this.attachments = attachments;
+            Attachments = attachments;
         }
 
         /// <summary>
@@ -126,28 +124,12 @@ namespace NServiceBus.SqlServer.HttpPassthrough
         /// <summary>
         /// The message attachments. Contains all binaries extracted from <see cref="IFormCollection.Files"/>
         /// </summary>
-        public List<Attachment> Attachments
-        {
-            get => attachments;
-            set
-            {
-                Guard.AgainstNull(value, nameof(Attachments));
-                attachments = value;
-            }
-        }
+        public List<Attachment> Attachments { get; set; }
 
         /// <summary>
         /// Any extra headers to add to the outgoing NServiceBus message.
         /// </summary>
-        public Dictionary<string, string> ExtraHeaders
-        {
-            get => extraHeaders;
-            set
-            {
-                Guard.AgainstNull(value, nameof(ExtraHeaders));
-                extraHeaders = value;
-            }
-        }
+        public Dictionary<string, string> ExtraHeaders { get; set; } = new();
 
         /// <summary>
         /// Convert all properties of this instance into a <see cref="Dictionary{TKey,TValue}"/>.
