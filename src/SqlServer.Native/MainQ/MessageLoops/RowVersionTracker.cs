@@ -1,83 +1,81 @@
 ﻿using System.Data;
 using System.Data.Common;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace NServiceBus.Transport.SqlServerNative
+namespace NServiceBus.Transport.SqlServerNative;
+
+public class RowVersionTracker
 {
-    public class RowVersionTracker
+    string table;
+
+    public RowVersionTracker(string table = "RowVersionTracker")
     {
-        string table;
+        Guard.AgainstNullOrEmpty(table, nameof(table));
+        this.table = table;
+    }
 
-        public RowVersionTracker(string table = "RowVersionTracker")
-        {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
-            this.table = table;
-        }
+    public Task CreateTable(DbConnection connection, CancellationToken cancellation = default)
+    {
+        return CreateTable(connection, null, cancellation);
+    }
 
-        public Task CreateTable(DbConnection connection, CancellationToken cancellation = default)
-        {
-            return CreateTable(connection, null, cancellation);
-        }
+    public Task CreateTable(DbTransaction transaction, CancellationToken cancellation = default)
+    {
+        return CreateTable(transaction.Connection, transaction, cancellation);
+    }
 
-        public Task CreateTable(DbTransaction transaction, CancellationToken cancellation = default)
-        {
-            return CreateTable(transaction.Connection, transaction, cancellation);
-        }
+    Task CreateTable(DbConnection connection, DbTransaction? transaction, CancellationToken cancellation)
+    {
+        return connection.RunCommand(transaction, string.Format(Sql, table), cancellation);
+    }
 
-        Task CreateTable(DbConnection connection, DbTransaction? transaction, CancellationToken cancellation)
-        {
-            return connection.RunCommand(transaction, string.Format(Sql, table), cancellation);
-        }
+    public Task Save(DbConnection connection, long rowVersion, CancellationToken cancellation = default)
+    {
+        Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
+        return Save(connection, null, rowVersion, cancellation);
+    }
 
-        public Task Save(DbConnection connection, long rowVersion, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
-            return Save(connection, null, rowVersion, cancellation);
-        }
+    public Task Save(DbTransaction transaction, long rowVersion, CancellationToken cancellation = default)
+    {
+        Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
+        return Save(transaction.Connection, transaction, rowVersion, cancellation);
+    }
 
-        public Task Save(DbTransaction transaction, long rowVersion, CancellationToken cancellation = default)
-        {
-            Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
-            return Save(transaction.Connection, transaction, rowVersion, cancellation);
-        }
-
-        async Task Save(DbConnection connection, DbTransaction? transaction, long rowVersion, CancellationToken cancellation)
-        {
-            using var command = connection.CreateCommand(
-                transaction: transaction,
-                sql: $@"
+    async Task Save(DbConnection connection, DbTransaction? transaction, long rowVersion, CancellationToken cancellation)
+    {
+        using var command = connection.CreateCommand(
+            transaction: transaction,
+            sql: $@"
 update {table}
 set RowVersion = @RowVersion
 if @@rowcount = 0
   insert into {table} (RowVersion)
   values (@RowVersion)
 ");
-            var parameter = command.CreateParameter();
-            parameter.ParameterName = "RowVersion";
-            parameter.DbType = DbType.Int64;
-            parameter.Value = rowVersion;
-            command.Parameters.Add(parameter);
-            await command.RunNonQuery(cancellation);
-        }
+        var parameter = command.CreateParameter();
+        parameter.ParameterName = "RowVersion";
+        parameter.DbType = DbType.Int64;
+        parameter.Value = rowVersion;
+        command.Parameters.Add(parameter);
+        await command.RunNonQuery(cancellation);
+    }
 
-        public async Task<long> Get(DbConnection connection, CancellationToken cancellation = default)
-        {
-            using var command = connection.CreateCommand();
-            command.CommandText = $@"
+    public async Task<long> Get(DbConnection connection, CancellationToken cancellation = default)
+    {
+        using var command = connection.CreateCommand();
+        command.CommandText = $@"
 select top (1) RowVersion
 from {table}";
-            var result = await command.RunScalar(cancellation);
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            if (result == null)
-            {
-                return 1;
-            }
-
-            return (long) result;
+        var result = await command.RunScalar(cancellation);
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+        if (result == null)
+        {
+            return 1;
         }
 
-        static string Sql = @"
+        return (long) result;
+    }
+
+    static string Sql = @"
 if exists (
   select *
   from sys.objects
@@ -89,5 +87,4 @@ create table {0} (
   RowVersion bigint not null
 );
 ";
-    }
 }

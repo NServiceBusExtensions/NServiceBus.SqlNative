@@ -1,8 +1,5 @@
-﻿using System;
-using System.Data.Common;
+﻿using System.Data.Common;
 using Microsoft.Data.SqlClient;
-using System.Threading;
-using System.Threading.Tasks;
 
 public static class Connection
 {

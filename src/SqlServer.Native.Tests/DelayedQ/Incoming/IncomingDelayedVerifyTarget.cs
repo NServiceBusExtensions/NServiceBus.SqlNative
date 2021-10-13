@@ -1,6 +1,4 @@
-﻿using System;
-
-class IncomingDelayedVerifyTarget
+﻿class IncomingDelayedVerifyTarget
 {
     public string Headers { get; }
     public DateTime? Due { get; }

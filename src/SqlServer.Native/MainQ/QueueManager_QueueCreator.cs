@@ -1,14 +1,14 @@
-﻿namespace NServiceBus.Transport.SqlServerNative
+﻿namespace NServiceBus.Transport.SqlServerNative;
+
+/// <summary>
+/// Handles creation of transport queues.
+/// </summary>
+public partial class QueueManager
 {
     /// <summary>
-    /// Handles creation of transport queues.
+    /// The sql statements used to create the queue.
     /// </summary>
-    public partial class QueueManager
-    {
-        /// <summary>
-        /// The sql statements used to create the queue.
-        /// </summary>
-        public override string CreateTableSql => @"
+    public override string CreateTableSql => @"
 if not exists (select * from sys.objects  where object_id = object_id('{0}') and type = 'U')
     create table {0} (
 	    Id uniqueidentifier not null,
@@ -51,5 +51,4 @@ include
 	RowVersion
 )
 where Expires is not null";
-    }
 }

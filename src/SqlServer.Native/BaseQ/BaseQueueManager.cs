@@ -1,48 +1,44 @@
-﻿using System;
-using System.Data.Common;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Data.Common;
 
-namespace NServiceBus.Transport.SqlServerNative
+namespace NServiceBus.Transport.SqlServerNative;
+
+public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
+    where TIncoming : class, IIncomingMessage
 {
-    public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
-        where TIncoming : class, IIncomingMessage
+    protected Table Table;
+    protected DbConnection Connection;
+    protected DbTransaction? Transaction;
+
+    protected BaseQueueManager(Table table, DbConnection connection)
     {
-        protected Table Table;
-        protected DbConnection Connection;
-        protected DbTransaction? Transaction;
+        Table = table;
+        Connection = connection;
+    }
 
-        protected BaseQueueManager(Table table, DbConnection connection)
-        {
-            Table = table;
-            Connection = connection;
-        }
+    protected BaseQueueManager(Table table, DbTransaction transaction)
+    {
+        Table = table;
+        Transaction = transaction;
+        Connection = transaction.Connection;
+    }
 
-        protected BaseQueueManager(Table table, DbTransaction transaction)
+    async Task<IncomingResult> ReadMultiple(DbCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
+    {
+        var count = 0;
+        long? lastRowVersion = null;
+        using var reader = await command.RunSequentialReader(cancellation);
+        while (await reader.ReadAsync(cancellation))
         {
-            Table = table;
-            Transaction = transaction;
-            Connection = transaction.Connection;
+            count++;
+            cancellation.ThrowIfCancellationRequested();
+            await using var message = ReadMessage(reader);
+            lastRowVersion = message.RowVersion;
+            await func(message);
         }
-
-        async Task<IncomingResult> ReadMultiple(DbCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
+        return new()
         {
-            var count = 0;
-            long? lastRowVersion = null;
-            using var reader = await command.RunSequentialReader(cancellation);
-            while (await reader.ReadAsync(cancellation))
-            {
-                count++;
-                cancellation.ThrowIfCancellationRequested();
-                await using var message = ReadMessage(reader);
-                lastRowVersion = message.RowVersion;
-                await func(message);
-            }
-            return new()
-            {
-                Count = count,
-                LastRowVersion = lastRowVersion
-            };
-        }
+            Count = count,
+            LastRowVersion = lastRowVersion
+        };
     }
 }

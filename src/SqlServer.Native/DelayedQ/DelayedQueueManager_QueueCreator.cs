@@ -1,11 +1,11 @@
-﻿namespace NServiceBus.Transport.SqlServerNative
+﻿namespace NServiceBus.Transport.SqlServerNative;
+
+public partial class DelayedQueueManager
 {
-    public partial class DelayedQueueManager
-    {
-        /// <summary>
-        /// The sql statements used to create the Delayed queue.
-        /// </summary>
-        public override string CreateTableSql => @"
+    /// <summary>
+    /// The sql statements used to create the Delayed queue.
+    /// </summary>
+    public override string CreateTableSql => @"
 if exists (
   select *
   from sys.objects
@@ -24,5 +24,4 @@ create nonclustered index [Index_Due] on {0}
 (
   [Due]
 )";
-    }
 }

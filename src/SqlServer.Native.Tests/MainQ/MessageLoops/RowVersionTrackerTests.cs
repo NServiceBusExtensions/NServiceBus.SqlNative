@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using NServiceBus.Transport.SqlServerNative;
+﻿using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 
 public class RowVersionTrackerTests :

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using NServiceBus.Transport.SqlServerNative;
+﻿using NServiceBus.Transport.SqlServerNative;
 using VerifyXunit;
 using Xunit;
 

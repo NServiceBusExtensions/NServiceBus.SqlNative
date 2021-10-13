@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-static class DelegateWrappers
+﻿static class DelegateWrappers
 {
     static string threwAnException = "Provided {0} delegate threw an exception.";
     static string returnedNull = "Provided {0} delegate returned a null.";

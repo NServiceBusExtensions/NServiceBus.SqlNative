@@ -1,6 +1,4 @@
-﻿using System;
-
-class IncomingVerifyTarget
+﻿class IncomingVerifyTarget
 {
     public DateTime? Expires { get; }
     public string Headers { get; }

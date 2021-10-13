@@ -1,10 +1,7 @@
-﻿using System;
+﻿namespace NServiceBus.Transport.SqlServerNative;
 
-namespace NServiceBus.Transport.SqlServerNative
+public interface IIncomingMessage :
+    IAsyncDisposable
 {
-    public interface IIncomingMessage :
-        IAsyncDisposable
-    {
-        long RowVersion { get; }
-    }
+    long RowVersion { get; }
 }

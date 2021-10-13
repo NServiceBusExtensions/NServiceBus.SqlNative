@@ -1,71 +1,66 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿namespace NServiceBus.Transport.SqlServerNative;
 
-namespace NServiceBus.Transport.SqlServerNative
+public abstract class MessageLoop :
+    IAsyncDisposable
 {
-    public abstract class MessageLoop :
-        IAsyncDisposable
+    Action<Exception> errorCallback;
+    Task? task;
+    CancellationTokenSource? tokenSource;
+    TimeSpan delay;
+
+    public MessageLoop(
+        Action<Exception> errorCallback,
+        TimeSpan? delay = null)
     {
-        Action<Exception> errorCallback;
-        Task? task;
-        CancellationTokenSource? tokenSource;
-        TimeSpan delay;
+        Guard.AgainstNegativeAndZero(delay, nameof(delay));
+        this.errorCallback = errorCallback.WrapFunc(nameof(errorCallback));
+        this.delay = delay.GetValueOrDefault(TimeSpan.FromMinutes(1));
+    }
 
-        public MessageLoop(
-            Action<Exception> errorCallback,
-            TimeSpan? delay = null)
-        {
-            Guard.AgainstNegativeAndZero(delay, nameof(delay));
-            this.errorCallback = errorCallback.WrapFunc(nameof(errorCallback));
-            this.delay = delay.GetValueOrDefault(TimeSpan.FromMinutes(1));
-        }
+    public void Start()
+    {
+        tokenSource = new();
+        var cancellation = tokenSource.Token;
 
-        public void Start()
-        {
-            tokenSource = new();
-            var cancellation = tokenSource.Token;
-
-            task = Task.Run(async () =>
-                {
-                    while (!cancellation.IsCancellationRequested)
-                    {
-                        try
-                        {
-                            await RunBatch(cancellation);
-
-                            await Task.Delay(delay, cancellation);
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            // noop
-                        }
-                        catch (Exception ex)
-                        {
-                            errorCallback(ex);
-                        }
-                    }
-                },
-                cancellation);
-        }
-
-        protected abstract Task RunBatch(CancellationToken cancellation);
-
-        public Task Stop()
-        {
-            tokenSource?.Cancel();
-            tokenSource?.Dispose();
-            if (task == null)
+        task = Task.Run(async () =>
             {
-                return Task.CompletedTask;
-            }
+                while (!cancellation.IsCancellationRequested)
+                {
+                    try
+                    {
+                        await RunBatch(cancellation);
 
-            return task;
-        }
+                        await Task.Delay(delay, cancellation);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        // noop
+                    }
+                    catch (Exception ex)
+                    {
+                        errorCallback(ex);
+                    }
+                }
+            },
+            cancellation);
+    }
 
-        public async ValueTask DisposeAsync()
+    protected abstract Task RunBatch(CancellationToken cancellation);
+
+    public Task Stop()
+    {
+        tokenSource?.Cancel();
+        tokenSource?.Dispose();
+        if (task == null)
         {
-            await Stop();
+            return Task.CompletedTask;
         }
+
+        return task;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await Stop();
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-static class AssemblyHelper
+﻿static class AssemblyHelper
 {
     static AssemblyHelper()
     {

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using NServiceBus.Transport.SqlServerNative;
 using VerifyTests;
 using VerifyXunit;

@@ -1,9 +1,9 @@
-﻿namespace NServiceBus.Transport.SqlServerNative
+﻿namespace NServiceBus.Transport.SqlServerNative;
+
+public partial class DelayedQueueManager
 {
-    public partial class DelayedQueueManager
-    {
-        public static readonly string SendSql = ConnectionHelpers.WrapInNoCount(
-            @"
+    public static readonly string SendSql = ConnectionHelpers.WrapInNoCount(
+        @"
 insert into {0} (
   Due,
   Headers,
@@ -13,5 +13,4 @@ values (
   @Due,
   @Headers,
   @Body);");
-  }
 }

@@ -1,62 +1,58 @@
-﻿using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Data.Common;
 
-namespace NServiceBus.Transport.SqlServerNative
+namespace NServiceBus.Transport.SqlServerNative;
+
+public class SubscriptionManager
 {
-    public class SubscriptionManager
+    DbConnection connection;
+    Table table;
+    DbTransaction? transaction;
+    string createTableSql;
+    string unsubscribeSql;
+    string getSubscribersSql;
+    string subscribeSql;
+
+    public SubscriptionManager(Table table, DbConnection connection):
+        this(table, null,connection)
     {
-        DbConnection connection;
-        Table table;
-        DbTransaction? transaction;
-        string createTableSql;
-        string unsubscribeSql;
-        string getSubscribersSql;
-        string subscribeSql;
+    }
 
-        public SubscriptionManager(Table table, DbConnection connection):
-            this(table, null,connection)
-        {
-        }
+    public SubscriptionManager(Table table, DbTransaction transaction):
+        this(table,transaction,transaction.Connection)
+    {
+    }
 
-        public SubscriptionManager(Table table, DbTransaction transaction):
-            this(table,transaction,transaction.Connection)
-        {
-        }
+    SubscriptionManager(Table table, DbTransaction? transaction, DbConnection connection)
+    {
+        this.transaction = transaction;
+        this.table = table;
+        this.connection = connection;
+        createTableSql = string.Format(SubscriptionTableSql, table);
+        unsubscribeSql = string.Format(UnsubscribeSql, table);
+        getSubscribersSql = GetSubscribersSql.Replace("{0}", table.FullTableName);
+        subscribeSql = string.Format(SubscribeSql, table);
+    }
 
-        SubscriptionManager(Table table, DbTransaction? transaction, DbConnection connection)
-        {
-            this.transaction = transaction;
-            this.table = table;
-            this.connection = connection;
-            createTableSql = string.Format(SubscriptionTableSql, table);
-            unsubscribeSql = string.Format(UnsubscribeSql, table);
-            getSubscribersSql = GetSubscribersSql.Replace("{0}", table.FullTableName);
-            subscribeSql = string.Format(SubscribeSql, table);
-        }
+    /// <summary>
+    /// Drops the table.
+    /// </summary>
+    public virtual Task Drop(CancellationToken cancellation = default)
+    {
+        return connection.DropTable(transaction, table, cancellation);
+    }
 
-        /// <summary>
-        /// Drops the table.
-        /// </summary>
-        public virtual Task Drop(CancellationToken cancellation = default)
-        {
-            return connection.DropTable(transaction, table, cancellation);
-        }
+    /// <summary>
+    /// Creates the table.
+    /// </summary>
+    public virtual Task Create(CancellationToken cancellation = default)
+    {
+        return connection.RunCommand(transaction, createTableSql, cancellation);
+    }
 
-        /// <summary>
-        /// Creates the table.
-        /// </summary>
-        public virtual Task Create(CancellationToken cancellation = default)
-        {
-            return connection.RunCommand(transaction, createTableSql, cancellation);
-        }
-
-        /// <summary>
-        /// The sql statements used to create the subscription table.
-        /// </summary>
-        public static readonly string SubscriptionTableSql = @"
+    /// <summary>
+    /// The sql statements used to create the subscription table.
+    /// </summary>
+    public static readonly string SubscriptionTableSql = @"
 if exists (
   select *
   from sys.objects
@@ -76,10 +72,10 @@ create table {0} (
 )
 ";
 
-        /// <summary>
-        /// The sql statements used to add a subscription.
-        /// </summary>
-        public static readonly string SubscribeSql = @"
+    /// <summary>
+    /// The sql statements used to add a subscription.
+    /// </summary>
+    public static readonly string SubscribeSql = @"
 MERGE {0} WITH (HOLDLOCK, TABLOCK) AS target
 USING(SELECT @Endpoint AS Endpoint, @QueueAddress AS QueueAddress, @Topic AS Topic) AS source
 ON target.Endpoint = source.Endpoint
@@ -100,69 +96,68 @@ VALUES
     @Endpoint
 );";
 
-        public async Task Subscribe(string endpoint, string address, string topic)
-        {
-            using var command = connection.CreateCommand();
-            command.CommandText = subscribeSql;
-            command.AddStringParam("Endpoint", endpoint);
-            command.AddStringParam("QueueAddress", address);
-            command.AddStringParam("Topic", topic);
+    public async Task Subscribe(string endpoint, string address, string topic)
+    {
+        using var command = connection.CreateCommand();
+        command.CommandText = subscribeSql;
+        command.AddStringParam("Endpoint", endpoint);
+        command.AddStringParam("QueueAddress", address);
+        command.AddStringParam("Topic", topic);
 
-            await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-        }
+        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+    }
 
-        /// <summary>
-        /// The sql statements used to unsubscribe from a topic.
-        /// </summary>
-        public static readonly string UnsubscribeSql = @"
+    /// <summary>
+    /// The sql statements used to unsubscribe from a topic.
+    /// </summary>
+    public static readonly string UnsubscribeSql = @"
 DELETE FROM {0}
 WHERE
     Endpoint = @Endpoint and
     Topic = @Topic";
 
-        public async Task Unsubscribe(string endpoint, string topic)
-        {
-            using var command = connection.CreateCommand();
-            command.CommandText = unsubscribeSql;
-            command.AddStringParam("Endpoint", endpoint);
-            command.AddStringParam("Topic", topic);
-            await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-        }
+    public async Task Unsubscribe(string endpoint, string topic)
+    {
+        using var command = connection.CreateCommand();
+        command.CommandText = unsubscribeSql;
+        command.AddStringParam("Endpoint", endpoint);
+        command.AddStringParam("Topic", topic);
+        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+    }
 
-        /// <summary>
-        /// The sql statements used to get subscribers for a topic.
-        /// </summary>
-        public static readonly string GetSubscribersSql = @"
+    /// <summary>
+    /// The sql statements used to get subscribers for a topic.
+    /// </summary>
+    public static readonly string GetSubscribersSql = @"
 SELECT DISTINCT QueueAddress
 FROM {0}
 WHERE Topic IN ({1})
 ";
 
-        public async Task<List<string>> GetSubscribers(params string[] topics)
+    public async Task<List<string>> GetSubscribers(params string[] topics)
+    {
+        var results = new List<string>();
+
+        var argumentsList = string.Join(", ", Enumerable.Range(0, topics.Length).Select(i => $"@Topic_{i}"));
+        var getSubscribersCommand = getSubscribersSql.Replace("{1}", argumentsList);
+
+        using (var command = connection.CreateCommand())
         {
-            var results = new List<string>();
-
-            var argumentsList = string.Join(", ", Enumerable.Range(0, topics.Length).Select(i => $"@Topic_{i}"));
-            var getSubscribersCommand = getSubscribersSql.Replace("{1}", argumentsList);
-
-            using (var command = connection.CreateCommand())
+            command.CommandText = getSubscribersCommand;
+            for (var i = 0; i < topics.Length; i++)
             {
-                command.CommandText = getSubscribersCommand;
-                for (var i = 0; i < topics.Length; i++)
-                {
-                    command.AddStringParam($"Topic_{i}", topics[i]);
-                }
-
-                using (var reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
-                {
-                    while (await reader.ReadAsync().ConfigureAwait(false))
-                    {
-                        results.Add(reader.GetString(0));
-                    }
-                }
-
-                return results;
+                command.AddStringParam($"Topic_{i}", topics[i]);
             }
+
+            using (var reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
+            {
+                while (await reader.ReadAsync().ConfigureAwait(false))
+                {
+                    results.Add(reader.GetString(0));
+                }
+            }
+
+            return results;
         }
     }
 }

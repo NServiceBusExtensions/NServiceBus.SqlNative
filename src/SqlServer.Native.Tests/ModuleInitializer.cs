@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NServiceBus.Transport.SqlServerNative;
 using VerifyTests;
 

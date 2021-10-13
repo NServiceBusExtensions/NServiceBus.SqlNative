@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using Microsoft.AspNetCore.Http;
+﻿using System.Runtime.ExceptionServices;
 
 static class Extensions
 {

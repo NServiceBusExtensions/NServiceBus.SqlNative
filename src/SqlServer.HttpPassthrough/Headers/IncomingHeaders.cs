@@ -1,6 +1,4 @@
-﻿using System;
-
-struct IncomingHeaders
+﻿struct IncomingHeaders
 {
     public Guid MessageId { get; }
     public string MessageType { get; }

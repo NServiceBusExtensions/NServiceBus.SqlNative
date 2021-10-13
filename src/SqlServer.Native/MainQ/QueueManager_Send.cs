@@ -1,10 +1,10 @@
-﻿namespace NServiceBus.Transport.SqlServerNative
-{
-    public partial class QueueManager
-    {
-        string sendSql = null!;
+﻿namespace NServiceBus.Transport.SqlServerNative;
 
-        const string dedupSql = @"
+public partial class QueueManager
+{
+    string sendSql = null!;
+
+    const string dedupSql = @"
 if exists (
   select *
   from {0}
@@ -14,7 +14,7 @@ return
 insert into {0} (Id)
 values (@Id);";
 
-        const string sql = @"
+    const string sql = @"
 insert into {0} (
   Id,
   Recoverable,
@@ -29,19 +29,18 @@ values (
   @Headers,
   @Body);";
 
-        void InitSendSql()
+    void InitSendSql()
+    {
+        string resultSql;
+        if (dedupe)
         {
-            string resultSql;
-            if (dedupe)
-            {
-                resultSql = string.Format(dedupSql, dedupeTable) + string.Format(sql, Table);
-            }
-            else
-            {
-                resultSql = string.Format(sql, Table);
-            }
-
-            sendSql = ConnectionHelpers.WrapInNoCount(resultSql);
+            resultSql = string.Format(dedupSql, dedupeTable) + string.Format(sql, Table);
         }
+        else
+        {
+            resultSql = string.Format(sql, Table);
+        }
+
+        sendSql = ConnectionHelpers.WrapInNoCount(resultSql);
     }
 }

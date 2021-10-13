@@ -1,9 +1,5 @@
-﻿using System;
-using System.Data.Common;
+﻿using System.Data.Common;
 using Microsoft.Data.SqlClient;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using NServiceBus.Transport.SqlServerNative;
 // ReSharper disable UnusedVariable
 

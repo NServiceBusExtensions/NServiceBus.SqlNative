@@ -1,6 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using NServiceBus;
+﻿using NServiceBus;
 using NServiceBus.Installation;
 using NServiceBus.Settings;
 using NServiceBus.Transport.SqlServerDeduplication;

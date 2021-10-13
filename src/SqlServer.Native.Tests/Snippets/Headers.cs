@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NServiceBus.Transport.SqlServerNative;
+﻿using NServiceBus.Transport.SqlServerNative;
 // ReSharper disable UnusedVariable
 
 public class HeadersUsage

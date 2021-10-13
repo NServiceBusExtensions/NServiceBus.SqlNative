@@ -1,8 +1,4 @@
-﻿using System;
-using System.Data.Common;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Data.Common;
 using NServiceBus.Transport.SqlServerNative;
 
 public class ConsumingLoop

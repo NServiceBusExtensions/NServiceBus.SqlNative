@@ -88,7 +88,7 @@ public class Startup
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Startup.cs#L11-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-startup' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Startup.cs#L8-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-startup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -111,7 +111,7 @@ var configuration = new PassthroughConfiguration(
 configuration.AppendClaimsToMessageHeaders();
 services.AddSqlHttpPassthrough(configuration);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L36-L48' title='Snippet source file'>snippet source</a> | <a href='#snippet-appendclaimstomessageheaders' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L31-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-appendclaimstomessageheaders' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 A custom prefix can also be defined.
@@ -129,7 +129,7 @@ var configuration = new PassthroughConfiguration(
 configuration.AppendClaimsToMessageHeaders(headerPrefix: "Claim.");
 services.AddSqlHttpPassthrough(configuration);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L19-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-appendclaimstomessageheaders_withprefix' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L14-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-appendclaimstomessageheaders_withprefix' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 For unit testing and integration purposes it may be useful to manipulate a raw `Dictionary<string, string>`. This can be done using `ClaimsAppender`.
@@ -147,7 +147,7 @@ var claims = new List<Claim>
 };
 ClaimsAppender.Append(claims, headerDictionary, "prefix.");
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L53-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-appendclaimstodictionary' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L48-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-appendclaimstodictionary' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To extract claims:
@@ -157,7 +157,7 @@ To extract claims:
 ```cs
 var claimsList = ClaimsAppender.Extract(headerDictionary, "prefix.");
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L68-L72' title='Snippet source file'>snippet source</a> | <a href='#snippet-extractclaimsfromdictionary' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L63-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-extractclaimsfromdictionary' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 It may also be necessary to process claims with no reference to `NServiceBus.SqlServer.HttpPassthrough`. This can be done using the following utility methods. Note that these methods use `JsonConvert` from [Json.NET](https://www.newtonsoft.com/json).
@@ -197,7 +197,7 @@ public static IEnumerable<Claim> Extract(
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L76-L110' title='Snippet source file'>snippet source</a> | <a href='#snippet-claimsraw' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L71-L105' title='Snippet source file'>snippet source</a> | <a href='#snippet-claimsraw' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -256,7 +256,7 @@ public class PassthroughController : ControllerBase
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/PassThroughController.cs#L6-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-controller' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/PassThroughController.cs#L4-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-controller' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 WARNING: In a production application the controller would be performing any authorization and authentication on the incoming request. 
@@ -350,7 +350,7 @@ await clientFormSender.Send(
         {"fileName", Encoding.UTF8.GetBytes("fileContents")}
     });
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L12-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-clientformsender' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L9-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-clientformsender' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 This can be useful when performing [Integration testing in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/testing/integration-testing).
@@ -374,5 +374,5 @@ await clientFormSender.Send(
         {"fileName", Encoding.UTF8.GetBytes("fileContents")}
     });
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L31-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-asptesthost' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L28-L46' title='Snippet source file'>snippet source</a> | <a href='#snippet-asptesthost' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

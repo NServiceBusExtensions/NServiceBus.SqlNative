@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-
-public class LogContextMiddleware
+﻿public class LogContextMiddleware
 {
     RequestDelegate next;
 

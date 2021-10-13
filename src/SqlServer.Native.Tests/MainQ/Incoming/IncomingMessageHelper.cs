@@ -1,5 +1,4 @@
-﻿using System.IO;
-using NServiceBus.Transport.SqlServerNative;
+﻿using NServiceBus.Transport.SqlServerNative;
 
 static class IncomingMessageHelper
 {

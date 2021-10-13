@@ -1,8 +1,5 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
-using System.Threading;
-using System.Threading.Tasks;
 #if (SqlServerDedupe)
 namespace NServiceBus.Transport.SqlServerDeduplication
 #else
