@@ -48,24 +48,24 @@ static class Extensions
         return command;
     }
 
-    public static long? LongOrNull(this DbDataReader dataReader, int index)
+    public static Task<long?> LongOrNull(this DbDataReader dataReader, int index)
     {
         if (dataReader.IsDBNull(index))
         {
-            return default;
+            return Task.FromResult<long?>(default);
         }
 
-        return dataReader.GetFieldValue<long>(index);
+        return dataReader.GetFieldValueAsync<long?>(index);
     }
 
-    public static DateTime? DatetimeOrNull(this DbDataReader dataReader, int index)
+    public static Task<DateTime?> DatetimeOrNull(this DbDataReader dataReader, int index)
     {
         if (dataReader.IsDBNull(index))
         {
-            return default;
+            return Task.FromResult<DateTime?>(default);
         }
 
-        return dataReader.GetFieldValue<DateTime>(index);
+        return dataReader.GetFieldValueAsync<DateTime?>(index);
     }
 
     public static async Task<DbDataReader> RunSequentialReader(this DbCommand command, CancellationToken cancellation)

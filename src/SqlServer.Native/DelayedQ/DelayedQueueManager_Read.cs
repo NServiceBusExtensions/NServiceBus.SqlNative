@@ -32,9 +32,9 @@ order by RowVersion
     protected override async Task<IncomingDelayedMessage> ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups)
     {
         var rowVersion = dataReader.GetInt64(0);
-        var due = dataReader.DatetimeOrNull(1);
+        var due = await dataReader.DatetimeOrNull(1);
         var headers = await dataReader.GetFieldValueAsync<string>(2);
-        var length = dataReader.LongOrNull(3);
+        var length = await dataReader.LongOrNull(3);
         StreamWrapper? streamWrapper;
         if (length == null)
         {

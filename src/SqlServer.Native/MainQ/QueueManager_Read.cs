@@ -34,9 +34,9 @@ order by RowVersion
     {
         var id = dataReader.GetGuid(0);
         var rowVersion = dataReader.GetInt64(1);
-        var expires = dataReader.DatetimeOrNull(2);
+        var expires = await dataReader.DatetimeOrNull(2);
         var headers = await dataReader.GetFieldValueAsync<string>(3);
-        var length = dataReader.LongOrNull(4);
+        var length = await dataReader.LongOrNull(4);
         StreamWrapper? streamWrapper;
         if (length == null)
         {
