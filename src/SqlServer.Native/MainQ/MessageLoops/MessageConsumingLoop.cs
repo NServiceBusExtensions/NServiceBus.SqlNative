@@ -51,7 +51,7 @@ public class MessageConsumingLoop :
         DbConnection? connection = null;
         if (connectionBuilder != null)
         {
-            using (connection = await connectionBuilder(cancellation))
+            await using (connection = await connectionBuilder(cancellation))
             {
                 var consumer = new QueueManager(table, connection);
                 await RunBatch(consumer, message => connectionCallback!(connection, message, cancellation), cancellation);

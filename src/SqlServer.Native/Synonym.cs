@@ -35,7 +35,7 @@ public class Synonym
     {
         target ??= synonym;
         GuardAgainstCircularAlias(synonym, target);
-        using var command = sourceDatabase.CreateCommand();
+        await using var command = sourceDatabase.CreateCommand();
         command.Transaction = sourceTransaction;
         command.CommandText = $@"
     drop synonym if exists [{sourceSchema}].[{synonym}];
@@ -46,7 +46,7 @@ public class Synonym
 
     public async Task DropAll()
     {
-        using var command = sourceDatabase.CreateCommand();
+        await using var command = sourceDatabase.CreateCommand();
         command.Transaction = sourceTransaction;
         command.CommandText = @"
 declare @n char(1)
@@ -65,7 +65,7 @@ exec sp_executesql @stmt
 
     public async Task Drop(string synonym)
     {
-        using var command = sourceDatabase.CreateCommand();
+        await using var command = sourceDatabase.CreateCommand();
         command.Transaction = sourceTransaction;
         command.CommandText = $"drop synonym if exists [{sourceSchema}].[{synonym}];";
         await command.ExecuteNonQueryAsync();

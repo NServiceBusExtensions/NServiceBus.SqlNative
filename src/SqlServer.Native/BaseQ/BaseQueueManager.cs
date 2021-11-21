@@ -26,7 +26,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     {
         var count = 0;
         long? lastRowVersion = null;
-        using var reader = await command.RunSequentialReader(cancellation);
+        await using var reader = await command.RunSequentialReader(cancellation);
         while (await reader.ReadAsync(cancellation))
         {
             count++;

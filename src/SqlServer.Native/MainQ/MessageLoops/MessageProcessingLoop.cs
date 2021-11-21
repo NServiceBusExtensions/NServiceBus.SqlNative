@@ -64,7 +64,7 @@ public class MessageProcessingLoop :
         DbConnection? connection = null;
         if (connectionBuilder != null)
         {
-            using (connection = await connectionBuilder(cancellation))
+            await using (connection = await connectionBuilder(cancellation))
             {
                 var reader = new QueueManager(table, connection);
                 await RunBatch(
@@ -94,7 +94,7 @@ public class MessageProcessingLoop :
             }
             catch
             {
-                await transaction.RollbackAsync(cancellation);
+                 await transaction.RollbackAsync(cancellation);
                 throw;
             }
         }
