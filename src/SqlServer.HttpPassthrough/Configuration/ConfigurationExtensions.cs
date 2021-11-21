@@ -57,7 +57,7 @@ public static class ConfigurationExtensions
         var headersBuilder = new HeadersBuilder(configuration.OriginatingEndpoint, configuration.OriginatingMachine);
         services.AddSingleton<ISqlPassthrough>(serviceProvider =>
         {
-            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+            var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger<ISqlPassthrough>();
             var sender = new Sender(configuration.ConnectionFunc, headersBuilder, configuration.AttachmentsTable, configuration.DedupeTable, logger);
             return new SqlPassthrough(configuration.SendCallback, sender, configuration.AppendClaims, configuration.ClaimsHeaderPrefix, logger);
