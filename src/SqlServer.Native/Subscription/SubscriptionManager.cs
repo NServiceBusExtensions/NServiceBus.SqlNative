@@ -141,23 +141,19 @@ WHERE Topic IN ({1})
         var argumentsList = string.Join(", ", Enumerable.Range(0, topics.Length).Select(i => $"@Topic_{i}"));
         var getSubscribersCommand = getSubscribersSql.Replace("{1}", argumentsList);
 
-        await using (var command = connection.CreateCommand())
+        await using var command = connection.CreateCommand();
+        command.CommandText = getSubscribersCommand;
+        for (var i = 0; i < topics.Length; i++)
         {
-            command.CommandText = getSubscribersCommand;
-            for (var i = 0; i < topics.Length; i++)
-            {
-                command.AddStringParam($"Topic_{i}", topics[i]);
-            }
-
-            await using (var reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
-            {
-                while (await reader.ReadAsync().ConfigureAwait(false))
-                {
-                    results.Add(reader.GetString(0));
-                }
-            }
-
-            return results;
+            command.AddStringParam($"Topic_{i}", topics[i]);
         }
+
+        await using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
+        while (await reader.ReadAsync().ConfigureAwait(false))
+        {
+            results.Add(reader.GetString(0));
+        }
+
+        return results;
     }
 }
