@@ -29,11 +29,11 @@ where RowVersion >= @RowVersion
 order by RowVersion
 ");
 
-    protected override IncomingDelayedMessage ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups)
+    protected override async Task<IncomingDelayedMessage> ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups)
     {
         var rowVersion = dataReader.GetInt64(0);
         var due = dataReader.DatetimeOrNull(1);
-        var headers = dataReader.GetFieldValue<string>(2);
+        var headers = await dataReader.GetFieldValueAsync<string>(2);
         var length = dataReader.LongOrNull(3);
         StreamWrapper? streamWrapper;
         if (length == null)

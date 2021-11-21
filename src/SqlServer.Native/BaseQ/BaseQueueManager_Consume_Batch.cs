@@ -11,7 +11,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
 {
     protected abstract DbCommand BuildConsumeCommand(int batchSize);
 
-    protected abstract TIncoming ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups);
+    protected abstract Task<TIncoming> ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups);
 
     public virtual Task<IncomingResult> Consume(int size, Action<TIncoming> action, CancellationToken cancellation = default)
     {

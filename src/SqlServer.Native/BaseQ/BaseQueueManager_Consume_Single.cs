@@ -19,7 +19,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
                 return default;
             }
 
-            return ReadMessage(reader, reader);
+            return await ReadMessage(reader, reader);
         }
         catch
         {

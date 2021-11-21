@@ -31,7 +31,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
         {
             count++;
             cancellation.ThrowIfCancellationRequested();
-            await using var message = ReadMessage(reader);
+            await using var message = await ReadMessage(reader);
             lastRowVersion = message.RowVersion;
             await func(message);
         }
