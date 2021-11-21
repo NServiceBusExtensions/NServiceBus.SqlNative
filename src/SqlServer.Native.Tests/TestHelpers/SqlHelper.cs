@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System.Data.Common;
+using Microsoft.Data.SqlClient;
 using NServiceBus.Transport.SqlServerNative;
 
 static class SqlHelper
@@ -55,6 +56,19 @@ if(db_id('{database}') is null)
             }
 
             yield return record;
+        }
+    }
+
+    public static DbDataReader RunReader(this DbCommand command)
+    {
+        try
+        {
+            return command.ExecuteReader();
+        }
+        catch (DbException exception)
+        {
+            command.SetCommandData(exception);
+            throw;
         }
     }
 }

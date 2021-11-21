@@ -20,7 +20,7 @@ public class RowVersionTracker
 
     public Task CreateTable(DbTransaction transaction, CancellationToken cancellation = default)
     {
-        return CreateTable(transaction.Connection, transaction, cancellation);
+        return CreateTable(transaction.Connection!, transaction, cancellation);
     }
 
     Task CreateTable(DbConnection connection, DbTransaction? transaction, CancellationToken cancellation)
@@ -37,12 +37,12 @@ public class RowVersionTracker
     public Task Save(DbTransaction transaction, long rowVersion, CancellationToken cancellation = default)
     {
         Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
-        return Save(transaction.Connection, transaction, rowVersion, cancellation);
+        return Save(transaction.Connection!, transaction, rowVersion, cancellation);
     }
 
     async Task Save(DbConnection connection, DbTransaction? transaction, long rowVersion, CancellationToken cancellation)
     {
-        using var command = connection.CreateCommand(
+        await using var command = connection.CreateCommand(
             transaction: transaction,
             sql: $@"
 update {table}
@@ -61,7 +61,7 @@ if @@rowcount = 0
 
     public async Task<long> Get(DbConnection connection, CancellationToken cancellation = default)
     {
-        using var command = connection.CreateCommand();
+        await using var command = connection.CreateCommand();
         command.CommandText = $@"
 select top (1) RowVersion
 from {table}";

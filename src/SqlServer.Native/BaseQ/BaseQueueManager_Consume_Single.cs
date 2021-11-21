@@ -11,7 +11,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
         DbDataReader? reader = null;
         try
         {
-            using var command = BuildConsumeCommand(1);
+            await using var command = BuildConsumeCommand(1);
             reader = await command.RunSingleRowReader(cancellation);
             if (!await reader.ReadAsync(cancellation))
             {
@@ -19,7 +19,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
                 return default;
             }
 
-            return ReadMessage(reader, reader);
+            return await ReadMessage(reader, reader);
         }
         catch
         {

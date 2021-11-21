@@ -7,11 +7,7 @@
 public class IncomingDelayedMessage :
     IIncomingMessage
 {
-#if NETSTANDARD2_1
-        IAsyncDisposable[] cleanups;
-#else
-    IDisposable[] cleanups;
-#endif
+    IAsyncDisposable[] cleanups;
     bool disposed;
     volatile int disposeSignaled;
     long rowVersion;
@@ -19,11 +15,7 @@ public class IncomingDelayedMessage :
     string headers;
     Stream? body;
 
-#if NETSTANDARD2_1
-        public IncomingDelayedMessage(long rowVersion, DateTime? due, string headers, Stream? body, IAsyncDisposable[] cleanups)
-#else
-    public IncomingDelayedMessage(long rowVersion, DateTime? due, string headers, Stream? body, IDisposable[] cleanups)
-#endif
+    public IncomingDelayedMessage(long rowVersion, DateTime? due, string headers, Stream? body, IAsyncDisposable[] cleanups)
     {
         Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
         this.cleanups = cleanups;

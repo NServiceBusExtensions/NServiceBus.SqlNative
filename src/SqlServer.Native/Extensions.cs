@@ -3,14 +3,6 @@ using System.Data.Common;
 
 static class Extensions
 {
-    //#if netstandard2_0
-    public static Task DisposeAsync(this IDisposable disposable)
-    {
-        disposable.Dispose();
-        return Task.CompletedTask;
-    }
-    //#endif
-
     public static Func<T, Task> ToTaskFunc<T>(this Action<T> action)
     {
         return x =>
@@ -44,7 +36,7 @@ static class Extensions
 
     public static async Task RunCommand(this DbConnection connection, DbTransaction? transaction, string sql, CancellationToken cancellation = default)
     {
-        using var command = connection.CreateCommand(transaction, sql);
+        await using var command = connection.CreateCommand(transaction, sql);
         await command.RunNonQuery(cancellation);
     }
 
@@ -89,20 +81,7 @@ static class Extensions
         }
     }
 
-    public static DbDataReader RunReader(this DbCommand command)
-    {
-        try
-        {
-            return command.ExecuteReader();
-        }
-        catch (DbException exception)
-        {
-            SetCommandData(command, exception);
-            throw;
-        }
-    }
-
-    public static async Task<object> RunScalar(this DbCommand command, CancellationToken cancellation)
+    public static async Task<object?> RunScalar(this DbCommand command, CancellationToken cancellation)
     {
         try
         {
@@ -151,7 +130,7 @@ static class Extensions
         return bodyParameter;
     }
 
-    static void SetCommandData(DbCommand command, DbException exception)
+    public static void SetCommandData(this DbCommand command, DbException exception)
     {
         exception.Data["Sql"] = command.CommandText;
     }

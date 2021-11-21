@@ -17,8 +17,8 @@ public class SubscriptionManager
     {
     }
 
-    public SubscriptionManager(Table table, DbTransaction transaction):
-        this(table,transaction,transaction.Connection)
+    public SubscriptionManager(Table table, DbTransaction transaction) :
+        this(table, transaction, transaction.Connection!)
     {
     }
 
@@ -98,7 +98,7 @@ VALUES
 
     public async Task Subscribe(string endpoint, string address, string topic)
     {
-        using var command = connection.CreateCommand();
+        await using var command = connection.CreateCommand();
         command.CommandText = subscribeSql;
         command.AddStringParam("Endpoint", endpoint);
         command.AddStringParam("QueueAddress", address);
@@ -118,7 +118,7 @@ WHERE
 
     public async Task Unsubscribe(string endpoint, string topic)
     {
-        using var command = connection.CreateCommand();
+        await using var command = connection.CreateCommand();
         command.CommandText = unsubscribeSql;
         command.AddStringParam("Endpoint", endpoint);
         command.AddStringParam("Topic", topic);
@@ -141,23 +141,19 @@ WHERE Topic IN ({1})
         var argumentsList = string.Join(", ", Enumerable.Range(0, topics.Length).Select(i => $"@Topic_{i}"));
         var getSubscribersCommand = getSubscribersSql.Replace("{1}", argumentsList);
 
-        using (var command = connection.CreateCommand())
+        await using var command = connection.CreateCommand();
+        command.CommandText = getSubscribersCommand;
+        for (var i = 0; i < topics.Length; i++)
         {
-            command.CommandText = getSubscribersCommand;
-            for (var i = 0; i < topics.Length; i++)
-            {
-                command.AddStringParam($"Topic_{i}", topics[i]);
-            }
-
-            using (var reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
-            {
-                while (await reader.ReadAsync().ConfigureAwait(false))
-                {
-                    results.Add(reader.GetString(0));
-                }
-            }
-
-            return results;
+            command.AddStringParam($"Topic_{i}", topics[i]);
         }
+
+        await using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
+        while (await reader.ReadAsync().ConfigureAwait(false))
+        {
+            results.Add(reader.GetString(0));
+        }
+
+        return results;
     }
 }

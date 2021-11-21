@@ -4,7 +4,7 @@ public partial class QueueManager
 {
     public virtual async Task Send(IEnumerable<OutgoingMessage> messages, CancellationToken cancellation = default)
     {
-        using var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
+        await using var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
         var parameters = command.Parameters;
 
         var idParameter = CreateIdParameter(command, parameters);
@@ -23,7 +23,7 @@ public partial class QueueManager
 
     public virtual async Task Send(IAsyncEnumerable<OutgoingMessage> messages, CancellationToken cancellation = default)
     {
-        using var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
+        await using var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
         var parameters = command.Parameters;
 
         var idParameter = CreateIdParameter(command, parameters);

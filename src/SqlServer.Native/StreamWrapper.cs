@@ -58,12 +58,11 @@
         set => inner.Position = value;
     }
 
-    public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+    public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback? callback, object? state)
     {
         return inner.BeginRead(buffer, offset, count, callback, state);
     }
 
-#if NETSTANDARD2_1
     public override int Read(Span<byte> buffer)
     {
         return inner.Read(buffer);
@@ -88,7 +87,6 @@
     {
         throw new NotImplementedException();
     }
-#endif
 
     public override void Close()
     {
@@ -106,12 +104,13 @@
         return inner.EndRead(asyncResult);
     }
 
+    [Obsolete("This Remoting API is not supported and throws PlatformNotSupportedException.", DiagnosticId = "SYSLIB0010", UrlFormat = "https://aka.ms/dotnet-warnings/{0}")]
     public override object InitializeLifetimeService()
     {
         return inner.InitializeLifetimeService();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return inner.Equals(obj);
     }
@@ -121,7 +120,7 @@
         return inner.GetHashCode();
     }
 
-    public override string ToString()
+    public override string? ToString()
     {
         return inner.ToString();
     }
@@ -148,7 +147,7 @@
 
     public override int WriteTimeout => throw new NotImplementedException();
 
-    public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+    public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback? callback, object? state)
     {
         throw new NotImplementedException();
     }

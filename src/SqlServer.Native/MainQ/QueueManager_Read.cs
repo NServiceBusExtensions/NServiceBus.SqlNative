@@ -30,16 +30,12 @@ where RowVersion >= @RowVersion
 order by RowVersion
 ");
 
-#if NETSTANDARD2_1
-        protected override IncomingMessage ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups)
-#else
-    protected override IncomingMessage ReadMessage(DbDataReader dataReader, params IDisposable[] cleanups)
-#endif
+    protected override async Task<IncomingMessage> ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups)
     {
         var id = dataReader.GetGuid(0);
         var rowVersion = dataReader.GetInt64(1);
         var expires = dataReader.DatetimeOrNull(2);
-        var headers = dataReader.GetFieldValue<string>(3);
+        var headers = await dataReader.GetFieldValueAsync<string>(3);
         var length = dataReader.LongOrNull(4);
         StreamWrapper? streamWrapper;
         if (length == null)

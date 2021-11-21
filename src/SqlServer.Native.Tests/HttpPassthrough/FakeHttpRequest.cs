@@ -31,7 +31,7 @@ public class FakeHttpRequest :
     public override IHeaderDictionary Headers => new HeaderDictionary(HeadersDictionary);
     public override IRequestCookieCollection Cookies { get; set; } = null!;
     public override long? ContentLength { get; set; } = null!;
-    public override string ContentType { get; set; } = null!;
+    public override string? ContentType { get; set; } = null!;
     public override Stream Body { get; set; }
     public override bool HasFormContentType { get; }
     public override IFormCollection Form { get; set; }

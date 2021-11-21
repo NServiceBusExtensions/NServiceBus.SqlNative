@@ -11,11 +11,8 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
 {
     protected abstract DbCommand BuildConsumeCommand(int batchSize);
 
-#if NETSTANDARD2_1
-        protected abstract TIncoming ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups);
-#else
-    protected abstract TIncoming ReadMessage(DbDataReader dataReader, params IDisposable[] cleanups);
-#endif
+    protected abstract Task<TIncoming> ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups);
+
     public virtual Task<IncomingResult> Consume(int size, Action<TIncoming> action, CancellationToken cancellation = default)
     {
         return Consume(size, action.ToTaskFunc(), cancellation);
@@ -24,7 +21,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     public virtual async Task<IncomingResult> Consume(int size, Func<TIncoming, Task> func, CancellationToken cancellation = default)
     {
         Guard.AgainstNegativeAndZero(size, nameof(size));
-        using var command = BuildConsumeCommand(size);
+        await using var command = BuildConsumeCommand(size);
         return await ReadMultiple(command, func, cancellation);
     }
 }
