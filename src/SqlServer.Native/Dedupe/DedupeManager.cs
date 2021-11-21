@@ -128,11 +128,7 @@ namespace NServiceBus.Transport.SqlServerNative
             }
             try
             {
-#if NETSTANDARD2_1
                 await transaction.CommitAsync();
-#else
-                transaction.Commit();
-#endif
             }
             catch (DbException sqlException)
             {

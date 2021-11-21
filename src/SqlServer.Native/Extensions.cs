@@ -3,14 +3,6 @@ using System.Data.Common;
 
 static class Extensions
 {
-    //#if netstandard2_0
-    public static Task DisposeAsync(this IDisposable disposable)
-    {
-        disposable.Dispose();
-        return Task.CompletedTask;
-    }
-    //#endif
-
     public static Func<T, Task> ToTaskFunc<T>(this Action<T> action)
     {
         return x =>

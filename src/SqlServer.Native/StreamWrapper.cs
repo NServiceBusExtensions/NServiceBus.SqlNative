@@ -63,7 +63,6 @@
         return inner.BeginRead(buffer, offset, count, callback, state);
     }
 
-#if NETSTANDARD2_1
     public override int Read(Span<byte> buffer)
     {
         return inner.Read(buffer);
@@ -88,7 +87,6 @@
     {
         throw new NotImplementedException();
     }
-#endif
 
     public override void Close()
     {

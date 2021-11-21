@@ -7,11 +7,7 @@
 public class IncomingMessage :
     IIncomingMessage
 {
-#if NETSTANDARD2_1
     IAsyncDisposable[] cleanups;
-#else
-    IDisposable[] cleanups;
-#endif
     bool disposed;
     volatile int disposeSignaled;
     Guid id;
@@ -20,11 +16,7 @@ public class IncomingMessage :
     string headers;
     Stream? body;
 
-#if NETSTANDARD2_1
-        public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, IAsyncDisposable[] cleanups)
-#else
-    public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, IDisposable[] cleanups)
-#endif
+    public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, IAsyncDisposable[] cleanups)
     {
         Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
         this.cleanups = cleanups;

@@ -39,11 +39,7 @@ class Sender
         using var connection = await connectionFunc(cancellation);
         using var transaction = connection.BeginTransaction();
         var rowVersion = await SendInsideTransaction(message, destination, cancellation, transaction);
-#if NETSTANDARD2_1
         await transaction.CommitAsync(cancellation);
-#else
-        transaction.Commit();
-#endif
         return rowVersion;
     }
 

@@ -30,11 +30,7 @@ where RowVersion >= @RowVersion
 order by RowVersion
 ");
 
-#if NETSTANDARD2_1
-        protected override IncomingMessage ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups)
-#else
-    protected override IncomingMessage ReadMessage(DbDataReader dataReader, params IDisposable[] cleanups)
-#endif
+    protected override IncomingMessage ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups)
     {
         var id = dataReader.GetGuid(0);
         var rowVersion = dataReader.GetInt64(1);
