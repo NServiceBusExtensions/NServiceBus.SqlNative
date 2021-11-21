@@ -102,7 +102,7 @@ static class Extensions
         }
     }
 
-    public static async Task<object> RunScalar(this DbCommand command, CancellationToken cancellation)
+    public static async Task<object?> RunScalar(this DbCommand command, CancellationToken cancellation)
     {
         try
         {

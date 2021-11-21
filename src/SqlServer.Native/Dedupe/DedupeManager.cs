@@ -28,7 +28,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             this.transaction = transaction;
             this.table = table;
-            connection = transaction.Connection;
+            connection = transaction.Connection!;
             InitSql();
         }
 
@@ -83,7 +83,8 @@ namespace NServiceBus.Transport.SqlServerNative
             {
                 return null;
             }
-            return (string) o;
+
+            return (string?)o;
         }
 
         public async Task<DedupeResult> WriteDedupRecord(Guid messageId, string? context, CancellationToken cancellation = default)
