@@ -28,7 +28,7 @@ public class Synonym
         this.targetDatabase = targetDatabase;
         this.sourceSchema = sourceSchema;
         this.targetSchema = targetSchema;
-        sourceDatabase = sourceTransaction.Connection;
+        sourceDatabase = sourceTransaction.Connection!;
     }
 
     public async Task Create(string synonym, string? target = null)

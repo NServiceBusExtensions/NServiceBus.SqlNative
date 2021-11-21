@@ -17,8 +17,8 @@ public class SubscriptionManager
     {
     }
 
-    public SubscriptionManager(Table table, DbTransaction transaction):
-        this(table,transaction,transaction.Connection)
+    public SubscriptionManager(Table table, DbTransaction transaction) :
+        this(table, transaction, transaction.Connection!)
     {
     }
 

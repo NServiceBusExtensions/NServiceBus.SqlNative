@@ -19,7 +19,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     {
         Table = table;
         Transaction = transaction;
-        Connection = transaction.Connection;
+        Connection = transaction.Connection!;
     }
 
     async Task<IncomingResult> ReadMultiple(DbCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
