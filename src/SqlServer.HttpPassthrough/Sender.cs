@@ -79,7 +79,7 @@ class Sender
 
     async Task SendAttachments(DbTransaction transaction, DateTime expiry, CancellationToken cancellation, PassthroughMessage message)
     {
-        var connection = transaction.Connection;
+        var connection = transaction.Connection!;
         foreach (var file in message.Attachments)
         {
             await SendAttachment(transaction, message.Id.ToString(), expiry, cancellation, file, connection);
