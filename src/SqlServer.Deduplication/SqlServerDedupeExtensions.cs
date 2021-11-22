@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 using NServiceBus.Configuration.AdvancedExtensibility;
 using NServiceBus.Transport.SqlServerDeduplication;
 
@@ -14,7 +14,7 @@ public static class SqlServerDedupeExtensions
     /// </summary>
     public static DedupeSettings EnableDedupe(
         this EndpointConfiguration configuration,
-        Func<CancellationToken, Task<DbConnection>> connectionBuilder)
+        Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
     {
         var recoverability = configuration.Recoverability();
         recoverability.AddUnrecoverableException<NotSupportedException>();

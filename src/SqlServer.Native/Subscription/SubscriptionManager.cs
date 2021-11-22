@@ -1,28 +1,28 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
 public class SubscriptionManager
 {
-    DbConnection connection;
+    SqlConnection connection;
     Table table;
-    DbTransaction? transaction;
+    SqlTransaction? transaction;
     string createTableSql;
     string unsubscribeSql;
     string getSubscribersSql;
     string subscribeSql;
 
-    public SubscriptionManager(Table table, DbConnection connection):
+    public SubscriptionManager(Table table, SqlConnection connection):
         this(table, null,connection)
     {
     }
 
-    public SubscriptionManager(Table table, DbTransaction transaction) :
+    public SubscriptionManager(Table table, SqlTransaction transaction) :
         this(table, transaction, transaction.Connection!)
     {
     }
 
-    SubscriptionManager(Table table, DbTransaction? transaction, DbConnection connection)
+    SubscriptionManager(Table table, SqlTransaction? transaction, SqlConnection connection)
     {
         this.transaction = transaction;
         this.table = table;

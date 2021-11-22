@@ -1,11 +1,11 @@
 ﻿using System.Data;
-using System.Data.Common;
+using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
 public partial class DelayedQueueManager
 {
-    protected override DbCommand CreateSendCommand(OutgoingDelayedMessage message)
+    protected override SqlCommand CreateSendCommand(OutgoingDelayedMessage message)
     {
         var command = Connection.CreateCommand(Transaction, string.Format(SendSql, Table));
 
@@ -20,7 +20,7 @@ public partial class DelayedQueueManager
         return command;
     }
 
-    static DbParameter CreateDueParameter(DbCommand command)
+    static SqlParameter CreateDueParameter(SqlCommand command)
     {
         var dueParameter = command.CreateParameter();
         dueParameter.ParameterName = "Due";
@@ -29,7 +29,7 @@ public partial class DelayedQueueManager
         return dueParameter;
     }
 
-    static DbParameter CreateHeadersParameter(DbCommand command)
+    static SqlParameter CreateHeadersParameter(SqlCommand command)
     {
         var headersParameter = command.CreateParameter();
         headersParameter.ParameterName = "Headers";
@@ -38,7 +38,7 @@ public partial class DelayedQueueManager
         return headersParameter;
     }
 
-    static DbParameter CreateBodyParameter(DbCommand command)
+    static SqlParameter CreateBodyParameter(SqlCommand command)
     {
         var bodyParameter = command.CreateParameter();
         bodyParameter.ParameterName = "Body";

@@ -255,7 +255,7 @@ await versionTracker.Save(sqlConnection, newRowVersion);
 // get row version
 var startingRow = await versionTracker.Get(sqlConnection);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L15-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-rowversiontracker' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L14-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-rowversiontracker' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Note that this is only one possible implementation of storing the current `RowVersion`.
@@ -277,7 +277,7 @@ var rowVersionTracker = new RowVersionTracker();
 var startingRow = await rowVersionTracker.Get(sqlConnection);
 
 static async Task Callback(
-    DbTransaction transaction,
+    SqlTransaction transaction,
     IncomingMessage message,
     CancellationToken cancellation)
 {
@@ -296,13 +296,13 @@ static void ErrorCallback(Exception exception)
     Environment.FailFast("Message processing loop failed", exception);
 }
 
-Task<DbTransaction> BuildTransaction(CancellationToken cancellation)
+Task<SqlTransaction> BuildTransaction(CancellationToken cancellation)
 {
     return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
 }
 
 Task PersistRowVersion(
-    DbTransaction transaction,
+    SqlTransaction transaction,
     long rowVersion,
     CancellationToken token)
 {
@@ -323,7 +323,7 @@ Console.ReadKey();
 
 await processingLoop.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L33-L86' title='Snippet source file'>snippet source</a> | <a href='#snippet-processingloop' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L32-L85' title='Snippet source file'>snippet source</a> | <a href='#snippet-processingloop' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -397,7 +397,7 @@ An example use case is monitoring an [audit queue](https://docs.particular.net/n
 <a id='snippet-consumeloop'></a>
 ```cs
 static async Task Callback(
-    DbTransaction transaction,
+    SqlTransaction transaction,
     IncomingMessage message,
     CancellationToken cancellation)
 {
@@ -409,7 +409,7 @@ static async Task Callback(
     }
 }
 
-Task<DbTransaction> BuildTransaction(CancellationToken cancellation)
+Task<SqlTransaction> BuildTransaction(CancellationToken cancellation)
 {
     return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
 }
@@ -857,7 +857,7 @@ The APIs of this extension target either a `SQLConnection` and `SQLTransaction`.
 <!-- snippet: ConnectionHelpers -->
 <a id='snippet-connectionhelpers'></a>
 ```cs
-public static async Task<DbConnection> OpenConnection(
+public static async Task<SqlConnection> OpenConnection(
     string connectionString,
     CancellationToken cancellation)
 {
@@ -874,7 +874,7 @@ public static async Task<DbConnection> OpenConnection(
     }
 }
 
-public static async Task<DbTransaction> BeginTransaction(
+public static async Task<SqlTransaction> BeginTransaction(
     string connectionString,
     CancellationToken cancellation)
 {
@@ -882,7 +882,7 @@ public static async Task<DbTransaction> BeginTransaction(
     return connection.BeginTransaction();
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/ConnectionHelpers.cs#L6-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-connectionhelpers' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/ConnectionHelpers.cs#L5-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-connectionhelpers' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

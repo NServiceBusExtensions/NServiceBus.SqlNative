@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Logging;
@@ -33,7 +32,7 @@ class Program
         await endpoint.Stop();
     }
 
-    static async Task<DbConnection> ConnectionBuilder(CancellationToken cancellation)
+    static async Task<SqlConnection> ConnectionBuilder(CancellationToken cancellation)
     {
         var sqlConnection = new SqlConnection(connection);
         try

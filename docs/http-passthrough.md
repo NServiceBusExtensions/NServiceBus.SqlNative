@@ -81,7 +81,7 @@ public class Startup
         // other ASP.MVC config
     }
 
-    static Task<DbConnection> OpenConnection(CancellationToken cancellation)
+    static Task<SqlConnection> OpenConnection(CancellationToken cancellation)
     {
         //TODO open and return a SqlConnection
         return null!;

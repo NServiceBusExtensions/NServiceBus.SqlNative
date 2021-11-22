@@ -1,7 +1,7 @@
 ﻿using System.Data;
-using System.Data.Common;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using NServiceBus.Transport.SqlServerNative;
 
@@ -13,7 +13,7 @@ namespace NServiceBus.SqlServer.HttpPassthrough;
 public class PassthroughConfiguration
 {
     internal Action<Exception> DedupCriticalError;
-    internal Func<CancellationToken, Task<DbConnection>> ConnectionFunc;
+    internal Func<CancellationToken, Task<SqlConnection>> ConnectionFunc;
     internal string OriginatingMachine = Environment.MachineName;
     internal string OriginatingEndpoint = "SqlHttpPassthrough";
     internal Func<HttpContext, PassthroughMessage, Task<Table>> SendCallback;
@@ -25,11 +25,11 @@ public class PassthroughConfiguration
     /// <summary>
     /// Initialize a new instance of <see cref="PassthroughConfiguration"/>.
     /// </summary>
-    /// <param name="connectionFunc">Creates a instance of a new and un-open <see cref="DbConnection"/>.</param>
+    /// <param name="connectionFunc">Creates a instance of a new and un-open <see cref="SqlConnection"/>.</param>
     /// <param name="callback">Manipulate or verify a <see cref="PassthroughMessage"/> prior to it being sent. Returns the destination <see cref="Table"/>.</param>
     /// <param name="dedupCriticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
     public PassthroughConfiguration(
-        Func<DbConnection> connectionFunc,
+        Func<SqlConnection> connectionFunc,
         Func<HttpContext, PassthroughMessage, Task<Table>> callback,
         Action<Exception> dedupCriticalError) :
         this(
@@ -38,7 +38,7 @@ public class PassthroughConfiguration
                 var connection = connectionFunc();
                 if (connection.State == ConnectionState.Open)
                 {
-                    throw new("This overload of PassthroughConfiguration expects `Func<DbConnection> connectionFunc` to return a un-opened DbConnection.");
+                    throw new("This overload of PassthroughConfiguration expects `Func<SqlConnection> connectionFunc` to return a un-opened SqlConnection.");
                 }
                 try
                 {
@@ -59,11 +59,11 @@ public class PassthroughConfiguration
     /// <summary>
     /// Initialize a new instance of <see cref="PassthroughConfiguration"/>.
     /// </summary>
-    /// <param name="connectionFunc">Creates a instance of a new and open <see cref="DbConnection"/>.</param>
+    /// <param name="connectionFunc">Creates a instance of a new and open <see cref="SqlConnection"/>.</param>
     /// <param name="callback">Manipulate or verify a <see cref="PassthroughMessage"/> prior to it being sent. Returns the destination <see cref="Table"/>.</param>
     /// <param name="dedupCriticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
     public PassthroughConfiguration(
-        Func<CancellationToken, Task<DbConnection>> connectionFunc,
+        Func<CancellationToken, Task<SqlConnection>> connectionFunc,
         Func<HttpContext, PassthroughMessage, Task<Table>> callback,
         Action<Exception> dedupCriticalError)
     {

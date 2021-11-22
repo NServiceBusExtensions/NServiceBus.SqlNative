@@ -1,16 +1,16 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
 public class Synonym
 {
-    DbConnection sourceDatabase;
+    SqlConnection sourceDatabase;
     string targetDatabase;
     string sourceSchema;
     string targetSchema;
-    DbTransaction? sourceTransaction;
+    SqlTransaction? sourceTransaction;
 
-    public Synonym(DbConnection sourceDatabase, string targetDatabase, string sourceSchema = "dbo", string targetSchema = "dbo")
+    public Synonym(SqlConnection sourceDatabase, string targetDatabase, string sourceSchema = "dbo", string targetSchema = "dbo")
     {
         Guard.AgainstNullOrEmpty(targetDatabase, nameof(targetDatabase));
         Guard.AgainstNullOrEmpty(targetSchema, nameof(targetSchema));
@@ -20,7 +20,7 @@ public class Synonym
         this.targetSchema = targetSchema;
     }
 
-    public Synonym(DbTransaction sourceTransaction, string targetDatabase, string sourceSchema = "dbo", string targetSchema = "dbo")
+    public Synonym(SqlTransaction sourceTransaction, string targetDatabase, string sourceSchema = "dbo", string targetSchema = "dbo")
     {
         Guard.AgainstNullOrEmpty(targetDatabase, nameof(targetDatabase));
         Guard.AgainstNullOrEmpty(targetSchema, nameof(targetSchema));

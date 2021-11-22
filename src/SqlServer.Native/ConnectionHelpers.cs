@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 #if (SqlServerDedupe)
 namespace NServiceBus.Transport.SqlServerDeduplication
@@ -21,7 +21,7 @@ if (@nocount = 'on') set nocount on;
 if (@nocount = 'off') set nocount off;";
         }
 
-        internal static Task DropTable(this DbConnection connection, DbTransaction? transaction, Table table, CancellationToken cancellation = default)
+        internal static Task DropTable(this SqlConnection connection, SqlTransaction? transaction, Table table, CancellationToken cancellation = default)
         {
             return connection.RunCommand(transaction, $"drop table if exists {table}", cancellation);
         }

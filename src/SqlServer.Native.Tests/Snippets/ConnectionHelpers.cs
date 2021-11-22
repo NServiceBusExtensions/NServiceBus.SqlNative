@@ -1,11 +1,10 @@
-﻿using System.Data.Common;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 
 public static class ConnectionHelpers
 {
     #region ConnectionHelpers
 
-    public static async Task<DbConnection> OpenConnection(
+    public static async Task<SqlConnection> OpenConnection(
         string connectionString,
         CancellationToken cancellation)
     {
@@ -22,7 +21,7 @@ public static class ConnectionHelpers
         }
     }
 
-    public static async Task<DbTransaction> BeginTransaction(
+    public static async Task<SqlTransaction> BeginTransaction(
         string connectionString,
         CancellationToken cancellation)
     {

@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
@@ -9,9 +9,9 @@ namespace NServiceBus.Transport.SqlServerNative;
 public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     where TIncoming : class, IIncomingMessage
 {
-    protected abstract DbCommand BuildConsumeCommand(int batchSize);
+    protected abstract SqlCommand BuildConsumeCommand(int batchSize);
 
-    protected abstract Task<TIncoming> ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups);
+    protected abstract Task<TIncoming> ReadMessage(SqlDataReader dataReader, params IAsyncDisposable[] cleanups);
 
     public virtual Task<IncomingResult> Consume(int size, Action<TIncoming> action, CancellationToken cancellation = default)
     {

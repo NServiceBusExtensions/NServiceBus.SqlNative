@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
@@ -7,21 +7,21 @@ public class MessageProcessingLoop :
 {
     string table;
     long startingRow;
-    Func<CancellationToken, Task<DbConnection>>? connectionBuilder;
-    Func<CancellationToken, Task<DbTransaction>>? transactionBuilder;
-    Func<DbTransaction, IncomingMessage, CancellationToken, Task>? transactionCallback;
-    Func<DbConnection, IncomingMessage, CancellationToken, Task>? connectionCallback;
-    Func<DbTransaction, long, CancellationToken, Task>? transactionPersistRowVersion;
-    Func<DbConnection, long, CancellationToken, Task>? connectionPersistRowVersion;
+    Func<CancellationToken, Task<SqlConnection>>? connectionBuilder;
+    Func<CancellationToken, Task<SqlTransaction>>? transactionBuilder;
+    Func<SqlTransaction, IncomingMessage, CancellationToken, Task>? transactionCallback;
+    Func<SqlConnection, IncomingMessage, CancellationToken, Task>? connectionCallback;
+    Func<SqlTransaction, long, CancellationToken, Task>? transactionPersistRowVersion;
+    Func<SqlConnection, long, CancellationToken, Task>? connectionPersistRowVersion;
     int batchSize;
 
     public MessageProcessingLoop(
         string table,
         long startingRow,
-        Func<CancellationToken, Task<DbTransaction>> transactionBuilder,
-        Func<DbTransaction, IncomingMessage, CancellationToken, Task> callback,
+        Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
+        Func<SqlTransaction, IncomingMessage, CancellationToken, Task> callback,
         Action<Exception> errorCallback,
-        Func<DbTransaction, long, CancellationToken, Task> persistRowVersion,
+        Func<SqlTransaction, long, CancellationToken, Task> persistRowVersion,
         int batchSize = 10,
         TimeSpan? delay = null) :
         base(errorCallback, delay)
@@ -40,10 +40,10 @@ public class MessageProcessingLoop :
     public MessageProcessingLoop(
         string table,
         long startingRow,
-        Func<CancellationToken, Task<DbConnection>> connectionBuilder,
-        Func<DbConnection, IncomingMessage, CancellationToken, Task> callback,
+        Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
+        Func<SqlConnection, IncomingMessage, CancellationToken, Task> callback,
         Action<Exception> errorCallback,
-        Func<DbConnection, long, CancellationToken, Task> persistRowVersion,
+        Func<SqlConnection, long, CancellationToken, Task> persistRowVersion,
         int batchSize = 10,
         TimeSpan? delay = null) :
         base(errorCallback, delay)
@@ -61,7 +61,7 @@ public class MessageProcessingLoop :
 
     protected override async Task RunBatch(CancellationToken cancellation)
     {
-        DbConnection? connection = null;
+        SqlConnection? connection = null;
         if (connectionBuilder != null)
         {
             await using (connection = await connectionBuilder(cancellation))
@@ -77,7 +77,7 @@ public class MessageProcessingLoop :
             return;
         }
 
-        DbTransaction? transaction = null;
+        SqlTransaction? transaction = null;
         try
         {
             transaction = await transactionBuilder!(cancellation);

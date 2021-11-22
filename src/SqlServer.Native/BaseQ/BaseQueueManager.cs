@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
@@ -6,23 +6,23 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     where TIncoming : class, IIncomingMessage
 {
     protected Table Table;
-    protected DbConnection Connection;
-    protected DbTransaction? Transaction;
+    protected SqlConnection Connection;
+    protected SqlTransaction? Transaction;
 
-    protected BaseQueueManager(Table table, DbConnection connection)
+    protected BaseQueueManager(Table table, SqlConnection connection)
     {
         Table = table;
         Connection = connection;
     }
 
-    protected BaseQueueManager(Table table, DbTransaction transaction)
+    protected BaseQueueManager(Table table, SqlTransaction transaction)
     {
         Table = table;
         Transaction = transaction;
         Connection = transaction.Connection!;
     }
 
-    async Task<IncomingResult> ReadMultiple(DbCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
+    async Task<IncomingResult> ReadMultiple(SqlCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
     {
         var count = 0;
         long? lastRowVersion = null;

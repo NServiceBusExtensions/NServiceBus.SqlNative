@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Transport.SqlServerDeduplication;
@@ -8,11 +8,11 @@ class CleanupTask :
 {
     Table table;
     CriticalError criticalError;
-    Func<CancellationToken, Task<DbConnection>> connectionBuilder;
+    Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
     DedupeCleanerJob? job;
 
     public CleanupTask(Table table, CriticalError criticalError,
-        Func<CancellationToken, Task<DbConnection>> connectionBuilder)
+        Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
     {
         this.table = table;
         this.criticalError = criticalError;

@@ -1,6 +1,6 @@
-﻿using System.Data.Common;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
@@ -44,7 +44,7 @@ public class Startup
         // other ASP.MVC config
     }
 
-    static Task<DbConnection> OpenConnection(CancellationToken cancellation)
+    static Task<SqlConnection> OpenConnection(CancellationToken cancellation)
     {
         //TODO open and return a SqlConnection
         return null!;

@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using System.Data.Common;
+using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
@@ -13,34 +13,34 @@ public class RowVersionTracker
         this.table = table;
     }
 
-    public Task CreateTable(DbConnection connection, CancellationToken cancellation = default)
+    public Task CreateTable(SqlConnection connection, CancellationToken cancellation = default)
     {
         return CreateTable(connection, null, cancellation);
     }
 
-    public Task CreateTable(DbTransaction transaction, CancellationToken cancellation = default)
+    public Task CreateTable(SqlTransaction transaction, CancellationToken cancellation = default)
     {
         return CreateTable(transaction.Connection!, transaction, cancellation);
     }
 
-    Task CreateTable(DbConnection connection, DbTransaction? transaction, CancellationToken cancellation)
+    Task CreateTable(SqlConnection connection, SqlTransaction? transaction, CancellationToken cancellation)
     {
         return connection.RunCommand(transaction, string.Format(Sql, table), cancellation);
     }
 
-    public Task Save(DbConnection connection, long rowVersion, CancellationToken cancellation = default)
+    public Task Save(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
     {
         Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
         return Save(connection, null, rowVersion, cancellation);
     }
 
-    public Task Save(DbTransaction transaction, long rowVersion, CancellationToken cancellation = default)
+    public Task Save(SqlTransaction transaction, long rowVersion, CancellationToken cancellation = default)
     {
         Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
         return Save(transaction.Connection!, transaction, rowVersion, cancellation);
     }
 
-    async Task Save(DbConnection connection, DbTransaction? transaction, long rowVersion, CancellationToken cancellation)
+    async Task Save(SqlConnection connection, SqlTransaction? transaction, long rowVersion, CancellationToken cancellation)
     {
         await using var command = connection.CreateCommand(
             transaction: transaction,
@@ -59,7 +59,7 @@ if @@rowcount = 0
         await command.RunNonQuery(cancellation);
     }
 
-    public async Task<long> Get(DbConnection connection, CancellationToken cancellation = default)
+    public async Task<long> Get(SqlConnection connection, CancellationToken cancellation = default)
     {
         await using var command = connection.CreateCommand();
         command.CommandText = $@"

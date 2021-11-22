@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 static class SqlExtensions
 {
@@ -26,7 +26,7 @@ static class SqlExtensions
         return builder.ToString();
     }
 
-    public static bool IsKeyViolation(this DbException sqlException)
+    public static bool IsKeyViolation(this SqlException sqlException)
     {
         var exception = (dynamic) sqlException;
         //Unique Key Violation = 2627

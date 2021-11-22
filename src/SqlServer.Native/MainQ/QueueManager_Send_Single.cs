@@ -1,11 +1,11 @@
 ﻿using System.Data;
-using System.Data.Common;
+using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
 public partial class QueueManager
 {
-    protected override DbCommand CreateSendCommand(OutgoingMessage message)
+    protected override SqlCommand CreateSendCommand(OutgoingMessage message)
     {
         var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
         var parameters = command.Parameters;
@@ -23,7 +23,7 @@ public partial class QueueManager
         return command;
     }
 
-    static DbParameter CreateIdParameter(DbCommand command, DbParameterCollection parameters)
+    static SqlParameter CreateIdParameter(SqlCommand command, SqlParameterCollection parameters)
     {
         var idParameter = command.CreateParameter();
         idParameter.ParameterName = "Id";
@@ -32,7 +32,7 @@ public partial class QueueManager
         return idParameter;
     }
 
-    static DbParameter CreateExpiresParameter(DbCommand command, DbParameterCollection parameters)
+    static SqlParameter CreateExpiresParameter(SqlCommand command, SqlParameterCollection parameters)
     {
         var expiresParameter = command.CreateParameter();
         expiresParameter.ParameterName = "Expires";
@@ -41,7 +41,7 @@ public partial class QueueManager
         return expiresParameter;
     }
 
-    static DbParameter CreateHeadersParameter(DbCommand command, DbParameterCollection parameters)
+    static SqlParameter CreateHeadersParameter(SqlCommand command, SqlParameterCollection parameters)
     {
         var headersParameter = command.CreateParameter();
         headersParameter.ParameterName = "Headers";
@@ -50,7 +50,7 @@ public partial class QueueManager
         return headersParameter;
     }
 
-    static DbParameter CreateBodyParameter(DbCommand command, DbParameterCollection parameters)
+    static SqlParameter CreateBodyParameter(SqlCommand command, SqlParameterCollection parameters)
     {
         var bodyParameter = command.CreateParameter();
         bodyParameter.ParameterName = "Body";

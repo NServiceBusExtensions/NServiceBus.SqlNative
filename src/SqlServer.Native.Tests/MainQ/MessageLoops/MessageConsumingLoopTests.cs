@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 using NServiceBus.Transport.SqlServerNative;
 using Xunit;
 
@@ -40,7 +40,7 @@ public class MessageConsumingLoopTests :
 
         var count = 0;
 
-        Task Callback(DbConnection connection, IncomingMessage message, CancellationToken cancellation)
+        Task Callback(SqlConnection connection, IncomingMessage message, CancellationToken cancellation)
         {
             count++;
             if (count == 5)

@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using System.Data.Common;
+using Microsoft.Data.SqlClient;
 
 static class Extensions
 {
@@ -12,7 +12,7 @@ static class Extensions
         };
     }
 
-    public static void SetValueOrDbNull(this DbParameter corrParam, DateTime? value)
+    public static void SetValueOrDbNull(this SqlParameter corrParam, DateTime? value)
     {
         if (value == null)
         {
@@ -23,7 +23,7 @@ static class Extensions
         corrParam.Value = value;
     }
 
-    public static void SetBinaryOrDbNull(this DbParameter corrParam, object? value)
+    public static void SetBinaryOrDbNull(this SqlParameter corrParam, object? value)
     {
         if (value == null)
         {
@@ -34,13 +34,13 @@ static class Extensions
         corrParam.Value = value;
     }
 
-    public static async Task RunCommand(this DbConnection connection, DbTransaction? transaction, string sql, CancellationToken cancellation = default)
+    public static async Task RunCommand(this SqlConnection connection, SqlTransaction? transaction, string sql, CancellationToken cancellation = default)
     {
         await using var command = connection.CreateCommand(transaction, sql);
         await command.RunNonQuery(cancellation);
     }
 
-    public static DbCommand CreateCommand(this DbConnection connection, DbTransaction? transaction, string sql)
+    public static SqlCommand CreateCommand(this SqlConnection connection, SqlTransaction? transaction, string sql)
     {
         var command = connection.CreateCommand();
         command.Transaction = transaction;
@@ -48,7 +48,7 @@ static class Extensions
         return command;
     }
 
-    public static Task<long?> LongOrNull(this DbDataReader dataReader, int index)
+    public static Task<long?> LongOrNull(this SqlDataReader dataReader, int index)
     {
         if (dataReader.IsDBNull(index))
         {
@@ -58,7 +58,7 @@ static class Extensions
         return dataReader.GetFieldValueAsync<long?>(index);
     }
 
-    public static Task<DateTime?> DatetimeOrNull(this DbDataReader dataReader, int index)
+    public static Task<DateTime?> DatetimeOrNull(this SqlDataReader dataReader, int index)
     {
         if (dataReader.IsDBNull(index))
         {
@@ -68,59 +68,59 @@ static class Extensions
         return dataReader.GetFieldValueAsync<DateTime?>(index);
     }
 
-    public static async Task<DbDataReader> RunSequentialReader(this DbCommand command, CancellationToken cancellation)
+    public static async Task<SqlDataReader> RunSequentialReader(this SqlCommand command, CancellationToken cancellation)
     {
         try
         {
             return await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellation);
         }
-        catch (DbException exception)
+        catch (SqlException exception)
         {
             SetCommandData(command, exception);
             throw;
         }
     }
 
-    public static async Task<object?> RunScalar(this DbCommand command, CancellationToken cancellation)
+    public static async Task<object?> RunScalar(this SqlCommand command, CancellationToken cancellation)
     {
         try
         {
             return await command.ExecuteScalarAsync(cancellation);
         }
-        catch (DbException exception)
+        catch (SqlException exception)
         {
             SetCommandData(command, exception);
             throw;
         }
     }
 
-    public static async Task<DbDataReader> RunSingleRowReader(this DbCommand command, CancellationToken cancellation)
+    public static async Task<SqlDataReader> RunSingleRowReader(this SqlCommand command, CancellationToken cancellation)
     {
         try
         {
             return await command.ExecuteReaderAsync(CommandBehavior.SingleRow | CommandBehavior.SequentialAccess, cancellation);
         }
-        catch (DbException exception)
+        catch (SqlException exception)
         {
             SetCommandData(command, exception);
             throw;
         }
     }
 
-    public static async Task RunNonQuery(this DbCommand command, CancellationToken cancellation)
+    public static async Task RunNonQuery(this SqlCommand command, CancellationToken cancellation)
     {
         try
         {
             await command.ExecuteNonQueryAsync(cancellation);
         }
-        catch (DbException exception)
+        catch (SqlException exception)
         {
             SetCommandData(command, exception);
             throw;
         }
     }
 
-    public static DbParameter AddStringParam(this DbCommand command, string name, string value)
+    public static SqlParameter AddStringParam(this SqlCommand command, string name, string value)
     {
         var bodyParameter = command.CreateParameter();
         bodyParameter.ParameterName = name;
@@ -130,7 +130,7 @@ static class Extensions
         return bodyParameter;
     }
 
-    public static void SetCommandData(this DbCommand command, DbException exception)
+    public static void SetCommandData(this SqlCommand command, SqlException exception)
     {
         exception.Data["Sql"] = command.CommandText;
     }

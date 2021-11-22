@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
@@ -6,16 +6,16 @@ public class MessageConsumingLoop :
     MessageLoop
 {
     string table;
-    Func<CancellationToken, Task<DbConnection>>? connectionBuilder;
-    Func<CancellationToken, Task<DbTransaction>>? transactionBuilder;
-    Func<DbTransaction, IncomingMessage, CancellationToken, Task>? transactionCallback;
-    Func<DbConnection, IncomingMessage, CancellationToken, Task>? connectionCallback;
+    Func<CancellationToken, Task<SqlConnection>>? connectionBuilder;
+    Func<CancellationToken, Task<SqlTransaction>>? transactionBuilder;
+    Func<SqlTransaction, IncomingMessage, CancellationToken, Task>? transactionCallback;
+    Func<SqlConnection, IncomingMessage, CancellationToken, Task>? connectionCallback;
     int batchSize;
 
     public MessageConsumingLoop(
         string table,
-        Func<CancellationToken, Task<DbTransaction>> transactionBuilder,
-        Func<DbTransaction, IncomingMessage, CancellationToken, Task> callback,
+        Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
+        Func<SqlTransaction, IncomingMessage, CancellationToken, Task> callback,
         Action<Exception> errorCallback,
         int batchSize = 10,
         TimeSpan? delay = null) :
@@ -31,8 +31,8 @@ public class MessageConsumingLoop :
 
     public MessageConsumingLoop(
         string table,
-        Func<CancellationToken, Task<DbConnection>> connectionBuilder,
-        Func<DbConnection, IncomingMessage, CancellationToken, Task> callback,
+        Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
+        Func<SqlConnection, IncomingMessage, CancellationToken, Task> callback,
         Action<Exception> errorCallback,
         int batchSize = 10,
         TimeSpan? delay = null) :
@@ -48,7 +48,7 @@ public class MessageConsumingLoop :
 
     protected override async Task RunBatch(CancellationToken cancellation)
     {
-        DbConnection? connection = null;
+        SqlConnection? connection = null;
         if (connectionBuilder != null)
         {
             await using (connection = await connectionBuilder(cancellation))
@@ -59,7 +59,7 @@ public class MessageConsumingLoop :
 
             return;
         }
-        DbTransaction? transaction = null;
+        SqlTransaction? transaction = null;
         try
         {
             transaction = await transactionBuilder!(cancellation);

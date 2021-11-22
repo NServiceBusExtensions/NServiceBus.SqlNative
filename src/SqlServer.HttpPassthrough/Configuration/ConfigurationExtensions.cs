@@ -1,7 +1,7 @@
-﻿using System.Data.Common;
-using System.Net;
+﻿using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -18,12 +18,12 @@ public static class ConfigurationExtensions
     /// Add Sql HTTP Passthrough to an instance of <see cref="IServiceCollection"/>.
     /// Used from <code>Startup.ConfigureServices.</code>
     /// </summary>
-    /// <param name="connectionFunc">Creates a instance of a new and un-open <see cref="DbConnection"/>.</param>
+    /// <param name="connectionFunc">Creates a instance of a new and un-open <see cref="SqlConnection"/>.</param>
     /// <param name="callback">Manipulate or verify a <see cref="PassthroughMessage"/> prior to it being sent. Returns the destination <see cref="Table"/>.</param>
     /// <param name="dedupCriticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
     public static void AddSqlHttpPassthrough(
         this IServiceCollection services,
-        Func<DbConnection> connectionFunc,
+        Func<SqlConnection> connectionFunc,
         Func<HttpContext, PassthroughMessage, Task<Table>> callback,
         Action<Exception> dedupCriticalError)
     {
@@ -34,12 +34,12 @@ public static class ConfigurationExtensions
     /// Add Sql HTTP Passthrough to an instance of <see cref="IServiceCollection"/>.
     /// Used from <code>Startup.ConfigureServices.</code>
     /// </summary>
-    /// <param name="connectionFunc">Creates a instance of a new and open <see cref="DbConnection"/>.</param>
+    /// <param name="connectionFunc">Creates a instance of a new and open <see cref="SqlConnection"/>.</param>
     /// <param name="callback">Manipulate or verify a <see cref="PassthroughMessage"/> prior to it being sent. Returns the destination <see cref="Table"/>.</param>
     /// <param name="dedupCriticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
     public static void AddSqlHttpPassthrough(
         this IServiceCollection services,
-        Func<CancellationToken, Task<DbConnection>> connectionFunc,
+        Func<CancellationToken, Task<SqlConnection>> connectionFunc,
         Func<HttpContext, PassthroughMessage, Task<Table>> callback,
         Action<Exception> dedupCriticalError)
     {
