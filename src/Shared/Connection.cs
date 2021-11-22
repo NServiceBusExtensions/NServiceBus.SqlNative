@@ -8,7 +8,7 @@ public static class Connection
     {
         if (Environment.GetEnvironmentVariable("AppVeyor") == "True")
         {
-            ConnectionString = @"Server=(local)\SQL2017;Database=master;User ID=sa;Password=Password12!;Max Pool Size=100;TrustServerCertificate=True";
+            ConnectionString = @"Server=(local)\SQL2019;Database=master;User ID=sa;Password=Password12!;Max Pool Size=100;TrustServerCertificate=True";
             return;
         }
 
