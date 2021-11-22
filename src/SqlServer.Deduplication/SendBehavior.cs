@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 using NServiceBus.Logging;
 using NServiceBus.Pipeline;
 using NServiceBus.Transport;
@@ -9,9 +9,9 @@ class SendBehavior :
 {
     ILog logger = LogManager.GetLogger("DeduplicationSendBehavior");
     Table table;
-    Func<CancellationToken, Task<DbConnection>> connectionBuilder;
+    Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
 
-    public SendBehavior(Table table, Func<CancellationToken, Task<DbConnection>> connectionBuilder)
+    public SendBehavior(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
     {
         this.table = table;
         this.connectionBuilder = connectionBuilder;
@@ -36,7 +36,7 @@ class SendBehavior :
         var transportTransaction = new TransportTransaction();
         context.Extensions.Set(transportTransaction);
         await using var connection = await connectionTask;
-        await using var transaction = await connection.BeginTransactionAsync();
+        await using var transaction = (SqlTransaction) await connection.BeginTransactionAsync();
         transportTransaction.Set(connection);
         transportTransaction.Set(transaction);
 

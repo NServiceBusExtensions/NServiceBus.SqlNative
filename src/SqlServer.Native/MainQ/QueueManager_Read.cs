@@ -1,11 +1,11 @@
 ﻿using System.Data;
-using System.Data.Common;
+using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
 public partial class QueueManager
 {
-    protected override DbCommand BuildReadCommand(int batchSize, long startRowVersion)
+    protected override SqlCommand BuildReadCommand(int batchSize, long startRowVersion)
     {
         var command = Connection.CreateCommand(Transaction, string.Format(ReadSql, Table, batchSize));
         var parameter = command.CreateParameter();
@@ -30,7 +30,7 @@ where RowVersion >= @RowVersion
 order by RowVersion
 ");
 
-    protected override async Task<IncomingMessage> ReadMessage(DbDataReader dataReader, params IAsyncDisposable[] cleanups)
+    protected override async Task<IncomingMessage> ReadMessage(SqlDataReader dataReader, params IAsyncDisposable[] cleanups)
     {
         var id = dataReader.GetGuid(0);
         var rowVersion = dataReader.GetInt64(1);

@@ -1,6 +1,6 @@
-﻿using System.Data.Common;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using NServiceBus.SqlServer.HttpPassthrough;
@@ -109,7 +109,7 @@ public class AppendClaimsToMessageHeaders
         return null!;
     }
 
-    static Task<DbConnection> OpenConnection(CancellationToken cancellation)
+    static Task<SqlConnection> OpenConnection(CancellationToken cancellation)
     {
         return null!;
     }

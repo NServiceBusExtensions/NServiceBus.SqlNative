@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Logging;
@@ -44,7 +43,7 @@ class Program
         await subscription.Create();
     }
 
-    static async Task<DbConnection> ConnectionBuilder()
+    static async Task<SqlConnection> ConnectionBuilder()
     {
         var sqlConnection = new SqlConnection(connection);
         try

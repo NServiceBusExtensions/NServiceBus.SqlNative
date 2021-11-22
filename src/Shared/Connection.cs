@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 
 public static class Connection
 {
@@ -30,7 +29,7 @@ public static class Connection
         return connection;
     }
 
-    public static async Task<DbConnection> OpenAsyncConnection(CancellationToken cancellation = default)
+    public static async Task<SqlConnection> OpenAsyncConnection(CancellationToken cancellation = default)
     {
         var connection = new SqlConnection(ConnectionString);
         await connection.OpenAsync(cancellation);

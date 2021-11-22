@@ -1,5 +1,6 @@
 ﻿using System.Data;
-using System.Data.Common;
+using Microsoft.Data.SqlClient;
+
 #if (SqlServerDedupe)
 namespace NServiceBus.Transport.SqlServerDeduplication
 #else
@@ -13,18 +14,18 @@ namespace NServiceBus.Transport.SqlServerNative
         string writeSql = null!;
         string readSql = null!;
 
-        DbConnection connection;
+        SqlConnection connection;
         Table table;
-        DbTransaction? transaction;
+        SqlTransaction? transaction;
 
-        public DedupeManager(DbConnection connection, Table table)
+        public DedupeManager(SqlConnection connection, Table table)
         {
             this.connection = connection;
             this.table = table;
             InitSql();
         }
 
-        public DedupeManager(DbTransaction transaction, Table table)
+        public DedupeManager(SqlTransaction transaction, Table table)
         {
             this.transaction = transaction;
             this.table = table;
@@ -38,7 +39,7 @@ namespace NServiceBus.Transport.SqlServerNative
             readSql = ConnectionHelpers.WrapInNoCount(string.Format(readSqlFormat, table));
         }
 
-        DbCommand BuildReadCommand(Guid messageId)
+        SqlCommand BuildReadCommand(Guid messageId)
         {
             var command = connection.CreateCommand(transaction, readSql);
             var parameter = command.CreateParameter();
@@ -49,7 +50,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return command;
         }
 
-        DbCommand BuildWriteCommand(Guid messageId, string? context)
+        SqlCommand BuildWriteCommand(Guid messageId, string? context)
         {
             var command = connection.CreateCommand(transaction, writeSql);
             var parameters = command.Parameters;
@@ -95,7 +96,7 @@ namespace NServiceBus.Transport.SqlServerNative
                 await using var command = BuildWriteCommand(messageId, context);
                 await command.RunNonQuery(cancellation);
             }
-            catch (DbException sqlException)
+            catch (SqlException sqlException)
             {
                 if (sqlException.IsKeyViolation())
                 {
@@ -124,13 +125,13 @@ namespace NServiceBus.Transport.SqlServerNative
             Guard.AgainstEmpty(messageId, nameof(messageId));
             if (transaction == null)
             {
-                throw new($"Can only be used if the {nameof(DbTransaction)} constructor is used.");
+                throw new($"Can only be used if the {nameof(SqlTransaction)} constructor is used.");
             }
             try
             {
                 await transaction.CommitAsync();
             }
-            catch (DbException sqlException)
+            catch (SqlException sqlException)
             {
                 if (sqlException.IsKeyViolation())
                 {

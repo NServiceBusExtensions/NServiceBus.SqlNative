@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using NServiceBus.Transport.SqlServerNative;
 using NServiceBus.Attachments.Sql.Raw;
@@ -8,12 +8,12 @@ using Table = NServiceBus.Transport.SqlServerNative.Table;
 class Sender
 {
     Persister attachments;
-    Func<CancellationToken, Task<DbConnection>> connectionFunc;
+    Func<CancellationToken, Task<SqlConnection>> connectionFunc;
     HeadersBuilder headersBuilder;
     Table dedupeTable;
     ILogger logger;
 
-    public Sender(Func<CancellationToken, Task<DbConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
+    public Sender(Func<CancellationToken, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
     {
         this.connectionFunc = connectionFunc;
         attachments = new(new(attachmentsTable.TableName, attachmentsTable.Schema, false));
@@ -43,7 +43,7 @@ class Sender
         return rowVersion;
     }
 
-    async Task<long> SendInsideTransaction(PassthroughMessage message, Table destination, CancellationToken cancellation, DbTransaction transaction)
+    async Task<long> SendInsideTransaction(PassthroughMessage message, Table destination, CancellationToken cancellation, SqlTransaction transaction)
     {
         var headersString = headersBuilder.GetHeadersString(message);
         LogSend(message);
@@ -73,7 +73,7 @@ class Sender
             message.Attachments.Select(x => x.FileName));
     }
 
-    async Task SendAttachments(DbTransaction transaction, DateTime expiry, CancellationToken cancellation, PassthroughMessage message)
+    async Task SendAttachments(SqlTransaction transaction, DateTime expiry, CancellationToken cancellation, PassthroughMessage message)
     {
         var connection = transaction.Connection!;
         foreach (var file in message.Attachments)
@@ -82,7 +82,7 @@ class Sender
         }
     }
 
-    async Task SendAttachment(DbTransaction transaction, string messageId, DateTime expiry, CancellationToken cancellation, Attachment file, DbConnection connection)
+    async Task SendAttachment(SqlTransaction transaction, string messageId, DateTime expiry, CancellationToken cancellation, Attachment file, SqlConnection connection)
     {
         await using var stream = file.Stream();
         await attachments.SaveStream(connection, transaction, messageId, file.FileName, expiry, stream, cancellation: cancellation);

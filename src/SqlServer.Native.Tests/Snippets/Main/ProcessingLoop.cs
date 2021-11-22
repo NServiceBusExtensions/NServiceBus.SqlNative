@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using NServiceBus.Transport.SqlServerNative;
 // ReSharper disable UnusedVariable
 
@@ -37,7 +36,7 @@ public class ProcessingLoop
         var startingRow = await rowVersionTracker.Get(sqlConnection);
 
         static async Task Callback(
-            DbTransaction transaction,
+            SqlTransaction transaction,
             IncomingMessage message,
             CancellationToken cancellation)
         {
@@ -56,13 +55,13 @@ public class ProcessingLoop
             Environment.FailFast("Message processing loop failed", exception);
         }
 
-        Task<DbTransaction> BuildTransaction(CancellationToken cancellation)
+        Task<SqlTransaction> BuildTransaction(CancellationToken cancellation)
         {
             return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
         }
 
         Task PersistRowVersion(
-            DbTransaction transaction,
+            SqlTransaction transaction,
             long rowVersion,
             CancellationToken token)
         {

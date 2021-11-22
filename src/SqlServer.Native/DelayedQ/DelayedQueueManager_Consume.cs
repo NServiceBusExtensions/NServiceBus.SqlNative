@@ -1,10 +1,10 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
 public partial class DelayedQueueManager
 {
-    protected override DbCommand BuildConsumeCommand(int batchSize)
+    protected override SqlCommand BuildConsumeCommand(int batchSize)
     {
         return Connection.CreateCommand(Transaction, string.Format(ConsumeSql, Table, batchSize));
     }

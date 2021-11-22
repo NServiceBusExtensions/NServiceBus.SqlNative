@@ -1,17 +1,17 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
 public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     where TIncoming : class, IIncomingMessage
 {
-    protected abstract DbCommand BuildReadCommand(int batchSize, long startRowVersion);
+    protected abstract SqlCommand BuildReadCommand(int batchSize, long startRowVersion);
 
     public virtual async Task<TIncoming?> Read(long rowVersion, CancellationToken cancellation = default)
     {
         Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
         var shouldCleanup = false;
-        DbDataReader? reader = null;
+        SqlDataReader? reader = null;
         try
         {
             await using var command = BuildReadCommand(1, rowVersion);

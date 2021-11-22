@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
@@ -8,7 +8,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     public virtual async Task<TIncoming?> Consume(CancellationToken cancellation = default)
     {
         var shouldCleanup = false;
-        DbDataReader? reader = null;
+        SqlDataReader? reader = null;
         try
         {
             await using var command = BuildConsumeCommand(1);

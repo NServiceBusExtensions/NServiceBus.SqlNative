@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NServiceBus.SqlServer.HttpPassthrough;
@@ -18,7 +17,7 @@ public class SampleStartup
     public void ConfigureServices(IServiceCollection services)
     {
         var configuration = new PassthroughConfiguration(
-            connectionFunc: () => new SqlConnection(Connection.ConnectionString),
+            connectionFunc: () => new(Connection.ConnectionString),
             callback: AmendMessage,
             dedupCriticalError: exception => { Environment.FailFast("", exception); });
         configuration.AppendClaimsToMessageHeaders();

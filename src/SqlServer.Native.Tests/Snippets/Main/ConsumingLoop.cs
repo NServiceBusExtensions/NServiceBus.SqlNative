@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 using NServiceBus.Transport.SqlServerNative;
 
 public class ConsumingLoop
@@ -10,7 +10,7 @@ public class ConsumingLoop
         #region ConsumeLoop
 
         static async Task Callback(
-            DbTransaction transaction,
+            SqlTransaction transaction,
             IncomingMessage message,
             CancellationToken cancellation)
         {
@@ -22,7 +22,7 @@ public class ConsumingLoop
             }
         }
 
-        Task<DbTransaction> BuildTransaction(CancellationToken cancellation)
+        Task<SqlTransaction> BuildTransaction(CancellationToken cancellation)
         {
             return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
         }

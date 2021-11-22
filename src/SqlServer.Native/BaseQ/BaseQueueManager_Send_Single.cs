@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Data.SqlClient;
 
 namespace NServiceBus.Transport.SqlServerNative;
 
@@ -23,5 +23,5 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
         return (long) rowVersion;
     }
 
-    protected abstract DbCommand CreateSendCommand(TOutgoing message);
+    protected abstract SqlCommand CreateSendCommand(TOutgoing message);
 }
