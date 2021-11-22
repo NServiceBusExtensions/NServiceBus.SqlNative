@@ -35,16 +35,4 @@ public static class Connection
         await connection.OpenAsync(cancellation);
         return connection;
     }
-
-    public static async Task<SqlConnection> OpenAsyncConnection()
-    {
-        var connection = new SqlConnection(ConnectionString);
-        await connection.OpenAsync();
-        return connection;
-    }
-
-    public static SqlConnection NewConnection()
-    {
-        return new(ConnectionString);
-    }
 }
