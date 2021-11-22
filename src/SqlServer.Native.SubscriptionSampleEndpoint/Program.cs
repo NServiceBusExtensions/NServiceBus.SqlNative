@@ -7,7 +7,7 @@ using SampleNamespace;
 
 class Program
 {
-    const string connection = @"Server=.\SQLExpress;Database=SubscriptionSample; Integrated Security=True;Max Pool Size=100";
+    const string connection = @"Server=.\SQLExpress;Database=SubscriptionSample; Integrated Security=True;Max Pool Size=100;TrustServerCertificate=True";
     static async Task Main()
     {
         await CreateTables();
