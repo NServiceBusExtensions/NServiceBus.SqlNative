@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿#if DEBUG
+
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using My.Namespace;
 using NServiceBus;
@@ -84,3 +86,5 @@ public class HttpPassthroughIntegrationTests :
         }
     }
 }
+
+#endif
