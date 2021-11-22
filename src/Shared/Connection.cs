@@ -9,11 +9,11 @@ public static class Connection
     {
         if (Environment.GetEnvironmentVariable("AppVeyor") == "True")
         {
-            ConnectionString = @"Server=(local)\SQL2017;Database=master;User ID=sa;Password=Password12!;Max Pool Size=100";
+            ConnectionString = @"Server=(local)\SQL2017;Database=master;User ID=sa;Password=Password12!;Max Pool Size=100;TrustServerCertificate=True";
             return;
         }
 
-        ConnectionString = @"Server=.\;Database=NServiceBusNativeTests; Integrated Security=True;Max Pool Size=100";
+        ConnectionString = @"Server=.\;Database=NServiceBusNativeTests; Integrated Security=True;Max Pool Size=100;TrustServerCertificate=True";
     }
 
     public static SqlConnection OpenConnection()
