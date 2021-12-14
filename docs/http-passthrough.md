@@ -350,7 +350,7 @@ await clientFormSender.Send(
         {"fileName", Encoding.UTF8.GetBytes("fileContents")}
     });
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L10-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-clientformsender' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L9-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-clientformsender' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 This can be useful when performing [Integration testing in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/testing/integration-testing).
@@ -374,5 +374,5 @@ await clientFormSender.Send(
         {"fileName", Encoding.UTF8.GetBytes("fileContents")}
     });
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L29-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-asptesthost' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L28-L46' title='Snippet source file'>snippet source</a> | <a href='#snippet-asptesthost' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
