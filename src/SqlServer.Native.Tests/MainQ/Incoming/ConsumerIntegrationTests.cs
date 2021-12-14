@@ -1,6 +1,5 @@
 ﻿using NServiceBus;
 using NServiceBus.Transport.SqlServerNative;
-using Xunit;
 
 public class ConsumerIntegrationTests :
     TestBase

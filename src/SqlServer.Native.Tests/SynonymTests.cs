@@ -1,7 +1,4 @@
 ﻿using NServiceBus.Transport.SqlServerNative;
-using VerifyXunit;
-using VerifyTests;
-using Xunit;
 
 [UsesVerify]
 public class SynonymTests :

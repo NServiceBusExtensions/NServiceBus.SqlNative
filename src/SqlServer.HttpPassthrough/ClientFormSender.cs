@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace NServiceBus.SqlServer.HttpPassthrough;
+﻿namespace NServiceBus.SqlServer.HttpPassthrough;
 
 /// <summary>
 /// Helper class for sending passthrough messages from a client.

@@ -1,6 +1,5 @@
 ﻿using NServiceBus;
 using NServiceBus.Transport.SqlServerNative;
-using Xunit;
 using Headers = NServiceBus.Transport.SqlServerNative.Headers;
 
 public class SendIntegration :

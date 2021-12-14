@@ -1,8 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using NServiceBus.Transport.SqlServerNative;
-using VerifyTests;
-using VerifyXunit;
-using Xunit;
 
 [UsesVerify]
 public class MainQueueCreationTests

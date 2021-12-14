@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.TestHost;
 using NServiceBus;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
-using Xunit;
 
 public class HttpPassthroughDedupTests :
     TestBase

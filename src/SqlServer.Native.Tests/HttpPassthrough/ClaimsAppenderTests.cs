@@ -1,7 +1,5 @@
 ﻿using System.Security.Claims;
 using NServiceBus.SqlServer.HttpPassthrough;
-using VerifyXunit;
-using Xunit;
 
 [UsesVerify]
 public class ClaimsAppenderTests :

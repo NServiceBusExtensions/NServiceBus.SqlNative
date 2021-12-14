@@ -1,5 +1,4 @@
 ﻿using System.Runtime.ExceptionServices;
-using Microsoft.AspNetCore.Http;
 
 static class Extensions
 {

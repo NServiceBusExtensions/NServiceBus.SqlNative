@@ -1,7 +1,4 @@
 ﻿using NServiceBus.Transport.SqlServerNative;
-using VerifyTests;
-using VerifyXunit;
-using Xunit;
 
 [UsesVerify]
 public class DedupeManagerTests :

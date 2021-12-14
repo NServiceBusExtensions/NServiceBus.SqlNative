@@ -1,5 +1,4 @@
 ﻿using NServiceBus.Transport.SqlServerNative;
-using Xunit;
 
 public class RowVersionTrackerTests :
     TestBase

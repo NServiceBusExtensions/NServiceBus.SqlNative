@@ -7,7 +7,6 @@ using NServiceBus;
 using NServiceBus.Attachments.Sql;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
-using Xunit;
 
 public class HttpPassthroughIntegrationTests :
     TestBase

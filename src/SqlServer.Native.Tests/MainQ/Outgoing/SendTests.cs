@@ -1,6 +1,4 @@
 ﻿using NServiceBus.Transport.SqlServerNative;
-using VerifyXunit;
-using Xunit;
 
 [UsesVerify]
 public class SendTests :

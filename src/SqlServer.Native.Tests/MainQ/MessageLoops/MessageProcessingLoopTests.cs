@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using NServiceBus.Transport.SqlServerNative;
-using Xunit;
 
 public class MessageProcessingLoopTests :
     TestBase

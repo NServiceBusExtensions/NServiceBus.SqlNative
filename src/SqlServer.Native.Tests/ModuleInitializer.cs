@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using NServiceBus.Transport.SqlServerNative;
-using VerifyTests;
 
 public static class ModuleInitializer
 {
