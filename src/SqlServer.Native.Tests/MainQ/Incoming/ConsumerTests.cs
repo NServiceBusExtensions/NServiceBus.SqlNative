@@ -12,7 +12,7 @@ public class ConsumerTests :
         await TestDataBuilder.SendData(table);
         var consumer = new QueueManager(table, SqlConnection);
         await using var result = await consumer.Consume();
-        await Verifier.Verify(result!.ToVerifyTarget());
+        await Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public class ConsumerTests :
         await TestDataBuilder.SendNullData(table);
         var consumer = new QueueManager(table, SqlConnection);
         await using var result = await consumer.Consume();
-        await Verifier.Verify(result!.ToVerifyTarget());
+        await Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class ConsumerTests :
             size: 10,
             action: message => { messages.Add(message.ToVerifyTarget()); });
         Assert.Equal(5, result.Count);
-        await Verifier.Verify(messages.OrderBy(x => x.Id));
+        await Verify(messages.OrderBy(x => x.Id));
     }
 
     public ConsumerTests()

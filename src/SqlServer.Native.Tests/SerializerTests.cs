@@ -15,7 +15,7 @@ public class SerializerTests
                 {"a//b", "a//b"},
                 {@"a\/b", @"a\/b"}
             });
-        return Verifier.Verify(Serializer.DeSerializeDictionary(serialized));
+        return Verify(Serializer.DeSerializeDictionary(serialized));
     }
 
     [Fact]
@@ -32,6 +32,6 @@ public class SerializerTests
                 "a//b",
                 @"a\/b"
             });
-        return Verifier.Verify(Serializer.DeSerializeList(serialized));
+        return Verify(Serializer.DeSerializeList(serialized));
     }
 }

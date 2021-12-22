@@ -11,7 +11,7 @@ public class MainQueueCreationTests
         var manager = new QueueManager("MainQueueCreationTests", connection);
         await manager.Drop();
         await manager.Create();
-        await Verifier.Verify(connection)
+        await Verify(connection)
             .SchemaSettings(includeItem: s => s == "MainQueueCreationTests");
     }
 
@@ -41,6 +41,6 @@ create clustered index Index_RowVersion on {tableName}
 select type_desc from sys.indexes
 where object_id = object_id('{tableName}')
 and name = 'Index_RowVersion'", connection);
-        await Verifier.Verify(getIndexTypeDesCommand.ExecuteScalarAsync());
+        await Verify(getIndexTypeDesCommand.ExecuteScalarAsync());
     }
 }

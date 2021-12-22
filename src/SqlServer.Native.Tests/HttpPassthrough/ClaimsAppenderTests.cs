@@ -11,7 +11,7 @@ public class ClaimsAppenderTests :
         var headers = new Dictionary<string, string>();
         var claims = BuildClaims();
         ClaimsAppender.Append(claims, headers, "prefix.");
-        return Verifier.Verify(headers);
+        return Verify(headers);
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public class ClaimsAppenderTests :
                 x.Type,
                 x.Value
             });
-        return Verifier.Verify(result);
+        return Verify(result);
     }
 
     static IEnumerable<Claim> BuildClaims()

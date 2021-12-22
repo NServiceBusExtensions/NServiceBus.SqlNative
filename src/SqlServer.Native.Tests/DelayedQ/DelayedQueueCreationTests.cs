@@ -12,6 +12,6 @@ public class DelayedQueueCreationTests
         await manager.Create();
         var settings = new VerifySettings();
         settings.SchemaSettings(includeItem: s => s == "DelayedQueueCreationTests");
-        await Verifier.Verify(connection, settings);
+        await Verify(connection, settings);
     }
 }

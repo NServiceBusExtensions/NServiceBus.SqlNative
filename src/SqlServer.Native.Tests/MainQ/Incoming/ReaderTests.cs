@@ -12,7 +12,7 @@ public class ReaderTests :
         await TestDataBuilder.SendData(table);
         var reader = new QueueManager(table, SqlConnection);
         await using var result = await reader.Read(1);
-        await Verifier.Verify(result!.ToVerifyTarget());
+        await Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public class ReaderTests :
         await TestDataBuilder.SendNullData(table);
         var reader = new QueueManager(table, SqlConnection);
         await using var result = await reader.Read(1);
-        await Verifier.Verify(result!.ToVerifyTarget());
+        await Verify(result!.ToVerifyTarget());
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class ReaderTests :
                 size: 10,
                 startRowVersion: 1,
                 action: message => { messages.Add(message.ToVerifyTarget()); });
-        await Verifier.Verify(messages.OrderBy(x => x.Id));
+        await Verify(messages.OrderBy(x => x.Id));
     }
 
     public ReaderTests()

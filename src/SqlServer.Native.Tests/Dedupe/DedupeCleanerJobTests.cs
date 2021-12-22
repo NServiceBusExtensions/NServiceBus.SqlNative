@@ -29,7 +29,7 @@ public class DedupeCleanerJobTests :
         cleaner.Start();
         Thread.Sleep(100);
         await cleaner.Stop();
-        await Verifier.Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
+        await Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
     Task<long> Send(OutgoingMessage message)

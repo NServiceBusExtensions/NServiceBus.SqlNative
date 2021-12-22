@@ -22,7 +22,7 @@ public class DedupeManagerTests :
         SqlRecording.StartRecording();
         await cleaner.CleanupItemsOlderThan(now);
         var sqlEntries = SqlRecording.FinishRecording();
-        await Verifier.Verify(
+        await Verify(
             new
             {
                 ReplicationData = SqlHelper.ReadDuplicateData("Deduplication", SqlConnection),

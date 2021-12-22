@@ -48,7 +48,7 @@ public class RequestParserTests :
     static Task Verify(FakeHttpRequest request)
     {
         var extract = RequestParser.Extract(request, CancellationToken.None).GetAwaiter().GetResult();
-        return Verifier.Verify(new
+        return Verify(new
         {
             extract.Attachments.Single().FileName,
             extract.Body,

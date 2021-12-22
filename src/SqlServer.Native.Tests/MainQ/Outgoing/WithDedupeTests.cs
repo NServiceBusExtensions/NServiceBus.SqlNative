@@ -13,7 +13,7 @@ public class WithDedupeTests :
     {
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
-        await Verifier.Verify( SqlHelper.ReadData(table, SqlConnection));
+        await Verify( SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -22,7 +22,7 @@ public class WithDedupeTests :
         var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
         await Send(message);
         await Send(message);
-        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     //[Fact]
@@ -31,7 +31,7 @@ public class WithDedupeTests :
     //    var message = BuildBytesMessage("00000000-0000-0000-0000-000000000001");
     //    Send(message);
     //    Send(message);
-    //    await Verifier.Verify(SqlHelper.ReadData(table));
+    //    await Verify(SqlHelper.ReadData(table));
     //}
 
     [Fact]
@@ -43,7 +43,7 @@ public class WithDedupeTests :
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class WithDedupeTests :
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class WithDedupeTests :
             BuildBytesMessage("00000000-0000-0000-0000-000000000002")
         };
         await Send(messages);
-        await Verifier.Verify(SqlHelper.ReadData(table, SqlConnection));
+        await Verify(SqlHelper.ReadData(table, SqlConnection));
     }
 
     Task Send(List<OutgoingMessage> messages)
