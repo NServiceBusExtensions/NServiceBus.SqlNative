@@ -12,6 +12,6 @@ public class TestBase :
 
     public virtual void Dispose()
     {
-        SqlConnection?.Dispose();
+        SqlConnection.Dispose();
     }
 }
