@@ -10,6 +10,6 @@
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="2.3.0" />
     <PackageReference Include="NServiceBus.Transport.SqlServer" Version="6.3.2" />
     <ProjectReference Include="..\SqlServer.Deduplication\SqlServer.Deduplication.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.63" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.64" PrivateAssets="all" />
   </ItemGroup>
 </Project>
