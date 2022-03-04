@@ -9,11 +9,11 @@
 
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="7.0.2" />
+    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="7.1.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\SqlServer.HttpPassthrough\SqlServer.HttpPassthrough.csproj" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.68" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.77" PrivateAssets="all" />
   </ItemGroup>
 </Project>
