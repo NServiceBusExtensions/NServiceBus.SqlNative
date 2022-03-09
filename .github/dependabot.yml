@@ -5,17 +5,3 @@ updates:
   schedule:
     interval: daily
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: Verify.Xunit
-    versions:
-    - 10.7.0
-    - 10.8.0
-    - 10.9.0
-    - 11.1.0
-    - 11.2.0
-  - dependency-name: Newtonsoft.Json
-    versions:
-    - 13.0.1
-  - dependency-name: Verify.SqlServer
-    versions:
-    - 2.13.1
