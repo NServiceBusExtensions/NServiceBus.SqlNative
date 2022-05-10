@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>NServiceBus.SqlServer.Native</AssemblyName>
     <PackageName>NServiceBus.SqlServer.Native</PackageName>
-    <TargetFrameworks>net6</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
