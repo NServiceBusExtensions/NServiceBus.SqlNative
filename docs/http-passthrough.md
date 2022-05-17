@@ -81,14 +81,12 @@ public class Startup
         // other ASP.MVC config
     }
 
-    static Task<SqlConnection> OpenConnection(CancellationToken cancellation)
-    {
+    static Task<SqlConnection> OpenConnection(CancellationToken cancellation) =>
         //TODO open and return a SqlConnection
-        return null!;
-    }
+        null!;
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Startup.cs#L8-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-startup' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Startup.cs#L8-L52' title='Snippet source file'>snippet source</a> | <a href='#snippet-startup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -244,19 +242,15 @@ public class PassthroughController : ControllerBase
 {
     ISqlPassthrough sender;
 
-    public PassthroughController(ISqlPassthrough sender)
-    {
+    public PassthroughController(ISqlPassthrough sender) =>
         this.sender = sender;
-    }
 
     [HttpPost]
-    public Task Post(CancellationToken cancellation)
-    {
-        return sender.Send(HttpContext, cancellation);
-    }
+    public Task Post(CancellationToken cancellation) =>
+        sender.Send(HttpContext, cancellation);
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/PassThroughController.cs#L4-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-controller' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/PassThroughController.cs#L4-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-controller' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 WARNING: In a production application the controller would be performing any authorization and authentication on the incoming request. 

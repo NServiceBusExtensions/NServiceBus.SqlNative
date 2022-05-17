@@ -764,7 +764,7 @@ var messages = new List<OutgoingMessage>
 };
 await manager.Send(messages);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L81-L100' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendbatchwithdeduplication' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L79-L98' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendbatchwithdeduplication' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -780,15 +780,13 @@ At application startup, start an instance of `DeduplicationCleanerJob`.
 var cleaner = new DedupeCleanerJob(
     table: "Deduplication",
     connectionBuilder: cancellation =>
-    {
-        return ConnectionHelpers.OpenConnection(connectionString, cancellation);
-    },
+        ConnectionHelpers.OpenConnection(connectionString, cancellation),
     criticalError: _ => { },
     expireWindow: TimeSpan.FromHours(1),
     frequencyToRunCleanup: TimeSpan.FromMinutes(10));
 cleaner.Start();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L52-L65' title='Snippet source file'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstart' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L52-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstart' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Then at application shutdown stop the instance.
@@ -798,7 +796,7 @@ Then at application shutdown stop the instance.
 ```cs
 await cleaner.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L67-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstop' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L65-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstop' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
