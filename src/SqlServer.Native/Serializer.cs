@@ -39,13 +39,9 @@ static class Serializer
         return Encoding.UTF8.GetString(stream.ToArray()).Replace(@"\/","/");
     }
 
-    static DataContractJsonSerializer BuildDictionarySerializer()
-    {
-        return new(typeof(Dictionary<string, string>), serializerSettings);
-    }
+    static DataContractJsonSerializer BuildDictionarySerializer() =>
+        new(typeof(Dictionary<string, string>), serializerSettings);
 
-    static DataContractJsonSerializer BuildListSerializer()
-    {
-        return new(typeof(List<string>), serializerSettings);
-    }
+    static DataContractJsonSerializer BuildListSerializer() =>
+        new(typeof(List<string>), serializerSettings);
 }

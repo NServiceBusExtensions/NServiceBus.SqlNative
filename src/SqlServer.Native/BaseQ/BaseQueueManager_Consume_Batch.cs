@@ -13,10 +13,8 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
 
     protected abstract Task<TIncoming> ReadMessage(SqlDataReader dataReader, params IAsyncDisposable[] cleanups);
 
-    public virtual Task<IncomingResult> Consume(int size, Action<TIncoming> action, CancellationToken cancellation = default)
-    {
-        return Consume(size, action.ToTaskFunc(), cancellation);
-    }
+    public virtual Task<IncomingResult> Consume(int size, Action<TIncoming> action, CancellationToken cancellation = default) =>
+        Consume(size, action.ToTaskFunc(), cancellation);
 
     public virtual async Task<IncomingResult> Consume(int size, Func<TIncoming, Task> func, CancellationToken cancellation = default)
     {

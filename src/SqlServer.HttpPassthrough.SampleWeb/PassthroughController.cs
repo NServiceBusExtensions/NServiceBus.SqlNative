@@ -9,10 +9,8 @@ public class PassthroughController :
 {
     ISqlPassthrough sender;
 
-    public PassthroughController(ISqlPassthrough sender)
-    {
+    public PassthroughController(ISqlPassthrough sender) =>
         this.sender = sender;
-    }
 
     [HttpPost]
     public async Task Post(CancellationToken cancellation)

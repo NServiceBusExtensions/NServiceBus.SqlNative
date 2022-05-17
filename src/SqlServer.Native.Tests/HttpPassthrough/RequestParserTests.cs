@@ -40,10 +40,8 @@ public class RequestParserTests :
        return Verify(request);
     }
 
-    static MemoryStream Body()
-    {
-        return new(Encoding.UTF8.GetBytes("{}"));
-    }
+    static MemoryStream Body() =>
+        new(Encoding.UTF8.GetBytes("{}"));
 
     static Task Verify(FakeHttpRequest request)
     {

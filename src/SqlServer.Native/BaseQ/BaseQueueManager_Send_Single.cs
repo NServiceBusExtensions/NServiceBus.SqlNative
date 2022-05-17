@@ -5,10 +5,8 @@ namespace NServiceBus.Transport.SqlServerNative;
 public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     where TIncoming : class, IIncomingMessage
 {
-    public virtual Task<long> Send(TOutgoing message, CancellationToken cancellation = default)
-    {
-        return InnerSend(message, cancellation);
-    }
+    public virtual Task<long> Send(TOutgoing message, CancellationToken cancellation = default) =>
+        InnerSend(message, cancellation);
 
     async Task<long> InnerSend(TOutgoing message, CancellationToken cancellation)
     {

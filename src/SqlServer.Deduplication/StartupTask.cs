@@ -26,13 +26,9 @@ class CleanupTask :
         return Task.CompletedTask;
     }
 
-    void RaiseError(Exception exception)
-    {
+    void RaiseError(Exception exception) =>
         criticalError.Raise("Dedup cleanup failed", exception);
-    }
 
-    protected override Task OnStop(IMessageSession session)
-    {
-        return job == null ? Task.CompletedTask : job.Stop();
-    }
+    protected override Task OnStop(IMessageSession session) =>
+        job == null ? Task.CompletedTask : job.Stop();
 }

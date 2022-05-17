@@ -4,10 +4,8 @@ namespace NServiceBus.Transport.SqlServerNative;
 
 public partial class DelayedQueueManager
 {
-    protected override SqlCommand BuildConsumeCommand(int batchSize)
-    {
-        return Connection.CreateCommand(Transaction, string.Format(ConsumeSql, Table, batchSize));
-    }
+    protected override SqlCommand BuildConsumeCommand(int batchSize) =>
+        Connection.CreateCommand(Transaction, string.Format(ConsumeSql, Table, batchSize));
 
     public static readonly string ConsumeSql = ConnectionHelpers.WrapInNoCount(@"
 with message as (

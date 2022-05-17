@@ -36,10 +36,8 @@ public class DedupeManagerTests :
         return sender.Send(message);
     }
 
-    static OutgoingMessage BuildBytesMessage(string guid)
-    {
-        return new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
-    }
+    static OutgoingMessage BuildBytesMessage(string guid) =>
+        new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
 
     public DedupeManagerTests()
     {

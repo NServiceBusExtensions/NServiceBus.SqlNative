@@ -15,18 +15,14 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     /// <summary>
     /// Creates a queue.
     /// </summary>
-    public virtual Task Create(bool createDecodedBodyComputedColumn = true, CancellationToken cancellation = default)
-    {
-        return InnerCreate(createDecodedBodyComputedColumn, null, cancellation);
-    }
+    public virtual Task Create(bool createDecodedBodyComputedColumn = true, CancellationToken cancellation = default) =>
+        InnerCreate(createDecodedBodyComputedColumn, null, cancellation);
 
     /// <summary>
     /// Drops a queue.
     /// </summary>
-    public virtual Task Drop(CancellationToken cancellation = default)
-    {
-        return Connection.DropTable(Transaction, Table, cancellation);
-    }
+    public virtual Task Drop(CancellationToken cancellation = default) =>
+        Connection.DropTable(Transaction, Table, cancellation);
 
     Task InnerCreate(bool createDecodedBodyComputedColumn, string? computedColumnSql, CancellationToken cancellation)
     {

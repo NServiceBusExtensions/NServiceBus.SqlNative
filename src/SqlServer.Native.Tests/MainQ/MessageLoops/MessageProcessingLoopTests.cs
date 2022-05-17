@@ -112,8 +112,6 @@ public class MessageProcessingLoopTests :
         });
     }
 
-    static OutgoingMessage BuildMessage(string guid)
-    {
-        return new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
-    }
+    static OutgoingMessage BuildMessage(string guid) =>
+        new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
 }

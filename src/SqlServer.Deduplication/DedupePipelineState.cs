@@ -24,8 +24,6 @@ class DedupePipelineState
         return false;
     }
 
-    public static void Set(SendOptions options, DedupePipelineState state)
-    {
+    public static void Set(SendOptions options, DedupePipelineState state) =>
         options.GetExtensions().Set(state);
-    }
 }

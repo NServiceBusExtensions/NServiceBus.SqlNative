@@ -21,16 +21,12 @@ public class OutgoingDelayedMessage
     }
 
     public OutgoingDelayedMessage(DateTime due, string? headers, byte[]? bodyBytes) :
-        this(due, headers)
-    {
+        this(due, headers) =>
         Body = bodyBytes;
-    }
 
     public OutgoingDelayedMessage(DateTime due, string? headers, Stream? bodyStream) :
-        this(due, headers)
-    {
+        this(due, headers) =>
         Body = bodyStream;
-    }
 
     public DateTime Due { get; }
     public string Headers { get; }

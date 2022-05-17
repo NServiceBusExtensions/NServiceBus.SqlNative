@@ -26,10 +26,8 @@ public class QueueCreatorIntegration
     {
         ManualResetEvent resetEvent;
 
-        public SendHandler(ManualResetEvent resetEvent)
-        {
+        public SendHandler(ManualResetEvent resetEvent) =>
             this.resetEvent = resetEvent;
-        }
 
         public Task Handle(SendMessage message, IMessageHandlerContext context)
         {

@@ -1,7 +1,5 @@
 ﻿public static class TaskEx
 {
-    public static void Await(this Task task)
-    {
+    public static void Await(this Task task) =>
         task.GetAwaiter().GetResult();
-    }
 }

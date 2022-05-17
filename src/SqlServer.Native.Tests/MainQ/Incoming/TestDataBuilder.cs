@@ -34,13 +34,9 @@ static class TestDataBuilder
         });
     }
 
-    public static OutgoingMessage BuildMessage(string guid)
-    {
-        return new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
-    }
+    public static OutgoingMessage BuildMessage(string guid) =>
+        new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
 
-    public static OutgoingMessage BuildNullMessage(string guid)
-    {
-        return new(new(guid), bodyBytes: null);
-    }
+    public static OutgoingMessage BuildNullMessage(string guid) =>
+        new(new(guid), bodyBytes: null);
 }

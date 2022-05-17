@@ -8,10 +8,8 @@ class NeedToInstallSomething :
 {
     DedupeSettings? settings;
 
-    public NeedToInstallSomething(ReadOnlySettings settings)
-    {
+    public NeedToInstallSomething(ReadOnlySettings settings) =>
         this.settings = settings.GetOrDefault<DedupeSettings>();
-    }
 
     public async Task Install(string identity)
     {

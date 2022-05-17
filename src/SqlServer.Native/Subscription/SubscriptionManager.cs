@@ -36,18 +36,14 @@ public class SubscriptionManager
     /// <summary>
     /// Drops the table.
     /// </summary>
-    public virtual Task Drop(CancellationToken cancellation = default)
-    {
-        return connection.DropTable(transaction, table, cancellation);
-    }
+    public virtual Task Drop(CancellationToken cancellation = default) =>
+        connection.DropTable(transaction, table, cancellation);
 
     /// <summary>
     /// Creates the table.
     /// </summary>
-    public virtual Task Create(CancellationToken cancellation = default)
-    {
-        return connection.RunCommand(transaction, createTableSql, cancellation);
-    }
+    public virtual Task Create(CancellationToken cancellation = default) =>
+        connection.RunCommand(transaction, createTableSql, cancellation);
 
     /// <summary>
     /// The sql statements used to create the subscription table.

@@ -15,8 +15,6 @@ public class SendFailureException :
     /// Initializes a new instance of <see cref="SendFailureException"/>
     /// </summary>
     public SendFailureException(PassthroughMessage passthroughMessage, Exception innerException) :
-        base("OutgoingMessage failed to send.", innerException)
-    {
+        base("OutgoingMessage failed to send.", innerException) =>
         PassthroughMessage = passthroughMessage;
-    }
 }

@@ -70,10 +70,8 @@ public class HttpPassthroughIntegrationTests :
     {
         ManualResetEvent resetEvent;
 
-        public Handler(ManualResetEvent resetEvent)
-        {
+        public Handler(ManualResetEvent resetEvent) =>
             this.resetEvent = resetEvent;
-        }
 
         public async Task Handle(MyMessage message, IMessageHandlerContext context)
         {

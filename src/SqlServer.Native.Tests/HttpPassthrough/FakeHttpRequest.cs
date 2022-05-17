@@ -13,10 +13,8 @@ public class FakeHttpRequest :
         Form = form;
     }
 
-    public override Task<IFormCollection> ReadFormAsync(CancellationToken cancellationToken = default)
-    {
-        return Task.FromResult(Form);
-    }
+    public override Task<IFormCollection> ReadFormAsync(CancellationToken cancellationToken = default) =>
+        Task.FromResult(Form);
 
     public override HttpContext HttpContext { get; } = null!;
     public override string Method { get; set; } = null!;

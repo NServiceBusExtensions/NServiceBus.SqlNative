@@ -25,10 +25,8 @@ public static class ConfigurationExtensions
         this IServiceCollection services,
         Func<SqlConnection> connectionFunc,
         Func<HttpContext, PassthroughMessage, Task<Table>> callback,
-        Action<Exception> dedupCriticalError)
-    {
+        Action<Exception> dedupCriticalError) =>
         AddSqlHttpPassthrough(services, new(connectionFunc, callback, dedupCriticalError));
-    }
 
     /// <summary>
     /// Add Sql HTTP Passthrough to an instance of <see cref="IServiceCollection"/>.
@@ -41,10 +39,8 @@ public static class ConfigurationExtensions
         this IServiceCollection services,
         Func<CancellationToken, Task<SqlConnection>> connectionFunc,
         Func<HttpContext, PassthroughMessage, Task<Table>> callback,
-        Action<Exception> dedupCriticalError)
-    {
+        Action<Exception> dedupCriticalError) =>
         AddSqlHttpPassthrough(services, new(connectionFunc, callback, dedupCriticalError));
-    }
 
     /// <summary>
     /// Add Sql HTTP Passthrough to an instance of <see cref="IServiceCollection"/>.
@@ -71,8 +67,6 @@ public static class ConfigurationExtensions
     /// Used from <code>Startup.Configure</code>
     /// </summary>
     public static void AddSqlHttpPassthroughBadRequestMiddleware(
-        this IApplicationBuilder builder)
-    {
+        this IApplicationBuilder builder) =>
         builder.UseMiddleware<BadRequestMiddleware>();
-    }
 }

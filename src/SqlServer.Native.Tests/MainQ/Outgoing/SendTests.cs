@@ -90,10 +90,8 @@ public class SendTests :
         return sender.Send(message);
     }
 
-    static OutgoingMessage BuildBytesMessage(string guid)
-    {
-        return new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
-    }
+    static OutgoingMessage BuildBytesMessage(string guid) =>
+        new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
 
     static OutgoingMessage BuildStreamMessage(string guid)
     {
@@ -101,15 +99,11 @@ public class SendTests :
         return new(new(guid), dateTime, "headers", stream);
     }
 
-    static OutgoingMessage BuildStreamNullMessage(string guid)
-    {
-        return new(new(guid), bodyStream: null);
-    }
+    static OutgoingMessage BuildStreamNullMessage(string guid) =>
+        new(new(guid), bodyStream: null);
 
-    static OutgoingMessage BuildBytesNullMessage(string guid)
-    {
-        return new(new(guid), bodyBytes: null);
-    }
+    static OutgoingMessage BuildBytesNullMessage(string guid) =>
+        new(new(guid), bodyBytes: null);
 
     public SendTests()
     {

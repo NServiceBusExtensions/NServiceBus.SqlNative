@@ -87,19 +87,15 @@ public class PassthroughConfiguration
     /// Control the table and schema used for deduplication.
     /// Defaults to 'dbo.Deduplication'.
     /// </summary>
-    public void Deduplication(Table table)
-    {
+    public void Deduplication(Table table) =>
         DedupeTable = table;
-    }
 
     /// <summary>
     /// Control the table and schema used for attachments.
     /// Defaults to 'dbo.MessageAttachments'.
     /// </summary>
-    public void Attachments(Table table)
-    {
+    public void Attachments(Table table) =>
         AttachmentsTable = table;
-    }
 
     /// <summary>
     /// Append the <see cref="Claim"/>s of the <see cref="ClaimsPrincipal"/> from <see cref="HttpContext.User"/>.

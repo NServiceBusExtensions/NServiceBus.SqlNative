@@ -18,10 +18,8 @@ public static partial class Headers
     /// <summary>
     /// Serialize <paramref name="instance"/> into json.
     /// </summary>
-    public static string Serialize(IDictionary<string, string> instance)
-    {
-        return Serializer.SerializeDictionary(instance);
-    }
+    public static string Serialize(IDictionary<string, string> instance) =>
+        Serializer.SerializeDictionary(instance);
 
     /// <summary>
     /// Deserialize <paramref name="json"/> into a <see cref="IDictionary{TKey,TValue}"/>.
@@ -44,18 +42,14 @@ public static partial class Headers
     /// <summary>
     /// Convert <paramref name="dateTime"/> to a <see cref="string"/> using <see cref="WireDateTimeFormat"/>.
     /// </summary>
-    public static string ToWireFormattedString(DateTime dateTime)
-    {
-        return dateTime.ToUniversalTime()
+    public static string ToWireFormattedString(DateTime dateTime) =>
+        dateTime.ToUniversalTime()
             .ToString(WireDateTimeFormat, CultureInfo.InvariantCulture);
-    }
 
     /// <summary>
     /// Convert <paramref name="wireFormattedString"/> to a <see cref="DateTime"/> using <see cref="WireDateTimeFormat"/>.
     /// </summary>
-    public static DateTime ToUtcDateTime(string wireFormattedString)
-    {
-        return DateTime.ParseExact(wireFormattedString, WireDateTimeFormat, CultureInfo.InvariantCulture)
+    public static DateTime ToUtcDateTime(string wireFormattedString) =>
+        DateTime.ParseExact(wireFormattedString, WireDateTimeFormat, CultureInfo.InvariantCulture)
             .ToUniversalTime();
-    }
 }

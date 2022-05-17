@@ -54,9 +54,7 @@ public class Deduplication
         var cleaner = new DedupeCleanerJob(
             table: "Deduplication",
             connectionBuilder: cancellation =>
-            {
-                return ConnectionHelpers.OpenConnection(connectionString, cancellation);
-            },
+                ConnectionHelpers.OpenConnection(connectionString, cancellation),
             criticalError: _ => { },
             expireWindow: TimeSpan.FromHours(1),
             frequencyToRunCleanup: TimeSpan.FromMinutes(10));

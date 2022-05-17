@@ -3,15 +3,11 @@
 public class TestBase :
     IDisposable
 {
-    public TestBase()
-    {
+    public TestBase() =>
         SqlConnection = Connection.OpenConnection();
-    }
 
     public SqlConnection SqlConnection;
 
-    public virtual void Dispose()
-    {
+    public virtual void Dispose() =>
         SqlConnection.Dispose();
-    }
 }

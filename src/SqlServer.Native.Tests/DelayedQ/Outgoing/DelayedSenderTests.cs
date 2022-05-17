@@ -79,10 +79,8 @@ public class DelayedSenderTests :
         return sender.Send(messages);
     }
 
-    static OutgoingDelayedMessage BuildBytesMessage()
-    {
-        return new(dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
-    }
+    static OutgoingDelayedMessage BuildBytesMessage() =>
+        new(dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
 
     static OutgoingDelayedMessage BuildStreamMessage()
     {
@@ -90,15 +88,11 @@ public class DelayedSenderTests :
         return new(dateTime, "headers", stream);
     }
 
-    static OutgoingDelayedMessage BuildBytesNullMessage()
-    {
-        return new(dateTime, null, bodyBytes: null);
-    }
+    static OutgoingDelayedMessage BuildBytesNullMessage() =>
+        new(dateTime, null, bodyBytes: null);
 
-    static OutgoingDelayedMessage BuildStreamNullMessage()
-    {
-        return new(dateTime, null, bodyStream: null);
-    }
+    static OutgoingDelayedMessage BuildStreamNullMessage() =>
+        new(dateTime, null, bodyStream: null);
 
     public DelayedSenderTests()
     {

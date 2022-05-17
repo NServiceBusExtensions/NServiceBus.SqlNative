@@ -1,7 +1,5 @@
 ﻿public static class ApprovalTestsExtensions
 {
-    public static void Wait(this Task task)
-    {
+    public static void Wait(this Task task) =>
         task.GetAwaiter().GetResult();
-    }
 }

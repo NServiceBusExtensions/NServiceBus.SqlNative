@@ -56,15 +56,11 @@ public class CleanerTests
     class FakeTimer :
         AsyncTimer
     {
-        public Task Tick(DateTime utcTime, CancellationToken token)
-        {
-            return callback!(utcTime, token);
-        }
+        public Task Tick(DateTime utcTime, CancellationToken token) =>
+            callback!(utcTime, token);
 
-        public void OnError(Exception error)
-        {
+        public void OnError(Exception error) =>
             errorCallback!(error);
-        }
 
         public override void Start(Func<DateTime, CancellationToken, Task> callback, TimeSpan interval, Action<Exception> errorCallback, Func<TimeSpan, CancellationToken, Task> delayStrategy)
         {
@@ -72,10 +68,8 @@ public class CleanerTests
             this.errorCallback = errorCallback;
         }
 
-        public override Task Stop()
-        {
-            return Task.FromResult(0);
-        }
+        public override Task Stop() =>
+            Task.FromResult(0);
 
         Func<DateTime, CancellationToken, Task>? callback;
         Action<Exception>? errorCallback;

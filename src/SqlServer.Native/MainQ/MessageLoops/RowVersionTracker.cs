@@ -13,20 +13,14 @@ public class RowVersionTracker
         this.table = table;
     }
 
-    public Task CreateTable(SqlConnection connection, CancellationToken cancellation = default)
-    {
-        return CreateTable(connection, null, cancellation);
-    }
+    public Task CreateTable(SqlConnection connection, CancellationToken cancellation = default) =>
+        CreateTable(connection, null, cancellation);
 
-    public Task CreateTable(SqlTransaction transaction, CancellationToken cancellation = default)
-    {
-        return CreateTable(transaction.Connection!, transaction, cancellation);
-    }
+    public Task CreateTable(SqlTransaction transaction, CancellationToken cancellation = default) =>
+        CreateTable(transaction.Connection!, transaction, cancellation);
 
-    Task CreateTable(SqlConnection connection, SqlTransaction? transaction, CancellationToken cancellation)
-    {
-        return connection.RunCommand(transaction, string.Format(Sql, table), cancellation);
-    }
+    Task CreateTable(SqlConnection connection, SqlTransaction? transaction, CancellationToken cancellation) =>
+        connection.RunCommand(transaction, string.Format(Sql, table), cancellation);
 
     public Task Save(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
     {

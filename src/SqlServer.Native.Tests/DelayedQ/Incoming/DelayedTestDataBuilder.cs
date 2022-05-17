@@ -38,13 +38,9 @@ static class DelayedTestDataBuilder
         await sender.Send(new OutgoingDelayedMessage(time, "headers", Encoding.UTF8.GetBytes("{}")));
     }
 
-    public static OutgoingDelayedMessage BuildMessage()
-    {
-        return new(dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
-    }
+    public static OutgoingDelayedMessage BuildMessage() =>
+        new(dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
 
-    public static OutgoingDelayedMessage BuildNullMessage()
-    {
-        return new(dateTime, "{}", bodyBytes: null);
-    }
+    public static OutgoingDelayedMessage BuildNullMessage() =>
+        new(dateTime, "{}", bodyBytes: null);
 }

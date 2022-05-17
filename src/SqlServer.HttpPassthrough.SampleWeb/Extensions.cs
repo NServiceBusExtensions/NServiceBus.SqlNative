@@ -8,8 +8,6 @@ static class Extensions
         dispatchInfo.Throw();
     }
 
-    public static Dictionary<string, string> RequestStringDictionary(this HttpContext context)
-    {
-        return context.Request.Headers.ToDictionary(x => x.Key, y => y.Value.ToString());
-    }
+    public static Dictionary<string, string> RequestStringDictionary(this HttpContext context) =>
+        context.Request.Headers.ToDictionary(x => x.Key, y => y.Value.ToString());
 }

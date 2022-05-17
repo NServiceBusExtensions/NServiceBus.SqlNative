@@ -112,13 +112,11 @@ namespace NServiceBus.Transport.SqlServerNative
             );
         }
 
-        async Task<DedupeResult> BuildDedupeResult(Guid messageId, CancellationToken cancellation = default)
-        {
-            return new(
+        async Task<DedupeResult> BuildDedupeResult(Guid messageId, CancellationToken cancellation = default) =>
+            new(
                 dedupeOutcome: DedupeOutcome.Deduplicated,
                 context: await ReadContext(messageId, cancellation)
             );
-        }
 
         public async Task<DedupeResult> CommitWithDedupCheck(Guid messageId, string? context)
         {
@@ -171,10 +169,8 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// Drops a queue.
         /// </summary>
-        public virtual Task Drop(CancellationToken cancellation = default)
-        {
-            return connection.DropTable(transaction, table, cancellation);
-        }
+        public virtual Task Drop(CancellationToken cancellation = default) =>
+            connection.DropTable(transaction, table, cancellation);
 
         /// <summary>
         /// Creates a queue.

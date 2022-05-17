@@ -8,9 +8,8 @@ namespace NServiceBus.Transport.SqlServerNative
 {
     static class ConnectionHelpers
     {
-        internal static string WrapInNoCount(string sql)
-        {
-            return $@"
+        internal static string WrapInNoCount(string sql) =>
+            $@"
 declare @nocount varchar(3) = 'off';
 if ( (512 & @@options) = 512 ) set @nocount = 'on'
 set nocount on;
@@ -19,11 +18,8 @@ set nocount on;
 
 if (@nocount = 'on') set nocount on;
 if (@nocount = 'off') set nocount off;";
-        }
 
-        internal static Task DropTable(this SqlConnection connection, SqlTransaction? transaction, Table table, CancellationToken cancellation = default)
-        {
-            return connection.RunCommand(transaction, $"drop table if exists {table}", cancellation);
-        }
+        internal static Task DropTable(this SqlConnection connection, SqlTransaction? transaction, Table table, CancellationToken cancellation = default) =>
+            connection.RunCommand(transaction, $"drop table if exists {table}", cancellation);
     }
 }

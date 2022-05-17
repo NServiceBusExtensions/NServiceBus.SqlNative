@@ -59,8 +59,6 @@ public abstract class MessageLoop :
         return task;
     }
 
-    public async ValueTask DisposeAsync()
-    {
+    public async ValueTask DisposeAsync() =>
         await Stop();
-    }
 }

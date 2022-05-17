@@ -3,14 +3,12 @@ using Microsoft.Data.SqlClient;
 
 static class Extensions
 {
-    public static Func<T, Task> ToTaskFunc<T>(this Action<T> action)
-    {
-        return x =>
+    public static Func<T, Task> ToTaskFunc<T>(this Action<T> action) =>
+        x =>
         {
             action(x);
             return Task.CompletedTask;
         };
-    }
 
     public static void SetValueOrDbNull(this SqlParameter corrParam, DateTime? value)
     {
@@ -130,8 +128,6 @@ static class Extensions
         return bodyParameter;
     }
 
-    public static void SetCommandData(this SqlCommand command, SqlException exception)
-    {
+    public static void SetCommandData(this SqlCommand command, SqlException exception) =>
         exception.Data["Sql"] = command.CommandText;
-    }
 }

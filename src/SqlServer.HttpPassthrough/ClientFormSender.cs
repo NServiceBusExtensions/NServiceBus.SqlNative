@@ -10,10 +10,8 @@ public class ClientFormSender
     /// <summary>
     /// Initializes a new instance of <see cref="ClientFormSender"/>.
     /// </summary>
-    public ClientFormSender(HttpClient client)
-    {
+    public ClientFormSender(HttpClient client) =>
         this.client = client;
-    }
 
     /// <summary>
     /// Send a pass through message request.

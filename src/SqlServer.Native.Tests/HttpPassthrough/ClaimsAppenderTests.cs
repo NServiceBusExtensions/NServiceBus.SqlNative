@@ -31,8 +31,8 @@ public class ClaimsAppenderTests :
 
     static IEnumerable<Claim> BuildClaims()
     {
-        yield return new Claim(ClaimTypes.Email, "User@foo.bar");
-        yield return new Claim(ClaimTypes.NameIdentifier, "User1");
-        yield return new Claim(ClaimTypes.NameIdentifier, "User2");
+        yield return new(ClaimTypes.Email, "User@foo.bar");
+        yield return new(ClaimTypes.NameIdentifier, "User1");
+        yield return new(ClaimTypes.NameIdentifier, "User2");
     }
 }

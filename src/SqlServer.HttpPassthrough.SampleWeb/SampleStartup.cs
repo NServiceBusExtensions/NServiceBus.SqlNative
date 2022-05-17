@@ -3,10 +3,8 @@ using NServiceBus.Transport.SqlServerNative;
 
 public class SampleStartup
 {
-    public SampleStartup(IConfiguration configuration)
-    {
+    public SampleStartup(IConfiguration configuration) =>
         Configuration = configuration;
-    }
 
     public IConfiguration Configuration { get; }
 

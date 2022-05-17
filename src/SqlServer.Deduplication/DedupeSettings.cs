@@ -8,10 +8,8 @@ public class DedupeSettings
     internal Table Table = "Deduplication";
     internal Func<CancellationToken, Task<SqlConnection>> ConnectionBuilder;
 
-    internal DedupeSettings(Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
-    {
+    internal DedupeSettings(Func<CancellationToken, Task<SqlConnection>> connectionBuilder) =>
         ConnectionBuilder = connectionBuilder;
-    }
 
     internal bool RunCleanTask = true;
     internal bool InstallerDisabled;
@@ -19,25 +17,19 @@ public class DedupeSettings
     /// <summary>
     /// Disable the attachment cleanup task.
     /// </summary>
-    public void DisableCleanupTask()
-    {
+    public void DisableCleanupTask() =>
         RunCleanTask = false;
-    }
 
     /// <summary>
     /// Control the table and schema used for deduplication.
     /// Defaults to 'dbo.Deduplication'.
     /// </summary>
-    public void UseTable(Table table)
-    {
+    public void UseTable(Table table) =>
         Table = table;
-    }
 
     /// <summary>
     /// Disable the table creation installer.
     /// </summary>
-    public void DisableInstaller()
-    {
+    public void DisableInstaller() =>
         InstallerDisabled = true;
-    }
 }

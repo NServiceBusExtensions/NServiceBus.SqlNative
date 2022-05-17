@@ -23,16 +23,12 @@ public class OutgoingMessage
     }
 
     public OutgoingMessage(Guid id, DateTime? expires = null, string? headers = null, byte[]? bodyBytes = null) :
-        this(id, expires, headers)
-    {
+        this(id, expires, headers) =>
         Body = bodyBytes;
-    }
 
     public OutgoingMessage(Guid id, DateTime? expires = null, string? headers = null, Stream? bodyStream = null) :
-        this(id, expires, headers)
-    {
+        this(id, expires, headers) =>
         Body = bodyStream;
-    }
 
     public Guid Id { get; }
     public DateTime? Expires { get; }
