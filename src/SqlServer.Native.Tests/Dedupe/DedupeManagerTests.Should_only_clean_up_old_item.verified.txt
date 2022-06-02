@@ -1,4 +1,4 @@
-{
+﻿{
   $type: dynamic,
   ReplicationData: [
     {
@@ -9,6 +9,7 @@
   sqlEntries: [
     {
       $type: LogEntry,
+      HasTransaction: false,
       Parameters: {
         $type: Dictionary<string, object>,
         date: DateTime_1
