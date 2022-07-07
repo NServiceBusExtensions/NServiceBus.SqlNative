@@ -18,7 +18,7 @@ static class EndpointCreator
         transport.NativeDelayedDelivery();
         configuration.PurgeOnStartup(true);
         configuration.UsePersistence<LearningPersistence>();
-        configuration.UseSerialization<NewtonsoftSerializer>();
+        configuration.UseSerialization<NewtonsoftJsonSerializer>();
         return configuration;
     }
 }

@@ -16,7 +16,7 @@ class Program
 
         var configuration = new EndpointConfiguration("SampleEndpoint");
         configuration.UsePersistence<LearningPersistence>();
-        configuration.UseSerialization<NewtonsoftSerializer>();
+        configuration.UseSerialization<NewtonsoftJsonSerializer>();
         configuration.PurgeOnStartup(true);
         configuration.DisableFeature<TimeoutManager>();
         var transport = configuration.UseTransport<SqlServerTransport>();

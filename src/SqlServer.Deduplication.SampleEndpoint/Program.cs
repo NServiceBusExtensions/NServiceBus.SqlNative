@@ -17,7 +17,7 @@ class Program
         configuration.EnableInstallers();
         configuration.UsePersistence<LearningPersistence>();
         configuration.EnableDedupe(ConnectionBuilder);
-        configuration.UseSerialization<NewtonsoftSerializer>();
+        configuration.UseSerialization<NewtonsoftJsonSerializer>();
         configuration.PurgeOnStartup(true);
         configuration.DisableFeature<TimeoutManager>();
         var transport = configuration.UseTransport<SqlServerTransport>();

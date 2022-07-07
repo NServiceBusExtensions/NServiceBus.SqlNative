@@ -9,7 +9,7 @@ class Program
         configuration.UsePersistence<LearningPersistence>();
         var attachments = configuration.EnableAttachments(async () => await Connection.OpenAsyncConnection(), TimeToKeep.Default);
         attachments.UseTransportConnectivity();
-        configuration.UseSerialization<NewtonsoftSerializer>();
+        configuration.UseSerialization<NewtonsoftJsonSerializer>();
         configuration.PurgeOnStartup(true);
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(Connection.ConnectionString);
