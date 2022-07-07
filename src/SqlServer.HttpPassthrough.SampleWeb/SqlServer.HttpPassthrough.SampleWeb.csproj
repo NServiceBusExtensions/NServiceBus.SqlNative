@@ -9,7 +9,7 @@
 
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="7.1.0" />
+    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="7.1.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\SqlServer.HttpPassthrough\SqlServer.HttpPassthrough.csproj" />
