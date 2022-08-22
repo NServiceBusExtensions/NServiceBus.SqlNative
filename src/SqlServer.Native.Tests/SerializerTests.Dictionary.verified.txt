@@ -3,8 +3,8 @@
   a"b: a"b,
   a//b: a//b,
   a/b: a/b,
-  a\\/b: a\/b,
-  a\\b: a\b,
-  a\\\\b: a\\b,
+  a\/b: a\/b,
+  a\\b: a\\b,
+  a\b: a\b,
   key: value
 }
