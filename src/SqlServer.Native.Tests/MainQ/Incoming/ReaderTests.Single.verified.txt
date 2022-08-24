@@ -1,4 +1,4 @@
-{
+﻿{
   $type: IncomingVerifyTarget,
   Expires: DateTime_1,
   Headers: headers,

@@ -1,4 +1,4 @@
-[
+﻿[
   address1,
   address4
 ]
