@@ -41,6 +41,7 @@ create clustered index Index_RowVersion on {tableName}
 select type_desc from sys.indexes
 where object_id = object_id('{tableName}')
 and name = 'Index_RowVersion'", connection);
-        await Verify(getIndexTypeDesCommand.ExecuteScalarAsync());
+        var target = await getIndexTypeDesCommand.ExecuteScalarAsync();
+        await Verify(target!);
     }
 }
