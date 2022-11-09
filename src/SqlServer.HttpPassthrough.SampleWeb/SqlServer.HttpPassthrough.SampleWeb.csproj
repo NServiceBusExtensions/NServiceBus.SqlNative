@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="test.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 
-    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="7.3.0" />
+    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="7.4.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.1" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\SqlServer.HttpPassthrough\SqlServer.HttpPassthrough.csproj" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.80" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.82" PrivateAssets="all" />
   </ItemGroup>
 </Project>
