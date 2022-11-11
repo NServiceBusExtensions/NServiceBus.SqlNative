@@ -34,9 +34,17 @@ static class Extensions
 
     public static async Task RunCommand(this SqlConnection connection, SqlTransaction? transaction, string sql, CancellationToken cancellation = default)
     {
-        await using var command = connection.CreateCommand(transaction, sql);
+        using var command = connection.CreateCommand(transaction, sql);
         await command.RunNonQuery(cancellation);
     }
+
+#if NET48
+    public static ValueTask DisposeAsync(this IDisposable disposable)
+    {
+        disposable.Dispose();
+        return default;
+    }
+#endif
 
     public static SqlCommand CreateCommand(this SqlConnection connection, SqlTransaction? transaction, string sql)
     {

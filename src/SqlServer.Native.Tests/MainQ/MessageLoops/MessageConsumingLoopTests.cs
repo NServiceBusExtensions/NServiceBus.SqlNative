@@ -8,25 +8,26 @@ public class MessageConsumingLoopTests :
 
     string table = "MessageConsumingLoopTests";
 
-    [Fact]
-    public async Task Should_not_throw_when_run_over_end()
-    {
-        var manager = new QueueManager(table, SqlConnection);
-        await manager.Drop();
-        await manager.Create();
-        await SendMessages();
-
-        Exception? exception = null;
-        await using var loop = new MessageConsumingLoop(
-            table: table,
-            connectionBuilder: Connection.OpenAsyncConnection,
-            callback: (_, _, _) => Task.CompletedTask,
-            errorCallback: innerException => { exception = innerException; }
-        );
-        loop.Start();
-        Thread.Sleep(1000);
-        Assert.Null(exception!);
-    }
+    //TODO
+    // [Fact]
+    // public async Task Should_not_throw_when_run_over_end()
+    // {
+    //     var manager = new QueueManager(table, SqlConnection);
+    //     await manager.Drop();
+    //     await manager.Create();
+    //     await SendMessages();
+    //
+    //     Exception? exception = null;
+    //     await using var loop = new MessageConsumingLoop(
+    //         table: table,
+    //         connectionBuilder: Connection.OpenAsyncConnection,
+    //         callback: (_, _, _) => Task.CompletedTask,
+    //         errorCallback: innerException => { exception = innerException; }
+    //     );
+    //     loop.Start();
+    //     Thread.Sleep(1000);
+    //     Assert.Null(exception!);
+    // }
 
     [Fact]
     public async Task Should_get_correct_count()

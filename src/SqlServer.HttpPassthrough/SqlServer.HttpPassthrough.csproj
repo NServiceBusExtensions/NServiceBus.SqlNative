@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>NServiceBus.SqlServer.HttpPassthrough</AssemblyName>
     <PackageName>NServiceBus.SqlServer.HttpPassthrough</PackageName>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net48;net6.0</TargetFrameworks>
     <Description>HTTP passthrough for the SQL Server transport.</Description>
   </PropertyGroup>
   <ItemGroup>
@@ -14,7 +14,7 @@
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="7.5.0" />
+    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="8.0.0" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.82" PrivateAssets="all" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />

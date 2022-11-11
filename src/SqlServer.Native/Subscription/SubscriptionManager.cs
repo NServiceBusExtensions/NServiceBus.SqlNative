@@ -94,7 +94,7 @@ VALUES
 
     public async Task Subscribe(string endpoint, string address, string topic)
     {
-        await using var command = connection.CreateCommand();
+        using var command = connection.CreateCommand();
         command.CommandText = subscribeSql;
         command.AddStringParam("Endpoint", endpoint);
         command.AddStringParam("QueueAddress", address);
@@ -114,7 +114,7 @@ WHERE
 
     public async Task Unsubscribe(string endpoint, string topic)
     {
-        await using var command = connection.CreateCommand();
+        using var command = connection.CreateCommand();
         command.CommandText = unsubscribeSql;
         command.AddStringParam("Endpoint", endpoint);
         command.AddStringParam("Topic", topic);
@@ -137,14 +137,14 @@ WHERE Topic IN ({1})
         var argumentsList = string.Join(", ", Enumerable.Range(0, topics.Length).Select(i => $"@Topic_{i}"));
         var getSubscribersCommand = getSubscribersSql.Replace("{1}", argumentsList);
 
-        await using var command = connection.CreateCommand();
+        using var command = connection.CreateCommand();
         command.CommandText = getSubscribersCommand;
         for (var i = 0; i < topics.Length; i++)
         {
             command.AddStringParam($"Topic_{i}", topics[i]);
         }
 
-        await using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
+        using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
         while (await reader.ReadAsync().ConfigureAwait(false))
         {
             results.Add(reader.GetString(0));

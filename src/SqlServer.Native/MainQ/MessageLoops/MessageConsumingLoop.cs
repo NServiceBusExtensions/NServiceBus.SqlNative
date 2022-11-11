@@ -51,7 +51,7 @@ public class MessageConsumingLoop :
         SqlConnection? connection = null;
         if (connectionBuilder != null)
         {
-            await using (connection = await connectionBuilder(cancellation))
+            using (connection = await connectionBuilder(cancellation))
             {
                 var consumer = new QueueManager(table, connection);
                 await RunBatch(consumer, message => connectionCallback!(connection, message, cancellation), cancellation);
@@ -69,25 +69,19 @@ public class MessageConsumingLoop :
             {
                 await RunBatch(consumer, message => transactionCallback!(transaction, message, cancellation), cancellation);
 
-                await transaction.CommitAsync(cancellation);
+                transaction.Commit();
             }
             catch
             {
-                await transaction.RollbackAsync(cancellation);
+                transaction.Rollback();
                 throw;
             }
         }
         finally
         {
-            if (transaction != null)
-            {
-                await transaction.DisposeAsync();
-            }
+            transaction?.Dispose();
 
-            if (connection != null)
-            {
-                await connection.DisposeAsync();
-            }
+            connection?.Dispose();
         }
     }
 

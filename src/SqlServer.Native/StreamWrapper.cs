@@ -47,6 +47,7 @@
     public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback? callback, object? state) =>
         inner.BeginRead(buffer, offset, count, callback, state);
 
+#if !NET48
     public override int Read(Span<byte> buffer) =>
         inner.Read(buffer);
 
@@ -61,6 +62,7 @@
 
     public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default) =>
         throw new NotImplementedException();
+#endif
 
     public override void Close()
     {
@@ -74,7 +76,9 @@
     public override int EndRead(IAsyncResult asyncResult) =>
         inner.EndRead(asyncResult);
 
+#if !NET48
     [Obsolete("This Remoting API is not supported and throws PlatformNotSupportedException.", DiagnosticId = "SYSLIB0010", UrlFormat = "https://aka.ms/dotnet-warnings/{0}")]
+#endif
     public override object InitializeLifetimeService() =>
         inner.InitializeLifetimeService();
 

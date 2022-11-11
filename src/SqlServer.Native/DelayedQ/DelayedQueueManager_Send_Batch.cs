@@ -4,7 +4,7 @@ public partial class DelayedQueueManager
 {
     public virtual async Task Send(IEnumerable<OutgoingDelayedMessage> messages, CancellationToken cancellation = default)
     {
-        await using var command = Connection.CreateCommand(Transaction, string.Format(SendSql, Table));
+        using var command = Connection.CreateCommand(Transaction, string.Format(SendSql, Table));
         var dueParameter = CreateDueParameter(command);
         var headersParameter = CreateHeadersParameter(command);
         var bodyParameter = CreateBodyParameter(command);
@@ -20,7 +20,7 @@ public partial class DelayedQueueManager
 
     public virtual async Task Send(IAsyncEnumerable<OutgoingDelayedMessage> messages, CancellationToken cancellation = default)
     {
-        await using var command = Connection.CreateCommand(Transaction, string.Format(SendSql, Table));
+        using var command = Connection.CreateCommand(Transaction, string.Format(SendSql, Table));
         var dueParameter = CreateDueParameter(command);
         var headersParameter = CreateHeadersParameter(command);
         var bodyParameter = CreateBodyParameter(command);
