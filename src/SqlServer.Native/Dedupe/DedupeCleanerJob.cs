@@ -43,7 +43,7 @@ namespace NServiceBus.Transport.SqlServerNative
         {
             cleaner = new(async cancellation =>
                 {
-                    await using var connection = await connectionBuilder(cancellation);
+                    using var connection = await connectionBuilder(cancellation);
                     var dedupeCleaner = new DedupeManager(connection, table);
                     var expiry = DateTime.UtcNow.Subtract(expireWindow);
                     await dedupeCleaner.CleanupItemsOlderThan(expiry, cancellation);

@@ -64,7 +64,7 @@ public class MessageProcessingLoop :
         SqlConnection? connection = null;
         if (connectionBuilder != null)
         {
-            await using (connection = await connectionBuilder(cancellation))
+            using (connection = await connectionBuilder(cancellation))
             {
                 var reader = new QueueManager(table, connection);
                 await RunBatch(
@@ -90,25 +90,19 @@ public class MessageProcessingLoop :
                     messageFunc: message => transactionCallback!(transaction, message, cancellation),
                     persistFunc: () => transactionPersistRowVersion!(transaction, startingRow, cancellation),
                     cancellation);
-                    await transaction.CommitAsync(cancellation);
+                    transaction.Commit();
             }
             catch
             {
-                 await transaction.RollbackAsync(cancellation);
+                transaction.Rollback();
                 throw;
             }
         }
         finally
         {
-            if (transaction != null)
-            {
-                await transaction.DisposeAsync();
-            }
+            transaction?.Dispose();
 
-            if (connection != null)
-            {
-                await connection.DisposeAsync();
-            }
+            connection?.Dispose();
         }
     }
 

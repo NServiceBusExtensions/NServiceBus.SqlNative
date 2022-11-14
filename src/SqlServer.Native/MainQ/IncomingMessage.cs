@@ -7,7 +7,7 @@
 public class IncomingMessage :
     IIncomingMessage
 {
-    IAsyncDisposable[] cleanups;
+    Func<ValueTask>[] cleanups;
     bool disposed;
     volatile int disposeSignaled;
     Guid id;
@@ -16,7 +16,7 @@ public class IncomingMessage :
     string headers;
     Stream? body;
 
-    public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, IAsyncDisposable[] cleanups)
+    public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, Func<ValueTask>[] cleanups)
     {
         Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
         this.cleanups = cleanups;
@@ -87,15 +87,12 @@ public class IncomingMessage :
             return;
         }
 
-        if (Body != null)
-        {
-            await Body.DisposeAsync();
-        }
+        Body?.Dispose();
 
         disposed = true;
         foreach (var cleanup in cleanups)
         {
-            await cleanup.DisposeAsync();
+            await cleanup();
         }
     }
 }

@@ -30,7 +30,7 @@ where RowVersion >= @RowVersion
 order by RowVersion
 ");
 
-    protected override async Task<IncomingMessage> ReadMessage(SqlDataReader dataReader, params IAsyncDisposable[] cleanups)
+    protected override async Task<IncomingMessage> ReadMessage(SqlDataReader dataReader, params Func<ValueTask>[] cleanups)
     {
         var id = dataReader.GetGuid(0);
         var rowVersion = dataReader.GetInt64(1);

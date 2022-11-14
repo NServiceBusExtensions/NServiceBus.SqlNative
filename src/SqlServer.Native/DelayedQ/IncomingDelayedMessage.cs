@@ -7,7 +7,7 @@
 public class IncomingDelayedMessage :
     IIncomingMessage
 {
-    IAsyncDisposable[] cleanups;
+    Func<ValueTask>[] cleanups;
     bool disposed;
     volatile int disposeSignaled;
     long rowVersion;
@@ -15,7 +15,7 @@ public class IncomingDelayedMessage :
     string headers;
     Stream? body;
 
-    public IncomingDelayedMessage(long rowVersion, DateTime? due, string headers, Stream? body, IAsyncDisposable[] cleanups)
+    public IncomingDelayedMessage(long rowVersion, DateTime? due, string headers, Stream? body, Func<ValueTask>[] cleanups)
     {
         Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
         this.cleanups = cleanups;
@@ -76,15 +76,12 @@ public class IncomingDelayedMessage :
             return;
         }
 
-        if (Body != null)
-        {
-            await Body.DisposeAsync();
-        }
+        Body?.Dispose();
 
         disposed = true;
         foreach (var cleanup in cleanups)
         {
-            await cleanup.DisposeAsync();
+            await cleanup();
         }
     }
 }

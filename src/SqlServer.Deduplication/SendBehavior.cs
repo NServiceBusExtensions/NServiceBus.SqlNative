@@ -35,8 +35,8 @@ class SendBehavior :
 
         var transportTransaction = new TransportTransaction();
         context.Extensions.Set(transportTransaction);
-        await using var connection = await connectionTask;
-        await using var transaction = (SqlTransaction) await connection.BeginTransactionAsync();
+        using var connection = await connectionTask;
+        using var transaction = connection.BeginTransaction();
         transportTransaction.Set(connection);
         transportTransaction.Set(transaction);
 

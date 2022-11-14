@@ -10,7 +10,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     {
         Guard.AgainstNegativeAndZero(size, nameof(size));
         Guard.AgainstNegativeAndZero(startRowVersion, nameof(startRowVersion));
-        await using var command = BuildReadCommand(size, startRowVersion);
+        using var command = BuildReadCommand(size, startRowVersion);
         return await ReadMultiple(command, func, cancellation);
     }
 }

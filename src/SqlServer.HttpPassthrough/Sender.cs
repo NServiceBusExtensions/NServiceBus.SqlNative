@@ -36,10 +36,10 @@ class Sender
 
     async Task<long> InnerSend(PassthroughMessage message, Table destination, CancellationToken cancellation)
     {
-        await using var connection = await connectionFunc(cancellation);
-        await using var transaction = connection.BeginTransaction();
+        using var connection = await connectionFunc(cancellation);
+        using var transaction = connection.BeginTransaction();
         var rowVersion = await SendInsideTransaction(message, destination, cancellation, transaction);
-        await transaction.CommitAsync(cancellation);
+        transaction.Commit();
         return rowVersion;
     }
 
@@ -84,7 +84,7 @@ class Sender
 
     async Task SendAttachment(SqlTransaction transaction, string messageId, DateTime expiry, CancellationToken cancellation, Attachment file, SqlConnection connection)
     {
-        await using var stream = file.Stream();
+        using var stream = file.Stream();
         await attachments.SaveStream(connection, transaction, messageId, file.FileName, expiry, stream, cancellation: cancellation);
     }
 }

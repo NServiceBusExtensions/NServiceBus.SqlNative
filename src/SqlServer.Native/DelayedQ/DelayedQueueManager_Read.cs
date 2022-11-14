@@ -29,7 +29,7 @@ where RowVersion >= @RowVersion
 order by RowVersion
 ");
 
-    protected override async Task<IncomingDelayedMessage> ReadMessage(SqlDataReader dataReader, params IAsyncDisposable[] cleanups)
+    protected override async Task<IncomingDelayedMessage> ReadMessage(SqlDataReader dataReader, params Func<ValueTask>[] cleanups)
     {
         var rowVersion = dataReader.GetInt64(0);
         var due = await dataReader.DatetimeOrNull(1);

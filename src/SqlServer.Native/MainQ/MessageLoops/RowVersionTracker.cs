@@ -36,7 +36,7 @@ public class RowVersionTracker
 
     async Task Save(SqlConnection connection, SqlTransaction? transaction, long rowVersion, CancellationToken cancellation)
     {
-        await using var command = connection.CreateCommand(
+        using var command = connection.CreateCommand(
             transaction: transaction,
             sql: $@"
 update {table}
@@ -55,7 +55,7 @@ if @@rowcount = 0
 
     public async Task<long> Get(SqlConnection connection, CancellationToken cancellation = default)
     {
-        await using var command = connection.CreateCommand();
+        using var command = connection.CreateCommand();
         command.CommandText = $@"
 select top (1) RowVersion
 from {table}";

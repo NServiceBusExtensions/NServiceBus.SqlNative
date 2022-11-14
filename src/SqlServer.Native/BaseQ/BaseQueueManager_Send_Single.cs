@@ -10,7 +10,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
 
     async Task<long> InnerSend(TOutgoing message, CancellationToken cancellation)
     {
-        await using var command = CreateSendCommand(message);
+        using var command = CreateSendCommand(message);
         var rowVersion = await command.RunScalar(cancellation);
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         if (rowVersion == null)
