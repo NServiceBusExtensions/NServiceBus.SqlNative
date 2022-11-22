@@ -1,5 +1,4 @@
-﻿using NServiceBus;
-using NServiceBus.Attachments.Sql;
+﻿using NServiceBus.Attachments.Sql;
 
 class Program
 {

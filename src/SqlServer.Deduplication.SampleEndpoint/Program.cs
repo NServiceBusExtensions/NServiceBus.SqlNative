@@ -1,6 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using NServiceBus;
-using NServiceBus.Features;
 using NServiceBus.Logging;
 using NServiceBus.Transport.SqlServerDeduplication;
 using SampleNamespace;
@@ -19,7 +17,6 @@ class Program
         configuration.EnableDedupe(ConnectionBuilder);
         configuration.UseSerialization<NewtonsoftJsonSerializer>();
         configuration.PurgeOnStartup(true);
-        configuration.DisableFeature<TimeoutManager>();
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(connection);
         transport.Transactions(TransportTransactionMode.SendsAtomicWithReceive);

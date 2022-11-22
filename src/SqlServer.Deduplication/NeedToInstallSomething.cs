@@ -1,5 +1,4 @@
-﻿using NServiceBus;
-using NServiceBus.Installation;
+﻿using NServiceBus.Installation;
 using NServiceBus.Settings;
 using NServiceBus.Transport.SqlServerDeduplication;
 
@@ -8,10 +7,10 @@ class NeedToInstallSomething :
 {
     DedupeSettings? settings;
 
-    public NeedToInstallSomething(ReadOnlySettings settings) =>
+    public NeedToInstallSomething(IReadOnlySettings settings) =>
         this.settings = settings.GetOrDefault<DedupeSettings>();
 
-    public async Task Install(string identity)
+    public async Task Install(string identity, CancellationToken cancellation = default)
     {
         if (settings == null || settings.InstallerDisabled)
         {
@@ -20,6 +19,6 @@ class NeedToInstallSomething :
 
         using var connection = await settings.ConnectionBuilder(CancellationToken.None);
         var manager = new DedupeManager(connection, settings.Table);
-        await manager.Create();
+        await manager.Create(cancellation);
     }
 }

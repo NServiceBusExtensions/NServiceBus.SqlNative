@@ -1,5 +1,4 @@
-﻿using NServiceBus;
-using SampleNamespace;
+﻿using SampleNamespace;
 
 class MyHandler :
     IHandleMessages<SampleMessage>

@@ -1,6 +1,4 @@
-﻿using NServiceBus;
-
-namespace SampleNamespace;
+﻿namespace SampleNamespace;
 
 class SampleMessage :
     IMessage

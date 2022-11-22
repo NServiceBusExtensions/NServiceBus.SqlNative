@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using NServiceBus;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 

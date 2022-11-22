@@ -1,5 +1,4 @@
-﻿using NServiceBus;
-using NServiceBus.Transport.SqlServerNative;
+﻿using NServiceBus.Transport.SqlServerNative;
 
 static class EndpointCreator
 {

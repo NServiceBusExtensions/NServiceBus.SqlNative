@@ -816,7 +816,7 @@ var headers = new Dictionary<string, string>
 };
 var serialized = Headers.Serialize(headers);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Headers.cs#L8-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-serialize' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Headers.cs#L9-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-serialize' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -829,7 +829,7 @@ Deserialize a JSON string to a `Dictionary<string, string>`.
 ```cs
 var headers = Headers.DeSerialize(headersString);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Headers.cs#L23-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-deserialize' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Headers.cs#L24-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-deserialize' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using NServiceBus;
 using NServiceBus.Extensibility;
 using NServiceBus.Pipeline;
 using NServiceBus.Transport.SqlServerDeduplication;

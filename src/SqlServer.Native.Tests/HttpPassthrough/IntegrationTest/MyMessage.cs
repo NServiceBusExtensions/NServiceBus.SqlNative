@@ -1,6 +1,4 @@
-﻿using NServiceBus;
-
-namespace My.Namespace;
+﻿namespace My.Namespace;
 
 class MyMessage :
     IMessage

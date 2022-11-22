@@ -1,4 +1,4 @@
-﻿using NServiceBus;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 public class QueueCreatorIntegration
 {
@@ -7,7 +7,7 @@ public class QueueCreatorIntegration
     {
         var resetEvent = new ManualResetEvent(false);
         var configuration = await EndpointCreator.Create("IntegrationSend");
-        configuration.RegisterComponents(components => components.RegisterSingleton(resetEvent));
+        configuration.RegisterComponents(_ => _.AddSingleton(resetEvent));
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage(endpoint);
         resetEvent.WaitOne();
