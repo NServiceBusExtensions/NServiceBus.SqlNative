@@ -2,8 +2,8 @@
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using My.Namespace;
-using NServiceBus;
 using NServiceBus.Attachments.Sql;
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
@@ -60,7 +60,7 @@ public class HttpPassthroughIntegrationTests :
     {
         var configuration = await EndpointCreator.Create(nameof(HttpPassthroughIntegrationTests));
         var attachments = configuration.EnableAttachments(async () => await Connection.OpenAsyncConnection(), TimeToKeep.Default);
-        configuration.RegisterComponents(components => components.RegisterSingleton(resetEvent));
+        configuration.RegisterComponents(_ => _.AddSingleton(resetEvent));
         attachments.UseTransportConnectivity();
         return await Endpoint.Start(configuration);
     }

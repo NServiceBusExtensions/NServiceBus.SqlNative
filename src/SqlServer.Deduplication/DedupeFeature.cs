@@ -1,4 +1,4 @@
-﻿using NServiceBus;
+﻿using Microsoft.Extensions.DependencyInjection;
 using NServiceBus.Features;
 
 class DeduplicationFeature :
@@ -19,7 +19,7 @@ class DeduplicationFeature :
         }
         if (settings.RunCleanTask)
         {
-            context.RegisterStartupTask(builder => new CleanupTask(table, builder.Build<CriticalError>(), connectionBuilder));
+            context.RegisterStartupTask(provider => new CleanupTask(table, provider.GetRequiredService<CriticalError>(), connectionBuilder));
         }
     }
 }

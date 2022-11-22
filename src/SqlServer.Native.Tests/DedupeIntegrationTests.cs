@@ -1,5 +1,4 @@
-﻿using NServiceBus;
-using NServiceBus.Attachments.Sql;
+﻿using NServiceBus.Attachments.Sql;
 using NServiceBus.Transport.SqlServerNative;
 using DedupeOutcome = NServiceBus.Transport.SqlServerDeduplication.DedupeOutcome;
 using DedupeResult = NServiceBus.Transport.SqlServerDeduplication.DedupeResult;

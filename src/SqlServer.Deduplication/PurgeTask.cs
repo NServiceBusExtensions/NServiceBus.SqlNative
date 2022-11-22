@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using NServiceBus;
 using NServiceBus.Features;
 using NServiceBus.Transport.SqlServerDeduplication;
 
@@ -15,13 +14,13 @@ class PurgeTask :
         this.connectionBuilder = connectionBuilder;
     }
 
-    protected override async Task OnStart(IMessageSession session)
+    protected override async Task OnStart(IMessageSession session, CancellationToken cancellation = default)
     {
         using var connection = await connectionBuilder(CancellationToken.None);
         var dedupeManager = new DedupeManager(connection, table);
-        await dedupeManager.PurgeItems();
+        await dedupeManager.PurgeItems(cancellation);
     }
 
-    protected override Task OnStop(IMessageSession session) =>
+    protected override Task OnStop(IMessageSession session, CancellationToken cancellation = default) =>
         Task.CompletedTask;
 }

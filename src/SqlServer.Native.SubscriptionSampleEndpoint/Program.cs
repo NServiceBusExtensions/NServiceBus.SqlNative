@@ -1,6 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using NServiceBus;
-using NServiceBus.Features;
 using NServiceBus.Logging;
 using NServiceBus.Transport.SqlServerNative;
 using SampleNamespace;
@@ -18,7 +16,6 @@ class Program
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftJsonSerializer>();
         configuration.PurgeOnStartup(true);
-        configuration.DisableFeature<TimeoutManager>();
         var transport = configuration.UseTransport<SqlServerTransport>();
         transport.ConnectionString(connection);
         transport.Transactions(TransportTransactionMode.SendsAtomicWithReceive);

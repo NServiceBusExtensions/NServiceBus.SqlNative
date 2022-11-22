@@ -1,4 +1,4 @@
-﻿using NServiceBus;
+﻿using Microsoft.Extensions.DependencyInjection;
 using NServiceBus.Transport.SqlServerNative;
 using Headers = NServiceBus.Transport.SqlServerNative.Headers;
 
@@ -10,7 +10,7 @@ public class SendIntegration :
     {
         var resetEvent = new ManualResetEvent(false);
         var configuration = await EndpointCreator.Create("IntegrationSend");
-        configuration.RegisterComponents(components => components.RegisterSingleton(resetEvent));
+        configuration.RegisterComponents(_ => _.AddSingleton(resetEvent));
         var endpoint = await Endpoint.Start(configuration);
         await SendStartMessage();
         resetEvent.WaitOne();
