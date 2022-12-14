@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.1" />
-    <PackageReference Include="NServiceBus" Version="8.0.0" />
+    <PackageReference Include="NServiceBus" Version="8.0.2" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="3.0.0" />
     <PackageReference Include="NServiceBus.Transport.SqlServer" Version="7.0.0" />
     <ProjectReference Include="..\SqlServer.Deduplication\SqlServer.Deduplication.csproj" />
