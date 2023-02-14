@@ -23,8 +23,8 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public Table(string tableName, string schema, bool sanitize)
         {
-            Guard.AgainstNullOrEmpty(tableName, nameof(tableName));
-            Guard.AgainstNullOrEmpty(schema, nameof(schema));
+            Guard.AgainstNullOrEmpty(tableName);
+            Guard.AgainstNullOrEmpty(schema);
             TableName = tableName;
             Schema = schema;
             if (sanitize)
@@ -57,7 +57,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// </summary>
         public static implicit operator Table(string table)
         {
-            Guard.AgainstNullOrEmpty(table, nameof(table));
+            Guard.AgainstNullOrEmpty(table);
             return new(table);
         }
 

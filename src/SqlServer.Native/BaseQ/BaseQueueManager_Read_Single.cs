@@ -9,7 +9,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
 
     public virtual async Task<TIncoming?> Read(long rowVersion, CancellationToken cancellation = default)
     {
-        Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
+        Guard.AgainstNegativeAndZero(rowVersion);
         var shouldCleanup = false;
         SqlDataReader? reader = null;
         try

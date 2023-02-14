@@ -26,9 +26,9 @@ public class MessageProcessingLoop :
         TimeSpan? delay = null) :
         base(errorCallback, delay)
     {
-        Guard.AgainstNullOrEmpty(table, nameof(table));
-        Guard.AgainstNegativeAndZero(startingRow, nameof(startingRow));
-        Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
+        Guard.AgainstNullOrEmpty(table);
+        Guard.AgainstNegativeAndZero(startingRow);
+        Guard.AgainstNegativeAndZero(batchSize);
         this.table = table;
         this.startingRow = startingRow;
         this.transactionBuilder = transactionBuilder.WrapFunc(nameof(transactionBuilder));
@@ -48,9 +48,9 @@ public class MessageProcessingLoop :
         TimeSpan? delay = null) :
         base(errorCallback, delay)
     {
-        Guard.AgainstNullOrEmpty(table, nameof(table));
-        Guard.AgainstNegativeAndZero(startingRow, nameof(startingRow));
-        Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
+        Guard.AgainstNullOrEmpty(table);
+        Guard.AgainstNegativeAndZero(startingRow);
+        Guard.AgainstNegativeAndZero(batchSize);
         connectionCallback = callback.WrapFunc(nameof(connectionCallback));
         this.table = table;
         this.startingRow = startingRow;

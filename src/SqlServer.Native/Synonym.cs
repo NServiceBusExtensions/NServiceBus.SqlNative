@@ -12,8 +12,8 @@ public class Synonym
 
     public Synonym(SqlConnection sourceDatabase, string targetDatabase, string sourceSchema = "dbo", string targetSchema = "dbo")
     {
-        Guard.AgainstNullOrEmpty(targetDatabase, nameof(targetDatabase));
-        Guard.AgainstNullOrEmpty(targetSchema, nameof(targetSchema));
+        Guard.AgainstNullOrEmpty(targetDatabase);
+        Guard.AgainstNullOrEmpty(targetSchema);
         this.sourceDatabase = sourceDatabase;
         this.targetDatabase = targetDatabase;
         this.sourceSchema = sourceSchema;
@@ -22,8 +22,8 @@ public class Synonym
 
     public Synonym(SqlTransaction sourceTransaction, string targetDatabase, string sourceSchema = "dbo", string targetSchema = "dbo")
     {
-        Guard.AgainstNullOrEmpty(targetDatabase, nameof(targetDatabase));
-        Guard.AgainstNullOrEmpty(targetSchema, nameof(targetSchema));
+        Guard.AgainstNullOrEmpty(targetDatabase);
+        Guard.AgainstNullOrEmpty(targetSchema);
         this.sourceTransaction = sourceTransaction;
         this.targetDatabase = targetDatabase;
         this.sourceSchema = sourceSchema;

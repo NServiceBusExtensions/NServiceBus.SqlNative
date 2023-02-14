@@ -18,7 +18,7 @@ public static class ClaimsAppender
     /// </summary>
     public static void Append(IEnumerable<Claim> claims, IDictionary<string, string> headers, string? prefix)
     {
-        Guard.AgainstEmpty(prefix, nameof(prefix));
+        Guard.AgainstEmpty(prefix);
         prefix ??= "";
         foreach (var claim in claims.GroupBy(x => x.Type))
         {
@@ -33,7 +33,7 @@ public static class ClaimsAppender
     /// </summary>
     public static IEnumerable<Claim> Extract(IDictionary<string, string> headers, string prefix)
     {
-        Guard.AgainstNullOrEmpty(prefix, nameof(prefix));
+        Guard.AgainstNullOrEmpty(prefix);
         foreach (var header in headers)
         {
             var key = header.Key;

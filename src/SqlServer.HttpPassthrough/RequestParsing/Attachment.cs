@@ -9,7 +9,7 @@ public class Attachment
 {
     public Attachment(Func<Stream> stream, string fileName)
     {
-        Guard.AgainstNullOrEmpty(fileName, nameof(fileName));
+        Guard.AgainstNullOrEmpty(fileName);
         Stream = stream;
         FileName = fileName;
     }

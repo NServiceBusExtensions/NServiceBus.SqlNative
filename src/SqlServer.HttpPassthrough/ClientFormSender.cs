@@ -28,11 +28,11 @@ public class ClientFormSender
     /// </summary>
     public virtual async Task<(Guid messageId, int httpStatus)> Send(string route, string message, string typeName, Guid messageId = default, string? typeNamespace = null, string? destination = null, Dictionary<string, byte[]>? attachments = null, CancellationToken cancellation = default)
     {
-        Guard.AgainstNullOrEmpty(route, nameof(route));
-        Guard.AgainstNullOrEmpty(typeName, nameof(typeName));
-        Guard.AgainstNullOrEmpty(message, nameof(message));
-        Guard.AgainstEmpty(typeNamespace, nameof(typeNamespace));
-        Guard.AgainstEmpty(destination, nameof(destination));
+        Guard.AgainstNullOrEmpty(route);
+        Guard.AgainstNullOrEmpty(typeName);
+        Guard.AgainstNullOrEmpty(message);
+        Guard.AgainstEmpty(typeNamespace);
+        Guard.AgainstEmpty(destination);
         if (messageId == default)
         {
             messageId = Guid.NewGuid();

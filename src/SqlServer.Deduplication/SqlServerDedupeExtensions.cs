@@ -34,7 +34,7 @@ public static class SqlServerDedupeExtensions
 
     public static Task<DedupeResult> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions? options = null, string? context = null)
     {
-        Guard.AgainstEmpty(messageId, nameof(messageId));
+        Guard.AgainstEmpty(messageId);
         if (options == null)
         {
             options = new();

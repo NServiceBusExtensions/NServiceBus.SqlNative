@@ -77,7 +77,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public async Task<string?> ReadContext(Guid messageId, CancellationToken cancellation = default)
         {
-            Guard.AgainstEmpty(messageId, nameof(messageId));
+            Guard.AgainstEmpty(messageId);
             using var command = BuildReadCommand(messageId);
             var o = await command.RunScalar(cancellation);
             if (o == DBNull.Value)
@@ -90,7 +90,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public async Task<DedupeResult> WriteDedupRecord(Guid messageId, string? context, CancellationToken cancellation = default)
         {
-            Guard.AgainstEmpty(messageId, nameof(messageId));
+            Guard.AgainstEmpty(messageId);
             try
             {
                 using var command = BuildWriteCommand(messageId, context);
@@ -120,7 +120,7 @@ namespace NServiceBus.Transport.SqlServerNative
 
         public async Task<DedupeResult> CommitWithDedupCheck(Guid messageId, string? context)
         {
-            Guard.AgainstEmpty(messageId, nameof(messageId));
+            Guard.AgainstEmpty(messageId);
             if (transaction == null)
             {
                 throw new($"Can only be used if the {nameof(SqlTransaction)} constructor is used.");

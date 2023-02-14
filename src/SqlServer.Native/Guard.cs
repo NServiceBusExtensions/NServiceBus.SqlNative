@@ -1,6 +1,6 @@
 ﻿static class Guard
 {
-    public static void AgainstNullOrEmpty(string value, string argumentName)
+    public static void AgainstNullOrEmpty(string value, [CallerArgumentExpression("value")] string argumentName = "")
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -8,7 +8,7 @@
         }
     }
 
-    public static void AgainstEmpty(string? value, string argumentName)
+    public static void AgainstEmpty(string? value, [CallerArgumentExpression("value")] string argumentName = "")
     {
         if (value == null)
         {
@@ -21,7 +21,7 @@
         }
     }
 
-    public static void AgainstEmpty(Guid value, string argumentName)
+    public static void AgainstEmpty(Guid value, [CallerArgumentExpression("value")] string argumentName = "")
     {
         if (value == Guid.Empty)
         {
@@ -29,7 +29,7 @@
         }
     }
 
-    public static void AgainstNegativeAndZero(TimeSpan? value, string argumentName)
+    public static void AgainstNegativeAndZero(TimeSpan? value, [CallerArgumentExpression("value")] string argumentName = "")
     {
         if (value == null)
         {
@@ -42,7 +42,7 @@
         }
     }
 
-    public static void AgainstNegativeAndZero(int value, string argumentName)
+    public static void AgainstNegativeAndZero(int value, [CallerArgumentExpression("value")] string argumentName = "")
     {
         if (value < 1)
         {
@@ -50,7 +50,7 @@
         }
     }
 
-    public static void AgainstNegativeAndZero(long value, string argumentName)
+    public static void AgainstNegativeAndZero(long value, [CallerArgumentExpression("value")] string argumentName = "")
     {
         if (value < 1)
         {
@@ -58,3 +58,16 @@
         }
     }
 }
+#if (NETFRAMEWORK || NETSTANDARD || NETCOREAPP)
+namespace System.Runtime.CompilerServices
+{
+    [AttributeUsage(AttributeTargets.Parameter)]
+    sealed class CallerArgumentExpressionAttribute : Attribute
+    {
+        public CallerArgumentExpressionAttribute(string parameterName) =>
+            ParameterName = parameterName;
+
+        public string ParameterName { get; }
+    }
+}
+#endif

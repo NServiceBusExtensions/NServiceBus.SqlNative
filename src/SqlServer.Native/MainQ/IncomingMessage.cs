@@ -18,7 +18,7 @@ public class IncomingMessage :
 
     public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, Func<ValueTask>[] cleanups)
     {
-        Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
+        Guard.AgainstNegativeAndZero(rowVersion);
         this.cleanups = cleanups;
         this.id = id;
         this.rowVersion = rowVersion;

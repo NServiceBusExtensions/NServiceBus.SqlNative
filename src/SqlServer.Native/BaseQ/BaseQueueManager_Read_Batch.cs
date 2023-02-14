@@ -8,8 +8,8 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
 
     public virtual async Task<IncomingResult> Read(int size, long startRowVersion, Func<TIncoming, Task> func, CancellationToken cancellation = default)
     {
-        Guard.AgainstNegativeAndZero(size, nameof(size));
-        Guard.AgainstNegativeAndZero(startRowVersion, nameof(startRowVersion));
+        Guard.AgainstNegativeAndZero(size);
+        Guard.AgainstNegativeAndZero(startRowVersion);
         using var command = BuildReadCommand(size, startRowVersion);
         return await ReadMultiple(command, func, cancellation);
     }

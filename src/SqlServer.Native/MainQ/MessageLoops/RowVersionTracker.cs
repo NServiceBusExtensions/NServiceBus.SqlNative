@@ -9,7 +9,7 @@ public class RowVersionTracker
 
     public RowVersionTracker(string table = "RowVersionTracker")
     {
-        Guard.AgainstNullOrEmpty(table, nameof(table));
+        Guard.AgainstNullOrEmpty(table);
         this.table = table;
     }
 
@@ -24,13 +24,13 @@ public class RowVersionTracker
 
     public Task Save(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
     {
-        Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
+        Guard.AgainstNegativeAndZero(rowVersion);
         return Save(connection, null, rowVersion, cancellation);
     }
 
     public Task Save(SqlTransaction transaction, long rowVersion, CancellationToken cancellation = default)
     {
-        Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
+        Guard.AgainstNegativeAndZero(rowVersion);
         return Save(transaction.Connection!, transaction, rowVersion, cancellation);
     }
 

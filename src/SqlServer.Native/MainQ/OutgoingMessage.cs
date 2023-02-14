@@ -8,8 +8,8 @@ public class OutgoingMessage
 {
     public OutgoingMessage(Guid id, DateTime? expires = null, string? headers = null)
     {
-        Guard.AgainstEmpty(id, nameof(id));
-        Guard.AgainstEmpty(headers, nameof(headers));
+        Guard.AgainstEmpty(id);
+        Guard.AgainstEmpty(headers);
         Id = id;
         Expires = expires;
         if (headers == null)

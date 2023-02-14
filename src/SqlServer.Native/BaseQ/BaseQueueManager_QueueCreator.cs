@@ -8,7 +8,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     /// </summary>
     public virtual Task Create(string computedColumnSql, CancellationToken cancellation = default)
     {
-        Guard.AgainstNullOrEmpty(computedColumnSql, nameof(computedColumnSql));
+        Guard.AgainstNullOrEmpty(computedColumnSql);
         return InnerCreate(true, computedColumnSql, cancellation);
     }
 

@@ -8,7 +8,7 @@ public class OutgoingDelayedMessage
 {
     public OutgoingDelayedMessage(DateTime due, string? headers)
     {
-        Guard.AgainstEmpty(headers, nameof(headers));
+        Guard.AgainstEmpty(headers);
         Due = due;
         if (headers == null)
         {

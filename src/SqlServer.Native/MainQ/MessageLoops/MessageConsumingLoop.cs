@@ -21,8 +21,8 @@ public class MessageConsumingLoop :
         TimeSpan? delay = null) :
         base(errorCallback, delay)
     {
-        Guard.AgainstNullOrEmpty(table, nameof(table));
-        Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
+        Guard.AgainstNullOrEmpty(table);
+        Guard.AgainstNegativeAndZero(batchSize);
         this.table = table;
         transactionCallback = callback.WrapFunc(nameof(transactionCallback));
         this.transactionBuilder = transactionBuilder.WrapFunc(nameof(transactionBuilder));
@@ -38,8 +38,8 @@ public class MessageConsumingLoop :
         TimeSpan? delay = null) :
         base(errorCallback, delay)
     {
-        Guard.AgainstNullOrEmpty(table, nameof(table));
-        Guard.AgainstNegativeAndZero(batchSize, nameof(batchSize));
+        Guard.AgainstNullOrEmpty(table);
+        Guard.AgainstNegativeAndZero(batchSize);
         connectionCallback = callback.WrapFunc(nameof(connectionCallback));
         this.table = table;
         this.connectionBuilder = connectionBuilder.WrapFunc(nameof(this.connectionBuilder));

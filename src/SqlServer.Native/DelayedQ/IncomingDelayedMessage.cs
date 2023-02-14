@@ -17,7 +17,7 @@ public class IncomingDelayedMessage :
 
     public IncomingDelayedMessage(long rowVersion, DateTime? due, string headers, Stream? body, Func<ValueTask>[] cleanups)
     {
-        Guard.AgainstNegativeAndZero(rowVersion, nameof(rowVersion));
+        Guard.AgainstNegativeAndZero(rowVersion);
         this.cleanups = cleanups;
         this.rowVersion = rowVersion;
         this.due = due;

@@ -77,8 +77,8 @@ public class PassthroughConfiguration
     /// </summary>
     public void OriginatingInfo(string endpoint, string machine)
     {
-        Guard.AgainstNullOrEmpty(endpoint, nameof(endpoint));
-        Guard.AgainstNullOrEmpty(machine, nameof(machine));
+        Guard.AgainstNullOrEmpty(endpoint);
+        Guard.AgainstNullOrEmpty(machine);
         OriginatingMachine = machine;
         OriginatingEndpoint = endpoint;
     }
@@ -103,7 +103,7 @@ public class PassthroughConfiguration
     /// <param name="headerPrefix">The key prefix to use on the outgoing message header. Defaults to 'SqlHttpPassthrough.Claim.'.</param>
     public void AppendClaimsToMessageHeaders(string headerPrefix = "SqlHttpPassthrough.Claim.")
     {
-        Guard.AgainstNullOrEmpty(headerPrefix, nameof(headerPrefix));
+        Guard.AgainstNullOrEmpty(headerPrefix);
         AppendClaims = true;
         ClaimsHeaderPrefix = headerPrefix;
     }
