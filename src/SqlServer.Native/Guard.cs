@@ -58,7 +58,7 @@
         }
     }
 }
-#if (NETFRAMEWORK || NETSTANDARD || NETCOREAPP)
+#if NET48
 namespace System.Runtime.CompilerServices
 {
     [AttributeUsage(AttributeTargets.Parameter)]

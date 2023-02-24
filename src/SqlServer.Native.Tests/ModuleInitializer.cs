@@ -6,7 +6,7 @@ public static class ModuleInitializer
     [ModuleInitializer]
     public static void Initialize()
     {
-        VerifySqlServer.Enable();
+        VerifySqlServer.Initialize();
         VerifierSettings.AddExtraSettings(_ => _.TypeNameHandling = TypeNameHandling.Objects);
         SqlHelper.EnsureDatabaseExists(Connection.ConnectionString);
         using var sqlConnection = Connection.OpenConnection();
