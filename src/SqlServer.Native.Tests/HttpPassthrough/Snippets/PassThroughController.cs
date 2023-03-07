@@ -12,7 +12,7 @@ public class PassthroughController : ControllerBase
         this.sender = sender;
 
     [HttpPost]
-    public Task Post(CancellationToken cancellation) =>
+    public Task Post(Cancellation cancellation) =>
         sender.Send(HttpContext, cancellation);
 }
 

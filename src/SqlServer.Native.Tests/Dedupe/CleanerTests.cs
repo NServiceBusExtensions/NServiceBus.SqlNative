@@ -56,7 +56,7 @@ public class CleanerTests
     class FakeTimer :
         AsyncTimer
     {
-        public Task Tick(DateTime utcTime, CancellationToken token) =>
+        public Task Tick(DateTime utcTime, Cancellation cancellation) =>
             callback!(utcTime, token);
 
         public void OnError(Exception error) =>

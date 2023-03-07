@@ -41,7 +41,7 @@ public class MessageProcessingLoopTests :
 
         var count = 0;
 
-        Task Callback(SqlConnection connection, IncomingMessage incomingBytesMessage, CancellationToken arg3)
+        Task Callback(SqlConnection connection, IncomingMessage incomingBytesMessage, Cancellation arg3)
         {
             count++;
             if (count == 5)
@@ -75,7 +75,7 @@ public class MessageProcessingLoopTests :
 
         long rowVersion = 0;
 
-        Task PersistRowVersion(SqlConnection sqlConnection, long currentRowVersion, CancellationToken arg3)
+        Task PersistRowVersion(SqlConnection sqlConnection, long currentRowVersion, Cancellation arg3)
         {
             rowVersion = currentRowVersion;
             if (rowVersion == 6)

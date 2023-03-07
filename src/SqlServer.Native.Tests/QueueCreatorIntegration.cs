@@ -29,7 +29,7 @@ public class QueueCreatorIntegration
         public SendHandler(ManualResetEvent resetEvent) =>
             this.resetEvent = resetEvent;
 
-        public Task Handle(SendMessage message, IMessageHandlerContext context)
+        public Task Handle(SendMessage message, HandlerContext context)
         {
             resetEvent.Set();
             return Task.CompletedTask;

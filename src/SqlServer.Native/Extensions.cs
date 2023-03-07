@@ -32,7 +32,7 @@ static class Extensions
         corrParam.Value = value;
     }
 
-    public static async Task RunCommand(this SqlConnection connection, SqlTransaction? transaction, string sql, CancellationToken cancellation = default)
+    public static async Task RunCommand(this SqlConnection connection, SqlTransaction? transaction, string sql, Cancellation cancellation = default)
     {
         using var command = connection.CreateCommand(transaction, sql);
         await command.RunNonQuery(cancellation);
@@ -74,7 +74,7 @@ static class Extensions
         return dataReader.GetFieldValueAsync<DateTime?>(index);
     }
 
-    public static async Task<SqlDataReader> RunSequentialReader(this SqlCommand command, CancellationToken cancellation)
+    public static async Task<SqlDataReader> RunSequentialReader(this SqlCommand command, Cancellation cancellation)
     {
         try
         {
@@ -87,7 +87,7 @@ static class Extensions
         }
     }
 
-    public static async Task<object?> RunScalar(this SqlCommand command, CancellationToken cancellation)
+    public static async Task<object?> RunScalar(this SqlCommand command, Cancellation cancellation)
     {
         try
         {
@@ -100,7 +100,7 @@ static class Extensions
         }
     }
 
-    public static async Task<SqlDataReader> RunSingleRowReader(this SqlCommand command, CancellationToken cancellation)
+    public static async Task<SqlDataReader> RunSingleRowReader(this SqlCommand command, Cancellation cancellation)
     {
         try
         {
@@ -113,7 +113,7 @@ static class Extensions
         }
     }
 
-    public static async Task RunNonQuery(this SqlCommand command, CancellationToken cancellation)
+    public static async Task RunNonQuery(this SqlCommand command, Cancellation cancellation)
     {
         try
         {

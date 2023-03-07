@@ -13,7 +13,7 @@ public class PassthroughController :
         this.sender = sender;
 
     [HttpPost]
-    public async Task Post(CancellationToken cancellation)
+    public async Task Post(Cancellation cancellation)
     {
         try
         {

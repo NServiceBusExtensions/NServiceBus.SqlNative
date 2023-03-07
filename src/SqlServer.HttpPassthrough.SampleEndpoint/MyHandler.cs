@@ -4,7 +4,7 @@ using SampleNamespace;
 class MyHandler :
     IHandleMessages<SampleMessage>
 {
-    public Task Handle(SampleMessage message, IMessageHandlerContext context)
+    public Task Handle(SampleMessage message, HandlerContext context)
     {
         Console.WriteLine("MyHandler");
         foreach (var header in context.MessageHeaders)

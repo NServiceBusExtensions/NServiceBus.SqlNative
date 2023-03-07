@@ -29,7 +29,7 @@ class Program
         await endpoint.Stop();
     }
 
-    static async Task<SqlConnection> ConnectionBuilder(CancellationToken cancellation)
+    static async Task<SqlConnection> ConnectionBuilder(Cancellation cancellation)
     {
         var sqlConnection = new SqlConnection(connection);
         try

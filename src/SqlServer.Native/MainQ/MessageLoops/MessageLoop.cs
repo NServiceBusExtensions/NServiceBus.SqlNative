@@ -45,7 +45,7 @@ public abstract class MessageLoop :
             cancellation);
     }
 
-    protected abstract Task RunBatch(CancellationToken cancellation);
+    protected abstract Task RunBatch(Cancellation cancellation);
 
     public Task Stop()
     {

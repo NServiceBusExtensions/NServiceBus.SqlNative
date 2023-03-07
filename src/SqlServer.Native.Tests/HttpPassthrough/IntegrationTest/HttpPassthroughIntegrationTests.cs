@@ -73,7 +73,7 @@ public class HttpPassthroughIntegrationTests :
         public Handler(ManualResetEvent resetEvent) =>
             this.resetEvent = resetEvent;
 
-        public async Task Handle(MyMessage message, IMessageHandlerContext context)
+        public async Task Handle(MyMessage message, HandlerContext context)
         {
             var incomingAttachment = context.Attachments();
             Assert.NotNull(await incomingAttachment.GetBytes("fooFile"));

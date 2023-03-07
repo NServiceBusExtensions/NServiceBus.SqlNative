@@ -59,7 +59,7 @@ public class HttpPassthroughDedupTests :
     class Handler :
         IHandleMessages<DedupMessage>
     {
-        public Task Handle(DedupMessage message, IMessageHandlerContext context)
+        public Task Handle(DedupMessage message, HandlerContext context)
         {
             Interlocked.Increment(ref count);
             return Task.CompletedTask;

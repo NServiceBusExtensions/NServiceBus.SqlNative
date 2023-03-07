@@ -107,6 +107,6 @@ public class AppendClaimsToMessageHeaders
     static Task<Table> Callback(HttpContext httpContext, PassthroughMessage passthroughMessage) =>
         null!;
 
-    static Task<SqlConnection> OpenConnection(CancellationToken cancellation) =>
+    static Task<SqlConnection> OpenConnection(Cancellation cancellation) =>
         null!;
 }

@@ -12,7 +12,7 @@ public class ConsumingLoop
         static async Task Callback(
             SqlTransaction transaction,
             IncomingMessage message,
-            CancellationToken cancellation)
+            Cancellation cancellation)
         {
             if (message.Body != null)
             {
@@ -22,7 +22,7 @@ public class ConsumingLoop
             }
         }
 
-        Task<SqlTransaction> BuildTransaction(CancellationToken cancellation)
+        Task<SqlTransaction> BuildTransaction(Cancellation cancellation)
         {
             return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
         }

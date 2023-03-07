@@ -17,14 +17,14 @@ class DedupService :
         this.criticalError = criticalError;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public Task StartAsync(Cancellation cancellation)
     {
         job = new(table, connectionBuilder, criticalError);
         job.Start();
         return Task.CompletedTask;
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public Task StopAsync(Cancellation cancellation)
     {
         if (job != null)
         {

@@ -5,7 +5,7 @@ namespace NServiceBus.Transport.SqlServerNative;
 public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     where TIncoming : class, IIncomingMessage
 {
-    public virtual async Task<TIncoming?> Consume(CancellationToken cancellation = default)
+    public virtual async Task<TIncoming?> Consume(Cancellation cancellation = default)
     {
         var shouldCleanup = false;
         SqlDataReader? reader = null;

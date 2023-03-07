@@ -21,7 +21,7 @@ class SqlPassthrough :
         this.logger = logger;
     }
 
-    public async Task Send(HttpContext context, CancellationToken cancellation = default)
+    public async Task Send(HttpContext context, Cancellation cancellation = default)
     {
         var passThroughMessage = await RequestParser.Extract(context.Request, cancellation);
         var destinationTable = await sendCallback(context, passThroughMessage).ConfigureAwait(true);

@@ -46,7 +46,7 @@ public class MessageConsumingLoop :
         this.batchSize = batchSize;
     }
 
-    protected override async Task RunBatch(CancellationToken cancellation)
+    protected override async Task RunBatch(Cancellation cancellation)
     {
         SqlConnection? connection = null;
         if (connectionBuilder != null)
@@ -85,7 +85,7 @@ public class MessageConsumingLoop :
         }
     }
 
-    async Task RunBatch(QueueManager consumer, Func<IncomingMessage, Task> action, CancellationToken cancellation)
+    async Task RunBatch(QueueManager consumer, Func<IncomingMessage, Task> action, Cancellation cancellation)
     {
         while (true)
         {

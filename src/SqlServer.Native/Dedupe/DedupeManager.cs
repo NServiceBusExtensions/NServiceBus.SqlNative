@@ -75,7 +75,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return command;
         }
 
-        public async Task<string?> ReadContext(Guid messageId, CancellationToken cancellation = default)
+        public async Task<string?> ReadContext(Guid messageId, Cancellation cancellation = default)
         {
             Guard.AgainstEmpty(messageId);
             using var command = BuildReadCommand(messageId);
@@ -88,7 +88,7 @@ namespace NServiceBus.Transport.SqlServerNative
             return (string?)o;
         }
 
-        public async Task<DedupeResult> WriteDedupRecord(Guid messageId, string? context, CancellationToken cancellation = default)
+        public async Task<DedupeResult> WriteDedupRecord(Guid messageId, string? context, Cancellation cancellation = default)
         {
             Guard.AgainstEmpty(messageId);
             try
@@ -112,7 +112,7 @@ namespace NServiceBus.Transport.SqlServerNative
             );
         }
 
-        async Task<DedupeResult> BuildDedupeResult(Guid messageId, CancellationToken cancellation = default) =>
+        async Task<DedupeResult> BuildDedupeResult(Guid messageId, Cancellation cancellation = default) =>
             new(
                 dedupeOutcome: DedupeOutcome.Deduplicated,
                 context: await ReadContext(messageId, cancellation)
@@ -145,7 +145,7 @@ namespace NServiceBus.Transport.SqlServerNative
             );
         }
 
-        public virtual async Task CleanupItemsOlderThan(DateTime dateTime, CancellationToken cancellation = default)
+        public virtual async Task CleanupItemsOlderThan(DateTime dateTime, Cancellation cancellation = default)
         {
             using var command = connection.CreateCommand();
             command.Transaction = transaction;
@@ -158,7 +158,7 @@ namespace NServiceBus.Transport.SqlServerNative
             await command.RunNonQuery(cancellation);
         }
 
-        public virtual async Task PurgeItems(CancellationToken cancellation = default)
+        public virtual async Task PurgeItems(Cancellation cancellation = default)
         {
             using var command = connection.CreateCommand();
             command.Transaction = transaction;
@@ -169,13 +169,13 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <summary>
         /// Drops a queue.
         /// </summary>
-        public virtual Task Drop(CancellationToken cancellation = default) =>
+        public virtual Task Drop(Cancellation cancellation = default) =>
             connection.DropTable(transaction, table, cancellation);
 
         /// <summary>
         /// Creates a queue.
         /// </summary>
-        public virtual Task Create(CancellationToken cancellation = default)
+        public virtual Task Create(Cancellation cancellation = default)
         {
             var command = string.Format(DedupeTableSql, table);
             return connection.RunCommand(transaction, command, cancellation);

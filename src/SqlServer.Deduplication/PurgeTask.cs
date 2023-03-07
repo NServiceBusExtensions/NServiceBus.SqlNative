@@ -14,13 +14,13 @@ class PurgeTask :
         this.connectionBuilder = connectionBuilder;
     }
 
-    protected override async Task OnStart(IMessageSession session, CancellationToken cancellation = default)
+    protected override async Task OnStart(IMessageSession session, Cancellation cancellation = default)
     {
         using var connection = await connectionBuilder(CancellationToken.None);
         var dedupeManager = new DedupeManager(connection, table);
         await dedupeManager.PurgeItems(cancellation);
     }
 
-    protected override Task OnStop(IMessageSession session, CancellationToken cancellation = default) =>
+    protected override Task OnStop(IMessageSession session, Cancellation cancellation = default) =>
         Task.CompletedTask;
 }

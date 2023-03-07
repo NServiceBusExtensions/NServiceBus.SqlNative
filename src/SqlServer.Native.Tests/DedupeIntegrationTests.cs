@@ -60,7 +60,7 @@ public class DedupeIntegrationTests :
     class Handler :
         IHandleMessages<MyMessage>
     {
-        public Task Handle(MyMessage message, IMessageHandlerContext context)
+        public Task Handle(MyMessage message, HandlerContext context)
         {
             countdown.Signal();
             return Task.CompletedTask;

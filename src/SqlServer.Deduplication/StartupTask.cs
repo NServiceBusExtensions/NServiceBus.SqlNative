@@ -18,7 +18,7 @@ class CleanupTask :
         this.connectionBuilder = connectionBuilder;
     }
 
-    protected override Task OnStart(IMessageSession session, CancellationToken cancellation = default)
+    protected override Task OnStart(IMessageSession session, Cancellation cancellation = default)
     {
         job = new(table, connectionBuilder, RaiseError);
         job.Start();
@@ -28,6 +28,6 @@ class CleanupTask :
     void RaiseError(Exception exception) =>
         criticalError.Raise("Dedup cleanup failed", exception);
 
-    protected override Task OnStop(IMessageSession session, CancellationToken cancellation = default) =>
+    protected override Task OnStop(IMessageSession session, Cancellation cancellation = default) =>
         job == null ? Task.CompletedTask : job.Stop();
 }

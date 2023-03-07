@@ -6,7 +6,7 @@ public static class ConnectionHelpers
 
     public static async Task<SqlConnection> OpenConnection(
         string connectionString,
-        CancellationToken cancellation)
+        Cancellation cancellation)
     {
         var connection = new SqlConnection(connectionString);
         try
@@ -23,7 +23,7 @@ public static class ConnectionHelpers
 
     public static async Task<SqlTransaction> BeginTransaction(
         string connectionString,
-        CancellationToken cancellation)
+        Cancellation cancellation)
     {
         var connection = await OpenConnection(connectionString, cancellation);
         return connection.BeginTransaction();

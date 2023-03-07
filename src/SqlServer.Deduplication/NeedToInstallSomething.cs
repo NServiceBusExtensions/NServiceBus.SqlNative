@@ -10,7 +10,7 @@ class NeedToInstallSomething :
     public NeedToInstallSomething(IReadOnlySettings settings) =>
         this.settings = settings.GetOrDefault<DedupeSettings>();
 
-    public async Task Install(string identity, CancellationToken cancellation = default)
+    public async Task Install(string identity, Cancellation cancellation = default)
     {
         if (settings == null || settings.InstallerDisabled)
         {

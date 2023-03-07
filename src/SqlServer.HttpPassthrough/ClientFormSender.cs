@@ -16,7 +16,7 @@ public class ClientFormSender
     /// <summary>
     /// Send a pass through message request.
     /// </summary>
-    public virtual Task<(Guid messageId, int httpStatus)> Send(string route, string message, Type messageType, Guid messageId = default, string? destination = null, Dictionary<string, byte[]>? attachments = null, CancellationToken cancellation = default)
+    public virtual Task<(Guid messageId, int httpStatus)> Send(string route, string message, Type messageType, Guid messageId = default, string? destination = null, Dictionary<string, byte[]>? attachments = null, Cancellation cancellation = default)
     {
         var typeName = messageType.Name;
         var typeNamespace = messageType.Namespace;
@@ -26,7 +26,7 @@ public class ClientFormSender
     /// <summary>
     /// Send a pass through message request.
     /// </summary>
-    public virtual async Task<(Guid messageId, int httpStatus)> Send(string route, string message, string typeName, Guid messageId = default, string? typeNamespace = null, string? destination = null, Dictionary<string, byte[]>? attachments = null, CancellationToken cancellation = default)
+    public virtual async Task<(Guid messageId, int httpStatus)> Send(string route, string message, string typeName, Guid messageId = default, string? typeNamespace = null, string? destination = null, Dictionary<string, byte[]>? attachments = null, Cancellation cancellation = default)
     {
         Guard.AgainstNullOrEmpty(route);
         Guard.AgainstNullOrEmpty(typeName);

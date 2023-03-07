@@ -38,7 +38,7 @@ public class ProcessingLoop
         static async Task Callback(
             SqlTransaction transaction,
             IncomingMessage message,
-            CancellationToken cancellation)
+            Cancellation cancellation)
         {
             if (message.Body == null)
             {
@@ -55,7 +55,7 @@ public class ProcessingLoop
             Environment.FailFast("Message processing loop failed", exception);
         }
 
-        Task<SqlTransaction> BuildTransaction(CancellationToken cancellation)
+        Task<SqlTransaction> BuildTransaction(Cancellation cancellation)
         {
             return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
         }
@@ -63,7 +63,7 @@ public class ProcessingLoop
         Task PersistRowVersion(
             SqlTransaction transaction,
             long rowVersion,
-            CancellationToken token)
+            Cancellation cancellation)
         {
             return rowVersionTracker.Save(sqlConnection, rowVersion, token);
         }

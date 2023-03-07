@@ -29,7 +29,7 @@ public static class Connection
         return connection;
     }
 
-    public static async Task<SqlConnection> OpenAsyncConnection(CancellationToken cancellation = default)
+    public static async Task<SqlConnection> OpenAsyncConnection(Cancellation cancellation = default)
     {
         var connection = new SqlConnection(ConnectionString);
         await connection.OpenAsync(cancellation);

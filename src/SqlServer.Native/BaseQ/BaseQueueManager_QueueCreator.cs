@@ -6,7 +6,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     /// <summary>
     /// Creates a queue.
     /// </summary>
-    public virtual Task Create(string computedColumnSql, CancellationToken cancellation = default)
+    public virtual Task Create(string computedColumnSql, Cancellation cancellation = default)
     {
         Guard.AgainstNullOrEmpty(computedColumnSql);
         return InnerCreate(true, computedColumnSql, cancellation);
@@ -15,16 +15,16 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     /// <summary>
     /// Creates a queue.
     /// </summary>
-    public virtual Task Create(bool createDecodedBodyComputedColumn = true, CancellationToken cancellation = default) =>
+    public virtual Task Create(bool createDecodedBodyComputedColumn = true, Cancellation cancellation = default) =>
         InnerCreate(createDecodedBodyComputedColumn, null, cancellation);
 
     /// <summary>
     /// Drops a queue.
     /// </summary>
-    public virtual Task Drop(CancellationToken cancellation = default) =>
+    public virtual Task Drop(Cancellation cancellation = default) =>
         Connection.DropTable(Transaction, Table, cancellation);
 
-    Task InnerCreate(bool createDecodedBodyComputedColumn, string? computedColumnSql, CancellationToken cancellation)
+    Task InnerCreate(bool createDecodedBodyComputedColumn, string? computedColumnSql, Cancellation cancellation)
     {
         if (createDecodedBodyComputedColumn)
         {

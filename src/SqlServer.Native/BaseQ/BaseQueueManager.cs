@@ -22,7 +22,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
         Connection = transaction.Connection!;
     }
 
-    async Task<IncomingResult> ReadMultiple(SqlCommand command, Func<TIncoming, Task> func, CancellationToken cancellation)
+    async Task<IncomingResult> ReadMultiple(SqlCommand command, Func<TIncoming, Task> func, Cancellation cancellation)
     {
         var count = 0;
         long? lastRowVersion = null;

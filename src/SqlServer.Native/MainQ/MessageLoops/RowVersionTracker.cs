@@ -13,28 +13,28 @@ public class RowVersionTracker
         this.table = table;
     }
 
-    public Task CreateTable(SqlConnection connection, CancellationToken cancellation = default) =>
+    public Task CreateTable(SqlConnection connection, Cancellation cancellation = default) =>
         CreateTable(connection, null, cancellation);
 
-    public Task CreateTable(SqlTransaction transaction, CancellationToken cancellation = default) =>
+    public Task CreateTable(SqlTransaction transaction, Cancellation cancellation = default) =>
         CreateTable(transaction.Connection!, transaction, cancellation);
 
-    Task CreateTable(SqlConnection connection, SqlTransaction? transaction, CancellationToken cancellation) =>
+    Task CreateTable(SqlConnection connection, SqlTransaction? transaction, Cancellation cancellation) =>
         connection.RunCommand(transaction, string.Format(Sql, table), cancellation);
 
-    public Task Save(SqlConnection connection, long rowVersion, CancellationToken cancellation = default)
+    public Task Save(SqlConnection connection, long rowVersion, Cancellation cancellation = default)
     {
         Guard.AgainstNegativeAndZero(rowVersion);
         return Save(connection, null, rowVersion, cancellation);
     }
 
-    public Task Save(SqlTransaction transaction, long rowVersion, CancellationToken cancellation = default)
+    public Task Save(SqlTransaction transaction, long rowVersion, Cancellation cancellation = default)
     {
         Guard.AgainstNegativeAndZero(rowVersion);
         return Save(transaction.Connection!, transaction, rowVersion, cancellation);
     }
 
-    async Task Save(SqlConnection connection, SqlTransaction? transaction, long rowVersion, CancellationToken cancellation)
+    async Task Save(SqlConnection connection, SqlTransaction? transaction, long rowVersion, Cancellation cancellation)
     {
         using var command = connection.CreateCommand(
             transaction: transaction,
@@ -53,7 +53,7 @@ if @@rowcount = 0
         await command.RunNonQuery(cancellation);
     }
 
-    public async Task<long> Get(SqlConnection connection, CancellationToken cancellation = default)
+    public async Task<long> Get(SqlConnection connection, Cancellation cancellation = default)
     {
         using var command = connection.CreateCommand();
         command.CommandText = $@"

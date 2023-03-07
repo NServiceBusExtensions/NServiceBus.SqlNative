@@ -9,5 +9,5 @@ namespace NServiceBus.SqlServer.HttpPassthrough;
 /// </summary>
 public interface ISqlPassthrough
 {
-    Task Send(HttpContext context, CancellationToken cancellation = default);
+    Task Send(HttpContext context, Cancellation cancellation = default);
 }
