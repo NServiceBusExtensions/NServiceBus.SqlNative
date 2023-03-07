@@ -81,7 +81,7 @@ public class Startup
         // other ASP.MVC config
     }
 
-    static Task<SqlConnection> OpenConnection(CancellationToken cancellation) =>
+    static Task<SqlConnection> OpenConnection(Cancellation cancellation) =>
         //TODO open and return a SqlConnection
         null!;
 }
@@ -246,7 +246,7 @@ public class PassthroughController : ControllerBase
         this.sender = sender;
 
     [HttpPost]
-    public Task Post(CancellationToken cancellation) =>
+    public Task Post(Cancellation cancellation) =>
         sender.Send(HttpContext, cancellation);
 }
 ```
