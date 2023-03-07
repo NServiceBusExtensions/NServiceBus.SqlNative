@@ -57,7 +57,7 @@ public class CleanerTests
         AsyncTimer
     {
         public Task Tick(DateTime utcTime, Cancellation cancellation) =>
-            callback!(utcTime, token);
+            callback!(utcTime, cancellation);
 
         public void OnError(Exception error) =>
             errorCallback!(error);

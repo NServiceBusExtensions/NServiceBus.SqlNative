@@ -274,7 +274,7 @@ var startingRow = await rowVersionTracker.Get(sqlConnection);
 static async Task Callback(
     SqlTransaction transaction,
     IncomingMessage message,
-    CancellationToken cancellation)
+    Cancellation cancellation)
 {
     if (message.Body == null)
     {
@@ -282,7 +282,7 @@ static async Task Callback(
     }
 
     using var reader = new StreamReader(message.Body);
-    var bodyText = await reader.ReadToEndAsync();
+    var bodyText = await reader.ReadToEndAsync(cancellation);
     Console.WriteLine($"Message received in error message:\r\n{bodyText}");
 }
 
@@ -291,7 +291,7 @@ static void ErrorCallback(Exception exception)
     Environment.FailFast("Message processing loop failed", exception);
 }
 
-Task<SqlTransaction> BuildTransaction(CancellationToken cancellation)
+Task<SqlTransaction> BuildTransaction(Cancellation cancellation)
 {
     return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
 }
@@ -299,9 +299,9 @@ Task<SqlTransaction> BuildTransaction(CancellationToken cancellation)
 Task PersistRowVersion(
     SqlTransaction transaction,
     long rowVersion,
-    CancellationToken token)
+    Cancellation cancellation)
 {
-    return rowVersionTracker.Save(sqlConnection, rowVersion, token);
+    return rowVersionTracker.Save(sqlConnection, rowVersion, cancellation);
 }
 
 var processingLoop = new MessageProcessingLoop(
@@ -394,17 +394,17 @@ An example use case is monitoring an [audit queue](https://docs.particular.net/n
 static async Task Callback(
     SqlTransaction transaction,
     IncomingMessage message,
-    CancellationToken cancellation)
+    Cancellation cancellation)
 {
     if (message.Body != null)
     {
         using var reader = new StreamReader(message.Body);
-        var bodyText = await reader.ReadToEndAsync();
+        var bodyText = await reader.ReadToEndAsync(cancellation);
         Console.WriteLine($"Reply received:\r\n{bodyText}");
     }
 }
 
-Task<SqlTransaction> BuildTransaction(CancellationToken cancellation)
+Task<SqlTransaction> BuildTransaction(Cancellation cancellation)
 {
     return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
 }
@@ -852,7 +852,7 @@ The APIs of this extension target either a `SQLConnection` and `SQLTransaction`.
 ```cs
 public static async Task<SqlConnection> OpenConnection(
     string connectionString,
-    CancellationToken cancellation)
+    Cancellation cancellation)
 {
     var connection = new SqlConnection(connectionString);
     try
@@ -869,7 +869,7 @@ public static async Task<SqlConnection> OpenConnection(
 
 public static async Task<SqlTransaction> BeginTransaction(
     string connectionString,
-    CancellationToken cancellation)
+    Cancellation cancellation)
 {
     var connection = await OpenConnection(connectionString, cancellation);
     return connection.BeginTransaction();

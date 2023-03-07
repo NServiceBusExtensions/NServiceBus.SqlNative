@@ -46,7 +46,7 @@ public class ProcessingLoop
             }
 
             using var reader = new StreamReader(message.Body);
-            var bodyText = await reader.ReadToEndAsync();
+            var bodyText = await reader.ReadToEndAsync(cancellation);
             Console.WriteLine($"Message received in error message:\r\n{bodyText}");
         }
 
@@ -65,7 +65,7 @@ public class ProcessingLoop
             long rowVersion,
             Cancellation cancellation)
         {
-            return rowVersionTracker.Save(sqlConnection, rowVersion, token);
+            return rowVersionTracker.Save(sqlConnection, rowVersion, cancellation);
         }
 
         var processingLoop = new MessageProcessingLoop(

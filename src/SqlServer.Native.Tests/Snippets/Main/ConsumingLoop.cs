@@ -17,7 +17,7 @@ public class ConsumingLoop
             if (message.Body != null)
             {
                 using var reader = new StreamReader(message.Body);
-                var bodyText = await reader.ReadToEndAsync();
+                var bodyText = await reader.ReadToEndAsync(cancellation);
                 Console.WriteLine($"Reply received:\r\n{bodyText}");
             }
         }

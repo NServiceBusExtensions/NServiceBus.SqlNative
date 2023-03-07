@@ -52,7 +52,7 @@
         inner.Read(buffer);
 
     public override ValueTask<int> ReadAsync(Memory<byte> buffer, Cancellation cancellation = default) =>
-        inner.ReadAsync(buffer, cancellationToken);
+        inner.ReadAsync(buffer, cancellation);
 
     public override void CopyTo(Stream destination, int bufferSize) =>
         inner.CopyTo(destination, bufferSize);
