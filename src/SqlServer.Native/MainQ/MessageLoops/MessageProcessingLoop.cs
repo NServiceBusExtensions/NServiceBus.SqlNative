@@ -7,21 +7,21 @@ public class MessageProcessingLoop :
 {
     string table;
     long startingRow;
-    Func<CancellationToken, Task<SqlConnection>>? connectionBuilder;
-    Func<CancellationToken, Task<SqlTransaction>>? transactionBuilder;
-    Func<SqlTransaction, IncomingMessage, CancellationToken, Task>? transactionCallback;
-    Func<SqlConnection, IncomingMessage, CancellationToken, Task>? connectionCallback;
-    Func<SqlTransaction, long, CancellationToken, Task>? transactionPersistRowVersion;
-    Func<SqlConnection, long, CancellationToken, Task>? connectionPersistRowVersion;
+    Func<Cancellation, Task<SqlConnection>>? connectionBuilder;
+    Func<Cancellation, Task<SqlTransaction>>? transactionBuilder;
+    Func<SqlTransaction, IncomingMessage, Cancellation, Task>? transactionCallback;
+    Func<SqlConnection, IncomingMessage, Cancellation, Task>? connectionCallback;
+    Func<SqlTransaction, long, Cancellation, Task>? transactionPersistRowVersion;
+    Func<SqlConnection, long, Cancellation, Task>? connectionPersistRowVersion;
     int batchSize;
 
     public MessageProcessingLoop(
         string table,
         long startingRow,
-        Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
-        Func<SqlTransaction, IncomingMessage, CancellationToken, Task> callback,
+        Func<Cancellation, Task<SqlTransaction>> transactionBuilder,
+        Func<SqlTransaction, IncomingMessage, Cancellation, Task> callback,
         Action<Exception> errorCallback,
-        Func<SqlTransaction, long, CancellationToken, Task> persistRowVersion,
+        Func<SqlTransaction, long, Cancellation, Task> persistRowVersion,
         int batchSize = 10,
         TimeSpan? delay = null) :
         base(errorCallback, delay)
@@ -40,10 +40,10 @@ public class MessageProcessingLoop :
     public MessageProcessingLoop(
         string table,
         long startingRow,
-        Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
-        Func<SqlConnection, IncomingMessage, CancellationToken, Task> callback,
+        Func<Cancellation, Task<SqlConnection>> connectionBuilder,
+        Func<SqlConnection, IncomingMessage, Cancellation, Task> callback,
         Action<Exception> errorCallback,
-        Func<SqlConnection, long, CancellationToken, Task> persistRowVersion,
+        Func<SqlConnection, long, Cancellation, Task> persistRowVersion,
         int batchSize = 10,
         TimeSpan? delay = null) :
         base(errorCallback, delay)

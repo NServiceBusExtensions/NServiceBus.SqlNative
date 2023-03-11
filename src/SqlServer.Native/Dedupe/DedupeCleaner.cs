@@ -4,10 +4,10 @@
 
     AsyncTimer timer;
     Action<Exception> criticalError;
-    Func<CancellationToken, Task> cleanup;
+    Func<Cancellation, Task> cleanup;
     TimeSpan frequencyToRunCleanup;
 
-    public DedupeCleaner(Func<CancellationToken, Task> cleanup, Action<Exception> criticalError, TimeSpan frequencyToRunCleanup, AsyncTimer timer)
+    public DedupeCleaner(Func<Cancellation, Task> cleanup, Action<Exception> criticalError, TimeSpan frequencyToRunCleanup, AsyncTimer timer)
     {
         this.cleanup = cleanup;
         this.frequencyToRunCleanup = frequencyToRunCleanup;

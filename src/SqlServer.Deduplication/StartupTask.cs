@@ -7,11 +7,11 @@ class CleanupTask :
 {
     Table table;
     CriticalError criticalError;
-    Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+    Func<Cancellation, Task<SqlConnection>> connectionBuilder;
     DedupeCleanerJob? job;
 
     public CleanupTask(Table table, CriticalError criticalError,
-        Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+        Func<Cancellation, Task<SqlConnection>> connectionBuilder)
     {
         this.table = table;
         this.criticalError = criticalError;

@@ -9,7 +9,7 @@ namespace NServiceBus.Transport.SqlServerNative
     public class DedupeCleanerJob
     {
         Table table;
-        Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+        Func<Cancellation, Task<SqlConnection>> connectionBuilder;
         Action<Exception> criticalError;
         TimeSpan expireWindow;
         TimeSpan frequencyToRunCleanup;
@@ -22,7 +22,7 @@ namespace NServiceBus.Transport.SqlServerNative
         /// <param name="table">The sql <see cref="Table"/> to perform cleanup on.</param>
         public DedupeCleanerJob(
             Table table,
-            Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
+            Func<Cancellation, Task<SqlConnection>> connectionBuilder,
             Action<Exception> criticalError,
             TimeSpan? expireWindow = null,
             TimeSpan? frequencyToRunCleanup = null)

@@ -14,7 +14,7 @@ public static class SqlServerDedupeExtensions
     /// </summary>
     public static DedupeSettings EnableDedupe(
         this EndpointConfiguration configuration,
-        Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+        Func<Cancellation, Task<SqlConnection>> connectionBuilder)
     {
         var recoverability = configuration.Recoverability();
         recoverability.AddUnrecoverableException<NotSupportedException>();

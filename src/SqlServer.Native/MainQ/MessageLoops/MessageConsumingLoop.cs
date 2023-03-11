@@ -6,16 +6,16 @@ public class MessageConsumingLoop :
     MessageLoop
 {
     string table;
-    Func<CancellationToken, Task<SqlConnection>>? connectionBuilder;
-    Func<CancellationToken, Task<SqlTransaction>>? transactionBuilder;
-    Func<SqlTransaction, IncomingMessage, CancellationToken, Task>? transactionCallback;
-    Func<SqlConnection, IncomingMessage, CancellationToken, Task>? connectionCallback;
+    Func<Cancellation, Task<SqlConnection>>? connectionBuilder;
+    Func<Cancellation, Task<SqlTransaction>>? transactionBuilder;
+    Func<SqlTransaction, IncomingMessage, Cancellation, Task>? transactionCallback;
+    Func<SqlConnection, IncomingMessage, Cancellation, Task>? connectionCallback;
     int batchSize;
 
     public MessageConsumingLoop(
         string table,
-        Func<CancellationToken, Task<SqlTransaction>> transactionBuilder,
-        Func<SqlTransaction, IncomingMessage, CancellationToken, Task> callback,
+        Func<Cancellation, Task<SqlTransaction>> transactionBuilder,
+        Func<SqlTransaction, IncomingMessage, Cancellation, Task> callback,
         Action<Exception> errorCallback,
         int batchSize = 10,
         TimeSpan? delay = null) :
@@ -31,8 +31,8 @@ public class MessageConsumingLoop :
 
     public MessageConsumingLoop(
         string table,
-        Func<CancellationToken, Task<SqlConnection>> connectionBuilder,
-        Func<SqlConnection, IncomingMessage, CancellationToken, Task> callback,
+        Func<Cancellation, Task<SqlConnection>> connectionBuilder,
+        Func<SqlConnection, IncomingMessage, Cancellation, Task> callback,
         Action<Exception> errorCallback,
         int batchSize = 10,
         TimeSpan? delay = null) :

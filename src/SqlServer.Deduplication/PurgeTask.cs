@@ -6,9 +6,9 @@ class PurgeTask :
     FeatureStartupTask
 {
     Table table;
-    Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+    Func<Cancellation, Task<SqlConnection>> connectionBuilder;
 
-    public PurgeTask(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder)
+    public PurgeTask(Table table, Func<Cancellation, Task<SqlConnection>> connectionBuilder)
     {
         this.table = table;
         this.connectionBuilder = connectionBuilder;
@@ -16,7 +16,7 @@ class PurgeTask :
 
     protected override async Task OnStart(IMessageSession session, Cancellation cancellation = default)
     {
-        using var connection = await connectionBuilder(CancellationToken.None);
+        using var connection = await connectionBuilder(Cancellation.None);
         var dedupeManager = new DedupeManager(connection, table);
         await dedupeManager.PurgeItems(cancellation);
     }

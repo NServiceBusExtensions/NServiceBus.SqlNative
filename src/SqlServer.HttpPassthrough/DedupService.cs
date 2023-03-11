@@ -6,11 +6,11 @@ class DedupService :
     IHostedService
 {
     Table table;
-    Func<CancellationToken, Task<SqlConnection>> connectionBuilder;
+    Func<Cancellation, Task<SqlConnection>> connectionBuilder;
     Action<Exception> criticalError;
     DedupeCleanerJob? job;
 
-    public DedupService(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder, Action<Exception> criticalError)
+    public DedupService(Table table, Func<Cancellation, Task<SqlConnection>> connectionBuilder, Action<Exception> criticalError)
     {
         this.table = table;
         this.connectionBuilder = connectionBuilder;

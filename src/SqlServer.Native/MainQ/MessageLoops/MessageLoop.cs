@@ -5,7 +5,7 @@ public abstract class MessageLoop :
 {
     Action<Exception> errorCallback;
     Task? task;
-    CancellationTokenSource? tokenSource;
+    CancellationSource? tokenSource;
     TimeSpan delay;
 
     public MessageLoop(

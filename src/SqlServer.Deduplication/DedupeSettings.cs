@@ -6,9 +6,9 @@ namespace NServiceBus;
 public class DedupeSettings
 {
     internal Table Table = "Deduplication";
-    internal Func<CancellationToken, Task<SqlConnection>> ConnectionBuilder;
+    internal Func<Cancellation, Task<SqlConnection>> ConnectionBuilder;
 
-    internal DedupeSettings(Func<CancellationToken, Task<SqlConnection>> connectionBuilder) =>
+    internal DedupeSettings(Func<Cancellation, Task<SqlConnection>> connectionBuilder) =>
         ConnectionBuilder = connectionBuilder;
 
     internal bool RunCleanTask = true;

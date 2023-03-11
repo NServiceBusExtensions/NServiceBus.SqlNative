@@ -42,7 +42,7 @@ public class CleanerTests
         {
             if (i % 9 == 0) //Succeed every 9th attempt
             {
-                await timer.Tick(DateTime.UtcNow, CancellationToken.None);
+                await timer.Tick(DateTime.UtcNow, Cancellation.None);
             }
             else
             {
@@ -62,7 +62,7 @@ public class CleanerTests
         public void OnError(Exception error) =>
             errorCallback!(error);
 
-        public override void Start(Func<DateTime, CancellationToken, Task> callback, TimeSpan interval, Action<Exception> errorCallback, Func<TimeSpan, CancellationToken, Task> delayStrategy)
+        public override void Start(Func<DateTime, Cancellation, Task> callback, TimeSpan interval, Action<Exception> errorCallback, Func<TimeSpan, Cancellation, Task> delayStrategy)
         {
             this.callback = callback;
             this.errorCallback = errorCallback;
@@ -71,7 +71,7 @@ public class CleanerTests
         public override Task Stop() =>
             Task.FromResult(0);
 
-        Func<DateTime, CancellationToken, Task>? callback;
+        Func<DateTime, Cancellation, Task>? callback;
         Action<Exception>? errorCallback;
     }
 }

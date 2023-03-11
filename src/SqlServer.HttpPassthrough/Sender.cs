@@ -8,12 +8,12 @@ using Table = NServiceBus.Transport.SqlServerNative.Table;
 class Sender
 {
     Persister attachments;
-    Func<CancellationToken, Task<SqlConnection>> connectionFunc;
+    Func<Cancellation, Task<SqlConnection>> connectionFunc;
     HeadersBuilder headersBuilder;
     Table dedupeTable;
     ILogger logger;
 
-    public Sender(Func<CancellationToken, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
+    public Sender(Func<Cancellation, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
     {
         this.connectionFunc = connectionFunc;
         attachments = new(new(attachmentsTable.TableName, attachmentsTable.Schema, false));

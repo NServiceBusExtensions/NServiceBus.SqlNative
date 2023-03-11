@@ -5,7 +5,7 @@ using NServiceBus.Transport.SqlServerDeduplication;
 class SendRegistration :
     RegisterStep
 {
-    public SendRegistration(Table table, Func<CancellationToken, Task<SqlConnection>> connectionBuilder) :
+    public SendRegistration(Table table, Func<Cancellation, Task<SqlConnection>> connectionBuilder) :
         base(
             stepId: $"{AssemblyHelper.Name}Send",
             behavior: typeof(SendBehavior),

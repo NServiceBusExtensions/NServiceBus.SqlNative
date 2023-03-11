@@ -17,7 +17,7 @@ class NeedToInstallSomething :
             return;
         }
 
-        using var connection = await settings.ConnectionBuilder(CancellationToken.None);
+        using var connection = await settings.ConnectionBuilder(Cancellation.None);
         var manager = new DedupeManager(connection, settings.Table);
         await manager.Create(cancellation);
     }
