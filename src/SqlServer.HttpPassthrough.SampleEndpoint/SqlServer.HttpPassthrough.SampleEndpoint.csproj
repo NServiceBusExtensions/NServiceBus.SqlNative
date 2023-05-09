@@ -8,7 +8,7 @@
     <PackageReference Include="NServiceBus" Version="8.0.3" />
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="3.0.0" />
     <PackageReference Include="NServiceBus.Transport.SqlServer" Version="7.0.0" />
-    <PackageReference Include="NServiceBus.Attachments.Sql" Version="10.5.0" />
+    <PackageReference Include="NServiceBus.Attachments.Sql" Version="10.5.1" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.90" PrivateAssets="all" />
     <Using Include="NServiceBus.IMessageHandlerContext" Alias="HandlerContext" />
