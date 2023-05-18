@@ -2,18 +2,16 @@
   <PropertyGroup>
     <AssemblyName>NServiceBus.SqlServer.HttpPassthrough</AssemblyName>
     <PackageName>NServiceBus.SqlServer.HttpPassthrough</PackageName>
-    <TargetFrameworks>net48;net6.0</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
     <Description>HTTP passthrough for the SQL Server transport.</Description>
   </PropertyGroup>
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
     <PackageReference Include="Fody" Version="6.7.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="10.5.1" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.90" PrivateAssets="all" />
