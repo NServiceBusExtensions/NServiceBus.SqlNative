@@ -3,7 +3,7 @@
 public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     where TIncoming : class, IIncomingMessage
 {
-    public virtual async Task<IncomingResult> Read(int size, long startRowVersion, Func<TIncoming, Task> func, Cancellation cancellation = default)
+    public virtual async Task<IncomingResult> Read(int size, long startRowVersion, Func<TIncoming, Cancellation, Task> func, Cancellation cancellation = default)
     {
         Guard.AgainstNegativeAndZero(size);
         Guard.AgainstNegativeAndZero(startRowVersion);

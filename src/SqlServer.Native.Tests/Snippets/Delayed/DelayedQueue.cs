@@ -97,7 +97,7 @@ public class DelayedQueue
         var result = await manager.Read(
             size: 5,
             startRowVersion: 10,
-            func: async message =>
+            func: async (message, cancellation) =>
             {
                 Console.WriteLine(message.Headers);
                 if (message.Body == null)
@@ -106,7 +106,7 @@ public class DelayedQueue
                 }
 
                 using var reader = new StreamReader(message.Body);
-                var bodyText = await reader.ReadToEndAsync();
+                var bodyText = await reader.ReadToEndAsync(cancellation);
                 Console.WriteLine(bodyText);
             });
 
@@ -144,7 +144,7 @@ public class DelayedQueue
         var manager = new DelayedQueueManager("endpointTable", sqlConnection);
         var result = await manager.Consume(
             size: 5,
-            func: async message =>
+            func: async (message, cancellation) =>
             {
                 Console.WriteLine(message.Headers);
                 if (message.Body == null)
@@ -153,7 +153,7 @@ public class DelayedQueue
                 }
 
                 using var reader = new StreamReader(message.Body);
-                var bodyText = await reader.ReadToEndAsync();
+                var bodyText = await reader.ReadToEndAsync(cancellation);
                 Console.WriteLine(bodyText);
             });
 

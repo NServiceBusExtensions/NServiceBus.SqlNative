@@ -34,7 +34,7 @@ public class DelayedReaderTests :
         var result = await reader.Read(
             size: 3,
             startRowVersion: 2,
-            func: message =>
+            func: (message, _) =>
             {
                 messages.Add(message.ToVerifyTarget());
                 return Task.CompletedTask;

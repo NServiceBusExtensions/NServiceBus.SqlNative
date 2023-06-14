@@ -27,7 +27,7 @@ if(db_id('{database}') is null)
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
         await reader.Read(size: 10,
             startRowVersion: 1,
-            func: message =>
+            func: (message, _) =>
             {
                 messages.Add(message.ToVerifyTarget());
                 return Task.CompletedTask;
@@ -41,7 +41,7 @@ if(db_id('{database}') is null)
         var messages = new ConcurrentBag<IncomingDelayedVerifyTarget>();
         await reader.Read(size: 10,
             startRowVersion: 1,
-            func: message =>
+            func: (message, _) =>
             {
                 messages.Add(message.ToVerifyTarget());
                 return Task.CompletedTask;

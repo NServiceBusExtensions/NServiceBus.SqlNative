@@ -22,7 +22,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
         Connection = transaction.Connection!;
     }
 
-    async Task<IncomingResult> ReadMultiple(SqlCommand command, Func<TIncoming, Task> func, Cancellation cancellation)
+    async Task<IncomingResult> ReadMultiple(SqlCommand command, Func<TIncoming, Cancellation, Task> func, Cancellation cancellation)
     {
         var count = 0;
         long? lastRowVersion = null;
@@ -33,7 +33,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
             cancellation.ThrowIfCancellationRequested();
             await using var message = await ReadMessage(reader);
             lastRowVersion = message.RowVersion;
-            await func(message);
+            await func(message, cancellation);
         }
         return new()
         {

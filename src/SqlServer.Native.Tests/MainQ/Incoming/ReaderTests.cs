@@ -34,7 +34,7 @@ public class ReaderTests :
         var result = await reader.Read(
             size: 3,
             startRowVersion: 2,
-            func: message =>
+            func: (message, _) =>
             {
                 messages.Add(message.ToVerifyTarget());
                 return Task.CompletedTask;
@@ -53,7 +53,7 @@ public class ReaderTests :
         await reader.Read(
             size: 10,
             startRowVersion: 1,
-            func: message =>
+            func: (message, _) =>
             {
                 messages.Add(message.ToVerifyTarget());
                 return Task.CompletedTask;

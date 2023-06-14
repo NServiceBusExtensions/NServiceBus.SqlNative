@@ -13,7 +13,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
 
     protected abstract Task<TIncoming> ReadMessage(SqlDataReader dataReader, params Func<ValueTask>[] cleanups);
 
-    public virtual async Task<IncomingResult> Consume(int size, Func<TIncoming, Task> func, Cancellation cancellation = default)
+    public virtual async Task<IncomingResult> Consume(int size, Func<TIncoming, Cancellation, Task> func, Cancellation cancellation = default)
     {
         Guard.AgainstNegativeAndZero(size, nameof(size));
         using var command = BuildConsumeCommand(size);

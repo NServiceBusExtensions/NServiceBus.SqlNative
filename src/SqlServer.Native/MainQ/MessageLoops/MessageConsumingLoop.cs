@@ -54,7 +54,7 @@ public class MessageConsumingLoop :
             using (connection = await connectionBuilder(cancellation))
             {
                 var consumer = new QueueManager(table, connection);
-                await RunBatch(consumer, message => connectionCallback!(connection, message, cancellation), cancellation);
+                await RunBatch(consumer, (message, cancellation) => connectionCallback!(connection, message, cancellation), cancellation);
             }
 
             return;
@@ -67,7 +67,7 @@ public class MessageConsumingLoop :
             var consumer = new QueueManager(table, transaction);
             try
             {
-                await RunBatch(consumer, message => transactionCallback!(transaction, message, cancellation), cancellation);
+                await RunBatch(consumer, (message, cancellation) => transactionCallback!(transaction, message, cancellation), cancellation);
 
                 transaction.Commit();
             }
@@ -85,7 +85,7 @@ public class MessageConsumingLoop :
         }
     }
 
-    async Task RunBatch(QueueManager consumer, Func<IncomingMessage, Task> action, Cancellation cancellation)
+    async Task RunBatch(QueueManager consumer, Func<IncomingMessage, Cancellation, Task> action, Cancellation cancellation)
     {
         while (true)
         {
