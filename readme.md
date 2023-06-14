@@ -615,7 +615,7 @@ Consuming a batch of messages.
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var result = await manager.Consume(
     size: 5,
-    action: async message =>
+    func: async message =>
     {
         Console.WriteLine(message.Headers);
         if (message.Body == null)

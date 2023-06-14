@@ -31,7 +31,8 @@ public class DelayedConsumerTests :
 
         var consumer = new DelayedQueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingDelayedVerifyTarget>();
-        var result = await consumer.Consume(size: 3,
+        var result = await consumer.Consume(
+            size: 3,
             action: message => { messages.Add(message.ToVerifyTarget()); });
         Assert.Equal(3, result.Count);
         Assert.Equal(3, result.LastRowVersion);
