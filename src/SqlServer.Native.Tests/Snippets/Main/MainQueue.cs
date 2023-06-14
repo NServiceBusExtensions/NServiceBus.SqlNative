@@ -98,7 +98,7 @@ public class MainQueue
         var result = await manager.Read(
             size: 5,
             startRowVersion: 10,
-            action: async message =>
+            func: async message =>
             {
                 Console.WriteLine(message.Headers);
                 if (message.Body == null)
@@ -145,7 +145,7 @@ public class MainQueue
         var manager = new QueueManager("endpointTable", sqlConnection);
         var result = await manager.Consume(
             size: 5,
-            action: async message =>
+            func: async message =>
             {
                 Console.WriteLine(message.Headers);
                 if (message.Body == null)

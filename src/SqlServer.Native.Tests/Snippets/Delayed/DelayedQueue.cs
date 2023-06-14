@@ -97,7 +97,7 @@ public class DelayedQueue
         var result = await manager.Read(
             size: 5,
             startRowVersion: 10,
-            action: async message =>
+            func: async message =>
             {
                 Console.WriteLine(message.Headers);
                 if (message.Body == null)

@@ -33,7 +33,11 @@ public class ConsumerTests :
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
         var result = await consumer.Consume(
             size: 3,
-            action: message => { messages.Add(message.ToVerifyTarget()); });
+            func: message =>
+            {
+                messages.Add(message.ToVerifyTarget());
+                return Task.CompletedTask;
+            });
         Assert.Equal(3, result.Count);
     }
 
@@ -46,7 +50,11 @@ public class ConsumerTests :
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
         var result = await consumer.Consume(
             size: 10,
-            action: message => { messages.Add(message.ToVerifyTarget()); });
+            func: message =>
+            {
+                messages.Add(message.ToVerifyTarget());
+                return Task.CompletedTask;
+            });
         Assert.Equal(5, result.Count);
         await Verify(messages.OrderBy(x => x.Id));
     }

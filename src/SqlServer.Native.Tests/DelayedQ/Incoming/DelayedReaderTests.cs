@@ -34,7 +34,11 @@ public class DelayedReaderTests :
         var result = await reader.Read(
             size: 3,
             startRowVersion: 2,
-            action: message => { messages.Add(message.ToVerifyTarget()); });
+            func: message =>
+            {
+                messages.Add(message.ToVerifyTarget());
+                return Task.CompletedTask;
+            });
         Assert.Equal(4, result.LastRowVersion);
         Assert.Equal(3, result.Count);
         await Verify(messages.OrderBy(x => x.Due));
