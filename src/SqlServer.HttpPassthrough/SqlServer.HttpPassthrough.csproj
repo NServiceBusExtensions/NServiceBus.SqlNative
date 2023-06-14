@@ -12,7 +12,7 @@
     <PackageReference Include="Fody" Version="6.7.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="10.5.1" />
+    <PackageReference Include="NServiceBus.Attachments.Sql.Raw" Version="11.0.0" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.90" PrivateAssets="all" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />

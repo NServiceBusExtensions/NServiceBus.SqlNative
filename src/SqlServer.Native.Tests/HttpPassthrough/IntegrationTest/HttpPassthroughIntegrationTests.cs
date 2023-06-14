@@ -59,7 +59,7 @@ public class HttpPassthroughIntegrationTests :
     static async Task<IEndpointInstance> StartEndpoint(ManualResetEvent resetEvent)
     {
         var configuration = await EndpointCreator.Create(nameof(HttpPassthroughIntegrationTests));
-        var attachments = configuration.EnableAttachments(async () => await Connection.OpenAsyncConnection(), TimeToKeep.Default);
+        var attachments = configuration.EnableAttachments(Connection.OpenAsyncConnection, TimeToKeep.Default);
         configuration.RegisterComponents(_ => _.AddSingleton(resetEvent));
         attachments.UseTransportConnectivity();
         return await Endpoint.Start(configuration);
