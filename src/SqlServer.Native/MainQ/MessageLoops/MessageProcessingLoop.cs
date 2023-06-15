@@ -69,7 +69,7 @@ public class MessageProcessingLoop :
                 var reader = new QueueManager(table, connection);
                 await RunBatch(
                     reader,
-                    messageFunc: message => connectionCallback!(connection, message, cancellation),
+                    messageFunc: (message, cancellation) => connectionCallback!(connection, message, cancellation),
                     persistFunc: () => connectionPersistRowVersion!(connection, startingRow, cancellation),
                     cancellation);
             }
@@ -87,7 +87,7 @@ public class MessageProcessingLoop :
             {
                 await RunBatch(
                     reader,
-                    messageFunc: message => transactionCallback!(transaction, message, cancellation),
+                    messageFunc: (message, cancellation) => transactionCallback!(transaction, message, cancellation),
                     persistFunc: () => transactionPersistRowVersion!(transaction, startingRow, cancellation),
                     cancellation);
                     transaction.Commit();
@@ -106,7 +106,7 @@ public class MessageProcessingLoop :
         }
     }
 
-    async Task RunBatch(QueueManager reader, Func<IncomingMessage, Task> messageFunc, Func<Task> persistFunc, Cancellation cancellation)
+    async Task RunBatch(QueueManager reader, Func<IncomingMessage, Cancellation, Task> messageFunc, Func<Task> persistFunc, Cancellation cancellation)
     {
         while (true)
         {

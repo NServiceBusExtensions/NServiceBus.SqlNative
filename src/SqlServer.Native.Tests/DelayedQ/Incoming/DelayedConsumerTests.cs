@@ -33,7 +33,11 @@ public class DelayedConsumerTests :
         var messages = new ConcurrentBag<IncomingDelayedVerifyTarget>();
         var result = await consumer.Consume(
             size: 3,
-            action: message => { messages.Add(message.ToVerifyTarget()); });
+            func: (message, _) =>
+            {
+                messages.Add(message.ToVerifyTarget());
+                return Task.CompletedTask;
+            });
         Assert.Equal(3, result.Count);
         Assert.Equal(3, result.LastRowVersion);
         await Verify(messages.OrderBy(x => x.Due));

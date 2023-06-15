@@ -3,13 +3,6 @@ using Microsoft.Data.SqlClient;
 
 static class Extensions
 {
-    public static Func<T, Task> ToTaskFunc<T>(this Action<T> action) =>
-        x =>
-        {
-            action(x);
-            return Task.CompletedTask;
-        };
-
     public static void SetValueOrDbNull(this SqlParameter corrParam, DateTime? value)
     {
         if (value == null)

@@ -33,7 +33,7 @@ public class PassthroughConfiguration
         Func<HttpContext, PassthroughMessage, Task<Table>> callback,
         Action<Exception> dedupCriticalError) :
         this(
-            connectionFunc: async token =>
+            connectionFunc: async cancellation =>
             {
                 var connection = connectionFunc();
                 if (connection.State == ConnectionState.Open)
@@ -42,7 +42,7 @@ public class PassthroughConfiguration
                 }
                 try
                 {
-                    await connection.OpenAsync(token);
+                    await connection.OpenAsync(cancellation);
                     return connection;
                 }
                 catch

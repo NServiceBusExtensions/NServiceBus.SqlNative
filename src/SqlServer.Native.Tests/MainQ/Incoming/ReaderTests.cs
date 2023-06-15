@@ -34,7 +34,11 @@ public class ReaderTests :
         var result = await reader.Read(
             size: 3,
             startRowVersion: 2,
-            action: message => { messages.Add(message.ToVerifyTarget()); });
+            func: (message, _) =>
+            {
+                messages.Add(message.ToVerifyTarget());
+                return Task.CompletedTask;
+            });
         Assert.Equal(4, result.LastRowVersion);
         Assert.Equal(3, result.Count);
     }
@@ -47,9 +51,13 @@ public class ReaderTests :
         var reader = new QueueManager(table, SqlConnection);
         var messages = new ConcurrentBag<IncomingVerifyTarget>();
         await reader.Read(
-                size: 10,
-                startRowVersion: 1,
-                action: message => { messages.Add(message.ToVerifyTarget()); });
+            size: 10,
+            startRowVersion: 1,
+            func: (message, _) =>
+            {
+                messages.Add(message.ToVerifyTarget());
+                return Task.CompletedTask;
+            });
         await Verify(messages.OrderBy(x => x.Id));
     }
 

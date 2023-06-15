@@ -212,7 +212,7 @@ var manager = new QueueManager("endpointTable", sqlConnection);
 var result = await manager.Read(
     size: 5,
     startRowVersion: 10,
-    action: async message =>
+    func: async (message, cancellation) =>
     {
         Console.WriteLine(message.Headers);
         if (message.Body == null)
@@ -221,7 +221,7 @@ var result = await manager.Read(
         }
 
         using var reader = new StreamReader(message.Body);
-        var bodyText = await reader.ReadToEndAsync();
+        var bodyText = await reader.ReadToEndAsync(cancellation);
         Console.WriteLine(bodyText);
     });
 
@@ -362,7 +362,7 @@ Consuming a batch of messages.
 var manager = new QueueManager("endpointTable", sqlConnection);
 var result = await manager.Consume(
     size: 5,
-    action: async message =>
+    func: async (message, cancellation) =>
     {
         Console.WriteLine(message.Headers);
         if (message.Body == null)
@@ -371,7 +371,7 @@ var result = await manager.Consume(
         }
 
         using var reader = new StreamReader(message.Body);
-        var bodyText = await reader.ReadToEndAsync();
+        var bodyText = await reader.ReadToEndAsync(cancellation);
         Console.WriteLine(bodyText);
     });
 
@@ -555,7 +555,7 @@ var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var result = await manager.Read(
     size: 5,
     startRowVersion: 10,
-    action: async message =>
+    func: async (message, cancellation) =>
     {
         Console.WriteLine(message.Headers);
         if (message.Body == null)
@@ -564,7 +564,7 @@ var result = await manager.Read(
         }
 
         using var reader = new StreamReader(message.Body);
-        var bodyText = await reader.ReadToEndAsync();
+        var bodyText = await reader.ReadToEndAsync(cancellation);
         Console.WriteLine(bodyText);
     });
 
@@ -615,7 +615,7 @@ Consuming a batch of messages.
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var result = await manager.Consume(
     size: 5,
-    func: async message =>
+    func: async (message, cancellation) =>
     {
         Console.WriteLine(message.Headers);
         if (message.Body == null)
@@ -624,7 +624,7 @@ var result = await manager.Consume(
         }
 
         using var reader = new StreamReader(message.Body);
-        var bodyText = await reader.ReadToEndAsync();
+        var bodyText = await reader.ReadToEndAsync(cancellation);
         Console.WriteLine(bodyText);
     });
 

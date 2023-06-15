@@ -14,10 +14,10 @@ class MyHandler :
         return context.Attachments().ProcessStreams(WriteAttachment);
     }
 
-    static async Task WriteAttachment(AttachmentStream stream)
+    static async Task WriteAttachment(AttachmentStream stream, Cancellation cancellation)
     {
         using var reader = new StreamReader(stream);
-        var contents = await reader.ReadToEndAsync();
+        var contents = await reader.ReadToEndAsync(cancellation);
         Console.WriteLine("Attachment: {0}. Contents:{1}", stream.Name, contents);
     }
 }

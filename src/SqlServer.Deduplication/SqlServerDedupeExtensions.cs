@@ -25,14 +25,14 @@ public static class SqlServerDedupeExtensions
         return dedupeSettings;
     }
 
-    public static Task<DedupeResult> SendLocalWithDedupe(this IMessageSession session, Guid messageId, object message, string? context = null)
+    public static Task<DedupeResult> SendLocalWithDedupe(this IMessageSession session, Guid messageId, object message, string? context = null, Cancellation cancellation = default)
     {
         var options = new SendOptions();
         options.RouteToThisEndpoint();
-        return SendWithDedupe(session, messageId, message, options, context);
+        return SendWithDedupe(session, messageId, message, options, context, cancellation);
     }
 
-    public static Task<DedupeResult> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions? options = null, string? context = null)
+    public static Task<DedupeResult> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions? options = null, string? context = null, Cancellation cancellation = default)
     {
         Guard.AgainstEmpty(messageId);
         if (options == null)
@@ -44,7 +44,7 @@ public static class SqlServerDedupeExtensions
             ValidateMessageId(options);
         }
 
-        return InnerSendWithDedupe(session, message, messageId, options, context);
+        return InnerSendWithDedupe(session, message, messageId, options, context, cancellation);
     }
 
     static void ValidateMessageId(SendOptions options)
@@ -55,7 +55,7 @@ public static class SqlServerDedupeExtensions
         }
     }
 
-    static async Task<DedupeResult> InnerSendWithDedupe(IMessageSession session, object message, Guid messageId, SendOptions options, string? context)
+    static async Task<DedupeResult> InnerSendWithDedupe(IMessageSession session, object message, Guid messageId, SendOptions options, string? context, Cancellation cancellation)
     {
         var pipelineState = new DedupePipelineState
         {
@@ -64,7 +64,7 @@ public static class SqlServerDedupeExtensions
         DedupePipelineState.Set(options, pipelineState);
         options.SetMessageId(messageId.ToString());
 
-        await session.Send(message, options);
+        await session.Send(message, options, cancellation);
 
         return new(
             dedupeOutcome: pipelineState.DedupeOutcome,
