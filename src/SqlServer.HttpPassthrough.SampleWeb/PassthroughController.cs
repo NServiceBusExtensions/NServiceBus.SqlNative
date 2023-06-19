@@ -13,11 +13,11 @@ public class PassthroughController :
         this.sender = sender;
 
     [HttpPost]
-    public async Task Post(Cancellation cancellation)
+    public async Task Post(Cancel cancel)
     {
         try
         {
-            await sender.Send(HttpContext, cancellation);
+            await sender.Send(HttpContext, cancel);
         }
         catch (SendFailureException exception)
         {

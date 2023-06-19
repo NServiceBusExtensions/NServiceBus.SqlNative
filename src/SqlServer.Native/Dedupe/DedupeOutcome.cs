@@ -1,25 +1,23 @@
-﻿
-#if (SqlServerDedupe)
-namespace NServiceBus.Transport.SqlServerDeduplication
+﻿#if (SqlServerDedupe)
+namespace NServiceBus.Transport.SqlServerDeduplication;
 #else
-namespace NServiceBus.Transport.SqlServerNative
+namespace NServiceBus.Transport.SqlServerNative;
 #endif
+
+public struct DedupeResult
 {
-    public struct DedupeResult
+    public DedupeResult(DedupeOutcome dedupeOutcome, string? context)
     {
-        public DedupeResult(DedupeOutcome dedupeOutcome, string? context)
-        {
-            DedupeOutcome = dedupeOutcome;
-            Context = context;
-        }
-
-        public DedupeOutcome DedupeOutcome { get; }
-        public string? Context { get; }
+        DedupeOutcome = dedupeOutcome;
+        Context = context;
     }
 
-    public enum DedupeOutcome
-    {
-        Sent,
-        Deduplicated
-    }
+    public DedupeOutcome DedupeOutcome { get; }
+    public string? Context { get; }
+}
+
+public enum DedupeOutcome
+{
+    Sent,
+    Deduplicated
 }

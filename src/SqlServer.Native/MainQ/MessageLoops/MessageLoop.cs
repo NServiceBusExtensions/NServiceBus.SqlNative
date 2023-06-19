@@ -5,7 +5,7 @@ public abstract class MessageLoop :
 {
     Action<Exception> errorCallback;
     Task? task;
-    CancellationSource? tokenSource;
+    CancelSource? tokenSource;
     TimeSpan delay;
 
     public MessageLoop(
@@ -20,17 +20,17 @@ public abstract class MessageLoop :
     public void Start()
     {
         tokenSource = new();
-        var cancellation = tokenSource.Token;
+        var cancel = tokenSource.Token;
 
         task = Task.Run(async () =>
             {
-                while (!cancellation.IsCancellationRequested)
+                while (!cancel.IsCancellationRequested)
                 {
                     try
                     {
-                        await RunBatch(cancellation);
+                        await RunBatch(cancel);
 
-                        await Task.Delay(delay, cancellation);
+                        await Task.Delay(delay, cancel);
                     }
                     catch (OperationCanceledException)
                     {
@@ -42,10 +42,10 @@ public abstract class MessageLoop :
                     }
                 }
             },
-            cancellation);
+            cancel);
     }
 
-    protected abstract Task RunBatch(Cancellation cancellation);
+    protected abstract Task RunBatch(Cancel cancel);
 
     public Task Stop()
     {

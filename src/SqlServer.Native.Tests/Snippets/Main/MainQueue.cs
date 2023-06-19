@@ -98,7 +98,7 @@ public class MainQueue
         var result = await manager.Read(
             size: 5,
             startRowVersion: 10,
-            func: async (message, cancellation) =>
+            func: async (message, cancel) =>
             {
                 Console.WriteLine(message.Headers);
                 if (message.Body == null)
@@ -107,7 +107,7 @@ public class MainQueue
                 }
 
                 using var reader = new StreamReader(message.Body);
-                var bodyText = await reader.ReadToEndAsync(cancellation);
+                var bodyText = await reader.ReadToEndAsync(cancel);
                 Console.WriteLine(bodyText);
             });
 
@@ -145,7 +145,7 @@ public class MainQueue
         var manager = new QueueManager("endpointTable", sqlConnection);
         var result = await manager.Consume(
             size: 5,
-            func: async (message, cancellation) =>
+            func: async (message, cancel) =>
             {
                 Console.WriteLine(message.Headers);
                 if (message.Body == null)
@@ -154,7 +154,7 @@ public class MainQueue
                 }
 
                 using var reader = new StreamReader(message.Body);
-                var bodyText = await reader.ReadToEndAsync(cancellation);
+                var bodyText = await reader.ReadToEndAsync(cancel);
                 Console.WriteLine(bodyText);
             });
 

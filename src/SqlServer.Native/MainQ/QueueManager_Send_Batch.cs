@@ -2,7 +2,7 @@
 
 public partial class QueueManager
 {
-    public virtual async Task Send(IEnumerable<OutgoingMessage> messages, Cancellation cancellation = default)
+    public virtual async Task Send(IEnumerable<OutgoingMessage> messages, Cancel cancel = default)
     {
         using var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
         var parameters = command.Parameters;
@@ -17,11 +17,11 @@ public partial class QueueManager
             expiresParameter.SetValueOrDbNull(message.Expires);
             headersParameter.Value = message.Headers;
             bodyParameter.SetBinaryOrDbNull(message.Body);
-            await command.RunNonQuery(cancellation);
+            await command.RunNonQuery(cancel);
         }
     }
 
-    public virtual async Task Send(IAsyncEnumerable<OutgoingMessage> messages, Cancellation cancellation = default)
+    public virtual async Task Send(IAsyncEnumerable<OutgoingMessage> messages, Cancel cancel = default)
     {
         using var command = Connection.CreateCommand(Transaction, string.Format(sendSql, Table));
         var parameters = command.Parameters;
@@ -30,13 +30,13 @@ public partial class QueueManager
         var expiresParameter = CreateExpiresParameter(command, parameters);
         var headersParameter = CreateHeadersParameter(command, parameters);
         var bodyParameter = CreateBodyParameter(command, parameters);
-        await foreach (var message in messages.WithCancellation(cancellation))
+        await foreach (var message in messages.WithCancellation(cancel))
         {
             idParameter.Value = message.Id;
             expiresParameter.SetValueOrDbNull(message.Expires);
             headersParameter.Value = message.Headers;
             bodyParameter.SetBinaryOrDbNull(message.Body);
-            await command.RunNonQuery(cancellation);
+            await command.RunNonQuery(cancel);
         }
     }
 }

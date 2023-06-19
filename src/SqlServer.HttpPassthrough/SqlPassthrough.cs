@@ -21,12 +21,12 @@ class SqlPassthrough :
         this.logger = logger;
     }
 
-    public async Task Send(HttpContext context, Cancellation cancellation = default)
+    public async Task Send(HttpContext context, Cancel cancel = default)
     {
-        var passThroughMessage = await RequestParser.Extract(context.Request, cancellation);
+        var passThroughMessage = await RequestParser.Extract(context.Request, cancel);
         var destinationTable = await sendCallback(context, passThroughMessage).ConfigureAwait(true);
         ProcessClaims(context, passThroughMessage);
-        var rowVersion = await sender.Send(passThroughMessage, destinationTable, cancellation).ConfigureAwait(true);
+        var rowVersion = await sender.Send(passThroughMessage, destinationTable, cancel).ConfigureAwait(true);
         var wasDedup = rowVersion == 0;
         if (wasDedup)
         {

@@ -12,19 +12,19 @@ public class ConsumingLoop
         static async Task Callback(
             SqlTransaction transaction,
             IncomingMessage message,
-            Cancellation cancellation)
+            Cancel cancel)
         {
             if (message.Body != null)
             {
                 using var reader = new StreamReader(message.Body);
-                var bodyText = await reader.ReadToEndAsync(cancellation);
+                var bodyText = await reader.ReadToEndAsync(cancel);
                 Console.WriteLine($"Reply received:\r\n{bodyText}");
             }
         }
 
-        Task<SqlTransaction> BuildTransaction(Cancellation cancellation)
+        Task<SqlTransaction> BuildTransaction(Cancel cancel)
         {
-            return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
+            return ConnectionHelpers.BeginTransaction(connectionString, cancel);
         }
 
         static void ErrorCallback(Exception exception)

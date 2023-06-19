@@ -13,28 +13,28 @@ public class RowVersionTracker
         this.table = table;
     }
 
-    public Task CreateTable(SqlConnection connection, Cancellation cancellation = default) =>
-        CreateTable(connection, null, cancellation);
+    public Task CreateTable(SqlConnection connection, Cancel cancel = default) =>
+        CreateTable(connection, null, cancel);
 
-    public Task CreateTable(SqlTransaction transaction, Cancellation cancellation = default) =>
-        CreateTable(transaction.Connection!, transaction, cancellation);
+    public Task CreateTable(SqlTransaction transaction, Cancel cancel = default) =>
+        CreateTable(transaction.Connection!, transaction, cancel);
 
-    Task CreateTable(SqlConnection connection, SqlTransaction? transaction, Cancellation cancellation) =>
-        connection.RunCommand(transaction, string.Format(Sql, table), cancellation);
+    Task CreateTable(SqlConnection connection, SqlTransaction? transaction, Cancel cancel) =>
+        connection.RunCommand(transaction, string.Format(Sql, table), cancel);
 
-    public Task Save(SqlConnection connection, long rowVersion, Cancellation cancellation = default)
+    public Task Save(SqlConnection connection, long rowVersion, Cancel cancel = default)
     {
         Guard.AgainstNegativeAndZero(rowVersion);
-        return Save(connection, null, rowVersion, cancellation);
+        return Save(connection, null, rowVersion, cancel);
     }
 
-    public Task Save(SqlTransaction transaction, long rowVersion, Cancellation cancellation = default)
+    public Task Save(SqlTransaction transaction, long rowVersion, Cancel cancel = default)
     {
         Guard.AgainstNegativeAndZero(rowVersion);
-        return Save(transaction.Connection!, transaction, rowVersion, cancellation);
+        return Save(transaction.Connection!, transaction, rowVersion, cancel);
     }
 
-    async Task Save(SqlConnection connection, SqlTransaction? transaction, long rowVersion, Cancellation cancellation)
+    async Task Save(SqlConnection connection, SqlTransaction? transaction, long rowVersion, Cancel cancel)
     {
         using var command = connection.CreateCommand(
             transaction: transaction,
@@ -50,16 +50,16 @@ if @@rowcount = 0
         parameter.DbType = DbType.Int64;
         parameter.Value = rowVersion;
         command.Parameters.Add(parameter);
-        await command.RunNonQuery(cancellation);
+        await command.RunNonQuery(cancel);
     }
 
-    public async Task<long> Get(SqlConnection connection, Cancellation cancellation = default)
+    public async Task<long> Get(SqlConnection connection, Cancel cancel = default)
     {
         using var command = connection.CreateCommand();
         command.CommandText = $@"
 select top (1) RowVersion
 from {table}";
-        var result = await command.RunScalar(cancellation);
+        var result = await command.RunScalar(cancel);
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         if (result == null)
         {

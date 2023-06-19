@@ -6,25 +6,25 @@ class DedupService :
     IHostedService
 {
     Table table;
-    Func<Cancellation, Task<SqlConnection>> connectionBuilder;
+    Func<Cancel, Task<SqlConnection>> connectionBuilder;
     Action<Exception> criticalError;
     DedupeCleanerJob? job;
 
-    public DedupService(Table table, Func<Cancellation, Task<SqlConnection>> connectionBuilder, Action<Exception> criticalError)
+    public DedupService(Table table, Func<Cancel, Task<SqlConnection>> connectionBuilder, Action<Exception> criticalError)
     {
         this.table = table;
         this.connectionBuilder = connectionBuilder;
         this.criticalError = criticalError;
     }
 
-    public Task StartAsync(Cancellation cancellation)
+    public Task StartAsync(Cancel cancel)
     {
         job = new(table, connectionBuilder, criticalError);
         job.Start();
         return Task.CompletedTask;
     }
 
-    public Task StopAsync(Cancellation cancellation)
+    public Task StopAsync(Cancel cancel)
     {
         if (job != null)
         {

@@ -29,12 +29,12 @@ class Program
         await endpoint.Stop();
     }
 
-    static async Task<SqlConnection> ConnectionBuilder(Cancellation cancellation)
+    static async Task<SqlConnection> ConnectionBuilder(Cancel cancel)
     {
         var sqlConnection = new SqlConnection(connection);
         try
         {
-            await sqlConnection.OpenAsync(cancellation);
+            await sqlConnection.OpenAsync(cancel);
             return sqlConnection;
         }
         catch

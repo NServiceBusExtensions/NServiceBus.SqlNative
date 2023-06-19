@@ -5,13 +5,13 @@ namespace NServiceBus.Transport.SqlServerNative;
 public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     where TIncoming : class, IIncomingMessage
 {
-    public virtual Task<long> Send(TOutgoing message, Cancellation cancellation = default) =>
-        InnerSend(message, cancellation);
+    public virtual Task<long> Send(TOutgoing message, Cancel cancel = default) =>
+        InnerSend(message, cancel);
 
-    async Task<long> InnerSend(TOutgoing message, Cancellation cancellation)
+    async Task<long> InnerSend(TOutgoing message, Cancel cancel)
     {
         using var command = CreateSendCommand(message);
-        var rowVersion = await command.RunScalar(cancellation);
+        var rowVersion = await command.RunScalar(cancel);
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         if (rowVersion == null)
         {

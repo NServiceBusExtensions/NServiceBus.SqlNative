@@ -212,7 +212,7 @@ var manager = new QueueManager("endpointTable", sqlConnection);
 var result = await manager.Read(
     size: 5,
     startRowVersion: 10,
-    func: async (message, cancellation) =>
+    func: async (message, cancel) =>
     {
         Console.WriteLine(message.Headers);
         if (message.Body == null)
@@ -221,7 +221,7 @@ var result = await manager.Read(
         }
 
         using var reader = new StreamReader(message.Body);
-        var bodyText = await reader.ReadToEndAsync(cancellation);
+        var bodyText = await reader.ReadToEndAsync(cancel);
         Console.WriteLine(bodyText);
     });
 
@@ -274,7 +274,7 @@ var startingRow = await rowVersionTracker.Get(sqlConnection);
 static async Task Callback(
     SqlTransaction transaction,
     IncomingMessage message,
-    Cancellation cancellation)
+    Cancel cancel)
 {
     if (message.Body == null)
     {
@@ -282,7 +282,7 @@ static async Task Callback(
     }
 
     using var reader = new StreamReader(message.Body);
-    var bodyText = await reader.ReadToEndAsync(cancellation);
+    var bodyText = await reader.ReadToEndAsync(cancel);
     Console.WriteLine($"Message received in error message:\r\n{bodyText}");
 }
 
@@ -291,17 +291,17 @@ static void ErrorCallback(Exception exception)
     Environment.FailFast("Message processing loop failed", exception);
 }
 
-Task<SqlTransaction> BuildTransaction(Cancellation cancellation)
+Task<SqlTransaction> BuildTransaction(Cancel cancel)
 {
-    return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
+    return ConnectionHelpers.BeginTransaction(connectionString, cancel);
 }
 
 Task PersistRowVersion(
     SqlTransaction transaction,
     long rowVersion,
-    Cancellation cancellation)
+    Cancel cancel)
 {
-    return rowVersionTracker.Save(sqlConnection, rowVersion, cancellation);
+    return rowVersionTracker.Save(sqlConnection, rowVersion, cancel);
 }
 
 var processingLoop = new MessageProcessingLoop(
@@ -362,7 +362,7 @@ Consuming a batch of messages.
 var manager = new QueueManager("endpointTable", sqlConnection);
 var result = await manager.Consume(
     size: 5,
-    func: async (message, cancellation) =>
+    func: async (message, cancel) =>
     {
         Console.WriteLine(message.Headers);
         if (message.Body == null)
@@ -371,7 +371,7 @@ var result = await manager.Consume(
         }
 
         using var reader = new StreamReader(message.Body);
-        var bodyText = await reader.ReadToEndAsync(cancellation);
+        var bodyText = await reader.ReadToEndAsync(cancel);
         Console.WriteLine(bodyText);
     });
 
@@ -394,19 +394,19 @@ An example use case is monitoring an [audit queue](https://docs.particular.net/n
 static async Task Callback(
     SqlTransaction transaction,
     IncomingMessage message,
-    Cancellation cancellation)
+    Cancel cancel)
 {
     if (message.Body != null)
     {
         using var reader = new StreamReader(message.Body);
-        var bodyText = await reader.ReadToEndAsync(cancellation);
+        var bodyText = await reader.ReadToEndAsync(cancel);
         Console.WriteLine($"Reply received:\r\n{bodyText}");
     }
 }
 
-Task<SqlTransaction> BuildTransaction(Cancellation cancellation)
+Task<SqlTransaction> BuildTransaction(Cancel cancel)
 {
-    return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
+    return ConnectionHelpers.BeginTransaction(connectionString, cancel);
 }
 
 static void ErrorCallback(Exception exception)
@@ -555,7 +555,7 @@ var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var result = await manager.Read(
     size: 5,
     startRowVersion: 10,
-    func: async (message, cancellation) =>
+    func: async (message, cancel) =>
     {
         Console.WriteLine(message.Headers);
         if (message.Body == null)
@@ -564,7 +564,7 @@ var result = await manager.Read(
         }
 
         using var reader = new StreamReader(message.Body);
-        var bodyText = await reader.ReadToEndAsync(cancellation);
+        var bodyText = await reader.ReadToEndAsync(cancel);
         Console.WriteLine(bodyText);
     });
 
@@ -615,7 +615,7 @@ Consuming a batch of messages.
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var result = await manager.Consume(
     size: 5,
-    func: async (message, cancellation) =>
+    func: async (message, cancel) =>
     {
         Console.WriteLine(message.Headers);
         if (message.Body == null)
@@ -624,7 +624,7 @@ var result = await manager.Consume(
         }
 
         using var reader = new StreamReader(message.Body);
-        var bodyText = await reader.ReadToEndAsync(cancellation);
+        var bodyText = await reader.ReadToEndAsync(cancel);
         Console.WriteLine(bodyText);
     });
 
@@ -779,8 +779,8 @@ At application startup, start an instance of `DeduplicationCleanerJob`.
 ```cs
 var cleaner = new DedupeCleanerJob(
     table: "Deduplication",
-    connectionBuilder: cancellation =>
-        ConnectionHelpers.OpenConnection(connectionString, cancellation),
+    connectionBuilder: cancel =>
+        ConnectionHelpers.OpenConnection(connectionString, cancel),
     criticalError: _ => { },
     expireWindow: TimeSpan.FromHours(1),
     frequencyToRunCleanup: TimeSpan.FromMinutes(10));
@@ -852,12 +852,12 @@ The APIs of this extension target either a `SQLConnection` and `SQLTransaction`.
 ```cs
 public static async Task<SqlConnection> OpenConnection(
     string connectionString,
-    Cancellation cancellation)
+    Cancel cancel)
 {
     var connection = new SqlConnection(connectionString);
     try
     {
-        await connection.OpenAsync(cancellation);
+        await connection.OpenAsync(cancel);
         return connection;
     }
     catch
@@ -869,9 +869,9 @@ public static async Task<SqlConnection> OpenConnection(
 
 public static async Task<SqlTransaction> BeginTransaction(
     string connectionString,
-    Cancellation cancellation)
+    Cancel cancel)
 {
-    var connection = await OpenConnection(connectionString, cancellation);
+    var connection = await OpenConnection(connectionString, cancel);
     return connection.BeginTransaction();
 }
 ```

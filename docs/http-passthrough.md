@@ -81,7 +81,7 @@ public class Startup
         // other ASP.MVC config
     }
 
-    static Task<SqlConnection> OpenConnection(Cancellation cancellation) =>
+    static Task<SqlConnection> OpenConnection(Cancel cancel) =>
         //TODO open and return a SqlConnection
         null!;
 }
@@ -246,8 +246,8 @@ public class PassthroughController : ControllerBase
         this.sender = sender;
 
     [HttpPost]
-    public Task Post(Cancellation cancellation) =>
-        sender.Send(HttpContext, cancellation);
+    public Task Post(Cancel cancel) =>
+        sender.Send(HttpContext, cancel);
 }
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/PassThroughController.cs#L4-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-controller' title='Start of snippet'>anchor</a></sup>

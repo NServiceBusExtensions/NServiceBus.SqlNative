@@ -12,8 +12,8 @@ public class PassthroughController : ControllerBase
         this.sender = sender;
 
     [HttpPost]
-    public Task Post(Cancellation cancellation) =>
-        sender.Send(HttpContext, cancellation);
+    public Task Post(Cancel cancel) =>
+        sender.Send(HttpContext, cancel);
 }
 
 #endregion

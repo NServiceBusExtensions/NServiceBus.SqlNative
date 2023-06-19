@@ -9,9 +9,9 @@ class SendBehavior :
 {
     ILog logger = LogManager.GetLogger("DeduplicationSendBehavior");
     Table table;
-    Func<Cancellation, Task<SqlConnection>> connectionBuilder;
+    Func<Cancel, Task<SqlConnection>> connectionBuilder;
 
-    public SendBehavior(Table table, Func<Cancellation, Task<SqlConnection>> connectionBuilder)
+    public SendBehavior(Table table, Func<Cancel, Task<SqlConnection>> connectionBuilder)
     {
         this.table = table;
         this.connectionBuilder = connectionBuilder;
@@ -25,7 +25,7 @@ class SendBehavior :
             return;
         }
 
-        var connectionTask = connectionBuilder(Cancellation.None);
+        var connectionTask = connectionBuilder(Cancel.None);
         if (context.Extensions.TryGet(out TransportTransaction _))
         {
             throw new NotSupportedException("Deduplication is currently designed to be used from outside the NServiceBus pipeline. For example to dedup messages being sent from inside a web service endpoint.");

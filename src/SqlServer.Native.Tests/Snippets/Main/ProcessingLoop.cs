@@ -38,7 +38,7 @@ public class ProcessingLoop
         static async Task Callback(
             SqlTransaction transaction,
             IncomingMessage message,
-            Cancellation cancellation)
+            Cancel cancel)
         {
             if (message.Body == null)
             {
@@ -46,7 +46,7 @@ public class ProcessingLoop
             }
 
             using var reader = new StreamReader(message.Body);
-            var bodyText = await reader.ReadToEndAsync(cancellation);
+            var bodyText = await reader.ReadToEndAsync(cancel);
             Console.WriteLine($"Message received in error message:\r\n{bodyText}");
         }
 
@@ -55,17 +55,17 @@ public class ProcessingLoop
             Environment.FailFast("Message processing loop failed", exception);
         }
 
-        Task<SqlTransaction> BuildTransaction(Cancellation cancellation)
+        Task<SqlTransaction> BuildTransaction(Cancel cancel)
         {
-            return ConnectionHelpers.BeginTransaction(connectionString, cancellation);
+            return ConnectionHelpers.BeginTransaction(connectionString, cancel);
         }
 
         Task PersistRowVersion(
             SqlTransaction transaction,
             long rowVersion,
-            Cancellation cancellation)
+            Cancel cancel)
         {
-            return rowVersionTracker.Save(sqlConnection, rowVersion, cancellation);
+            return rowVersionTracker.Save(sqlConnection, rowVersion, cancel);
         }
 
         var processingLoop = new MessageProcessingLoop(

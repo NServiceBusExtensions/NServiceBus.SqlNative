@@ -25,10 +25,10 @@ static class Extensions
         corrParam.Value = value;
     }
 
-    public static async Task RunCommand(this SqlConnection connection, SqlTransaction? transaction, string sql, Cancellation cancellation = default)
+    public static async Task RunCommand(this SqlConnection connection, SqlTransaction? transaction, string sql, Cancel cancel = default)
     {
         using var command = connection.CreateCommand(transaction, sql);
-        await command.RunNonQuery(cancellation);
+        await command.RunNonQuery(cancel);
     }
 
 #if NET48
@@ -67,11 +67,11 @@ static class Extensions
         return dataReader.GetFieldValueAsync<DateTime?>(index);
     }
 
-    public static async Task<SqlDataReader> RunSequentialReader(this SqlCommand command, Cancellation cancellation)
+    public static async Task<SqlDataReader> RunSequentialReader(this SqlCommand command, Cancel cancel)
     {
         try
         {
-            return await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellation);
+            return await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancel);
         }
         catch (SqlException exception)
         {
@@ -80,11 +80,11 @@ static class Extensions
         }
     }
 
-    public static async Task<object?> RunScalar(this SqlCommand command, Cancellation cancellation)
+    public static async Task<object?> RunScalar(this SqlCommand command, Cancel cancel)
     {
         try
         {
-            return await command.ExecuteScalarAsync(cancellation);
+            return await command.ExecuteScalarAsync(cancel);
         }
         catch (SqlException exception)
         {
@@ -93,11 +93,11 @@ static class Extensions
         }
     }
 
-    public static async Task<SqlDataReader> RunSingleRowReader(this SqlCommand command, Cancellation cancellation)
+    public static async Task<SqlDataReader> RunSingleRowReader(this SqlCommand command, Cancel cancel)
     {
         try
         {
-            return await command.ExecuteReaderAsync(CommandBehavior.SingleRow | CommandBehavior.SequentialAccess, cancellation);
+            return await command.ExecuteReaderAsync(CommandBehavior.SingleRow | CommandBehavior.SequentialAccess, cancel);
         }
         catch (SqlException exception)
         {
@@ -106,11 +106,11 @@ static class Extensions
         }
     }
 
-    public static async Task RunNonQuery(this SqlCommand command, Cancellation cancellation)
+    public static async Task RunNonQuery(this SqlCommand command, Cancel cancel)
     {
         try
         {
-            await command.ExecuteNonQueryAsync(cancellation);
+            await command.ExecuteNonQueryAsync(cancel);
         }
         catch (SqlException exception)
         {

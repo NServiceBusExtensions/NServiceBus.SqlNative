@@ -7,7 +7,7 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
 {
     protected abstract SqlCommand BuildReadCommand(int batchSize, long startRowVersion);
 
-    public virtual async Task<TIncoming?> Read(long rowVersion, Cancellation cancellation = default)
+    public virtual async Task<TIncoming?> Read(long rowVersion, Cancel cancel = default)
     {
         Guard.AgainstNegativeAndZero(rowVersion);
         var shouldCleanup = false;
@@ -15,8 +15,8 @@ public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
         try
         {
             using var command = BuildReadCommand(1, rowVersion);
-            reader = await command.RunSingleRowReader(cancellation);
-            if (!await reader.ReadAsync(cancellation))
+            reader = await command.RunSingleRowReader(cancel);
+            if (!await reader.ReadAsync(cancel))
             {
                 shouldCleanup = true;
                 return default;

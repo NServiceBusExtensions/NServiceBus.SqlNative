@@ -6,16 +6,16 @@ public class MessageConsumingLoop :
     MessageLoop
 {
     string table;
-    Func<Cancellation, Task<SqlConnection>>? connectionBuilder;
-    Func<Cancellation, Task<SqlTransaction>>? transactionBuilder;
-    Func<SqlTransaction, IncomingMessage, Cancellation, Task>? transactionCallback;
-    Func<SqlConnection, IncomingMessage, Cancellation, Task>? connectionCallback;
+    Func<Cancel, Task<SqlConnection>>? connectionBuilder;
+    Func<Cancel, Task<SqlTransaction>>? transactionBuilder;
+    Func<SqlTransaction, IncomingMessage, Cancel, Task>? transactionCallback;
+    Func<SqlConnection, IncomingMessage, Cancel, Task>? connectionCallback;
     int batchSize;
 
     public MessageConsumingLoop(
         string table,
-        Func<Cancellation, Task<SqlTransaction>> transactionBuilder,
-        Func<SqlTransaction, IncomingMessage, Cancellation, Task> callback,
+        Func<Cancel, Task<SqlTransaction>> transactionBuilder,
+        Func<SqlTransaction, IncomingMessage, Cancel, Task> callback,
         Action<Exception> errorCallback,
         int batchSize = 10,
         TimeSpan? delay = null) :
@@ -31,8 +31,8 @@ public class MessageConsumingLoop :
 
     public MessageConsumingLoop(
         string table,
-        Func<Cancellation, Task<SqlConnection>> connectionBuilder,
-        Func<SqlConnection, IncomingMessage, Cancellation, Task> callback,
+        Func<Cancel, Task<SqlConnection>> connectionBuilder,
+        Func<SqlConnection, IncomingMessage, Cancel, Task> callback,
         Action<Exception> errorCallback,
         int batchSize = 10,
         TimeSpan? delay = null) :
@@ -46,15 +46,15 @@ public class MessageConsumingLoop :
         this.batchSize = batchSize;
     }
 
-    protected override async Task RunBatch(Cancellation cancellation)
+    protected override async Task RunBatch(Cancel cancel)
     {
         SqlConnection? connection = null;
         if (connectionBuilder != null)
         {
-            using (connection = await connectionBuilder(cancellation))
+            using (connection = await connectionBuilder(cancel))
             {
                 var consumer = new QueueManager(table, connection);
-                await RunBatch(consumer, (message, cancellation) => connectionCallback!(connection, message, cancellation), cancellation);
+                await RunBatch(consumer, (message, cancel) => connectionCallback!(connection, message, cancel), cancel);
             }
 
             return;
@@ -62,12 +62,12 @@ public class MessageConsumingLoop :
         SqlTransaction? transaction = null;
         try
         {
-            transaction = await transactionBuilder!(cancellation);
+            transaction = await transactionBuilder!(cancel);
             connection = transaction.Connection;
             var consumer = new QueueManager(table, transaction);
             try
             {
-                await RunBatch(consumer, (message, cancellation) => transactionCallback!(transaction, message, cancellation), cancellation);
+                await RunBatch(consumer, (message, cancel) => transactionCallback!(transaction, message, cancel), cancel);
 
                 transaction.Commit();
             }
@@ -85,11 +85,11 @@ public class MessageConsumingLoop :
         }
     }
 
-    async Task RunBatch(QueueManager consumer, Func<IncomingMessage, Cancellation, Task> action, Cancellation cancellation)
+    async Task RunBatch(QueueManager consumer, Func<IncomingMessage, Cancel, Task> action, Cancel cancel)
     {
         while (true)
         {
-            var result = await consumer.Consume(batchSize, action, cancellation);
+            var result = await consumer.Consume(batchSize, action, cancel);
             if (result.Count < batchSize)
             {
                 break;

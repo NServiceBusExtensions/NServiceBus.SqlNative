@@ -8,12 +8,12 @@ using Table = NServiceBus.Transport.SqlServerNative.Table;
 class Sender
 {
     Persister attachments;
-    Func<Cancellation, Task<SqlConnection>> connectionFunc;
+    Func<Cancel, Task<SqlConnection>> connectionFunc;
     HeadersBuilder headersBuilder;
     Table dedupeTable;
     ILogger logger;
 
-    public Sender(Func<Cancellation, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
+    public Sender(Func<Cancel, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
     {
         this.connectionFunc = connectionFunc;
         attachments = new(new(attachmentsTable.TableName, attachmentsTable.Schema, false));
@@ -22,11 +22,11 @@ class Sender
         this.logger = logger;
     }
 
-    public async Task<long> Send(PassthroughMessage message, Table destination, Cancellation cancellation)
+    public async Task<long> Send(PassthroughMessage message, Table destination, Cancel cancel)
     {
         try
         {
-           return await InnerSend(message, destination, cancellation);
+           return await InnerSend(message, destination, cancel);
         }
         catch (Exception exception)
         {
@@ -34,16 +34,16 @@ class Sender
         }
     }
 
-    async Task<long> InnerSend(PassthroughMessage message, Table destination, Cancellation cancellation)
+    async Task<long> InnerSend(PassthroughMessage message, Table destination, Cancel cancel)
     {
-        using var connection = await connectionFunc(cancellation);
+        using var connection = await connectionFunc(cancel);
         using var transaction = connection.BeginTransaction();
-        var rowVersion = await SendInsideTransaction(message, destination, cancellation, transaction);
+        var rowVersion = await SendInsideTransaction(message, destination, cancel, transaction);
         transaction.Commit();
         return rowVersion;
     }
 
-    async Task<long> SendInsideTransaction(PassthroughMessage message, Table destination, Cancellation cancellation, SqlTransaction transaction)
+    async Task<long> SendInsideTransaction(PassthroughMessage message, Table destination, Cancel cancel, SqlTransaction transaction)
     {
         var headersString = headersBuilder.GetHeadersString(message);
         LogSend(message);
@@ -53,8 +53,8 @@ class Sender
             bodyBytes: Encoding.UTF8.GetBytes(message.Body));
         var queueManager = new QueueManager(destination, transaction, dedupeTable);
         var attachmentExpiry = DateTime.UtcNow.AddDays(10);
-        await SendAttachments(transaction, attachmentExpiry, cancellation, message);
-        return await queueManager.Send(outgoingMessage, cancellation);
+        await SendAttachments(transaction, attachmentExpiry, cancel, message);
+        return await queueManager.Send(outgoingMessage, cancel);
     }
 
     void LogSend(PassthroughMessage message)
@@ -73,18 +73,18 @@ class Sender
             message.Attachments.Select(x => x.FileName));
     }
 
-    async Task SendAttachments(SqlTransaction transaction, DateTime expiry, Cancellation cancellation, PassthroughMessage message)
+    async Task SendAttachments(SqlTransaction transaction, DateTime expiry, Cancel cancel, PassthroughMessage message)
     {
         var connection = transaction.Connection!;
         foreach (var file in message.Attachments)
         {
-            await SendAttachment(transaction, message.Id.ToString(), expiry, cancellation, file, connection);
+            await SendAttachment(transaction, message.Id.ToString(), expiry, cancel, file, connection);
         }
     }
 
-    async Task SendAttachment(SqlTransaction transaction, string messageId, DateTime expiry, Cancellation cancellation, Attachment file, SqlConnection connection)
+    async Task SendAttachment(SqlTransaction transaction, string messageId, DateTime expiry, Cancel cancel, Attachment file, SqlConnection connection)
     {
         using var stream = file.Stream();
-        await attachments.SaveStream(connection, transaction, messageId, file.FileName, expiry, stream, cancellation: cancellation);
+        await attachments.SaveStream(connection, transaction, messageId, file.FileName, expiry, stream, cancel: cancel);
     }
 }

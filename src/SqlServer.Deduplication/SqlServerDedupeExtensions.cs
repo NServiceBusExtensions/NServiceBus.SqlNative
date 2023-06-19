@@ -14,7 +14,7 @@ public static class SqlServerDedupeExtensions
     /// </summary>
     public static DedupeSettings EnableDedupe(
         this EndpointConfiguration configuration,
-        Func<Cancellation, Task<SqlConnection>> connectionBuilder)
+        Func<Cancel, Task<SqlConnection>> connectionBuilder)
     {
         var recoverability = configuration.Recoverability();
         recoverability.AddUnrecoverableException<NotSupportedException>();
@@ -25,14 +25,14 @@ public static class SqlServerDedupeExtensions
         return dedupeSettings;
     }
 
-    public static Task<DedupeResult> SendLocalWithDedupe(this IMessageSession session, Guid messageId, object message, string? context = null, Cancellation cancellation = default)
+    public static Task<DedupeResult> SendLocalWithDedupe(this IMessageSession session, Guid messageId, object message, string? context = null, Cancel cancel = default)
     {
         var options = new SendOptions();
         options.RouteToThisEndpoint();
-        return SendWithDedupe(session, messageId, message, options, context, cancellation);
+        return SendWithDedupe(session, messageId, message, options, context, cancel);
     }
 
-    public static Task<DedupeResult> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions? options = null, string? context = null, Cancellation cancellation = default)
+    public static Task<DedupeResult> SendWithDedupe(this IMessageSession session, Guid messageId, object message, SendOptions? options = null, string? context = null, Cancel cancel = default)
     {
         Guard.AgainstEmpty(messageId);
         if (options == null)
@@ -44,7 +44,7 @@ public static class SqlServerDedupeExtensions
             ValidateMessageId(options);
         }
 
-        return InnerSendWithDedupe(session, message, messageId, options, context, cancellation);
+        return InnerSendWithDedupe(session, message, messageId, options, context, cancel);
     }
 
     static void ValidateMessageId(SendOptions options)
@@ -55,7 +55,7 @@ public static class SqlServerDedupeExtensions
         }
     }
 
-    static async Task<DedupeResult> InnerSendWithDedupe(IMessageSession session, object message, Guid messageId, SendOptions options, string? context, Cancellation cancellation)
+    static async Task<DedupeResult> InnerSendWithDedupe(IMessageSession session, object message, Guid messageId, SendOptions options, string? context, Cancel cancel)
     {
         var pipelineState = new DedupePipelineState
         {
@@ -64,7 +64,7 @@ public static class SqlServerDedupeExtensions
         DedupePipelineState.Set(options, pipelineState);
         options.SetMessageId(messageId.ToString());
 
-        await session.Send(message, options, cancellation);
+        await session.Send(message, options, cancel);
 
         return new(
             dedupeOutcome: pipelineState.DedupeOutcome,

@@ -7,21 +7,21 @@ public class MessageProcessingLoop :
 {
     string table;
     long startingRow;
-    Func<Cancellation, Task<SqlConnection>>? connectionBuilder;
-    Func<Cancellation, Task<SqlTransaction>>? transactionBuilder;
-    Func<SqlTransaction, IncomingMessage, Cancellation, Task>? transactionCallback;
-    Func<SqlConnection, IncomingMessage, Cancellation, Task>? connectionCallback;
-    Func<SqlTransaction, long, Cancellation, Task>? transactionPersistRowVersion;
-    Func<SqlConnection, long, Cancellation, Task>? connectionPersistRowVersion;
+    Func<Cancel, Task<SqlConnection>>? connectionBuilder;
+    Func<Cancel, Task<SqlTransaction>>? transactionBuilder;
+    Func<SqlTransaction, IncomingMessage, Cancel, Task>? transactionCallback;
+    Func<SqlConnection, IncomingMessage, Cancel, Task>? connectionCallback;
+    Func<SqlTransaction, long, Cancel, Task>? transactionPersistRowVersion;
+    Func<SqlConnection, long, Cancel, Task>? connectionPersistRowVersion;
     int batchSize;
 
     public MessageProcessingLoop(
         string table,
         long startingRow,
-        Func<Cancellation, Task<SqlTransaction>> transactionBuilder,
-        Func<SqlTransaction, IncomingMessage, Cancellation, Task> callback,
+        Func<Cancel, Task<SqlTransaction>> transactionBuilder,
+        Func<SqlTransaction, IncomingMessage, Cancel, Task> callback,
         Action<Exception> errorCallback,
-        Func<SqlTransaction, long, Cancellation, Task> persistRowVersion,
+        Func<SqlTransaction, long, Cancel, Task> persistRowVersion,
         int batchSize = 10,
         TimeSpan? delay = null) :
         base(errorCallback, delay)
@@ -40,10 +40,10 @@ public class MessageProcessingLoop :
     public MessageProcessingLoop(
         string table,
         long startingRow,
-        Func<Cancellation, Task<SqlConnection>> connectionBuilder,
-        Func<SqlConnection, IncomingMessage, Cancellation, Task> callback,
+        Func<Cancel, Task<SqlConnection>> connectionBuilder,
+        Func<SqlConnection, IncomingMessage, Cancel, Task> callback,
         Action<Exception> errorCallback,
-        Func<SqlConnection, long, Cancellation, Task> persistRowVersion,
+        Func<SqlConnection, long, Cancel, Task> persistRowVersion,
         int batchSize = 10,
         TimeSpan? delay = null) :
         base(errorCallback, delay)
@@ -59,19 +59,19 @@ public class MessageProcessingLoop :
         this.batchSize = batchSize;
     }
 
-    protected override async Task RunBatch(Cancellation cancellation)
+    protected override async Task RunBatch(Cancel cancel)
     {
         SqlConnection? connection = null;
         if (connectionBuilder != null)
         {
-            using (connection = await connectionBuilder(cancellation))
+            using (connection = await connectionBuilder(cancel))
             {
                 var reader = new QueueManager(table, connection);
                 await RunBatch(
                     reader,
-                    messageFunc: (message, cancellation) => connectionCallback!(connection, message, cancellation),
-                    persistFunc: () => connectionPersistRowVersion!(connection, startingRow, cancellation),
-                    cancellation);
+                    messageFunc: (message, cancel) => connectionCallback!(connection, message, cancel),
+                    persistFunc: () => connectionPersistRowVersion!(connection, startingRow, cancel),
+                    cancel);
             }
 
             return;
@@ -80,16 +80,16 @@ public class MessageProcessingLoop :
         SqlTransaction? transaction = null;
         try
         {
-            transaction = await transactionBuilder!(cancellation);
+            transaction = await transactionBuilder!(cancel);
             connection = transaction.Connection;
             var reader = new QueueManager(table, transaction);
             try
             {
                 await RunBatch(
                     reader,
-                    messageFunc: (message, cancellation) => transactionCallback!(transaction, message, cancellation),
-                    persistFunc: () => transactionPersistRowVersion!(transaction, startingRow, cancellation),
-                    cancellation);
+                    messageFunc: (message, cancel) => transactionCallback!(transaction, message, cancel),
+                    persistFunc: () => transactionPersistRowVersion!(transaction, startingRow, cancel),
+                    cancel);
                     transaction.Commit();
             }
             catch
@@ -106,11 +106,11 @@ public class MessageProcessingLoop :
         }
     }
 
-    async Task RunBatch(QueueManager reader, Func<IncomingMessage, Cancellation, Task> messageFunc, Func<Task> persistFunc, Cancellation cancellation)
+    async Task RunBatch(QueueManager reader, Func<IncomingMessage, Cancel, Task> messageFunc, Func<Task> persistFunc, Cancel cancel)
     {
         while (true)
         {
-            var result = await reader.Read(batchSize, startingRow, messageFunc, cancellation);
+            var result = await reader.Read(batchSize, startingRow, messageFunc, cancel);
             if (result.Count == 0)
             {
                 break;

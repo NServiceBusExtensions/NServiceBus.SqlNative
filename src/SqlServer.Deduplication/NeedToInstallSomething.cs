@@ -10,15 +10,15 @@ class NeedToInstallSomething :
     public NeedToInstallSomething(IReadOnlySettings settings) =>
         this.settings = settings.GetOrDefault<DedupeSettings>();
 
-    public async Task Install(string identity, Cancellation cancellation = default)
+    public async Task Install(string identity, Cancel cancel = default)
     {
         if (settings == null || settings.InstallerDisabled)
         {
             return;
         }
 
-        using var connection = await settings.ConnectionBuilder(Cancellation.None);
+        using var connection = await settings.ConnectionBuilder(Cancel.None);
         var manager = new DedupeManager(connection, settings.Table);
-        await manager.Create(cancellation);
+        await manager.Create(cancel);
     }
 }

@@ -6,12 +6,12 @@ public static class ConnectionHelpers
 
     public static async Task<SqlConnection> OpenConnection(
         string connectionString,
-        Cancellation cancellation)
+        Cancel cancel)
     {
         var connection = new SqlConnection(connectionString);
         try
         {
-            await connection.OpenAsync(cancellation);
+            await connection.OpenAsync(cancel);
             return connection;
         }
         catch
@@ -23,9 +23,9 @@ public static class ConnectionHelpers
 
     public static async Task<SqlTransaction> BeginTransaction(
         string connectionString,
-        Cancellation cancellation)
+        Cancel cancel)
     {
-        var connection = await OpenConnection(connectionString, cancellation);
+        var connection = await OpenConnection(connectionString, cancel);
         return connection.BeginTransaction();
     }
 

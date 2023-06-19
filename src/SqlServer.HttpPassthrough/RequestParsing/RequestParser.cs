@@ -3,10 +3,10 @@ using NServiceBus.SqlServer.HttpPassthrough;
 
 static class RequestParser
 {
-    public static async Task<PassthroughMessage> Extract(HttpRequest request, Cancellation cancellation)
+    public static async Task<PassthroughMessage> Extract(HttpRequest request, Cancel cancel)
     {
         var incomingHeaders = HeaderReader.GetIncomingHeaders(request.Headers);
-        var form = await request.ReadFormAsync(cancellation);
+        var form = await request.ReadFormAsync(cancel);
         return new(
             destination: incomingHeaders.Destination,
             id: incomingHeaders.MessageId,

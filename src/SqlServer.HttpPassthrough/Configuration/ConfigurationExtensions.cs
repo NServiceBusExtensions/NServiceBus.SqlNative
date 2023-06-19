@@ -37,7 +37,7 @@ public static class ConfigurationExtensions
     /// <param name="dedupCriticalError">Called when failed to clean expired records after 10 consecutive unsuccessful attempts. The most likely cause of this is connectivity issues with the database.</param>
     public static void AddSqlHttpPassthrough(
         this IServiceCollection services,
-        Func<Cancellation, Task<SqlConnection>> connectionFunc,
+        Func<Cancel, Task<SqlConnection>> connectionFunc,
         Func<HttpContext, PassthroughMessage, Task<Table>> callback,
         Action<Exception> dedupCriticalError) =>
         AddSqlHttpPassthrough(services, new(connectionFunc, callback, dedupCriticalError));
