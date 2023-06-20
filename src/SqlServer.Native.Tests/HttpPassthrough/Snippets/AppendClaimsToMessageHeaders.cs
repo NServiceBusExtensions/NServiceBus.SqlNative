@@ -74,9 +74,9 @@ public class AppendClaimsToMessageHeaders
         IEnumerable<Claim> claims,
         IDictionary<string, string> headers, string prefix)
     {
-        foreach (var claim in claims.GroupBy(x => x.Type))
+        foreach (var claim in claims.GroupBy(_ => _.Type))
         {
-            var items = claim.Select(x => x.Value);
+            var items = claim.Select(_ => _.Value);
             headers.Add(prefix + claim.Key, JsonConvert.SerializeObject(items));
         }
     }

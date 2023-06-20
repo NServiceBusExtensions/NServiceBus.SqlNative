@@ -70,7 +70,7 @@ class Sender
             message.Namespace,
             message.Type,
             message.Body,
-            message.Attachments.Select(x => x.FileName));
+            message.Attachments.Select(_ => _.FileName));
     }
 
     async Task SendAttachments(SqlTransaction transaction, DateTime expiry, Cancel cancel, PassthroughMessage message)

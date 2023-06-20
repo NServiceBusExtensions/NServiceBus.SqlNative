@@ -41,7 +41,7 @@ public class DelayedReaderTests :
             });
         Assert.Equal(4, result.LastRowVersion);
         Assert.Equal(3, result.Count);
-        await Verify(messages.OrderBy(x => x.Due));
+        await Verify(messages.OrderBy(_ => _.Due));
     }
 
     public DelayedReaderTests()

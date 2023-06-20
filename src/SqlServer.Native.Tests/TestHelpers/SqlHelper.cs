@@ -32,7 +32,7 @@ if(db_id('{database}') is null)
                 messages.Add(message.ToVerifyTarget());
                 return Task.CompletedTask;
             });
-        return messages.OrderBy(x => x.Id);
+        return messages.OrderBy(_ => _.Id);
     }
 
     public static async Task<IOrderedEnumerable<IncomingDelayedVerifyTarget>> ReadDelayedData(string table, SqlConnection connection)
@@ -46,7 +46,7 @@ if(db_id('{database}') is null)
                 messages.Add(message.ToVerifyTarget());
                 return Task.CompletedTask;
             });
-        return messages.OrderBy(x => x.Due);
+        return messages.OrderBy(_ => _.Due);
     }
 
     public static IEnumerable<IDictionary<string, object>> ReadDuplicateData(string table, SqlConnection conn)

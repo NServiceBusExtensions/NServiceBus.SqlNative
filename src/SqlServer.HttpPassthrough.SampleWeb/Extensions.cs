@@ -9,5 +9,5 @@ static class Extensions
     }
 
     public static Dictionary<string, string> RequestStringDictionary(this HttpContext context) =>
-        context.Request.Headers.ToDictionary(x => x.Key, y => y.Value.ToString());
+        context.Request.Headers.ToDictionary(_ => _.Key, _ => _.Value.ToString());
 }

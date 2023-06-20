@@ -40,7 +40,7 @@ public class DelayedConsumerTests :
             });
         Assert.Equal(3, result.Count);
         Assert.Equal(3, result.LastRowVersion);
-        await Verify(messages.OrderBy(x => x.Due));
+        await Verify(messages.OrderBy(_ => _.Due));
     }
 
     public DelayedConsumerTests()

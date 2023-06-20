@@ -58,7 +58,7 @@ public class ReaderTests :
                 messages.Add(message.ToVerifyTarget());
                 return Task.CompletedTask;
             });
-        await Verify(messages.OrderBy(x => x.Id));
+        await Verify(messages.OrderBy(_ => _.Id));
     }
 
     public ReaderTests()

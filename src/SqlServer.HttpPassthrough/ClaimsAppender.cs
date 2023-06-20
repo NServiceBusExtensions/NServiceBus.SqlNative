@@ -20,9 +20,9 @@ public static class ClaimsAppender
     {
         Guard.AgainstEmpty(prefix);
         prefix ??= "";
-        foreach (var claim in claims.GroupBy(x => x.Type))
+        foreach (var claim in claims.GroupBy(_ => _.Type))
         {
-            var items = claim.Select(x => x.Value).ToList();
+            var items = claim.Select(_ => _.Value).ToList();
             headers.Add(prefix + claim.Key, Serializer.SerializeList(items));
         }
     }

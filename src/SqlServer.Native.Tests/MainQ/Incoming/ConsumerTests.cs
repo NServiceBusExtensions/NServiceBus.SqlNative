@@ -56,7 +56,7 @@ public class ConsumerTests :
                 return Task.CompletedTask;
             });
         Assert.Equal(5, result.Count);
-        await Verify(messages.OrderBy(x => x.Id));
+        await Verify(messages.OrderBy(_ => _.Id));
     }
 
     public ConsumerTests()

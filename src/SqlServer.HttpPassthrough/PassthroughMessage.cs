@@ -139,7 +139,7 @@ public class PassthroughMessage
             {"CorrelationId", CorrelationId},
             {"Type", Type},
             {"Body", Body},
-            {"Attachments", Attachments.Select(x => x.FileName).ToList()},
+            {"Attachments", Attachments.Select(_ => _.FileName).ToList()},
             {"ExtraHeaders", ExtraHeaders}
         };
         if (Destination != null)
