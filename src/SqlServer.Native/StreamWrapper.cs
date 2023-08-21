@@ -1,7 +1,10 @@
-﻿class StreamWrapper :
+﻿using System.Data;
+
+class StreamWrapper :
     Stream
 {
     Stream inner;
+    long position;
 
     public StreamWrapper(long length, Stream inner)
     {
@@ -10,7 +13,7 @@
     }
 
     public override void EndWrite(IAsyncResult asyncResult) =>
-        inner.EndWrite(asyncResult);
+        throw new NotImplementedException();
 
     public override void Flush() =>
         inner.Flush();
@@ -18,17 +21,31 @@
     public override Task FlushAsync(Cancel cancel) =>
         inner.FlushAsync(cancel);
 
-    public override Task<int> ReadAsync(byte[] buffer, int offset, int count, Cancel cancel) =>
-        inner.ReadAsync(buffer, offset, count, cancel);
+    public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, Cancel cancel)
+    {
+        var bytesRead = await inner.ReadAsync(buffer, offset, count, cancel);
+        position += bytesRead;
+        return bytesRead;
+    }
 
-    public override int ReadByte() =>
-        inner.ReadByte();
+    public override int ReadByte()
+    {
+        position++;
+        return inner.ReadByte();
+    }
 
-    public override long Seek(long offset, SeekOrigin origin) =>
-        inner.Seek(offset, origin);
+    public override long Seek(long offset, SeekOrigin origin)
+    {
+        position += offset;
+        return inner.Seek(offset, origin);
+    }
 
-    public override int Read(byte[] buffer, int offset, int count) =>
-        inner.Read(buffer, offset, count);
+    public override int Read(byte[] buffer, int offset, int count)
+    {
+        var bytesRead = inner.Read(buffer, offset, count);
+        position += bytesRead;
+        return bytesRead;
+    }
 
     public override bool CanRead => inner.CanRead;
     public override bool CanSeek => inner.CanSeek;
@@ -40,22 +57,48 @@
 
     public override long Position
     {
-        get => inner.Position;
-        set => inner.Position = value;
+        get => position;
+        set
+        {
+            if (position == value)
+            {
+                return;
+            }
+
+            throw new NotImplementedException();
+        }
     }
 
     public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback? callback, object? state) =>
         inner.BeginRead(buffer, offset, count, callback, state);
 
+    public override int EndRead(IAsyncResult asyncResult)
+    {
+        var readBytes = inner.EndRead(asyncResult);
+        position += readBytes;
+        return readBytes;
+    }
+
 #if !NET48
-    public override int Read(Span<byte> buffer) =>
-        inner.Read(buffer);
+    public override int Read(Span<byte> buffer)
+    {
+        var bytesRead = inner.Read(buffer);
+        position += bytesRead;
+        return bytesRead;
+    }
 
-    public override ValueTask<int> ReadAsync(Memory<byte> buffer, Cancel cancel = default) =>
-        inner.ReadAsync(buffer, cancel);
+    public override async ValueTask<int> ReadAsync(Memory<byte> buffer, Cancel cancel = default)
+    {
+        var bytesRead = await inner.ReadAsync(buffer,  cancel);
+        position += bytesRead;
+        return bytesRead;
+    }
 
-    public override void CopyTo(Stream destination, int bufferSize) =>
+    public override void CopyTo(Stream destination, int bufferSize)
+    {
         inner.CopyTo(destination, bufferSize);
+        position = Length;
+    }
 
     public override void Write(ReadOnlySpan<byte> buffer) =>
         throw new NotImplementedException();
@@ -70,11 +113,17 @@
         base.Close();
     }
 
-    public override Task CopyToAsync(Stream destination, int bufferSize, Cancel cancel) =>
-        inner.CopyToAsync(destination, bufferSize, cancel);
+    protected override void Dispose(bool disposing)
+    {
+        inner.Dispose();
+        base.Dispose(disposing);
+    }
 
-    public override int EndRead(IAsyncResult asyncResult) =>
-        inner.EndRead(asyncResult);
+    public override Task CopyToAsync(Stream destination, int bufferSize, Cancel cancel)
+    {
+        position = Length;
+        return inner.CopyToAsync(destination, bufferSize, cancel);
+    }
 
 #if !NET48
     [Obsolete("This Remoting API is not supported and throws PlatformNotSupportedException.", DiagnosticId = "SYSLIB0010", UrlFormat = "https://aka.ms/dotnet-warnings/{0}")]
