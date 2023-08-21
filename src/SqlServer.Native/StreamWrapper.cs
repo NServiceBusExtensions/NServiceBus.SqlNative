@@ -28,8 +28,12 @@
 
     public override int ReadByte()
     {
-        position++;
-        return inner.ReadByte();
+        var readByte = inner.ReadByte();
+        if (readByte != -1)
+        {
+            position++;
+        }
+        return readByte;
     }
 
     public override long Seek(long offset, SeekOrigin origin)
