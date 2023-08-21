@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-class StreamWrapper :
+﻿class StreamWrapper :
     Stream
 {
     Stream inner;
