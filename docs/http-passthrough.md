@@ -195,7 +195,7 @@ public static IEnumerable<Claim> Extract(
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L71-L105' title='Snippet source file'>snippet source</a> | <a href='#snippet-claimsraw' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L70-L104' title='Snippet source file'>snippet source</a> | <a href='#snippet-claimsraw' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
