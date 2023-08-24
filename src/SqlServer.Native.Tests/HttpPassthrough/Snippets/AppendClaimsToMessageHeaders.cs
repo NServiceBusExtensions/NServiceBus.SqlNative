@@ -67,7 +67,6 @@ public class AppendClaimsToMessageHeaders
         #endregion
     }
 
-
     #region ClaimsRaw
 
     public static void Append(
