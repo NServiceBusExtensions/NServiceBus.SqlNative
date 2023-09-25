@@ -10,7 +10,7 @@ static class HeaderReader
 
         var messageNamespace = GetMessageNamespace(headers);
 
-        if (messageType.Contains("."))
+        if (messageType.Contains('.'))
         {
             throw new BadRequestException($"Invalid 'MessageType' header. Contains '.'. MessageType: {messageType}");
         }
