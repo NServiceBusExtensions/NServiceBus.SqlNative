@@ -22,7 +22,7 @@
     <ProjectReference Include="..\SqlServer.HttpPassthrough.SampleWeb\SqlServer.HttpPassthrough.SampleWeb.csproj" />
     <ProjectReference Include="..\SqlServer.HttpPassthrough\SqlServer.HttpPassthrough.csproj" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.97" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.99" PrivateAssets="all" />
     <Using Include="NServiceBus.IMessageHandlerContext" Alias="HandlerContext" />
   </ItemGroup>
 </Project>
