@@ -22,15 +22,11 @@ public class ConsumingLoop
             }
         }
 
-        Task<SqlTransaction> BuildTransaction(Cancel cancel)
-        {
-            return ConnectionHelpers.BeginTransaction(connectionString, cancel);
-        }
+        Task<SqlTransaction> BuildTransaction(Cancel cancel) =>
+            ConnectionHelpers.BeginTransaction(connectionString, cancel);
 
-        static void ErrorCallback(Exception exception)
-        {
+        static void ErrorCallback(Exception exception) =>
             Environment.FailFast("Message consuming loop failed", exception);
-        }
 
         // start consuming
         var consumingLoop = new MessageConsumingLoop(

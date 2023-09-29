@@ -41,7 +41,7 @@ public class RequestParserTests :
     }
 
     static MemoryStream Body() =>
-        new(Encoding.UTF8.GetBytes("{}"));
+        new("{}"u8.ToArray());
 
     static Task Verify(FakeHttpRequest request)
     {
@@ -59,7 +59,7 @@ public class RequestParserTests :
 
     static FormCollection Form()
     {
-        var attachmentBytes = Encoding.UTF8.GetBytes("Attachment Text");
+        var attachmentBytes = "Attachment Text"u8.ToArray();
         return new(
             new()
             {

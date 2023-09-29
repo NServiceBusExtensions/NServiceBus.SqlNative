@@ -80,11 +80,11 @@ public class DelayedSenderTests :
     }
 
     static OutgoingDelayedMessage BuildBytesMessage() =>
-        new(dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        new(dateTime, "headers", "{}"u8.ToArray());
 
     static OutgoingDelayedMessage BuildStreamMessage()
     {
-        var stream = new MemoryStream(Encoding.UTF8.GetBytes("{}"));
+        var stream = new MemoryStream("{}"u8.ToArray());
         return new(dateTime, "headers", stream);
     }
 

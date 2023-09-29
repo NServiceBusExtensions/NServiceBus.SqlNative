@@ -4,11 +4,9 @@
     {
         if (computedColumnSql == null)
         {
-            return @"
-  BodyString as cast(Body as varchar(max)),";
+            return "BodyString as cast(Body as varchar(max)),";
         }
 
-        return $@"
-  BodyString as {computedColumnSql},";
+        return $"BodyString as {computedColumnSql},";
     }
 }

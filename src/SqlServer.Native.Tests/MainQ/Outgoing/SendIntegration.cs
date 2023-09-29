@@ -25,27 +25,20 @@ public class SendIntegration :
             { "NServiceBus.EnclosedMessageTypes", typeof(SendMessage).FullName!}
         };
 
-        var message = new OutgoingMessage(Guid.NewGuid(), DateTime.Now.AddDays(1), Headers.Serialize(headers), Encoding.UTF8.GetBytes("{}"));
+        var message = new OutgoingMessage(Guid.NewGuid(), DateTime.Now.AddDays(1), Headers.Serialize(headers), "{}"u8.ToArray());
         return sender.Send(message);
     }
 
-    class SendHandler :
+    class SendHandler(ManualResetEvent @event) :
         IHandleMessages<SendMessage>
     {
-        ManualResetEvent resetEvent;
-
-        public SendHandler(ManualResetEvent resetEvent) =>
-            this.resetEvent = resetEvent;
-
         public Task Handle(SendMessage message, HandlerContext context)
         {
-            resetEvent.Set();
+            @event.Set();
             return Task.CompletedTask;
         }
     }
 
     class SendMessage :
-        IMessage
-    {
-    }
+        IMessage;
 }

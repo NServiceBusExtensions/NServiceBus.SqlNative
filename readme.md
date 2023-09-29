@@ -288,23 +288,17 @@ static async Task Callback(
     Console.WriteLine($"Message received in error message:\r\n{bodyText}");
 }
 
-static void ErrorCallback(Exception exception)
-{
+static void ErrorCallback(Exception exception) =>
     Environment.FailFast("Message processing loop failed", exception);
-}
 
-Task<SqlTransaction> BuildTransaction(Cancel cancel)
-{
-    return ConnectionHelpers.BeginTransaction(connectionString, cancel);
-}
+Task<SqlTransaction> BuildTransaction(Cancel cancel) =>
+    ConnectionHelpers.BeginTransaction(connectionString, cancel);
 
 Task PersistRowVersion(
     SqlTransaction transaction,
     long rowVersion,
-    Cancel cancel)
-{
-    return rowVersionTracker.Save(sqlConnection, rowVersion, cancel);
-}
+    Cancel cancel) =>
+    rowVersionTracker.Save(sqlConnection, rowVersion, cancel);
 
 var processingLoop = new MessageProcessingLoop(
     table: "error",
@@ -320,7 +314,7 @@ Console.ReadKey();
 
 await processingLoop.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L32-L85' title='Snippet source file'>snippet source</a> | <a href='#snippet-processingloop' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L32-L79' title='Snippet source file'>snippet source</a> | <a href='#snippet-processingloop' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -406,15 +400,11 @@ static async Task Callback(
     }
 }
 
-Task<SqlTransaction> BuildTransaction(Cancel cancel)
-{
-    return ConnectionHelpers.BeginTransaction(connectionString, cancel);
-}
+Task<SqlTransaction> BuildTransaction(Cancel cancel) =>
+    ConnectionHelpers.BeginTransaction(connectionString, cancel);
 
-static void ErrorCallback(Exception exception)
-{
+static void ErrorCallback(Exception exception) =>
     Environment.FailFast("Message consuming loop failed", exception);
-}
 
 // start consuming
 var consumingLoop = new MessageConsumingLoop(
@@ -428,7 +418,7 @@ consumingLoop.Start();
 // stop consuming
 await consumingLoop.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ConsumingLoop.cs#L10-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumeloop' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ConsumingLoop.cs#L10-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumeloop' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

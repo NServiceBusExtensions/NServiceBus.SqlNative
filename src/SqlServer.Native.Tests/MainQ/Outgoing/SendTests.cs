@@ -91,11 +91,11 @@ public class SendTests :
     }
 
     static OutgoingMessage BuildBytesMessage(string guid) =>
-        new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        new(new(guid), dateTime, "headers", "{}"u8.ToArray());
 
     static OutgoingMessage BuildStreamMessage(string guid)
     {
-        var stream = new MemoryStream(Encoding.UTF8.GetBytes("{}"));
+        var stream = new MemoryStream("{}"u8.ToArray());
         return new(new(guid), dateTime, "headers", stream);
     }
 

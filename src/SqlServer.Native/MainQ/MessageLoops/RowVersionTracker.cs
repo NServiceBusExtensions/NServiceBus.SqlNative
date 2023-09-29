@@ -38,13 +38,13 @@ public class RowVersionTracker
     {
         using var command = connection.CreateCommand(
             transaction: transaction,
-            sql: $@"
-update {table}
-set RowVersion = @RowVersion
-if @@rowcount = 0
-  insert into {table} (RowVersion)
-  values (@RowVersion)
-");
+            sql: $"""
+                  update {table}
+                  set RowVersion = @RowVersion
+                  if @@rowcount = 0
+                    insert into {table} (RowVersion)
+                    values (@RowVersion)
+                  """);
         var parameter = command.CreateParameter();
         parameter.ParameterName = "RowVersion";
         parameter.DbType = DbType.Int64;
@@ -56,9 +56,11 @@ if @@rowcount = 0
     public async Task<long> Get(SqlConnection connection, Cancel cancel = default)
     {
         using var command = connection.CreateCommand();
-        command.CommandText = $@"
-select top (1) RowVersion
-from {table}";
+        command.CommandText =
+            $"""
+             select top (1) RowVersion
+             from {table}
+             """;
         var result = await command.RunScalar(cancel);
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         if (result == null)
@@ -69,16 +71,16 @@ from {table}";
         return (long) result;
     }
 
-    static string Sql = @"
-if exists (
-  select *
-  from sys.objects
-  where object_id = object_id('{0}')
-    and type in ('U'))
-return
+    static string Sql = """
+                        if exists (
+                          select *
+                          from sys.objects
+                          where object_id = object_id('{0}')
+                            and type in ('U'))
+                        return
 
-create table {0} (
-  RowVersion bigint not null
-);
-";
+                        create table {0} (
+                          RowVersion bigint not null
+                        );
+                        """;
 }

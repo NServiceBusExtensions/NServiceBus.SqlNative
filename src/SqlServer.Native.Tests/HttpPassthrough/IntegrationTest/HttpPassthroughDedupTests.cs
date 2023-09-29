@@ -67,6 +67,4 @@ public class HttpPassthroughDedupTests :
     }
 }
 class DedupMessage :
-    IMessage
-{
-}
+    IMessage;

@@ -51,8 +51,8 @@ public class HttpPassthroughIntegrationTests :
             destination: nameof(HttpPassthroughIntegrationTests),
             attachments: new()
             {
-                {"fooFile", Encoding.UTF8.GetBytes("foo")},
-                {"default", Encoding.UTF8.GetBytes("bar")}
+                {"fooFile", "foo"u8.ToArray()},
+                {"default", "bar"u8.ToArray()}
             });
     }
 
@@ -65,21 +65,16 @@ public class HttpPassthroughIntegrationTests :
         return await Endpoint.Start(configuration);
     }
 
-    class Handler :
+    class Handler(ManualResetEvent @event) :
         IHandleMessages<MyMessage>
     {
-        ManualResetEvent resetEvent;
-
-        public Handler(ManualResetEvent resetEvent) =>
-            this.resetEvent = resetEvent;
-
         public async Task Handle(MyMessage message, HandlerContext context)
         {
             var incomingAttachment = context.Attachments();
             Assert.NotNull(await incomingAttachment.GetBytes("fooFile"));
             Assert.NotNull(await incomingAttachment.GetBytes());
             Assert.Equal("Value", message.Property);
-            resetEvent.Set();
+            @event.Set();
         }
     }
 }
