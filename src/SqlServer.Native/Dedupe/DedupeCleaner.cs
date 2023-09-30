@@ -37,5 +37,4 @@
             },
             delayStrategy: Task.Delay);
     }
-
 }
