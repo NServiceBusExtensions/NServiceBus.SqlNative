@@ -341,7 +341,7 @@ await clientFormSender.Send(
     destination: "TheDestination",
     attachments: new()
     {
-        {"fileName", Encoding.UTF8.GetBytes("fileContents")}
+        {"fileName", "fileContents"u8.ToArray()}
     });
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L9-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-clientformsender' title='Start of snippet'>anchor</a></sup>
@@ -365,7 +365,7 @@ await clientFormSender.Send(
     destination: "TheDestination",
     attachments: new()
     {
-        {"fileName", Encoding.UTF8.GetBytes("fileContents")}
+        {"fileName", "fileContents"u8.ToArray()}
     });
 ```
 <sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L28-L46' title='Snippet source file'>snippet source</a> | <a href='#snippet-asptesthost' title='Start of snippet'>anchor</a></sup>

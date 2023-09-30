@@ -37,10 +37,11 @@ public class Synonym
         GuardAgainstCircularAlias(synonym, target);
         using var command = sourceDatabase.CreateCommand();
         command.Transaction = sourceTransaction;
-        command.CommandText = $@"
-    drop synonym if exists [{sourceSchema}].[{synonym}];
-    create synonym [{sourceSchema}].[{synonym}] for [{targetDatabase}].[{targetSchema}].[{target}];
-";
+        command.CommandText =
+            $"""
+             drop synonym if exists [{sourceSchema}].[{synonym}];
+             create synonym [{sourceSchema}].[{synonym}] for [{targetDatabase}].[{targetSchema}].[{target}];
+             """;
         await command.ExecuteNonQueryAsync();
     }
 
@@ -48,18 +49,19 @@ public class Synonym
     {
         using var command = sourceDatabase.CreateCommand();
         command.Transaction = sourceTransaction;
-        command.CommandText = @"
-declare @n char(1)
-set @n = char(10)
+        command.CommandText =
+            """
+            declare @n char(1)
+            set @n = char(10)
 
-declare @stmt nvarchar(max)
+            declare @stmt nvarchar(max)
 
-select @stmt = isnull( @stmt + @n, '' ) +
-'drop synonym [' + SCHEMA_NAME(schema_id) + '].[' + name + ']'
-from sys.synonyms
+            select @stmt = isnull( @stmt + @n, '' ) +
+            'drop synonym [' + SCHEMA_NAME(schema_id) + '].[' + name + ']'
+            from sys.synonyms
 
-exec sp_executesql @stmt
-";
+            exec sp_executesql @stmt
+            """;
         await command.ExecuteNonQueryAsync();
     }
 

@@ -28,7 +28,5 @@ public class ConsumerIntegrationTests :
     }
 
     class SendMessage :
-        IMessage
-    {
-    }
+        IMessage;
 }

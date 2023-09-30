@@ -48,49 +48,52 @@ public class SubscriptionManager
     /// <summary>
     /// The sql statements used to create the subscription table.
     /// </summary>
-    public static readonly string SubscriptionTableSql = @"
-if exists (
-  select *
-  from sys.objects
-  where object_id = object_id('{0}')
-    and type in ('U'))
-return
+    public static readonly string SubscriptionTableSql =
+        """
+        if exists (
+          select *
+          from sys.objects
+          where object_id = object_id('{0}')
+            and type in ('U'))
+        return
 
-create table {0} (
-  QueueAddress nvarchar(200) not null,
-  Endpoint nvarchar(200),
-  Topic nvarchar(200) not null,
-  primary key clustered
-  (
-    Endpoint,
-    Topic
-  )
-)
-";
+        create table {0} (
+          QueueAddress nvarchar(200) not null,
+          Endpoint nvarchar(200),
+          Topic nvarchar(200) not null,
+          primary key clustered
+          (
+            Endpoint,
+            Topic
+          )
+        )
+        """;
 
     /// <summary>
     /// The sql statements used to add a subscription.
     /// </summary>
-    public static readonly string SubscribeSql = @"
-MERGE {0} WITH (HOLDLOCK, TABLOCK) AS target
-USING(SELECT @Endpoint AS Endpoint, @QueueAddress AS QueueAddress, @Topic AS Topic) AS source
-ON target.Endpoint = source.Endpoint
-AND target.Topic = source.Topic
-WHEN MATCHED AND target.QueueAddress <> source.QueueAddress THEN
-UPDATE SET QueueAddress = @QueueAddress
-WHEN NOT MATCHED THEN
-INSERT
-(
-    QueueAddress,
-    Topic,
-    Endpoint
-)
-VALUES
-(
-    @QueueAddress,
-    @Topic,
-    @Endpoint
-);";
+    public static readonly string SubscribeSql =
+        """
+        MERGE {0} WITH (HOLDLOCK, TABLOCK) AS target
+        USING(SELECT @Endpoint AS Endpoint, @QueueAddress AS QueueAddress, @Topic AS Topic) AS source
+        ON target.Endpoint = source.Endpoint
+        AND target.Topic = source.Topic
+        WHEN MATCHED AND target.QueueAddress <> source.QueueAddress THEN
+        UPDATE SET QueueAddress = @QueueAddress
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+          QueueAddress,
+          Topic,
+          Endpoint
+        )
+        VALUES
+        (
+          @QueueAddress,
+          @Topic,
+          @Endpoint
+        );
+        """;
 
     public async Task Subscribe(string endpoint, string address, string topic)
     {
@@ -106,11 +109,13 @@ VALUES
     /// <summary>
     /// The sql statements used to unsubscribe from a topic.
     /// </summary>
-    public static readonly string UnsubscribeSql = @"
-DELETE FROM {0}
-WHERE
-    Endpoint = @Endpoint and
-    Topic = @Topic";
+    public static readonly string UnsubscribeSql =
+        """
+        DELETE FROM {0}
+        WHERE
+          Endpoint = @Endpoint and
+          Topic = @Topic
+        """;
 
     public async Task Unsubscribe(string endpoint, string topic)
     {
@@ -124,11 +129,12 @@ WHERE
     /// <summary>
     /// The sql statements used to get subscribers for a topic.
     /// </summary>
-    public static readonly string GetSubscribersSql = @"
-SELECT DISTINCT QueueAddress
-FROM {0}
-WHERE Topic IN ({1})
-";
+    public static readonly string GetSubscribersSql =
+        """
+        SELECT DISTINCT QueueAddress
+        FROM {0}
+        WHERE Topic IN ({1})
+        """;
 
     public async Task<List<string>> GetSubscribers(params string[] topics)
     {

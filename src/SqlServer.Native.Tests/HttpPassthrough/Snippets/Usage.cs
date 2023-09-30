@@ -17,7 +17,7 @@ public class Usage
             destination: "TheDestination",
             attachments: new()
             {
-                {"fileName", Encoding.UTF8.GetBytes("fileContents")}
+                {"fileName", "fileContents"u8.ToArray()}
             });
 
         #endregion
@@ -40,7 +40,7 @@ public class Usage
             destination: "TheDestination",
             attachments: new()
             {
-                {"fileName", Encoding.UTF8.GetBytes("fileContents")}
+                {"fileName", "fileContents"u8.ToArray()}
             });
 
         #endregion

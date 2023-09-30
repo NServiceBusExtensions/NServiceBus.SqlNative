@@ -21,23 +21,16 @@ public class QueueCreatorIntegration
         return endpoint.Send(new SendMessage(), sendOptions);
     }
 
-    class SendHandler :
+    class SendHandler(ManualResetEvent @event) :
         IHandleMessages<SendMessage>
     {
-        ManualResetEvent resetEvent;
-
-        public SendHandler(ManualResetEvent resetEvent) =>
-            this.resetEvent = resetEvent;
-
         public Task Handle(SendMessage message, HandlerContext context)
         {
-            resetEvent.Set();
+            @event.Set();
             return Task.CompletedTask;
         }
     }
 
     class SendMessage :
-        IMessage
-    {
-    }
+        IMessage;
 }

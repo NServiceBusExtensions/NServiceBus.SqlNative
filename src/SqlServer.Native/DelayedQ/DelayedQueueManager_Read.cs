@@ -16,18 +16,19 @@ public partial class DelayedQueueManager
         return command;
     }
 
-    public static readonly string ReadSql = ConnectionHelpers.WrapInNoCount(@"
-select top({1})
-  RowVersion,
-  Due,
-  Headers,
-  datalength(Body),
-  Body
-from {0}
-with (readpast)
-where RowVersion >= @RowVersion
-order by RowVersion
-");
+    public static readonly string ReadSql = ConnectionHelpers.WrapInNoCount(
+        """
+        select top({1})
+          RowVersion,
+          Due,
+          Headers,
+          datalength(Body),
+          Body
+        from {0}
+        with (readpast)
+        where RowVersion >= @RowVersion
+        order by RowVersion
+        """);
 
     protected override async Task<IncomingDelayedMessage> ReadMessage(SqlDataReader dataReader, params Func<ValueTask>[] cleanups)
     {

@@ -50,23 +50,17 @@ public class ProcessingLoop
             Console.WriteLine($"Message received in error message:\r\n{bodyText}");
         }
 
-        static void ErrorCallback(Exception exception)
-        {
+        static void ErrorCallback(Exception exception) =>
             Environment.FailFast("Message processing loop failed", exception);
-        }
 
-        Task<SqlTransaction> BuildTransaction(Cancel cancel)
-        {
-            return ConnectionHelpers.BeginTransaction(connectionString, cancel);
-        }
+        Task<SqlTransaction> BuildTransaction(Cancel cancel) =>
+            ConnectionHelpers.BeginTransaction(connectionString, cancel);
 
         Task PersistRowVersion(
             SqlTransaction transaction,
             long rowVersion,
-            Cancel cancel)
-        {
-            return rowVersionTracker.Save(sqlConnection, rowVersion, cancel);
-        }
+            Cancel cancel) =>
+            rowVersionTracker.Save(sqlConnection, rowVersion, cancel);
 
         var processingLoop = new MessageProcessingLoop(
             table: "error",

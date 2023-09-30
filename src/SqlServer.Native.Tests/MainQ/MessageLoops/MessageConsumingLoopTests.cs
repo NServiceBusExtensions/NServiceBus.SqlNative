@@ -76,5 +76,5 @@ public class MessageConsumingLoopTests :
     }
 
     static OutgoingMessage BuildMessage(string guid) =>
-        new(new(guid), dateTime, "headers", Encoding.UTF8.GetBytes("{}"));
+        new(new(guid), dateTime, "headers", "{}"u8.ToArray());
 }
