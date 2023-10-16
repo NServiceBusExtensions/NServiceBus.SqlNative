@@ -7,5 +7,6 @@
     <Description>Low level .net wrapper for the SQL Server transport.</Description>
     <PackageTags>NServiceBus, Native, Raw</PackageTags>
     <NoWarn>CS1591;CS1573</NoWarn>
+    <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
   </PropertyGroup>
 </Project>
