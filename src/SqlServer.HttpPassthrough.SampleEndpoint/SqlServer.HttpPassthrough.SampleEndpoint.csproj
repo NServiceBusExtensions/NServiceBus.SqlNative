@@ -10,7 +10,7 @@
     <PackageReference Include="NServiceBus.Transport.SqlServer" Version="7.0.2" />
     <PackageReference Include="NServiceBus.Attachments.Sql" Version="12.0.6" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.100" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.101" PrivateAssets="all" />
     <Using Include="NServiceBus.IMessageHandlerContext" Alias="HandlerContext" />
   </ItemGroup>
 </Project>
