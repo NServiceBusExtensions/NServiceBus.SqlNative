@@ -107,7 +107,7 @@ The queue can be created using the following:
 var manager = new QueueManager("endpointTable", sqlConnection);
 await manager.Create();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L10-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-createqueue' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L11-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-createqueue' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -121,7 +121,7 @@ The queue can be deleted using the following:
 var manager = new QueueManager("endpointTable", sqlConnection);
 await manager.Drop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L20-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletequeue' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L21-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletequeue' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -144,7 +144,7 @@ var message = new OutgoingMessage(
     bodyBytes: body);
 await manager.Send(message);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L33-L42' title='Snippet source file'>snippet source</a> | <a href='#snippet-send' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L34-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-send' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -169,7 +169,7 @@ var messages = new List<OutgoingMessage>
 };
 await manager.Send(messages);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L53-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendbatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L54-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendbatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -199,7 +199,7 @@ if (message != null)
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L74-L90' title='Snippet source file'>snippet source</a> | <a href='#snippet-read' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L75-L91' title='Snippet source file'>snippet source</a> | <a href='#snippet-read' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -230,7 +230,7 @@ var result = await manager.Read(
 Console.WriteLine(result.Count);
 Console.WriteLine(result.LastRowVersion);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L95-L117' title='Snippet source file'>snippet source</a> | <a href='#snippet-readbatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L96-L118' title='Snippet source file'>snippet source</a> | <a href='#snippet-readbatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -344,7 +344,7 @@ if (message != null)
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L122-L138' title='Snippet source file'>snippet source</a> | <a href='#snippet-consume' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L123-L139' title='Snippet source file'>snippet source</a> | <a href='#snippet-consume' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -374,7 +374,7 @@ var result = await manager.Consume(
 Console.WriteLine(result.Count);
 Console.WriteLine(result.LastRowVersion);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L143-L164' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumebatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L144-L165' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumebatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -418,7 +418,7 @@ consumingLoop.Start();
 // stop consuming
 await consumingLoop.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ConsumingLoop.cs#L10-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumeloop' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ConsumingLoop.cs#L11-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumeloop' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -442,7 +442,7 @@ The queue can be created using the following:
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 await manager.Create();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L10-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-createdelayedqueue' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L12-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-createdelayedqueue' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -456,7 +456,7 @@ The queue can be deleted using the following:
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 await manager.Drop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L20-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletedelayedqueue' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L22-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletedelayedqueue' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -477,7 +477,7 @@ var message = new OutgoingDelayedMessage(
     bodyBytes: body);
 await manager.Send(message);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L33-L42' title='Snippet source file'>snippet source</a> | <a href='#snippet-senddelayed' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L35-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-senddelayed' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -502,7 +502,7 @@ var messages = new List<OutgoingDelayedMessage>
 };
 await manager.Send(messages);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L52-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-senddelayedbatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L54-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-senddelayedbatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -532,7 +532,7 @@ if (message != null)
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L73-L89' title='Snippet source file'>snippet source</a> | <a href='#snippet-readdelayed' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L75-L91' title='Snippet source file'>snippet source</a> | <a href='#snippet-readdelayed' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -563,7 +563,7 @@ var result = await manager.Read(
 Console.WriteLine(result.Count);
 Console.WriteLine(result.LastRowVersion);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L94-L116' title='Snippet source file'>snippet source</a> | <a href='#snippet-readdelayedbatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L96-L118' title='Snippet source file'>snippet source</a> | <a href='#snippet-readdelayedbatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -593,7 +593,7 @@ if (message != null)
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L121-L137' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumedelayed' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L123-L139' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumedelayed' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -623,7 +623,7 @@ var result = await manager.Consume(
 Console.WriteLine(result.Count);
 Console.WriteLine(result.LastRowVersion);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L142-L163' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumedelayedbatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L144-L165' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumedelayedbatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -652,7 +652,7 @@ The table can be created using the following:
 var manager = new SubscriptionManager("SubscriptionRouting", sqlConnection);
 await manager.Create();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Subscription/Subscription.cs#L10-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-createsubscriptiontable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Subscription/Subscription.cs#L11-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-createsubscriptiontable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -666,7 +666,7 @@ The table can be deleted using the following:
 var manager = new SubscriptionManager("SubscriptionRouting", sqlConnection);
 await manager.Drop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Subscription/Subscription.cs#L20-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletesubscriptiontable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Subscription/Subscription.cs#L21-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletesubscriptiontable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -688,7 +688,7 @@ The table can be created using the following:
 var manager = new DedupeManager(sqlConnection, "DeduplicationTable");
 await manager.Create();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L11-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-creatededuplicationtable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L12-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-creatededuplicationtable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -702,7 +702,7 @@ The table can be deleted using the following:
 var manager = new DedupeManager(sqlConnection, "DeduplicationTable");
 await manager.Drop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L21-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletededuplicationtable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L22-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletededuplicationtable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -728,7 +728,7 @@ var message = new OutgoingMessage(
     bodyBytes: body);
 await manager.Send(message);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L34-L46' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendwithdeduplication' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L35-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendwithdeduplication' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -756,7 +756,7 @@ var messages = new List<OutgoingMessage>
 };
 await manager.Send(messages);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L79-L98' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendbatchwithdeduplication' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L80-L99' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendbatchwithdeduplication' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -778,7 +778,7 @@ var cleaner = new DedupeCleanerJob(
     frequencyToRunCleanup: TimeSpan.FromMinutes(10));
 cleaner.Start();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L52-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstart' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L53-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstart' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Then at application shutdown stop the instance.
@@ -788,7 +788,7 @@ Then at application shutdown stop the instance.
 ```cs
 await cleaner.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L65-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstop' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L66-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstop' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
