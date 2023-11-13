@@ -19,15 +19,9 @@ public class DedupeManagerTests :
         var message2 = BuildBytesMessage("00000000-0000-0000-0000-000000000002");
         await Send(message2);
         var cleaner = new DedupeManager(SqlConnection, "Deduplication");
-        SqlRecording.StartRecording();
+        Recording.Start();
         await cleaner.CleanupItemsOlderThan(now);
-        var sqlEntries = SqlRecording.FinishRecording();
-        await Verify(
-            new
-            {
-                ReplicationData = SqlHelper.ReadDuplicateData("Deduplication", SqlConnection),
-                sqlEntries
-            });
+        await Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
     Task Send(OutgoingMessage message)

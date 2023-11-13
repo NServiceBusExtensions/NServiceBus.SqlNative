@@ -1,10 +1,12 @@
 ﻿using Microsoft.Data.SqlClient;
 using NServiceBus.Transport.SqlServerNative;
+// ReSharper disable ReplaceAsyncWithTaskReturn
 
 public class DelayedQueue
 {
     SqlConnection sqlConnection = null!;
 
+    // ReSharper disable once ReplaceAsyncWithTaskReturn
     async Task CreateQueue()
     {
         #region CreateDelayedQueue
