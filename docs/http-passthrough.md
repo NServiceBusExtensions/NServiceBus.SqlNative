@@ -238,19 +238,14 @@ Usage in a [controller](https://docs.microsoft.com/en-us/aspnet/core/mvc/control
 <a id='snippet-controller'></a>
 ```cs
 [Route("SendMessage")]
-public class PassthroughController : ControllerBase
+public class PassthroughController(ISqlPassthrough sender) : ControllerBase
 {
-    ISqlPassthrough sender;
-
-    public PassthroughController(ISqlPassthrough sender) =>
-        this.sender = sender;
-
     [HttpPost]
     public Task Post(Cancel cancel) =>
         sender.Send(HttpContext, cancel);
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/PassThroughController.cs#L4-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-controller' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/PassThroughController.cs#L4-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-controller' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 WARNING: In a production application the controller would be performing any authorization and authentication on the incoming request. 
