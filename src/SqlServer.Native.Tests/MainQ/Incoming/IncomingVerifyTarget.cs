@@ -1,15 +1,7 @@
-﻿class IncomingVerifyTarget
+﻿class IncomingVerifyTarget(DateTime? expires, string headers, Guid id, string? body)
 {
-    public DateTime? Expires { get; }
-    public string Headers { get; }
-    public Guid Id { get; }
-    public string? Body { get; }
-
-    public IncomingVerifyTarget(DateTime? expires, string headers, Guid id, string? body)
-    {
-        Expires = expires;
-        Headers = headers;
-        Id = id;
-        Body = body;
-    }
+    public DateTime? Expires { get; } = expires;
+    public string Headers { get; } = headers;
+    public Guid Id { get; } = id;
+    public string? Body { get; } = body;
 }

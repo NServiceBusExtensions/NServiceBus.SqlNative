@@ -5,22 +5,14 @@ using NServiceBus.Attachments.Sql.Raw;
 using NServiceBus.SqlServer.HttpPassthrough;
 using Table = NServiceBus.Transport.SqlServerNative.Table;
 
-class Sender
+class Sender(
+    Func<Cancel, Task<SqlConnection>> func,
+    HeadersBuilder builder,
+    Table attachmentsTable,
+    Table table,
+    ILogger logger)
 {
-    Persister attachments;
-    Func<Cancel, Task<SqlConnection>> connectionFunc;
-    HeadersBuilder headersBuilder;
-    Table dedupeTable;
-    ILogger logger;
-
-    public Sender(Func<Cancel, Task<SqlConnection>> connectionFunc, HeadersBuilder headersBuilder, Table attachmentsTable, Table dedupeTable, ILogger logger)
-    {
-        this.connectionFunc = connectionFunc;
-        attachments = new(new(attachmentsTable.TableName, attachmentsTable.Schema, false));
-        this.headersBuilder = headersBuilder;
-        this.dedupeTable = dedupeTable;
-        this.logger = logger;
-    }
+    Persister attachments = new(new(attachmentsTable.TableName, attachmentsTable.Schema, false));
 
     public async Task<long> Send(PassthroughMessage message, Table destination, Cancel cancel)
     {
@@ -36,7 +28,7 @@ class Sender
 
     async Task<long> InnerSend(PassthroughMessage message, Table destination, Cancel cancel)
     {
-        using var connection = await connectionFunc(cancel);
+        using var connection = await func(cancel);
         using var transaction = connection.BeginTransaction();
         var rowVersion = await SendInsideTransaction(message, destination, cancel, transaction);
         transaction.Commit();
@@ -45,13 +37,13 @@ class Sender
 
     async Task<long> SendInsideTransaction(PassthroughMessage message, Table destination, Cancel cancel, SqlTransaction transaction)
     {
-        var headersString = headersBuilder.GetHeadersString(message);
+        var headersString = builder.GetHeadersString(message);
         LogSend(message);
         var outgoingMessage = new OutgoingMessage(
             message.Id,
             headers: headersString,
             bodyBytes: Encoding.UTF8.GetBytes(message.Body));
-        var queueManager = new QueueManager(destination, transaction, dedupeTable);
+        var queueManager = new QueueManager(destination, transaction, table);
         var attachmentExpiry = DateTime.UtcNow.AddDays(10);
         await SendAttachments(transaction, attachmentExpiry, cancel, message);
         return await queueManager.Send(outgoingMessage, cancel);

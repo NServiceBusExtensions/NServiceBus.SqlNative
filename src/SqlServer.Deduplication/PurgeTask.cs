@@ -2,21 +2,12 @@
 using NServiceBus.Features;
 using NServiceBus.Transport.SqlServerDeduplication;
 
-class PurgeTask :
-    FeatureStartupTask
+class PurgeTask(Table table, Func<Cancel, Task<SqlConnection>> builder) :
+        FeatureStartupTask
 {
-    Table table;
-    Func<Cancel, Task<SqlConnection>> connectionBuilder;
-
-    public PurgeTask(Table table, Func<Cancel, Task<SqlConnection>> connectionBuilder)
-    {
-        this.table = table;
-        this.connectionBuilder = connectionBuilder;
-    }
-
     protected override async Task OnStart(IMessageSession session, Cancel cancel = default)
     {
-        using var connection = await connectionBuilder(Cancel.None);
+        using var connection = await builder(Cancel.None);
         var dedupeManager = new DedupeManager(connection, table);
         await dedupeManager.PurgeItems(cancel);
     }

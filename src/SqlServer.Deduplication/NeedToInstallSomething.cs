@@ -2,13 +2,10 @@
 using NServiceBus.Settings;
 using NServiceBus.Transport.SqlServerDeduplication;
 
-class NeedToInstallSomething :
+class NeedToInstallSomething(IReadOnlySettings settings) :
     INeedToInstallSomething
 {
-    DedupeSettings? settings;
-
-    public NeedToInstallSomething(IReadOnlySettings settings) =>
-        this.settings = settings.GetOrDefault<DedupeSettings>();
+    DedupeSettings? settings = settings.GetOrDefault<DedupeSettings>();
 
     public async Task Install(string identity, Cancel cancel = default)
     {

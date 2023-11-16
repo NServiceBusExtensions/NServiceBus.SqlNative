@@ -8,8 +8,7 @@ class SqlPassthrough(
         Sender sender,
         bool claims,
         string? headerPrefix,
-        ILogger logger)
-    :
+        ILogger logger) :
         ISqlPassthrough
 {
     public async Task Send(HttpContext context, Cancel cancel = default)

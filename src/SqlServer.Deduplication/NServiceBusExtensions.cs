@@ -8,6 +8,7 @@ static class NServiceBusExtensions
         {
             return purgeOnStartup;
         }
+
         return false;
     }
 }

@@ -9,27 +9,16 @@ namespace NServiceBus.SqlServer.HttpPassthrough;
 /// Used as a DTO for manipulation and verification purposes.
 /// </summary>
 [DebuggerDisplay("Id = {Id}, Namespace = {Namespace}, Type = {Type}, Destination = {Destination}")]
-public class PassthroughMessage
+public class PassthroughMessage(
+    string? destination,
+    Guid id,
+    Guid correlationId,
+    string type,
+    string? @namespace,
+    string? url,
+    string body,
+    List<Attachment> attachments)
 {
-    Guid id;
-    Guid correlationId;
-    string type;
-    string? ns;
-    string body;
-    string? clientUrl;
-
-    public PassthroughMessage(string? destination, Guid id, Guid correlationId, string type, string? @namespace, string? clientUrl, string body, List<Attachment> attachments)
-    {
-        Destination = destination;
-        this.id = id;
-        this.correlationId = correlationId;
-        this.type = type;
-        ns = @namespace;
-        this.clientUrl = clientUrl;
-        this.body = body;
-        Attachments = attachments;
-    }
-
     /// <summary>
     /// The message id. Contains the 'MessageId' value from <see cref="HttpRequest.Headers"/>.
     /// </summary>
@@ -76,11 +65,11 @@ public class PassthroughMessage
     /// </summary>
     public string? Namespace
     {
-        get => ns;
+        get => @namespace;
         set
         {
             Guard.AgainstEmpty(value, nameof(Namespace));
-            ns = value;
+            @namespace = value;
         }
     }
 
@@ -101,7 +90,7 @@ public class PassthroughMessage
     /// The message destination. Contains the 'Destination' value from <see cref="HttpRequest.Headers"/>.
     /// Primarily used to convert to a <see cref="Table"/> as a return value for the passthrough callback.
     /// </summary>
-    public string? Destination { get; }
+    public string? Destination { get; } = destination;
 
     /// <summary>
     /// The URL of the submitting page. Contains the <see cref="HeaderNames.Referer"/> value from <see cref="HttpRequest.Headers"/>.
@@ -109,18 +98,18 @@ public class PassthroughMessage
     /// </summary>
     public string? ClientUrl
     {
-        get => clientUrl;
+        get => url;
         set
         {
             Guard.AgainstEmpty(value, nameof(ClientUrl));
-            clientUrl = value;
+            url = value;
         }
     }
 
     /// <summary>
     /// The message attachments. Contains all binaries extracted from <see cref="IFormCollection.Files"/>
     /// </summary>
-    public List<Attachment> Attachments { get; set; }
+    public List<Attachment> Attachments { get; set; } = attachments;
 
     /// <summary>
     /// Any extra headers to add to the outgoing NServiceBus message.

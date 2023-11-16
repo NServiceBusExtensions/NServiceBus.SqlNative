@@ -13,7 +13,7 @@ static class RequestParser
             correlationId: incomingHeaders.MessageId,
             type: incomingHeaders.MessageType,
             @namespace: incomingHeaders.MessageNamespace,
-            clientUrl: incomingHeaders.Referrer,
+            url: incomingHeaders.Referrer,
             body: GetMessageBody(form),
             attachments: GetAttachments(form).ToList()
         );

@@ -3,16 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NServiceBus.SqlServer.HttpPassthrough;
 
-class BadRequestMiddleware
+class BadRequestMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
 {
-    RequestDelegate next;
-    ILogger<BadRequestMiddleware> logger;
-
-    public BadRequestMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
-    {
-        this.next = next;
-        logger = loggerFactory.CreateLogger<BadRequestMiddleware>();
-    }
+    ILogger<BadRequestMiddleware> logger = loggerFactory.CreateLogger<BadRequestMiddleware>();
 
     public async Task Invoke(HttpContext context)
     {

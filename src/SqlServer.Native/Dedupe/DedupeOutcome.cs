@@ -4,16 +4,10 @@ namespace NServiceBus.Transport.SqlServerDeduplication;
 namespace NServiceBus.Transport.SqlServerNative;
 #endif
 
-public struct DedupeResult
+public struct DedupeResult(DedupeOutcome dedupeOutcome, string? context)
 {
-    public DedupeResult(DedupeOutcome dedupeOutcome, string? context)
-    {
-        DedupeOutcome = dedupeOutcome;
-        Context = context;
-    }
-
-    public DedupeOutcome DedupeOutcome { get; }
-    public string? Context { get; }
+    public DedupeOutcome DedupeOutcome { get; } = dedupeOutcome;
+    public string? Context { get; } = context;
 }
 
 public enum DedupeOutcome

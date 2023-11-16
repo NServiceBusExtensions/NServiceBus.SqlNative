@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>NServiceBus.SqlServer.Deduplication</AssemblyName>
     <PackageName>NServiceBus.SqlServer.Deduplication</PackageName>
-    <TargetFrameworks>net48;net6.0</TargetFrameworks>
+    <TargetFrameworks>net48;net8.0</TargetFrameworks>
     <Description>Message deduplication for the SQL Server transport.</Description>
     <DefineConstants>$(DefineConstants);SqlServerDedupe</DefineConstants>
   </PropertyGroup>
@@ -20,7 +20,7 @@
     <PackageReference Include="NServiceBus" Version="8.1.6" />
     <PackageReference Include="Polyfill" Version="1.32.1" PrivateAssets="all" />
     <PackageReference Include="NServiceBus.Transport.SqlServer" Version="7.0.2" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.101" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.102" PrivateAssets="all" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
   </ItemGroup>
 </Project>

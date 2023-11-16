@@ -1,14 +1,7 @@
-﻿class StreamWrapper :
+﻿class StreamWrapper(long length, Stream inner) :
     Stream
 {
-    Stream inner;
     long position;
-
-    public StreamWrapper(long length, Stream inner)
-    {
-        this.inner = inner;
-        Length = length;
-    }
 
     public override void EndWrite(IAsyncResult asyncResult) =>
         throw new NotImplementedException();
@@ -60,7 +53,7 @@
     public override bool CanTimeout => inner.CanTimeout;
     public override bool CanWrite => false;
 
-    public override long Length { get; }
+    public override long Length { get; } = length;
     public override int ReadTimeout => inner.ReadTimeout;
 
     public override long Position

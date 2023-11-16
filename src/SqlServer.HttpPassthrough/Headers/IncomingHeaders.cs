@@ -1,17 +1,13 @@
-﻿struct IncomingHeaders
+﻿struct IncomingHeaders(
+    Guid messageId,
+    string messageType,
+    string? messageNamespace,
+    string? destination,
+    string? referrer)
 {
-    public Guid MessageId { get; }
-    public string MessageType { get; }
-    public string? Referrer { get; }
-    public string? Destination { get; }
-    public string? MessageNamespace { get; }
-
-    public IncomingHeaders(Guid messageId, string messageType, string? messageNamespace, string? destination, string? referrer)
-    {
-        MessageId = messageId;
-        MessageType = messageType;
-        MessageNamespace = messageNamespace;
-        Destination = destination;
-        Referrer = referrer;
-    }
+    public Guid MessageId { get; } = messageId;
+    public string MessageType { get; } = messageType;
+    public string? Referrer { get; } = referrer;
+    public string? Destination { get; } = destination;
+    public string? MessageNamespace { get; } = messageNamespace;
 }

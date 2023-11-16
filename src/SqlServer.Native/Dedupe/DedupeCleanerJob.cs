@@ -48,8 +48,8 @@ public class DedupeCleanerJob
                 var expiry = DateTime.UtcNow.Subtract(expireWindow);
                 await dedupeCleaner.CleanupItemsOlderThan(expiry, cancel);
             },
-            criticalError: criticalError,
-            frequencyToRunCleanup: frequencyToRunCleanup,
+            error: criticalError,
+            toRunCleanup: frequencyToRunCleanup,
             timer: new());
         cleaner.Start();
     }

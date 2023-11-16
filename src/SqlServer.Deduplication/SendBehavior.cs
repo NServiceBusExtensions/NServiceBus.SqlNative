@@ -4,18 +4,10 @@ using NServiceBus.Pipeline;
 using NServiceBus.Transport;
 using NServiceBus.Transport.SqlServerDeduplication;
 
-class SendBehavior :
-    Behavior<IOutgoingPhysicalMessageContext>
+class SendBehavior(Table table, Func<Cancel, Task<SqlConnection>> builder) :
+        Behavior<IOutgoingPhysicalMessageContext>
 {
     ILog logger = LogManager.GetLogger("DeduplicationSendBehavior");
-    Table table;
-    Func<Cancel, Task<SqlConnection>> connectionBuilder;
-
-    public SendBehavior(Table table, Func<Cancel, Task<SqlConnection>> connectionBuilder)
-    {
-        this.table = table;
-        this.connectionBuilder = connectionBuilder;
-    }
 
     public override async Task Invoke(IOutgoingPhysicalMessageContext context, Func<Task> next)
     {
@@ -25,7 +17,7 @@ class SendBehavior :
             return;
         }
 
-        var connectionTask = connectionBuilder(Cancel.None);
+        var connectionTask = builder(Cancel.None);
         if (context.Extensions.TryGet(out TransportTransaction _))
         {
             throw new NotSupportedException("Deduplication is currently designed to be used from outside the NServiceBus pipeline. For example to dedup messages being sent from inside a web service endpoint.");

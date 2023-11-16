@@ -4,13 +4,8 @@ using NServiceBus.SqlServer.HttpPassthrough;
 #region Controller
 
 [Route("SendMessage")]
-public class PassthroughController : ControllerBase
+public class PassthroughController(ISqlPassthrough sender) : ControllerBase
 {
-    ISqlPassthrough sender;
-
-    public PassthroughController(ISqlPassthrough sender) =>
-        this.sender = sender;
-
     [HttpPost]
     public Task Post(Cancel cancel) =>
         sender.Send(HttpContext, cancel);

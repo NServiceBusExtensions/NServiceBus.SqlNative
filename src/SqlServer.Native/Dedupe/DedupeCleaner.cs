@@ -1,19 +1,10 @@
-﻿class DedupeCleaner
+﻿class DedupeCleaner(
+    Func<Cancel, Task> cleanup,
+    Action<Exception> error,
+    TimeSpan toRunCleanup,
+    AsyncTimer timer)
 {
     public virtual Task Stop() => timer.Stop();
-
-    AsyncTimer timer;
-    Action<Exception> criticalError;
-    Func<Cancel, Task> cleanup;
-    TimeSpan frequencyToRunCleanup;
-
-    public DedupeCleaner(Func<Cancel, Task> cleanup, Action<Exception> criticalError, TimeSpan frequencyToRunCleanup, AsyncTimer timer)
-    {
-        this.cleanup = cleanup;
-        this.frequencyToRunCleanup = frequencyToRunCleanup;
-        this.timer = timer;
-        this.criticalError = criticalError;
-    }
 
     public virtual void Start()
     {
@@ -24,14 +15,14 @@
                 await cleanup(token);
                 cleanupFailures = 0;
             },
-            interval: frequencyToRunCleanup,
+            interval: toRunCleanup,
             errorCallback: exception =>
             {
                 //TODO: log every exception
                 cleanupFailures++;
                 if (cleanupFailures >= 10)
                 {
-                    criticalError(exception);
+                    error(exception);
                     cleanupFailures = 0;
                 }
             },

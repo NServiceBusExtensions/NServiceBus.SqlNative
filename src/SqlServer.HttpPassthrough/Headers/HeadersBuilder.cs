@@ -1,17 +1,8 @@
 using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 
-class HeadersBuilder
+class HeadersBuilder(string endpoint, string machine)
 {
-    string originatingEndpoint;
-    string originatingMachine;
-
-    public HeadersBuilder(string originatingEndpoint, string originatingMachine)
-    {
-        this.originatingEndpoint = originatingEndpoint;
-        this.originatingMachine = originatingMachine;
-    }
-
     public string GetHeadersString(PassthroughMessage message)
     {
         var messageType = GetMessageName(message);
@@ -22,8 +13,8 @@ class HeadersBuilder
         dictionary.Add("NServiceBus.CorrelationId", correlationId);
         dictionary.Add("NServiceBus.EnclosedMessageTypes", messageType);
         dictionary.Add("NServiceBus.TimeSent", Headers.ToWireFormattedString(DateTime.UtcNow));
-        dictionary.Add("NServiceBus.OriginatingMachine", originatingMachine);
-        dictionary.Add("NServiceBus.OriginatingEndpoint", originatingEndpoint);
+        dictionary.Add("NServiceBus.OriginatingMachine", machine);
+        dictionary.Add("NServiceBus.OriginatingEndpoint", endpoint);
         if (message.ClientUrl != null)
         {
             dictionary.Add("MessagePassthrough.ClientUrl", message.ClientUrl);
