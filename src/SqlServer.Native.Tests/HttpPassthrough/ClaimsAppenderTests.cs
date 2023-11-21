@@ -21,10 +21,10 @@ public class ClaimsAppenderTests :
         var claims = BuildClaims();
         ClaimsAppender.Append(claims, headers, "prefix.");
         var result = ClaimsAppender.Extract(headers, "prefix.")
-            .Select(x => new
+            .Select(_ => new
             {
-                x.Type,
-                x.Value
+                _.Type,
+                _.Value
             });
         return Verify(result);
     }

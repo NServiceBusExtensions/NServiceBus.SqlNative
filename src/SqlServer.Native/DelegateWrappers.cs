@@ -81,12 +81,12 @@
         };
 
     public static Func<T, Task<K>> WrapFunc<T, K>(this Func<T, Task<K>> func, string name) =>
-        async x =>
+        async _ =>
         {
             Task<K> task;
             try
             {
-                task = func(x);
+                task = func(_);
             }
             catch (Exception exception)
             {
