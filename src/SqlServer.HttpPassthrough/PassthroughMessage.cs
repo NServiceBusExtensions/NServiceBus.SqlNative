@@ -114,7 +114,7 @@ public class PassthroughMessage(
     /// <summary>
     /// Any extra headers to add to the outgoing NServiceBus message.
     /// </summary>
-    public Dictionary<string, string> ExtraHeaders { get; set; } = new();
+    public Dictionary<string, string> ExtraHeaders { get; set; } = [];
 
     /// <summary>
     /// Convert all properties of this instance into a <see cref="Dictionary{TKey,TValue}"/>.
