@@ -4,11 +4,11 @@
     static string returnedNull = "Provided {0} delegate returned a null.";
 
     public static Action<T> WrapFunc<T>(this Action<T> func, string name) =>
-        x =>
+        _ =>
         {
             try
             {
-                func(x);
+                func(_);
             }
             catch (Exception exception)
             {
