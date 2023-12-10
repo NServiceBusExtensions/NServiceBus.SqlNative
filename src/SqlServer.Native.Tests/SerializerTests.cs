@@ -22,16 +22,15 @@ public class SerializerTests
     public Task List()
     {
         var serialized = Serializer.SerializeList(
-            new()
-            {
-                "value",
-                @"a\b",
-                @"a\\b",
-                "a\"b",
-                "a/b",
-                "a//b",
-                @"a\/b"
-            });
+        [
+            "value",
+            @"a\b",
+            @"a\\b",
+            "a\"b",
+            "a/b",
+            "a//b",
+            @"a\/b"
+        ]);
         return Verify(Serializer.DeSerializeList(serialized));
     }
 }
