@@ -1,6 +1,17 @@
-﻿[
-  {
-    $type: Dictionary<string, object>,
-    Id: Guid_1
+﻿{
+  target: [
+    {
+      $type: Dictionary<string, object>,
+      Id: Guid_1
+    }
+  ],
+  sql: {
+    $type: LogEntry,
+    HasTransaction: false,
+    Parameters: {
+      $type: Dictionary<string, object>,
+      date: DateTime_1
+    },
+    Text: delete from [dbo].[Deduplication] where Created < @date
   }
-]
+}
