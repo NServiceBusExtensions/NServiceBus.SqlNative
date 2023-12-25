@@ -14,7 +14,7 @@
     <PackageReference Include="Verify.SqlServer" Version="8.0.1" />
     <PackageReference Include="Verify.Xunit" Version="22.10.0" />
     <PackageReference Include="Xunit" Version="2.6.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.5" PrivateAssets="all" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6" PrivateAssets="all" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\SqlServer.Deduplication\SqlServer.Deduplication.csproj" />
