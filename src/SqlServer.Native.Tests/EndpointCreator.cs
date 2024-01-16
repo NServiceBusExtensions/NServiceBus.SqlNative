@@ -16,6 +16,8 @@ static class EndpointCreator
         transport.Transactions(TransportTransactionMode.SendsAtomicWithReceive);
         transport.NativeDelayedDelivery();
         configuration.PurgeOnStartup(true);
+        configuration.EnableInstallers();
+        configuration.EnableDedupe(Connection.OpenAsyncConnection);
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftJsonSerializer>();
         return configuration;
