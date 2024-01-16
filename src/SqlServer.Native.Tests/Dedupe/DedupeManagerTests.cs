@@ -21,6 +21,7 @@ public class DedupeManagerTests :
         var cleaner = new DedupeManager(SqlConnection, "Deduplication");
         Recording.Start();
         await cleaner.CleanupItemsOlderThan(now);
+        await Task.Delay(1000);
         await Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
     }
 
