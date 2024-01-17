@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 
-[UsesVerify]
 public class RequestParserTests :
     TestBase
 {

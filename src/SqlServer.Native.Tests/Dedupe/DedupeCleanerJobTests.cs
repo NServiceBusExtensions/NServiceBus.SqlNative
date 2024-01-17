@@ -1,6 +1,5 @@
 ﻿using NServiceBus.Transport.SqlServerNative;
 
-[UsesVerify]
 public class DedupeCleanerJobTests :
     TestBase
 {

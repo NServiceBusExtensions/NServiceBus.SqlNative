@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using NServiceBus.Transport.SqlServerNative;
 
-[UsesVerify]
 public class MainQueueCreationTests
 {
     [Fact]

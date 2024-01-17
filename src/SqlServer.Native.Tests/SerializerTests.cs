@@ -1,5 +1,4 @@
-﻿[UsesVerify]
-public class SerializerTests
+﻿public class SerializerTests
 {
     [Fact]
     public Task Dictionary()

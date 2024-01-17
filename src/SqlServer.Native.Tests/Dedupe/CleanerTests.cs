@@ -1,5 +1,4 @@
-﻿[UsesVerify]
-public class CleanerTests
+﻿public class CleanerTests
 {
     [Fact]
     public void If_triggers_critical_action_after_10_failures()
