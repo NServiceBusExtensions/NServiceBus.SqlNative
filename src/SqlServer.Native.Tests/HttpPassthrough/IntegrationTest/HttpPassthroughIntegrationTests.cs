@@ -71,8 +71,8 @@ public class HttpPassthroughIntegrationTests :
         public async Task Handle(MyMessage message, HandlerContext context)
         {
             var incomingAttachment = context.Attachments();
-            Assert.NotNull(await incomingAttachment.GetBytes("fooFile"));
-            Assert.NotNull(await incomingAttachment.GetBytes());
+            Assert.NotNull(await incomingAttachment.GetBytes("fooFile", context.CancellationToken));
+            Assert.NotNull(await incomingAttachment.GetBytes(context.CancellationToken));
             Assert.Equal("Value", message.Property);
             @event.Set();
         }

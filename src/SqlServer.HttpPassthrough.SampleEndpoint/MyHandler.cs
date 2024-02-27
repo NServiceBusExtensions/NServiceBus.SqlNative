@@ -11,7 +11,7 @@ class MyHandler :
         {
             Console.WriteLine($"{header.Key.Replace("NServiceBus.","")}={header.Value}");
         }
-        return context.Attachments().ProcessStreams(WriteAttachment);
+        return context.Attachments().ProcessStreams(WriteAttachment, context.CancellationToken);
     }
 
     static async Task WriteAttachment(AttachmentStream stream, Cancel cancel)

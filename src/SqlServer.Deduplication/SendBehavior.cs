@@ -33,7 +33,7 @@ class SendBehavior(Table table, Func<Cancel, Task<SqlConnection>> builder) :
         transportTransaction.Set(transaction);
 
         var dedupeManager = new DedupeManager(transaction, table);
-        var writeResult = await dedupeManager.WriteDedupRecord(messageId, dedupePipelineState.Context);
+        var writeResult = await dedupeManager.WriteDedupRecord(messageId, dedupePipelineState.Context, context.CancellationToken);
         dedupePipelineState.DedupeOutcome = writeResult.DedupeOutcome;
         dedupePipelineState.Context = writeResult.Context;
         if (dedupePipelineState.DedupeOutcome == DedupeOutcome.Deduplicated)
