@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿#pragma warning disable CA1822
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;

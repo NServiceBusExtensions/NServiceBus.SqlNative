@@ -86,7 +86,7 @@ public class Startup
         null!;
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Startup.cs#L8-L52' title='Snippet source file'>snippet source</a> | <a href='#snippet-startup' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Startup.cs#L9-L53' title='Snippet source file'>snippet source</a> | <a href='#snippet-startup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

@@ -4,7 +4,7 @@
 
 public class HeadersUsage
 {
-    void Serialize()
+    static void Serialize()
     {
         #region Serialize
 
@@ -17,7 +17,7 @@ public class HeadersUsage
         #endregion
     }
 
-    void Deserialize()
+    static void Deserialize()
     {
         string headersString = null!;
 

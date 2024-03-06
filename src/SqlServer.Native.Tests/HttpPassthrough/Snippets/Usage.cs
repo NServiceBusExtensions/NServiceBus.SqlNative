@@ -4,7 +4,7 @@ using NServiceBus.SqlServer.HttpPassthrough;
 
 public class Usage
 {
-    async Task Foo(HttpClient httpClient)
+    static async Task Foo(HttpClient httpClient)
     {
         #region ClientFormSender
 

@@ -9,7 +9,7 @@ using NServiceBus.Transport.SqlServerNative;
 
 public class AppendClaimsToMessageHeaders
 {
-    public void WithPrefix(IServiceCollection services)
+    public static void WithPrefix(IServiceCollection services)
     {
         #region AppendClaimsToMessageHeaders_WithPrefix
 
@@ -26,7 +26,7 @@ public class AppendClaimsToMessageHeaders
         #endregion
     }
 
-    public void Default(IServiceCollection services)
+    public static void Default(IServiceCollection services)
     {
         #region AppendClaimsToMessageHeaders
 
@@ -43,7 +43,7 @@ public class AppendClaimsToMessageHeaders
         #endregion
     }
 
-    public void AppendClaimsToDictionary(Dictionary<string, string> headerDictionary)
+    public static void AppendClaimsToDictionary(Dictionary<string, string> headerDictionary)
     {
         #region AppendClaimsToDictionary
 
@@ -58,7 +58,7 @@ public class AppendClaimsToMessageHeaders
         #endregion
     }
 
-    public void ExtractClaimsFromDictionary(Dictionary<string, string> headerDictionary)
+    public static void ExtractClaimsFromDictionary(Dictionary<string, string> headerDictionary)
     {
         #region ExtractClaimsFromDictionary
 
