@@ -1,6 +1,4 @@
-﻿using NServiceBus.Transport.SqlServerNative;
-
-static class EndpointCreator
+﻿static class EndpointCreator
 {
     public static async Task<EndpointConfiguration> Create(string endpointName)
     {

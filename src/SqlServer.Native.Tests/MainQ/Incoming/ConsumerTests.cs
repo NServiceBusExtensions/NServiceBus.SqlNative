@@ -1,6 +1,4 @@
-﻿using NServiceBus.Transport.SqlServerNative;
-
-public class ConsumerTests :
+﻿public class ConsumerTests :
     TestBase
 {
     string table = "ConsumerTests";

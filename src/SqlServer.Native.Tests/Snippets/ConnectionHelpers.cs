@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-
-public static class ConnectionHelpers
+﻿public static class ConnectionHelpers
 {
     #region ConnectionHelpers
 

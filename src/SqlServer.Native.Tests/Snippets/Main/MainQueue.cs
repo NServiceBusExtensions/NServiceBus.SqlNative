@@ -1,5 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
-using NServiceBus.Transport.SqlServerNative;
+﻿
+
 // ReSharper disable ReplaceAsyncWithTaskReturn
 
 public class MainQueue

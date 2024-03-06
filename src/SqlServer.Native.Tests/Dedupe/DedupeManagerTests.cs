@@ -1,6 +1,4 @@
-﻿using NServiceBus.Transport.SqlServerNative;
-
-public class DedupeManagerTests :
+﻿public class DedupeManagerTests :
     TestBase
 {
     static DateTime dateTime = new(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);

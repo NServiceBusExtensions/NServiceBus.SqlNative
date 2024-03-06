@@ -1,7 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using NServiceBus.Transport.SqlServerNative;
-
-public class MessageProcessingLoopTests :
+﻿public class MessageProcessingLoopTests :
     TestBase
 {
     static DateTime dateTime = new(2000, 1, 1, 1, 1, 1, DateTimeKind.Utc);

@@ -1,7 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using NServiceBus.Transport.SqlServerNative;
-
-static class SqlHelper
+﻿static class SqlHelper
 {
     public static void EnsureDatabaseExists(string connectionString)
     {

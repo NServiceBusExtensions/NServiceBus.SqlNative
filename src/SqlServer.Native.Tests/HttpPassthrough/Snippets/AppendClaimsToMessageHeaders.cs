@@ -1,10 +1,6 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using NServiceBus.SqlServer.HttpPassthrough;
-using NServiceBus.Transport.SqlServerNative;
+
 // ReSharper disable UnusedVariable
 
 public class AppendClaimsToMessageHeaders

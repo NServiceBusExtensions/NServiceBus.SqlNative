@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using NServiceBus.SqlServer.HttpPassthrough;
-using NServiceBus.Transport.SqlServerNative;
 
 public class HttpPassthroughDedupTests :
     TestBase

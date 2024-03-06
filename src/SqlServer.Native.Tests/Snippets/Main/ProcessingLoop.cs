@@ -1,5 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
-using NServiceBus.Transport.SqlServerNative;
+﻿
+
 // ReSharper disable UnusedVariable
 
 public class ProcessingLoop

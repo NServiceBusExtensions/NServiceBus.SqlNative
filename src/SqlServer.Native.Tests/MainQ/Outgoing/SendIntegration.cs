@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using NServiceBus.Transport.SqlServerNative;
-using Headers = NServiceBus.Transport.SqlServerNative.Headers;
+﻿using Headers = NServiceBus.Transport.SqlServerNative.Headers;
 
 public class SendIntegration :
     TestBase

@@ -1,7 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using NServiceBus.Transport.SqlServerNative;
-
-public class MainQueueCreationTests
+﻿public class MainQueueCreationTests
 {
     [Fact]
     public async Task Run()

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NServiceBus.SqlServer.HttpPassthrough;
 
 #region Controller
 

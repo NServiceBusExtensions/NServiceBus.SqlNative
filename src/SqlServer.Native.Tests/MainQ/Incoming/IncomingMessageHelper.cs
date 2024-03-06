@@ -1,6 +1,4 @@
-﻿using NServiceBus.Transport.SqlServerNative;
-
-static class IncomingMessageHelper
+﻿static class IncomingMessageHelper
 {
     public static IncomingVerifyTarget ToVerifyTarget(this IncomingMessage result)
     {

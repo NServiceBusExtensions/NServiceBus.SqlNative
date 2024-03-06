@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-public class QueueCreatorIntegration
+﻿public class QueueCreatorIntegration
 {
     [Fact]
     public async Task Run()

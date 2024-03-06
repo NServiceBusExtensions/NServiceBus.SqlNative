@@ -1,6 +1,4 @@
-﻿using NServiceBus.Transport.SqlServerNative;
-
-public class DelayedQueueCreationTests
+﻿public class DelayedQueueCreationTests
 {
     [Fact]
     public async Task Run()

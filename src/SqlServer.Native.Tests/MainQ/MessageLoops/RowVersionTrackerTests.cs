@@ -1,6 +1,4 @@
-﻿using NServiceBus.Transport.SqlServerNative;
-
-public class RowVersionTrackerTests :
+﻿public class RowVersionTrackerTests :
     TestBase
 {
     [Fact]

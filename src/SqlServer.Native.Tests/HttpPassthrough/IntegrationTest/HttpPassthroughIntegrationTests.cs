@@ -2,11 +2,8 @@
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 using My.Namespace;
 using NServiceBus.Attachments.Sql;
-using NServiceBus.SqlServer.HttpPassthrough;
-using NServiceBus.Transport.SqlServerNative;
 
 public class HttpPassthroughIntegrationTests :
     TestBase

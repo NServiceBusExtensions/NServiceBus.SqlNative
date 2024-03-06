@@ -1,7 +1,4 @@
-﻿using System.Security.Claims;
-using NServiceBus.SqlServer.HttpPassthrough;
-
-public class ClaimsAppenderTests :
+﻿public class ClaimsAppenderTests :
     TestBase
 {
     [Fact]

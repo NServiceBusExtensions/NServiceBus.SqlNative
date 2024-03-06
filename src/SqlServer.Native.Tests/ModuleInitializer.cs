@@ -1,5 +1,4 @@
 ﻿using Argon;
-using NServiceBus.Transport.SqlServerNative;
 
 public static class ModuleInitializer
 {

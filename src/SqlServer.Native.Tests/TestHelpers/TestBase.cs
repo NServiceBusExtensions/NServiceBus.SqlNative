@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-
-public class TestBase :
+﻿public class TestBase :
     IDisposable
 {
     public SqlConnection SqlConnection = Connection.OpenConnection();

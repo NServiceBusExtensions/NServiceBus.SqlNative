@@ -1,6 +1,4 @@
-﻿using NServiceBus.Transport.SqlServerNative;
-
-static class IncomingDelayedStreamMessageHelper
+﻿static class IncomingDelayedStreamMessageHelper
 {
     public static IncomingDelayedVerifyTarget ToVerifyTarget(this IncomingDelayedMessage result)
     {
