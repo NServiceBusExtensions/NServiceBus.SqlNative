@@ -867,7 +867,7 @@ public static async Task<SqlTransaction> BeginTransaction(
     return connection.BeginTransaction();
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/ConnectionHelpers.cs#L5-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-connectionhelpers' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/ConnectionHelpers.cs#L3-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-connectionhelpers' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
