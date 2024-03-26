@@ -102,12 +102,12 @@ See also [SQL Server Transport - SQL statements](https://docs.particular.net/tra
 The queue can be created using the following:
 
 <!-- snippet: CreateQueue -->
-<a id='snippet-createqueue'></a>
+<a id='snippet-CreateQueue'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 await manager.Create();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L11-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-createqueue' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L11-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-CreateQueue' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -116,12 +116,12 @@ await manager.Create();
 The queue can be deleted using the following:
 
 <!-- snippet: DeleteQueue -->
-<a id='snippet-deletequeue'></a>
+<a id='snippet-DeleteQueue'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 await manager.Drop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L21-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletequeue' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L21-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-DeleteQueue' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -135,7 +135,7 @@ Sending to the main transport queue.
 Sending a single message.
 
 <!-- snippet: Send -->
-<a id='snippet-send'></a>
+<a id='snippet-Send'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var message = new OutgoingMessage(
@@ -144,7 +144,7 @@ var message = new OutgoingMessage(
     bodyBytes: body);
 await manager.Send(message);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L34-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-send' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L34-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-Send' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -153,7 +153,7 @@ await manager.Send(message);
 Sending a batch of messages.
 
 <!-- snippet: SendBatch -->
-<a id='snippet-sendbatch'></a>
+<a id='snippet-SendBatch'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var messages = new List<OutgoingMessage>
@@ -169,7 +169,7 @@ var messages = new List<OutgoingMessage>
 };
 await manager.Send(messages);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L54-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendbatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L54-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-SendBatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -183,7 +183,7 @@ await manager.Send(messages);
 Reading a single message.
 
 <!-- snippet: Read -->
-<a id='snippet-read'></a>
+<a id='snippet-Read'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var message = await manager.Read(rowVersion: 10);
@@ -199,7 +199,7 @@ if (message != null)
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L75-L91' title='Snippet source file'>snippet source</a> | <a href='#snippet-read' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L75-L91' title='Snippet source file'>snippet source</a> | <a href='#snippet-Read' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -208,7 +208,7 @@ if (message != null)
 Reading a batch of messages.
 
 <!-- snippet: ReadBatch -->
-<a id='snippet-readbatch'></a>
+<a id='snippet-ReadBatch'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var result = await manager.Read(
@@ -230,7 +230,7 @@ var result = await manager.Read(
 Console.WriteLine(result.Count);
 Console.WriteLine(result.LastRowVersion);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L96-L118' title='Snippet source file'>snippet source</a> | <a href='#snippet-readbatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L96-L118' title='Snippet source file'>snippet source</a> | <a href='#snippet-ReadBatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -239,7 +239,7 @@ Console.WriteLine(result.LastRowVersion);
 For many scenarios, it is likely to be necessary to keep track of the last message `RowVersion` that was read. A lightweight implementation of the functionality is provided by `RowVersionTracker`. `RowVersionTracker` stores the current `RowVersion` in a table containing a single column and row.
 
 <!-- snippet: RowVersionTracker -->
-<a id='snippet-rowversiontracker'></a>
+<a id='snippet-RowVersionTracker'></a>
 ```cs
 var versionTracker = new RowVersionTracker();
 
@@ -252,7 +252,7 @@ await versionTracker.Save(sqlConnection, newRowVersion);
 // get row version
 var startingRow = await versionTracker.Get(sqlConnection);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L14-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-rowversiontracker' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L14-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-RowVersionTracker' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Note that this is only one possible implementation of storing the current `RowVersion`.
@@ -267,7 +267,7 @@ An example use case is monitoring an [error queue](https://docs.particular.net/n
 Note that in the below snippet, the above `RowVersionTracker` is used for tracking the current `RowVersion`.
 
 <!-- snippet: ProcessingLoop -->
-<a id='snippet-processingloop'></a>
+<a id='snippet-ProcessingLoop'></a>
 ```cs
 var rowVersionTracker = new RowVersionTracker();
 
@@ -314,7 +314,7 @@ Console.ReadKey();
 
 await processingLoop.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L32-L79' title='Snippet source file'>snippet source</a> | <a href='#snippet-processingloop' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ProcessingLoop.cs#L32-L79' title='Snippet source file'>snippet source</a> | <a href='#snippet-ProcessingLoop' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -328,7 +328,7 @@ await processingLoop.Stop();
 Consume a single message.
 
 <!-- snippet: Consume -->
-<a id='snippet-consume'></a>
+<a id='snippet-Consume'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var message = await manager.Consume();
@@ -344,7 +344,7 @@ if (message != null)
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L123-L139' title='Snippet source file'>snippet source</a> | <a href='#snippet-consume' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L123-L139' title='Snippet source file'>snippet source</a> | <a href='#snippet-Consume' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -353,7 +353,7 @@ if (message != null)
 Consuming a batch of messages.
 
 <!-- snippet: ConsumeBatch -->
-<a id='snippet-consumebatch'></a>
+<a id='snippet-ConsumeBatch'></a>
 ```cs
 var manager = new QueueManager("endpointTable", sqlConnection);
 var result = await manager.Consume(
@@ -374,7 +374,7 @@ var result = await manager.Consume(
 Console.WriteLine(result.Count);
 Console.WriteLine(result.LastRowVersion);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L144-L165' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumebatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/MainQueue.cs#L144-L165' title='Snippet source file'>snippet source</a> | <a href='#snippet-ConsumeBatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -385,7 +385,7 @@ For scenarios where continual consumption (consuming and executing some code wit
 An example use case is monitoring an [audit queue](https://docs.particular.net/nservicebus/operations/auditing). Some action should be taken when a message appears in the audit queue, and it should be purged from the queue to free up the storage space. 
 
 <!-- snippet: ConsumeLoop -->
-<a id='snippet-consumeloop'></a>
+<a id='snippet-ConsumeLoop'></a>
 ```cs
 static async Task Callback(
     SqlTransaction transaction,
@@ -418,7 +418,7 @@ consumingLoop.Start();
 // stop consuming
 await consumingLoop.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ConsumingLoop.cs#L11-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumeloop' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Main/ConsumingLoop.cs#L11-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-ConsumeLoop' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -437,12 +437,12 @@ See also [SQL Server Transport - SQL statements](https://docs.particular.net/tra
 The queue can be created using the following:
 
 <!-- snippet: CreateDelayedQueue -->
-<a id='snippet-createdelayedqueue'></a>
+<a id='snippet-CreateDelayedQueue'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 await manager.Create();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L12-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-createdelayedqueue' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L12-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-CreateDelayedQueue' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -451,12 +451,12 @@ await manager.Create();
 The queue can be deleted using the following:
 
 <!-- snippet: DeleteDelayedQueue -->
-<a id='snippet-deletedelayedqueue'></a>
+<a id='snippet-DeleteDelayedQueue'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 await manager.Drop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L22-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletedelayedqueue' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L22-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-DeleteDelayedQueue' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -468,7 +468,7 @@ await manager.Drop();
 Sending a single message.
 
 <!-- snippet: SendDelayed -->
-<a id='snippet-senddelayed'></a>
+<a id='snippet-SendDelayed'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 var message = new OutgoingDelayedMessage(
@@ -477,7 +477,7 @@ var message = new OutgoingDelayedMessage(
     bodyBytes: body);
 await manager.Send(message);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L35-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-senddelayed' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L35-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-SendDelayed' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -486,7 +486,7 @@ await manager.Send(message);
 Sending a batch of messages.
 
 <!-- snippet: SendDelayedBatch -->
-<a id='snippet-senddelayedbatch'></a>
+<a id='snippet-SendDelayedBatch'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable.Delayed", sqlConnection);
 var messages = new List<OutgoingDelayedMessage>
@@ -502,7 +502,7 @@ var messages = new List<OutgoingDelayedMessage>
 };
 await manager.Send(messages);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L54-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-senddelayedbatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L54-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-SendDelayedBatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -516,7 +516,7 @@ await manager.Send(messages);
 Reading a single message.
 
 <!-- snippet: ReadDelayed -->
-<a id='snippet-readdelayed'></a>
+<a id='snippet-ReadDelayed'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var message = await manager.Read(rowVersion: 10);
@@ -532,7 +532,7 @@ if (message != null)
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L75-L91' title='Snippet source file'>snippet source</a> | <a href='#snippet-readdelayed' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L75-L91' title='Snippet source file'>snippet source</a> | <a href='#snippet-ReadDelayed' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -541,7 +541,7 @@ if (message != null)
 Reading a batch of messages.
 
 <!-- snippet: ReadDelayedBatch -->
-<a id='snippet-readdelayedbatch'></a>
+<a id='snippet-ReadDelayedBatch'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var result = await manager.Read(
@@ -563,7 +563,7 @@ var result = await manager.Read(
 Console.WriteLine(result.Count);
 Console.WriteLine(result.LastRowVersion);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L96-L118' title='Snippet source file'>snippet source</a> | <a href='#snippet-readdelayedbatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L96-L118' title='Snippet source file'>snippet source</a> | <a href='#snippet-ReadDelayedBatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -577,7 +577,7 @@ Console.WriteLine(result.LastRowVersion);
 Consume a single message.
 
 <!-- snippet: ConsumeDelayed -->
-<a id='snippet-consumedelayed'></a>
+<a id='snippet-ConsumeDelayed'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var message = await manager.Consume();
@@ -593,7 +593,7 @@ if (message != null)
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L123-L139' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumedelayed' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L123-L139' title='Snippet source file'>snippet source</a> | <a href='#snippet-ConsumeDelayed' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -602,7 +602,7 @@ if (message != null)
 Consuming a batch of messages.
 
 <!-- snippet: ConsumeDelayedBatch -->
-<a id='snippet-consumedelayedbatch'></a>
+<a id='snippet-ConsumeDelayedBatch'></a>
 ```cs
 var manager = new DelayedQueueManager("endpointTable", sqlConnection);
 var result = await manager.Consume(
@@ -623,7 +623,7 @@ var result = await manager.Consume(
 Console.WriteLine(result.Count);
 Console.WriteLine(result.LastRowVersion);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L144-L165' title='Snippet source file'>snippet source</a> | <a href='#snippet-consumedelayedbatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Delayed/DelayedQueue.cs#L144-L165' title='Snippet source file'>snippet source</a> | <a href='#snippet-ConsumeDelayedBatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -647,12 +647,12 @@ Queue management for the [native publish subscribe](https://docs.particular.net/
 The table can be created using the following:
 
 <!-- snippet: CreateSubscriptionTable -->
-<a id='snippet-createsubscriptiontable'></a>
+<a id='snippet-CreateSubscriptionTable'></a>
 ```cs
 var manager = new SubscriptionManager("SubscriptionRouting", sqlConnection);
 await manager.Create();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Subscription/Subscription.cs#L11-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-createsubscriptiontable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Subscription/Subscription.cs#L11-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-CreateSubscriptionTable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -661,12 +661,12 @@ await manager.Create();
 The table can be deleted using the following:
 
 <!-- snippet: DeleteSubscriptionTable -->
-<a id='snippet-deletesubscriptiontable'></a>
+<a id='snippet-DeleteSubscriptionTable'></a>
 ```cs
 var manager = new SubscriptionManager("SubscriptionRouting", sqlConnection);
 await manager.Drop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Subscription/Subscription.cs#L21-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletesubscriptiontable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Subscription/Subscription.cs#L21-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-DeleteSubscriptionTable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -683,12 +683,12 @@ Some scenarios, such as HTTP message pass through, require message deduplication
 The table can be created using the following:
 
 <!-- snippet: CreateDeduplicationTable -->
-<a id='snippet-creatededuplicationtable'></a>
+<a id='snippet-CreateDeduplicationTable'></a>
 ```cs
 var manager = new DedupeManager(sqlConnection, "DeduplicationTable");
 await manager.Create();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L12-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-creatededuplicationtable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L12-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-CreateDeduplicationTable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -697,12 +697,12 @@ await manager.Create();
 The table can be deleted using the following:
 
 <!-- snippet: DeleteDeduplicationTable -->
-<a id='snippet-deletededuplicationtable'></a>
+<a id='snippet-DeleteDeduplicationTable'></a>
 ```cs
 var manager = new DedupeManager(sqlConnection, "DeduplicationTable");
 await manager.Drop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L22-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-deletededuplicationtable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L22-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-DeleteDeduplicationTable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -716,7 +716,7 @@ Sending to the main transport queue with deduplication.
 Sending a single message with deduplication.
 
 <!-- snippet: SendWithDeduplication -->
-<a id='snippet-sendwithdeduplication'></a>
+<a id='snippet-SendWithDeduplication'></a>
 ```cs
 var manager = new QueueManager(
     "endpointTable",
@@ -728,7 +728,7 @@ var message = new OutgoingMessage(
     bodyBytes: body);
 await manager.Send(message);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L35-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendwithdeduplication' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L35-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-SendWithDeduplication' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -737,7 +737,7 @@ await manager.Send(message);
 Sending a batch of messages with deduplication.
 
 <!-- snippet: SendBatchWithDeduplication -->
-<a id='snippet-sendbatchwithdeduplication'></a>
+<a id='snippet-SendBatchWithDeduplication'></a>
 ```cs
 var manager = new QueueManager(
     "endpointTable",
@@ -756,7 +756,7 @@ var messages = new List<OutgoingMessage>
 };
 await manager.Send(messages);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L80-L99' title='Snippet source file'>snippet source</a> | <a href='#snippet-sendbatchwithdeduplication' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L80-L99' title='Snippet source file'>snippet source</a> | <a href='#snippet-SendBatchWithDeduplication' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -767,7 +767,7 @@ Deduplication records need to live for a period of time after the initial corres
 At application startup, start an instance of `DeduplicationCleanerJob`.
 
 <!-- snippet: DeduplicationCleanerJobStart -->
-<a id='snippet-deduplicationcleanerjobstart'></a>
+<a id='snippet-DeduplicationCleanerJobStart'></a>
 ```cs
 var cleaner = new DedupeCleanerJob(
     table: "Deduplication",
@@ -778,17 +778,17 @@ var cleaner = new DedupeCleanerJob(
     frequencyToRunCleanup: TimeSpan.FromMinutes(10));
 cleaner.Start();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L53-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstart' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L53-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-DeduplicationCleanerJobStart' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Then at application shutdown stop the instance.
 
 <!-- snippet: DeduplicationCleanerJobStop -->
-<a id='snippet-deduplicationcleanerjobstop'></a>
+<a id='snippet-DeduplicationCleanerJobStop'></a>
 ```cs
 await cleaner.Stop();
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L66-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-deduplicationcleanerjobstop' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Deduplication/Deduplication.cs#L66-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-DeduplicationCleanerJobStop' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -800,7 +800,7 @@ await cleaner.Stop();
 Serialize a `Dictionary<string, string>` to a JSON string.
 
 <!-- snippet: Serialize -->
-<a id='snippet-serialize'></a>
+<a id='snippet-Serialize'></a>
 ```cs
 var headers = new Dictionary<string, string>
 {
@@ -808,7 +808,7 @@ var headers = new Dictionary<string, string>
 };
 var serialized = Headers.Serialize(headers);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Headers.cs#L9-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-serialize' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Headers.cs#L9-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-Serialize' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -817,11 +817,11 @@ var serialized = Headers.Serialize(headers);
 Deserialize a JSON string to a `Dictionary<string, string>`.
 
 <!-- snippet: Deserialize -->
-<a id='snippet-deserialize'></a>
+<a id='snippet-Deserialize'></a>
 ```cs
 var headers = Headers.DeSerialize(headersString);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/Headers.cs#L24-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-deserialize' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/Headers.cs#L24-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-Deserialize' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -840,7 +840,7 @@ A copy of the [timestamp format methods](https://docs.particular.net/nservicebus
 The APIs of this extension target either a `SQLConnection` and `SQLTransaction`. Given that in configuration those values are often expressed as a connection string, `ConnectionHelpers` supports converting that string to a `SQLConnection` or `SQLTransaction`. It provides two methods `OpenConnection` and `BeginTransaction` with the effective implementation of those methods being:
 
 <!-- snippet: ConnectionHelpers -->
-<a id='snippet-connectionhelpers'></a>
+<a id='snippet-ConnectionHelpers'></a>
 ```cs
 public static async Task<SqlConnection> OpenConnection(
     string connectionString,
@@ -867,7 +867,7 @@ public static async Task<SqlTransaction> BeginTransaction(
     return connection.BeginTransaction();
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/Snippets/ConnectionHelpers.cs#L3-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-connectionhelpers' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/Snippets/ConnectionHelpers.cs#L3-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-ConnectionHelpers' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

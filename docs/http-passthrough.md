@@ -42,7 +42,7 @@ At [ASP.NET Core startup](https://docs.microsoft.com/en-us/aspnet/core/fundament
  * `AddSqlHttpPassthroughBadRequestMiddleware` is called on [IApplicationBuilder](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.iapplicationbuilder), which adds [Middleware](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/) to the pipeline. This means that if the request parsing code of the SQL HTTP Passthrough throws a `BadRequestException`, that exception can be gracefully handled and an [HTTP BadRequest (400)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400) can be sent as a response. This is optional, and a Controller can choose to explicitly catch and handle `BadRequestException` in a different way.
 
 <!-- snippet: Startup -->
-<a id='snippet-startup'></a>
+<a id='snippet-Startup'></a>
 ```cs
 public class Startup
 {
@@ -86,7 +86,7 @@ public class Startup
         null!;
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Startup.cs#L5-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-startup' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Startup.cs#L5-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-Startup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -97,7 +97,7 @@ Append the [Claims](https://msdn.microsoft.com/en-us/library/system.security.cla
 By default each header will get a prefix of `SqlHttpPassthrough.Claim.`
 
 <!-- snippet: AppendClaimsToMessageHeaders -->
-<a id='snippet-appendclaimstomessageheaders'></a>
+<a id='snippet-AppendClaimsToMessageHeaders'></a>
 ```cs
 var configuration = new PassthroughConfiguration(
     connectionFunc: OpenConnection,
@@ -109,13 +109,13 @@ var configuration = new PassthroughConfiguration(
 configuration.AppendClaimsToMessageHeaders();
 services.AddSqlHttpPassthrough(configuration);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L27-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-appendclaimstomessageheaders' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L27-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppendClaimsToMessageHeaders' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 A custom prefix can also be defined.
 
 <!-- snippet: AppendClaimsToMessageHeaders_WithPrefix -->
-<a id='snippet-appendclaimstomessageheaders_withprefix'></a>
+<a id='snippet-AppendClaimsToMessageHeaders_WithPrefix'></a>
 ```cs
 var configuration = new PassthroughConfiguration(
     connectionFunc: OpenConnection,
@@ -127,7 +127,7 @@ var configuration = new PassthroughConfiguration(
 configuration.AppendClaimsToMessageHeaders(headerPrefix: "Claim.");
 services.AddSqlHttpPassthrough(configuration);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L10-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-appendclaimstomessageheaders_withprefix' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L10-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppendClaimsToMessageHeaders_WithPrefix' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 For unit testing and integration purposes it may be useful to manipulate a raw `Dictionary<string, string>`. This can be done using `ClaimsAppender`.
@@ -135,7 +135,7 @@ For unit testing and integration purposes it may be useful to manipulate a raw `
 To append claims:
 
 <!-- snippet: AppendClaimsToDictionary -->
-<a id='snippet-appendclaimstodictionary'></a>
+<a id='snippet-AppendClaimsToDictionary'></a>
 ```cs
 var claims = new List<Claim>
 {
@@ -145,23 +145,23 @@ var claims = new List<Claim>
 };
 ClaimsAppender.Append(claims, headerDictionary, "prefix.");
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L44-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-appendclaimstodictionary' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L44-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppendClaimsToDictionary' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To extract claims:
 
 <!-- snippet: ExtractClaimsFromDictionary -->
-<a id='snippet-extractclaimsfromdictionary'></a>
+<a id='snippet-ExtractClaimsFromDictionary'></a>
 ```cs
 var claimsList = ClaimsAppender.Extract(headerDictionary, "prefix.");
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L59-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-extractclaimsfromdictionary' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L59-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-ExtractClaimsFromDictionary' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 It may also be necessary to process claims with no reference to `NServiceBus.SqlServer.HttpPassthrough`. This can be done using the following utility methods. Note that these methods use `JsonConvert` from [Json.NET](https://www.newtonsoft.com/json).
 
 <!-- snippet: ClaimsRaw -->
-<a id='snippet-claimsraw'></a>
+<a id='snippet-ClaimsRaw'></a>
 ```cs
 public static void Append(
     IEnumerable<Claim> claims,
@@ -195,7 +195,7 @@ public static IEnumerable<Claim> Extract(
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L66-L100' title='Snippet source file'>snippet source</a> | <a href='#snippet-claimsraw' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L66-L100' title='Snippet source file'>snippet source</a> | <a href='#snippet-ClaimsRaw' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -235,7 +235,7 @@ Usage in a [controller](https://docs.microsoft.com/en-us/aspnet/core/mvc/control
  * The Controller handling the HTTP Post and passing that information to `ISqlPassthrough.Send`.
 
 <!-- snippet: Controller -->
-<a id='snippet-controller'></a>
+<a id='snippet-Controller'></a>
 ```cs
 [Route("SendMessage")]
 public class PassthroughController(ISqlPassthrough sender) : ControllerBase
@@ -245,7 +245,7 @@ public class PassthroughController(ISqlPassthrough sender) : ControllerBase
         sender.Send(HttpContext, cancel);
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/PassThroughController.cs#L3-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-controller' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/PassThroughController.cs#L3-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-Controller' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 WARNING: In a production application the controller would be performing any authorization and authentication on the incoming request. 
@@ -266,7 +266,7 @@ If the incoming HTTP request fails to be parsed, a `BadRequestException` will be
 The JavaScript that submits the data does so through by building up a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) object and [POSTing](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Sending_and_retrieving_form_data#The_POST_method) that via the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 
 <!-- snippet: PostToBus -->
-<a id='snippet-posttobus'></a>
+<a id='snippet-PostToBus'></a>
 ```html
 function PostToBus() {
     var message = new Object();
@@ -297,7 +297,7 @@ function PostToBus() {
     return fetch('SendMessage', postSettings);
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.html#L11-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-posttobus' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.html#L11-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostToBus' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -306,7 +306,7 @@ function PostToBus() {
 For deduplication to operate, the client must generate a [MessageId](/nservicebus/messaging/message-identity.md), so that any retries can be ignored. JavaScript does not contain native functionality to generate a GUID, so a helper method is used. 
 
 <!-- snippet: Guid -->
-<a id='snippet-guid'></a>
+<a id='snippet-Guid'></a>
 ```html
 function newGuid() {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
@@ -316,7 +316,7 @@ function newGuid() {
     )
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.html#L1-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-guid' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.html#L1-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-Guid' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -325,7 +325,7 @@ function newGuid() {
 Creating and posting a multipart form can be done using a combination of [MultipartFormDataContent](https://msdn.microsoft.com/en-us/library/system.net.http.multipartformdatacontent.aspx) and [HttpClient.PostAsync](https://msdn.microsoft.com/en-us/library/system.net.http.httpclient.postasync.aspx). To simplify this action the `ClientFormSender` class can be used:
 
 <!-- snippet: ClientFormSender -->
-<a id='snippet-clientformsender'></a>
+<a id='snippet-ClientFormSender'></a>
 ```cs
 var clientFormSender = new ClientFormSender(httpClient);
 await clientFormSender.Send(
@@ -339,7 +339,7 @@ await clientFormSender.Send(
         {"fileName", "fileContents"u8.ToArray()}
     });
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L8-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-clientformsender' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/Usage.cs#L8-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-ClientFormSender' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 This can be useful when performing [Integration testing in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/testing/integration-testing).
