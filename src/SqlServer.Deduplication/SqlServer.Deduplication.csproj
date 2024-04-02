@@ -20,6 +20,6 @@
     <PackageReference Include="NServiceBus" Version="8.1.6" />
     <PackageReference Include="Polyfill" Version="4.2.0" PrivateAssets="all" />
     <PackageReference Include="NServiceBus.Transport.SqlServer" Version="7.0.6" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.125" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.126" PrivateAssets="all" />
   </ItemGroup>
 </Project>
