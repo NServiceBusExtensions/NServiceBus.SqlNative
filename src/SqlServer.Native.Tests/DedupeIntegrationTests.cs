@@ -46,6 +46,8 @@ public class DedupeIntegrationTests :
         configuration.EnableDedupe(Connection.OpenAsyncConnection);
         configuration.PurgeOnStartup(true);
         configuration.UseSerialization<NewtonsoftJsonSerializer>();
+        configuration.AssemblyScanner()
+            .ExcludeAssemblies("xunit.runner.utility.netcoreapp10.dll");
 
         var attachments = configuration.EnableAttachments(Connection.OpenAsyncConnection, TimeToKeep.Default);
         attachments.UseTransportConnectivity();
