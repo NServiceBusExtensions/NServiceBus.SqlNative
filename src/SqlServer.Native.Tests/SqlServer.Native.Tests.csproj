@@ -10,7 +10,7 @@
     <PackageReference Include="NServiceBus.Transport.SqlServer" Version="8.0.0" />
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="27.0.2" PrivateAssets="all" />
     <PackageReference Include="NServiceBus" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.5" />
     <PackageReference Include="Verify.SqlServer" Version="8.0.4" />
     <PackageReference Include="Verify.Xunit" Version="24.2.0" />
     <PackageReference Include="Xunit" Version="2.8.0" />
