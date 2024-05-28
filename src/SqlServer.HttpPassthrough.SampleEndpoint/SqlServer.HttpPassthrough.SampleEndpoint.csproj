@@ -4,13 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
-    <PackageReference Include="NServiceBus" Version="9.0.0" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="4.0.0" />
-    <PackageReference Include="NServiceBus.Transport.SqlServer" Version="8.0.0" />
-    <PackageReference Include="NServiceBus.Attachments.Sql" Version="14.0.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="NServiceBus" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" />
+    <PackageReference Include="NServiceBus.Transport.SqlServer" />
+    <PackageReference Include="NServiceBus.Attachments.Sql" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.127" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <Using Include="NServiceBus.IMessageHandlerContext" Alias="HandlerContext" />
   </ItemGroup>
 </Project>

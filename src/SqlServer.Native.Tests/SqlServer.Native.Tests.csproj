@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
-    <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="4.0.0" />
-    <PackageReference Include="Argon" Version="0.17.0" />
-    <PackageReference Include="NServiceBus.Transport.SqlServer" Version="8.0.0" />
-    <PackageReference Include="MarkdownSnippets.MsBuild" Version="27.0.2" PrivateAssets="all" />
-    <PackageReference Include="NServiceBus" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.5" />
-    <PackageReference Include="Verify.SqlServer" Version="8.0.4" />
-    <PackageReference Include="Verify.Xunit" Version="24.2.0" />
-    <PackageReference Include="Xunit" Version="2.8.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="NServiceBus.Newtonsoft.Json" />
+    <PackageReference Include="Argon" />
+    <PackageReference Include="NServiceBus.Transport.SqlServer" />
+    <PackageReference Include="MarkdownSnippets.MsBuild" PrivateAssets="all" />
+    <PackageReference Include="NServiceBus" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
+    <PackageReference Include="Verify.SqlServer" />
+    <PackageReference Include="Verify.Xunit" />
+    <PackageReference Include="Xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\SqlServer.Deduplication\SqlServer.Deduplication.csproj" />
     <ProjectReference Include="..\SqlServer.HttpPassthrough.SampleEndpoint\SqlServer.HttpPassthrough.SampleEndpoint.csproj" />
     <ProjectReference Include="..\SqlServer.HttpPassthrough.SampleWeb\SqlServer.HttpPassthrough.SampleWeb.csproj" />
     <ProjectReference Include="..\SqlServer.HttpPassthrough\SqlServer.HttpPassthrough.csproj" />
     <ProjectReference Include="..\SqlServer.Native\SqlServer.Native.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.127" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <Using Include="NServiceBus.IMessageHandlerContext" Alias="HandlerContext" />
   </ItemGroup>
 </Project>

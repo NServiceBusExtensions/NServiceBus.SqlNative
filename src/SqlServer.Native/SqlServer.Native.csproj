@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>NServiceBus.SqlServer.Native</AssemblyName>
@@ -7,11 +7,11 @@
   </PropertyGroup>
   <ItemGroup>
     <!--CVE Microsoft.Data.SqlClient 5.2.0 depends on Azure.Identity 1.10.3 with CVE-2024-29992 vulnerability -->
-    <PackageReference Include="Azure.Identity" Version="1.11.3" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
-    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
-    <PackageReference Include="Fody" Version="6.8.1" PrivateAssets="all" />
-    <PackageReference Include="Polyfill" Version="5.2.2" PrivateAssets="all" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.127" PrivateAssets="all" />
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="ConfigureAwait.Fody" PrivateAssets="All" />
+    <PackageReference Include="Fody" PrivateAssets="all" />
+    <PackageReference Include="Polyfill" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
   </ItemGroup>
 </Project>
