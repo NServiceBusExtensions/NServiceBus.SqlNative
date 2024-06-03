@@ -13,14 +13,14 @@
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
-    <PackageVersion Include="NServiceBus" Version="9.0.0" />
-    <PackageVersion Include="NServiceBus.Attachments.Sql" Version="14.0.0" />
-    <PackageVersion Include="NServiceBus.Attachments.Sql.Raw" Version="14.0.0" />
+    <PackageVersion Include="NServiceBus" Version="9.0.1" />
+    <PackageVersion Include="NServiceBus.Attachments.Sql" Version="14.0.1" />
+    <PackageVersion Include="NServiceBus.Attachments.Sql.Raw" Version="14.0.1" />
     <PackageVersion Include="NServiceBus.Newtonsoft.Json" Version="4.0.0" />
     <PackageVersion Include="NServiceBus.Transport.SqlServer" Version="8.0.0" />
     <PackageVersion Include="Polyfill" Version="5.3.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.127" />
-    <PackageVersion Include="Verify.SqlServer" Version="8.0.4" />
+    <PackageVersion Include="Verify.SqlServer" Version="8.0.5" />
     <PackageVersion Include="Verify.Xunit" Version="25.0.1" />
     <PackageVersion Include="Xunit" Version="2.8.1" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.1" />
