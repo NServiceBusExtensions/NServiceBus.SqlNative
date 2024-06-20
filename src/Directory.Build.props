@@ -8,8 +8,10 @@
     <PackageTags>NServiceBus, Native, Raw</PackageTags>
     <NoWarn>CS1591;CS1573</NoWarn>
     <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
+    <!--
     <NuGetAuditMode>all</NuGetAuditMode>
     <NuGetAuditLevel>low</NuGetAuditLevel>
+    -->
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 </Project>
