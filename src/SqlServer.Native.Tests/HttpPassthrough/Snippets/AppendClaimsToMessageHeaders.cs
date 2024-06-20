@@ -13,9 +13,7 @@ public class AppendClaimsToMessageHeaders
             connectionFunc: OpenConnection,
             callback: Callback,
             dedupCriticalError: exception =>
-            {
-                Environment.FailFast("Dedup cleanup failure", exception);
-            });
+                Environment.FailFast("Dedup cleanup failure", exception));
         configuration.AppendClaimsToMessageHeaders(headerPrefix: "Claim.");
         services.AddSqlHttpPassthrough(configuration);
 

@@ -109,7 +109,7 @@ var configuration = new PassthroughConfiguration(
 configuration.AppendClaimsToMessageHeaders();
 services.AddSqlHttpPassthrough(configuration);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L27-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppendClaimsToMessageHeaders' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L25-L37' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppendClaimsToMessageHeaders' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 A custom prefix can also be defined.
@@ -121,13 +121,11 @@ var configuration = new PassthroughConfiguration(
     connectionFunc: OpenConnection,
     callback: Callback,
     dedupCriticalError: exception =>
-    {
-        Environment.FailFast("Dedup cleanup failure", exception);
-    });
+        Environment.FailFast("Dedup cleanup failure", exception));
 configuration.AppendClaimsToMessageHeaders(headerPrefix: "Claim.");
 services.AddSqlHttpPassthrough(configuration);
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L10-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppendClaimsToMessageHeaders_WithPrefix' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L10-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppendClaimsToMessageHeaders_WithPrefix' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 For unit testing and integration purposes it may be useful to manipulate a raw `Dictionary<string, string>`. This can be done using `ClaimsAppender`.
@@ -145,7 +143,7 @@ var claims = new List<Claim>
 };
 ClaimsAppender.Append(claims, headerDictionary, "prefix.");
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L44-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppendClaimsToDictionary' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L42-L52' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppendClaimsToDictionary' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To extract claims:
@@ -155,7 +153,7 @@ To extract claims:
 ```cs
 var claimsList = ClaimsAppender.Extract(headerDictionary, "prefix.");
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L59-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-ExtractClaimsFromDictionary' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L57-L61' title='Snippet source file'>snippet source</a> | <a href='#snippet-ExtractClaimsFromDictionary' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 It may also be necessary to process claims with no reference to `NServiceBus.SqlServer.HttpPassthrough`. This can be done using the following utility methods. Note that these methods use `JsonConvert` from [Json.NET](https://www.newtonsoft.com/json).
@@ -195,7 +193,7 @@ public static IEnumerable<Claim> Extract(
     }
 }
 ```
-<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L66-L100' title='Snippet source file'>snippet source</a> | <a href='#snippet-ClaimsRaw' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/SqlServer.Native.Tests/HttpPassthrough/Snippets/AppendClaimsToMessageHeaders.cs#L64-L98' title='Snippet source file'>snippet source</a> | <a href='#snippet-ClaimsRaw' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

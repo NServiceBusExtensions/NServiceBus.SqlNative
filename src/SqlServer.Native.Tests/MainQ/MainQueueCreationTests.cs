@@ -8,7 +8,7 @@
         await manager.Drop();
         await manager.Create();
         await Verify(connection)
-            .SchemaSettings(includeItem: s => s == "MainQueueCreationTests");
+            .SchemaFilter(_ => _.Name == "MainQueueCreationTests");
     }
 
     [Fact]

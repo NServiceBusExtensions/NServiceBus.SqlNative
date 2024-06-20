@@ -8,7 +8,7 @@
         await manager.Drop();
         await manager.Create();
         var settings = new VerifySettings();
-        settings.SchemaSettings(includeItem: s => s == "DelayedQueueCreationTests");
+        settings.SchemaFilter(_ => _.Name == "DelayedQueueCreationTests");
         await Verify(connection, settings);
     }
 }
