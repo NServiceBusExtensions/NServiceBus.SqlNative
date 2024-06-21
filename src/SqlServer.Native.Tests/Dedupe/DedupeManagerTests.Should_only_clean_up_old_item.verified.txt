@@ -6,12 +6,13 @@
     }
   ],
   sql: {
-    $type: LogEntry,
-    HasTransaction: false,
+    Text: delete from [dbo].[Deduplication] where Created < @date,
     Parameters: {
-      $type: Dictionary<string, object>,
-      date: DateTime_1
+      date: {
+        Value: DateTime_1,
+        DbType: DateTime2
+      }
     },
-    Text: delete from [dbo].[Deduplication] where Created < @date
+    HasTransaction: false
   }
 }

@@ -1,5 +1,8 @@
--- Tables
+﻿## Tables
 
+### Subscription
+
+```sql
 CREATE TABLE [dbo].[Subscription](
 	[QueueAddress] [nvarchar](200) NOT NULL,
 	[Endpoint] [nvarchar](200) NOT NULL,
@@ -10,3 +13,4 @@ PRIMARY KEY CLUSTERED
 	[Topic] ASC
 ) ON [PRIMARY]
 ) ON [PRIMARY]
+```
