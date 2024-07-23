@@ -18,8 +18,6 @@
         configuration.EnableDedupe(Connection.OpenAsyncConnection);
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftJsonSerializer>();
-        configuration.AssemblyScanner()
-            .ExcludeAssemblies("xunit.runner.utility.netcoreapp10.dll");
         return configuration;
     }
 }
