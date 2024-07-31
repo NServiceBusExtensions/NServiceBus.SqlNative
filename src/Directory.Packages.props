@@ -4,7 +4,7 @@
     <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Argon" Version="0.17.0" />
+    <PackageVersion Include="Argon" Version="0.21.0" />
     <PackageVersion Include="ConfigureAwait.Fody" Version="3.3.2" />
     <PackageVersion Include="Fody" Version="6.8.1" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="27.0.2" />
@@ -13,7 +13,7 @@
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
-    <PackageVersion Include="NServiceBus" Version="9.1.0" />
+    <PackageVersion Include="NServiceBus" Version="9.1.1" />
     <PackageVersion Include="NServiceBus.Attachments.Sql" Version="15.0.0" />
     <PackageVersion Include="NServiceBus.Attachments.Sql.Raw" Version="15.0.0" />
     <PackageVersion Include="NServiceBus.Newtonsoft.Json" Version="4.0.0" />
@@ -21,7 +21,7 @@
     <PackageVersion Include="Polyfill" Version="6.0.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.133" />
     <PackageVersion Include="Verify.SqlServer" Version="9.0.1" />
-    <PackageVersion Include="Verify.Xunit" Version="26.1.5" />
+    <PackageVersion Include="Verify.Xunit" Version="26.1.6" />
     <PackageVersion Include="Xunit" Version="2.9.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>
