@@ -8,7 +8,7 @@
     <PackageVersion Include="ConfigureAwait.Fody" Version="3.3.2" />
     <PackageVersion Include="Fody" Version="6.8.1" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="27.0.2" />
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.8" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="5.2.1" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
@@ -21,8 +21,8 @@
     <PackageVersion Include="Polyfill" Version="6.2.3" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.134" />
     <PackageVersion Include="Verify.SqlServer" Version="9.0.1" />
-    <PackageVersion Include="Verify.Xunit" Version="26.2.0" />
-    <PackageVersion Include="Xunit" Version="2.9.0" />
+    <PackageVersion Include="Verify.XunitV3" Version="26.2.0-beta.1" />
+    <PackageVersion Include="xunit.v3" Version="0.2.0-pre.69" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.0-pre.24" />
   </ItemGroup>
 </Project>
