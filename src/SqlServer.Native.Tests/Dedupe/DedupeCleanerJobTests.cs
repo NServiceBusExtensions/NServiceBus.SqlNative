@@ -26,7 +26,8 @@
         cleaner.Start();
         Thread.Sleep(100);
         await cleaner.Stop();
-        await Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection));
+        await Verify(SqlHelper.ReadDuplicateData("Deduplication", SqlConnection))
+            .DontScrubGuids();
     }
 
     Task<long> Send(OutgoingMessage message)
