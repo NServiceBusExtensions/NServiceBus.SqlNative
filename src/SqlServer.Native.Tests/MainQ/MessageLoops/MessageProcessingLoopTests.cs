@@ -19,7 +19,10 @@
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: (_, _, _) => Task.CompletedTask,
-            errorCallback: innerException => { exception = innerException; },
+            errorCallback: innerException =>
+            {
+                exception = innerException;
+            },
             persistRowVersion: (_, _, _) => Task.CompletedTask
         );
         loop.Start();
@@ -54,7 +57,9 @@
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: Callback,
-            errorCallback: _ => { },
+            errorCallback: _ =>
+            {
+            },
             persistRowVersion: (_, _, _) => Task.CompletedTask);
         loop.Start();
         resetEvent.WaitOne(TimeSpan.FromSeconds(30));
@@ -88,7 +93,9 @@
             startingRow: 1,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: (_, _, _) => Task.CompletedTask,
-            errorCallback: _ => { },
+            errorCallback: _ =>
+            {
+            },
             persistRowVersion: PersistRowVersion);
         loop.Start();
         resetEvent.WaitOne(TimeSpan.FromSeconds(30));
@@ -99,14 +106,14 @@
     {
         var sender = new QueueManager(table, SqlConnection);
 
-        return sender.Send(new List<OutgoingMessage>
-        {
+        return sender.Send(
+        [
             BuildMessage("00000000-0000-0000-0000-000000000001"),
             BuildMessage("00000000-0000-0000-0000-000000000002"),
             BuildMessage("00000000-0000-0000-0000-000000000003"),
             BuildMessage("00000000-0000-0000-0000-000000000004"),
             BuildMessage("00000000-0000-0000-0000-000000000005")
-        });
+        ]);
     }
 
     static OutgoingMessage BuildMessage(string guid) =>

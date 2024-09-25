@@ -52,7 +52,9 @@
             table: table,
             connectionBuilder: Connection.OpenAsyncConnection,
             callback: Callback,
-            errorCallback: _ => { });
+            errorCallback: _ =>
+            {
+            });
         loop.Start();
         resetEvent.WaitOne(TimeSpan.FromSeconds(30));
         Assert.Equal(5, count);
@@ -62,14 +64,14 @@
     {
         var sender = new QueueManager(table, SqlConnection);
 
-        return sender.Send(new List<OutgoingMessage>
-            {
-                BuildMessage("00000000-0000-0000-0000-000000000001"),
-                BuildMessage("00000000-0000-0000-0000-000000000002"),
-                BuildMessage("00000000-0000-0000-0000-000000000003"),
-                BuildMessage("00000000-0000-0000-0000-000000000004"),
-                BuildMessage("00000000-0000-0000-0000-000000000005")
-            });
+        return sender.Send(
+        [
+            BuildMessage("00000000-0000-0000-0000-000000000001"),
+            BuildMessage("00000000-0000-0000-0000-000000000002"),
+            BuildMessage("00000000-0000-0000-0000-000000000003"),
+            BuildMessage("00000000-0000-0000-0000-000000000004"),
+            BuildMessage("00000000-0000-0000-0000-000000000005")
+        ]);
     }
 
     static OutgoingMessage BuildMessage(string guid) =>
