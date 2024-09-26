@@ -18,10 +18,10 @@
     <PackageVersion Include="NServiceBus.Attachments.Sql.Raw" Version="15.0.0" />
     <PackageVersion Include="NServiceBus.Newtonsoft.Json" Version="4.0.0" />
     <PackageVersion Include="NServiceBus.Transport.SqlServer" Version="8.1.3" />
-    <PackageVersion Include="Polyfill" Version="6.9.0" />
+    <PackageVersion Include="Polyfill" Version="6.10.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.135" />
     <PackageVersion Include="Verify.SqlServer" Version="10.0.0" />
-    <PackageVersion Include="Verify.XunitV3" Version="27.0.0-beta.4" />
+    <PackageVersion Include="Verify.XunitV3" Version="27.0.0-beta.5" />
     <PackageVersion Include="xunit.v3" Version="0.4.0-pre.20" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.0-pre.35" />
   </ItemGroup>
