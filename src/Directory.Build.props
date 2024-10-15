@@ -9,10 +9,9 @@
     <NoWarn>CS1591;CS1573</NoWarn>
     <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
     <!--
-    <NuGetAuditMode>all</NuGetAuditMode>
-    <NuGetAuditLevel>low</NuGetAuditLevel>
     -->
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
   </PropertyGroup>
 </Project>
