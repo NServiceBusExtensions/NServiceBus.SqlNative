@@ -138,6 +138,7 @@
     public override int GetHashCode() =>
         inner.GetHashCode();
 
+    // ReSharper disable once ReturnTypeCanBeNotNullable
     public override string? ToString() =>
         inner.ToString();
 

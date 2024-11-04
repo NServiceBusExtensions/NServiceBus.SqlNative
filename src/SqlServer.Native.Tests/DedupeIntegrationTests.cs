@@ -47,7 +47,7 @@ public class DedupeIntegrationTests :
         configuration.PurgeOnStartup(true);
         configuration.UseSerialization<NewtonsoftJsonSerializer>();
 
-        var attachments = configuration.EnableAttachments(Connection.OpenAsyncConnection, TimeToKeep.Default);
+        var attachments = configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
         attachments.UseTransportConnectivity();
 
         var transport = configuration.UseTransport<SqlServerTransport>();

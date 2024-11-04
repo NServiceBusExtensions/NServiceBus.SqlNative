@@ -6,7 +6,7 @@ class Program
     {
         var configuration = new EndpointConfiguration("SampleEndpoint");
         configuration.UsePersistence<LearningPersistence>();
-        var attachments = configuration.EnableAttachments(Connection.OpenAsyncConnection, TimeToKeep.Default);
+        var attachments = configuration.EnableAttachments(Connection.ConnectionString, TimeToKeep.Default);
         attachments.UseTransportConnectivity();
         configuration.UseSerialization<NewtonsoftJsonSerializer>();
         configuration.PurgeOnStartup(true);
