@@ -43,7 +43,7 @@ public class DedupeIntegrationTests :
         var configuration = new EndpointConfiguration(nameof(DedupeIntegrationTests));
         configuration.UsePersistence<LearningPersistence>();
         configuration.EnableInstallers();
-        configuration.EnableDedupe(Connection.OpenAsyncConnection);
+        configuration.EnableDedupe(Connection.ConnectionString);
         configuration.PurgeOnStartup(true);
         configuration.UseSerialization<NewtonsoftJsonSerializer>();
 

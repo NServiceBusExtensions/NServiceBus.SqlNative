@@ -15,7 +15,7 @@
         transport.NativeDelayedDelivery();
         configuration.PurgeOnStartup(true);
         configuration.EnableInstallers();
-        configuration.EnableDedupe(Connection.OpenAsyncConnection);
+        configuration.EnableDedupe(Connection.ConnectionString);
         configuration.UsePersistence<LearningPersistence>();
         configuration.UseSerialization<NewtonsoftJsonSerializer>();
         return configuration;
