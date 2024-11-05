@@ -14,6 +14,27 @@ public static class SqlServerDedupeExtensions
     /// </summary>
     public static DedupeSettings EnableDedupe(
         this EndpointConfiguration configuration,
+        string connection) =>
+        EnableDedupe(configuration, async cancel =>
+        {
+            var sqlConnection = new SqlConnection(connection);
+            try
+            {
+                await sqlConnection.OpenAsync(cancel);
+                return sqlConnection;
+            }
+            catch
+            {
+                sqlConnection.Dispose();
+                throw;
+            }
+        });
+
+    /// <summary>
+    /// Enable SQL attachments for this endpoint.
+    /// </summary>
+    public static DedupeSettings EnableDedupe(
+        this EndpointConfiguration configuration,
         Func<Cancel, Task<SqlConnection>> connectionBuilder)
     {
         var recoverability = configuration.Recoverability();
