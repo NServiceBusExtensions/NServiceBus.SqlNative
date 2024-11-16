@@ -10,21 +10,16 @@ public class IncomingMessage :
     Func<ValueTask>[] cleanups;
     bool disposed;
     volatile int disposeSignaled;
-    Guid id;
-    long rowVersion;
-    DateTime? expires;
-    string headers;
-    Stream? body;
 
     public IncomingMessage(Guid id, long rowVersion, DateTime? expires, string headers, Stream? body, Func<ValueTask>[] cleanups)
     {
         Guard.AgainstNegativeAndZero(rowVersion);
         this.cleanups = cleanups;
-        this.id = id;
-        this.rowVersion = rowVersion;
-        this.expires = expires;
-        this.headers = headers;
-        this.body = body;
+        Id = id;
+        RowVersion = rowVersion;
+        Expires = expires;
+        Headers = headers;
+        Body = body;
     }
 
     public Guid Id
@@ -32,7 +27,7 @@ public class IncomingMessage :
         get
         {
             ThrowIfDisposed();
-            return id;
+            return field;
         }
     }
 
@@ -41,7 +36,7 @@ public class IncomingMessage :
         get
         {
             ThrowIfDisposed();
-            return rowVersion;
+            return field;
         }
     }
 
@@ -50,7 +45,7 @@ public class IncomingMessage :
         get
         {
             ThrowIfDisposed();
-            return expires;
+            return field;
         }
     }
 
@@ -59,7 +54,7 @@ public class IncomingMessage :
         get
         {
             ThrowIfDisposed();
-            return headers;
+            return field;
         }
     }
 
@@ -68,7 +63,7 @@ public class IncomingMessage :
         get
         {
             ThrowIfDisposed();
-            return body;
+            return field;
         }
     }
 

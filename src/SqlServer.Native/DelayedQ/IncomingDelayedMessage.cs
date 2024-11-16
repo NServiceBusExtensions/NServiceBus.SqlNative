@@ -10,19 +10,15 @@ public class IncomingDelayedMessage :
     Func<ValueTask>[] cleanups;
     bool disposed;
     volatile int disposeSignaled;
-    long rowVersion;
-    DateTime? due;
-    string headers;
-    Stream? body;
 
     public IncomingDelayedMessage(long rowVersion, DateTime? due, string headers, Stream? body, Func<ValueTask>[] cleanups)
     {
         Guard.AgainstNegativeAndZero(rowVersion);
         this.cleanups = cleanups;
-        this.rowVersion = rowVersion;
-        this.due = due;
-        this.headers = headers;
-        this.body = body;
+        RowVersion = rowVersion;
+        Due = due;
+        Headers = headers;
+        Body = body;
     }
 
     public long RowVersion
@@ -30,7 +26,7 @@ public class IncomingDelayedMessage :
         get
         {
             ThrowIfDisposed();
-            return rowVersion;
+            return field;
         }
     }
 
@@ -39,7 +35,7 @@ public class IncomingDelayedMessage :
         get
         {
             ThrowIfDisposed();
-            return due;
+            return field;
         }
     }
 
@@ -48,7 +44,7 @@ public class IncomingDelayedMessage :
         get
         {
             ThrowIfDisposed();
-            return headers;
+            return field;
         }
     }
 
@@ -57,7 +53,7 @@ public class IncomingDelayedMessage :
         get
         {
             ThrowIfDisposed();
-            return body;
+            return field;
         }
     }
 
