@@ -1,6 +1,8 @@
-﻿using NServiceBus.SqlServer.HttpPassthrough;
+﻿using System.Diagnostics.CodeAnalysis;
+using NServiceBus.SqlServer.HttpPassthrough;
 using NServiceBus.Transport.SqlServerNative;
 
+[SuppressMessage("Performance", "CA1822:Mark members as static")]
 public class SampleStartup
 {
     public SampleStartup(IConfiguration configuration) =>
