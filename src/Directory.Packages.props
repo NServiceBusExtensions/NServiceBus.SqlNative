@@ -19,7 +19,7 @@
     <PackageVersion Include="NServiceBus.Newtonsoft.Json" Version="4.0.0" />
     <PackageVersion Include="NServiceBus.Transport.SqlServer" Version="8.1.6" />
     <PackageVersion Include="Polyfill" Version="7.5.0" />
-    <PackageVersion Include="ProjectDefaults" Version="1.0.144" />
+    <PackageVersion Include="ProjectDefaults" Version="1.0.145" />
     <PackageVersion Include="Verify.SqlServer" Version="10.1.0" />
     <PackageVersion Include="Verify.XunitV3" Version="28.4.0" />
     <PackageVersion Include="xunit.v3" Version="0.7.0-pre.15" />
