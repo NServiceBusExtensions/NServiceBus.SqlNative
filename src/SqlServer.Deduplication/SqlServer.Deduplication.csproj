@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>NServiceBus.SqlServer.Deduplication</AssemblyName>
     <PackageName>NServiceBus.SqlServer.Deduplication</PackageName>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Description>Message deduplication for the SQL Server transport.</Description>
     <DefineConstants>$(DefineConstants);SqlServerDedupe</DefineConstants>
   </PropertyGroup>
