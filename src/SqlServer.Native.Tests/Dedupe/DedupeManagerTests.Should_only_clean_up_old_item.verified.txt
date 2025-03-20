@@ -6,7 +6,9 @@
     }
   ],
   sql: {
-    Text: delete from [dbo].[Deduplication] where Created < @date,
+    Text:
+delete dbo.Deduplication
+where  Created < @date,
     Parameters: {
       date: {
         Value: DateTime_1,
