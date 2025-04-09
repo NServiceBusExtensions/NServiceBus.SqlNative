@@ -15,7 +15,7 @@ class BadRequestMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         }
         catch (BadRequestException exception)
         {
-            logger.LogError($"{exception.Message}. Headers:{{headers}}", context.RequestStringDictionary());
+            logger.LogError("{ExceptionMessage}. Headers:{headers}", exception.Message, context.RequestStringDictionary());
             var response = context.Response;
             response.StatusCode = (int) HttpStatusCode.BadRequest;
             response.ContentType = "text/plain";
