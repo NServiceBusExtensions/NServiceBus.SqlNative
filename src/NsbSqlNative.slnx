@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="../readme.source.md" />
+    <File Path=".editorconfig" />
+    <File Path="appveyor.yml" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+  </Folder>
+  <Project Path="Shared/Shared.csproj" />
+  <Project Path="SqlServer.Deduplication.SampleEndpoint/SqlServer.Deduplication.SampleEndpoint.csproj" />
+  <Project Path="SqlServer.Deduplication/SqlServer.Deduplication.csproj" />
+  <Project Path="SqlServer.HttpPassthrough.SampleEndpoint/SqlServer.HttpPassthrough.SampleEndpoint.csproj" />
+  <Project Path="SqlServer.HttpPassthrough.SampleWeb/SqlServer.HttpPassthrough.SampleWeb.csproj" />
+  <Project Path="SqlServer.HttpPassthrough/SqlServer.HttpPassthrough.csproj" />
+  <Project Path="SqlServer.Native.SubscriptionSampleEndpoint/SqlServer.Native.SubscriptionSampleEndpoint.csproj" />
+  <Project Path="SqlServer.Native.Tests/SqlServer.Native.Tests.csproj" />
+  <Project Path="SqlServer.Native/SqlServer.Native.csproj" />
+</Solution>
