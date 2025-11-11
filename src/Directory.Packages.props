@@ -12,7 +12,7 @@
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.2" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.10" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.10" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageVersion Include="NServiceBus" Version="9.2.7" />
     <PackageVersion Include="NServiceBus.Attachments.Sql" Version="16.0.2" />
     <PackageVersion Include="NServiceBus.Attachments.Sql.Raw" Version="16.0.2" />
