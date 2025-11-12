@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-
-namespace NServiceBus.Transport.SqlServerNative;
+﻿namespace NServiceBus.Transport.SqlServerNative;
 
 public abstract partial class BaseQueueManager<TIncoming, TOutgoing>
     where TIncoming : class, IIncomingMessage

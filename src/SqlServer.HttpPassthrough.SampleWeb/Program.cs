@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore;
+﻿#pragma warning disable ASPDEPR008
 
 public class Program
 {

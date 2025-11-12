@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+#pragma warning disable ASPDEPR008
+#pragma warning disable ASPDEPR004
 
 public class Usage
 {

@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-
-namespace NServiceBus.Transport.SqlServerNative;
+﻿namespace NServiceBus.Transport.SqlServerNative;
 
 public partial class QueueManager
 {
