@@ -15,13 +15,13 @@
     <PackageVersion Include="NServiceBus.Attachments.Sql" Version="16.0.2" />
     <PackageVersion Include="NServiceBus.Attachments.Sql.Raw" Version="16.0.2" />
     <PackageVersion Include="NServiceBus.Newtonsoft.Json" Version="4.1.0" />
-    <PackageVersion Include="NServiceBus.Transport.SqlServer" Version="8.1.10" />
+    <PackageVersion Include="NServiceBus.Transport.SqlServer" Version="8.1.11" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.163" />
     <PackageVersion Include="Polyfill" Version="9.3.4" />
     <PackageVersion Include="Verify.SqlServer" Version="11.2.0" />
     <PackageVersion Include="Verify.XunitV3" Version="31.8.0" />
     <PackageVersion Include="xunit.v3" Version="3.2.1" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
-    <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.4" />
+    <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.5" />
   </ItemGroup>
 </Project>
