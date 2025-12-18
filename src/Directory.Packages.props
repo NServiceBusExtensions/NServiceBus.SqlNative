@@ -16,8 +16,8 @@
     <PackageVersion Include="NServiceBus.Attachments.Sql.Raw" Version="16.0.2" />
     <PackageVersion Include="NServiceBus.Newtonsoft.Json" Version="4.1.0" />
     <PackageVersion Include="NServiceBus.Transport.SqlServer" Version="8.1.11" />
-    <PackageVersion Include="ProjectDefaults" Version="1.0.166" />
-    <PackageVersion Include="Polyfill" Version="9.3.4" />
+    <PackageVersion Include="ProjectDefaults" Version="1.0.167" />
+    <PackageVersion Include="Polyfill" Version="9.4.0" />
     <PackageVersion Include="Verify.SqlServer" Version="11.2.0" />
     <PackageVersion Include="Verify.XunitV3" Version="31.9.0" />
     <PackageVersion Include="xunit.v3" Version="3.2.1" />
