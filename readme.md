@@ -7,7 +7,7 @@ To change this file edit the source file and then run MarkdownSnippets.
 
 # <img src="/src/icon.png" height="30px"> NServiceBus.SqlServer.Native
 
-[![Build status](https://ci.appveyor.com/api/projects/status/vlhu32bab9gk2olc/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/nservicebus-sqlnative)
+[![Build status](https://img.shields.io/appveyor/build/SimonCropp/nservicebus-sqlnative)](https://ci.appveyor.com/project/SimonCropp/nservicebus-sqlnative)
 [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.Native.svg?label=SqlServer.Native)](https://www.nuget.org/packages/NServiceBus.SqlServer.Native/)
 [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.HttpPassthrough.svg?label=SqlServer.HttpPassthrough)](https://www.nuget.org/packages/NServiceBus.SqlServer.HttpPassthrough/)
 [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.SqlServer.Deduplication.svg?label=SqlServer.Deduplication)](https://www.nuget.org/packages/NServiceBus.SqlServer.Deduplication/)
